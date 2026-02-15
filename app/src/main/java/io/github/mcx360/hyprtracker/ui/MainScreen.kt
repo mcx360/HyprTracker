@@ -26,7 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,7 +37,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.utils.Constants
 import io.github.mcx360.hyprtracker.utils.Destinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -67,6 +69,8 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
     )
 }
 
+
+
 @Composable
 fun HyprTrackerBottomNavigationBar(navController: NavHostController){
     NavigationBar(
@@ -75,29 +79,69 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController){
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        Constants.bottomNavItems.forEach{ navItem ->
-            NavigationBarItem(
-                selected = currentRoute == navItem.route,
-                onClick = {
-                    navController.navigate(navItem.route)
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon,
-                        contentDescription = navItem.label)
-                },
-                label = {
-                    Text(text = navItem.label,)
-                },
-                alwaysShowLabel = false,
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer
-                )
+        NavigationBarItem(
+            selected = currentRoute == Destinations.LOGGINGSCREEN.name,
+            onClick = {
+                navController.navigate(Destinations.LOGGINGSCREEN.name)
+            },
+            icon = {
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_log_blood_pressure),
+                    contentDescription = stringResource(R.string.logging_screen_label))
+            },
+            label = {
+                Text(text = stringResource(R.string.logging_screen_label))
+            },
+            alwaysShowLabel = true,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
             )
-        }
+        )
+        NavigationBarItem(
+            selected = currentRoute == Destinations.MEDICINESCREEN.name,
+            onClick = {
+                navController.navigate(Destinations.MEDICINESCREEN.name)
+            },
+            icon = {
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
+                    contentDescription = stringResource(R.string.medicine_screen_label))
+            },
+            label = {
+                Text(text = stringResource(R.string.medicine_screen_label))
+            },
+            alwaysShowLabel = true,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        )
+        NavigationBarItem(
+            selected = currentRoute == Destinations.GRAPHVIEWSCREEN.name,
+            onClick = {
+                navController.navigate(Destinations.GRAPHVIEWSCREEN.name)
+            },
+            icon = {
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight),
+                    contentDescription = stringResource(R.string.graph_screen_label))
+            },
+            label = {
+                Text(text = stringResource(R.string.graph_screen_label))
+            },
+            alwaysShowLabel = true,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        )
     }
 }
 
@@ -111,10 +155,81 @@ fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState:
                 Text("HyprTracker", modifier = Modifier.padding(16.dp))
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text(text= "Drawer Item") },
+                    label = { Text(text= "Export logs") },
                     selected = false,
-                    onClick = {/*To be implemented*/}
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
+                    }
+
                 )
+                NavigationDrawerItem(
+                    label = { Text(text= "Share logs") },
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = {Text("My Documents")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = {Text("Bin")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
+                    }
+                )
+                HorizontalDivider()
+                NavigationDrawerItem(
+                    label = {Text("Backup/restore")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = {Text("Rate app")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = {Text("Report bug")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
+                    }
+                )
+                HorizontalDivider()
+                NavigationDrawerItem(
+                    label = {Text("Users & settings")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = {Text("About")},
+                    selected = false,
+                    onClick = {},
+                    icon = {
+                        Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
+                    }
+                )
+
             }
         }
     ){

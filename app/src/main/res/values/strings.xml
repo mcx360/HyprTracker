@@ -2,5 +2,5 @@
     <string name="app_name">HyprTracker</string>
     <string name="logging_screen_label">Logging</string>
     <string name="medicine_screen_label">Medicine</string>
-    <string name="graph_screen_label">Graphs</string>
+    <string name="graph_screen_label">Insights</string>
 </resources>
