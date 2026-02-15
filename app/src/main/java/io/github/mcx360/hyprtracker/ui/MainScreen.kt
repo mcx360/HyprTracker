@@ -1,17 +1,19 @@
 package io.github.mcx360.hyprtracker.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -34,10 +36,12 @@ import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.utils.Constants
 import io.github.mcx360.hyprtracker.utils.Destinations
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HyprTrackerTopAppBar(){
+fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -48,7 +52,11 @@ fun HyprTrackerTopAppBar(){
         },
         navigationIcon = {
             IconButton(onClick = {
-                /*To do*/
+                scope.launch {
+                    drawerState.apply {
+                        if (isClosed) open() else close()
+                    }
+                }
             }) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
@@ -94,9 +102,8 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController){
 }
 
 @Composable
-fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier){
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-    val scope = rememberCoroutineScope()
+fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState: DrawerState) {
+    val drawerState = drawerState
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -111,7 +118,7 @@ fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier){
             }
         }
     ){
-        Text("test")
+
     }
 }
 
@@ -138,17 +145,22 @@ fun NavHostContainer(
 
 @Composable
 fun HyprTrackerScreen(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()){
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            HyprTrackerTopAppBar()
+            HyprTrackerTopAppBar(drawerState = drawerState, scope = scope)
         },
         bottomBar = {
             HyprTrackerBottomNavigationBar(navController = navController)
         }
     ) { innerpadding ->
-        NavHostContainer(navController = navController)
-        HyprTrackerModalNavigationDrawer()
+        Box(modifier = Modifier.padding(innerpadding)){
+            NavHostContainer(navController = navController)
+            HyprTrackerModalNavigationDrawer(drawerState = drawerState)
+        }
     }
 }
