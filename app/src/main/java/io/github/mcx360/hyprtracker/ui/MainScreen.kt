@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -54,11 +55,7 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title:
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            if(title == null){
-                Text(stringResource(R.string.app_name))
-            } else {
-                Text(text = title.lowercase())
-            }
+            if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title.lowercase())
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -144,9 +141,10 @@ fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState:
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet{
-                Text("HyprTracker", modifier = Modifier
+                Text(stringResource(R.string.app_name), modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 32.dp),
+                    fontWeight = FontWeight.Bold
                 )
                 HorizontalDivider()
                 NavigationDrawerItem(
