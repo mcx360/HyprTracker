@@ -3,4 +3,14 @@
     <string name="logging_screen_label">Logging</string>
     <string name="medicine_screen_label">Medicine</string>
     <string name="graph_screen_label">Graphs</string>
+
+    <string name="export_label">Export logs</string>
+    <string name="share_label">Share logs</string>
+    <string name="documents_label">My Documents</string>
+    <string name="bin_label">Bin</string>
+    <string name="backup_label">Backup</string>
+    <string name="rating_label">Rate app</string>
+    <string name="bug_report_label">Report bug</string>
+    <string name="settings_label">Users &amp; settings</string>
+    <string name="about_label">About</string>
 </resources>
