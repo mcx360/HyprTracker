@@ -1,10 +1,12 @@
 package io.github.mcx360.hyprtracker.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DrawerState
@@ -64,6 +66,17 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
             }) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
+                    contentDescription = null
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {},
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ){
+                Icon(
+                    Icons.Filled.MoreVert,
                     contentDescription = null
                 )
             }
