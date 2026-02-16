@@ -3,11 +3,13 @@ package io.github.mcx360.hyprtracker.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,7 +18,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -74,7 +76,7 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
 @Composable
 fun HyprTrackerBottomNavigationBar(navController: NavHostController){
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.onPrimary
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -91,14 +93,7 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController){
             label = {
                 Text(text = stringResource(R.string.logging_screen_label))
             },
-            alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
-            )
+            alwaysShowLabel = true
         )
         NavigationBarItem(
             selected = currentRoute == Destinations.MEDICINESCREEN.name,
@@ -112,14 +107,7 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController){
             label = {
                 Text(text = stringResource(R.string.medicine_screen_label))
             },
-            alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
-            )
+            alwaysShowLabel = true
         )
         NavigationBarItem(
             selected = currentRoute == Destinations.GRAPHVIEWSCREEN.name,
@@ -134,13 +122,6 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController){
                 Text(text = stringResource(R.string.graph_screen_label))
             },
             alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                indicatorColor = MaterialTheme.colorScheme.secondaryContainer
-            )
         )
     }
 }
@@ -152,7 +133,10 @@ fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState:
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet{
-                Text("HyprTracker", modifier = Modifier.padding(16.dp))
+                Text("HyprTracker", modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 32.dp)
+                )
                 HorizontalDivider()
                 NavigationDrawerItem(
                     label = { Text(text= "Export logs") },
@@ -271,6 +255,13 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, navController: NavHostContr
         },
         bottomBar = {
             HyprTrackerBottomNavigationBar(navController = navController)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {},
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = null)
+            }
         }
     ) { innerpadding ->
         Box(modifier = Modifier.padding(innerpadding)){
