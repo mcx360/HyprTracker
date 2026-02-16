@@ -84,8 +84,6 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
     )
 }
 
-
-
 @Composable
 fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStack: NavBackStackEntry?, currentRoute: String?){
     NavigationBar(
@@ -222,18 +220,13 @@ fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState:
                         Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
                     }
                 )
-
             }
         }
-    ){
-
-    }
+    ){}
 }
 
 @Composable
-fun NavHostContainer(
-    navController: NavHostController,
-) {
+fun NavHostContainer(navController: NavHostController) {
   NavHost(
       navController = navController,
       startDestination = Destinations.LOGGINGSCREEN.name,
@@ -252,7 +245,7 @@ fun NavHostContainer(
 }
 
 @Composable
-fun HyprTrackerScreen(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()){
+fun HyprTrackerScreen(modifier: Modifier = Modifier){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
