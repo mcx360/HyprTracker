@@ -47,14 +47,18 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState){
+fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title: String?){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            Text(text = stringResource(R.string.app_name))
+            if(title == null){
+                Text(stringResource(R.string.app_name))
+            } else {
+                Text(text = title.lowercase())
+            }
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -255,7 +259,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
     Scaffold(
         modifier = modifier,
         topBar = {
-            HyprTrackerTopAppBar(drawerState = drawerState, scope = scope)
+            HyprTrackerTopAppBar(drawerState = drawerState, scope = scope, title = currentRoute)
         },
         bottomBar = {
             HyprTrackerBottomNavigationBar(currentRoute = currentRoute, navController = navController, navBackStack = navBackStackEntry)
