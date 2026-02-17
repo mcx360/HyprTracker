@@ -136,98 +136,6 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStac
 }
 
 @Composable
-fun HyprTrackerModalNavigationDrawer(modifier: Modifier = Modifier, drawerState: DrawerState) {
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet{
-                Text(stringResource(R.string.app_name), modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 32.dp),
-                    fontWeight = FontWeight.Bold
-                )
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text(text= stringResource(R.string.export_label)) },
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
-                    }
-
-                )
-                NavigationDrawerItem(
-                    label = { Text(text= stringResource(R.string.share_label)) },
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
-                    }
-                )
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.documents_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
-                    }
-                )
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.bin_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
-                    }
-                )
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.backup_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
-                    }
-                )
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.rating_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
-                    }
-                )
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.bug_report_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
-                    }
-                )
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.settings_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
-                    }
-                )
-                NavigationDrawerItem(
-                    label = {Text(text = stringResource(R.string.about_label))},
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
-                    }
-                )
-            }
-        }
-    ){}
-}
-
-@Composable
 fun NavHostContainer(navController: NavHostController) {
   NavHost(
       navController = navController,
@@ -254,25 +162,114 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            HyprTrackerTopAppBar(drawerState = drawerState, scope = scope, title = currentRoute)
+    ModalNavigationDrawer(
+        drawerContent = {
+                ModalDrawerSheet{
+                    Text(stringResource(R.string.app_name), modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 32.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = { Text(text= stringResource(R.string.export_label)) },
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
+                        }
+
+                    )
+                    NavigationDrawerItem(
+                        label = { Text(text= stringResource(R.string.share_label)) },
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
+                        }
+                    )
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.documents_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
+                        }
+                    )
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.bin_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
+                        }
+                    )
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.backup_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
+                        }
+                    )
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.rating_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
+                        }
+                    )
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.bug_report_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
+                        }
+                    )
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.settings_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
+                        }
+                    )
+                    NavigationDrawerItem(
+                        label = {Text(text = stringResource(R.string.about_label))},
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
+                        }
+                    )
+            }
         },
-        bottomBar = {
-            HyprTrackerBottomNavigationBar(currentRoute = currentRoute, navController = navController, navBackStack = navBackStackEntry)
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {},
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = null)
+        drawerState = drawerState
+    ) {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                HyprTrackerTopAppBar(drawerState = drawerState, scope = scope, title = currentRoute)
+            },
+            bottomBar = {
+                HyprTrackerBottomNavigationBar(currentRoute = currentRoute, navController = navController, navBackStack = navBackStackEntry)
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {},
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                }
+            }
+        ) { innerpadding ->
+            Box(modifier = Modifier.padding(innerpadding)){
+                NavHostContainer(navController = navController)
             }
         }
-    ) { innerpadding ->
-        Box(modifier = Modifier.padding(innerpadding)){
-            NavHostContainer(navController = navController)
-            HyprTrackerModalNavigationDrawer(drawerState = drawerState)
-        }
+
     }
 }
