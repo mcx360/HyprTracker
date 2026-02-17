@@ -34,7 +34,7 @@ fun LoggingScreen(modifier: Modifier = Modifier){
 @Composable
 fun NavTabRow() {
     val tabs = listOf("Log", "History")
-    var selectedTab by rememberSaveable { mutableIntStateOf(1) }
+    var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column() {
         TabRow(selectedTabIndex = selectedTab) {
