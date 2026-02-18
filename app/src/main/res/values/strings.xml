@@ -13,4 +13,9 @@
     <string name="bug_report_label">Report bug</string>
     <string name="settings_label">Users &amp; settings</string>
     <string name="about_label">About</string>
+
+    <string name="log_tab">Log</string>
+    <string name="History_tab">History</string>
+
+
 </resources>
