@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -30,10 +30,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -73,7 +75,6 @@ fun NavTabRow() {
             )
         }
 
-
         when (selectedTab) {
             0 -> LogTab()
             1 -> HistoryTab()
@@ -87,6 +88,9 @@ fun LogTab() {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
@@ -99,7 +103,7 @@ fun LogTab() {
             OutlinedTextField(
                 value = systolicValue,
                 onValueChange = { systolicValue = it },
-                label = { Text("systolic") },
+                label = { Text(text = stringResource(R.string.systolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -107,12 +111,12 @@ fun LogTab() {
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
-
             )
+
             OutlinedTextField(
                 value = diastolicValue,
                 onValueChange = { diastolicValue = it },
-                label = { Text("diastolic") },
+                label = { Text(text = stringResource(R.string.diastolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -120,12 +124,12 @@ fun LogTab() {
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
-
             )
+
             OutlinedTextField(
                 value = pulseValue,
                 onValueChange = { pulseValue = it },
-                label = { Text(" pulse") },
+                label = { Text(text = stringResource(R.string.pulse)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -184,34 +188,68 @@ fun LogTab() {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-    ) {
-        Text("Blood Pressure Stages", fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.CenterHorizontally))
-        Column(modifier = Modifier.padding(8.dp)) {
-            InfographicLine(Color.LightGray, "Category", "systolic", "", "diastolic")
-            Spacer(modifier = Modifier.size(8.dp))
-            InfographicLine(Color.Green, "Normal", "<120", "and", "<80")
-            Spacer(modifier = Modifier.size(8.dp))
-            InfographicLine(Color.Yellow, "Elevated", "120-129", "and", "<80")
-            Spacer(modifier = Modifier.size(8.dp))
-            InfographicLine(Color.hsl(30f, 1f, 0.5f), "Hypertension stagee 1", "130-139", "or", "80-89")
-            Spacer(modifier = Modifier.size(8.dp))
-            InfographicLine(Color.hsl(30f, 0.8f, 0.6f),"Hypertension stage 2", "140=<", "or", "90=<")
-            Spacer(modifier = Modifier.size(8.dp))
-            InfographicLine(Color.Red, "Hypertension crisis", ">180", "and/or", ">120")
+        ) {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(stringResource(R.string.BP_stages_title),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            InfographicLine(MaterialTheme.colorScheme.surfaceContainerHighest, stringArrayResource(R.array.hypertension_subheading),)
+            InfographicLine(Color(0xFF2E7D32), stringArrayResource(R.array.hypertension_stage_normal))
+            InfographicLine(Color(0xFFF9A825), stringArrayResource(R.array.hypertension_stage_elevated))
+            InfographicLine(Color(0xFFF57C00), stringArrayResource(R.array.hypertension_stage_one))
+            InfographicLine(Color(0xFFD32F2F),stringArrayResource(R.array.hypertension_stage_two))
+            InfographicLine(Color(0xFFB71C1C), stringArrayResource(R.array.hypertension_stage_crisis))
         }
     }
 }
 
 @Composable
-fun InfographicLine(color: Color, bloodPressureCategory: String, systolicValue: String, andOr : String, diastolicValue: String){
-        Row(modifier = Modifier.background(color = color)) {
-            Text(text = bloodPressureCategory, modifier = Modifier.weight(2f))
-            Text(text = systolicValue, modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-            Text(text = andOr, modifier = Modifier.weight(1f))
-            Text(text = diastolicValue, modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+fun InfographicLine(
+    color: Color,
+    stage: Array<String>
+    ) {
+    val textColor = if(color.luminance() > 0.5f) Color.Black else Color.White
+
+        Row(modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 4.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(color = color),
+            )
+        {
+            Text(
+                text = stage[0],
+                modifier = Modifier
+                    .weight(2f)
+                    .padding(4.dp),
+                color = textColor
+            )
+            Text(text = stage[1],
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp),
+                fontWeight = FontWeight.Bold,
+                color = textColor
+            )
+            Text(
+                text = stage[2],
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp),
+                fontWeight = FontWeight.Bold,
+                color = textColor
+            )
         }
 }
 

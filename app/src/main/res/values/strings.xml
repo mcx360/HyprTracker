@@ -1,9 +1,11 @@
 <resources>
+    <!--Core app strings including app name and names of 3 main sections of the app accessible through the bottom navigation bar-->
     <string name="app_name">HyprTracker</string>
     <string name="logging_screen_label">Logging</string>
     <string name="medicine_screen_label">Medicine</string>
     <string name="graph_screen_label">Graphs</string>
 
+    <!--Strings for the modal navigation drawer-->
     <string name="export_label">Export logs</string>
     <string name="share_label">Share logs</string>
     <string name="documents_label">My Documents</string>
@@ -14,8 +16,53 @@
     <string name="settings_label">Users &amp; settings</string>
     <string name="about_label">About</string>
 
+
+    <!--Strings for tab rows names (subsections names) in logging screen-->
     <string name="log_tab">Log</string>
     <string name="History_tab">History</string>
 
+    <!--Strings for systolic, diastolic and pulse labels in logging screen-->
+    <string name="systolic">Systolic</string>
+    <string name="diastolic">Diastolic</string>
+    <string name="pulse">Pulse</string>
+
+
+    <!--Strings for the blood pressure section info card in logging screen-->
+    <string name="BP_stages_title">Blood Pressure Stages</string>
+    <string-array name="hypertension_subheading">
+        <item>Stage</item>
+        <item>Systolic</item>
+        <item>Diastolic</item>
+    </string-array>
+
+    <string-array name="hypertension_stage_normal">
+        <item>Normal</item>
+        <item>Less Than 120</item>
+        <item>Less Than 80</item>
+    </string-array>
+
+    <string-array name="hypertension_stage_elevated">
+        <item>Elevated</item>
+        <item>120 To 129</item>
+        <item>Less Than 80</item>
+    </string-array>
+
+    <string-array name="hypertension_stage_one">
+        <item>Hypertension Stage 1</item>
+        <item>130 To 139</item>
+        <item>80 To 89</item>
+    </string-array>
+
+    <string-array name="hypertension_stage_two">
+        <item>Hypertension Stage 2</item>
+        <item>140 Or Higher</item>
+        <item>90 Or More</item>
+    </string-array>
+
+    <string-array name="hypertension_stage_crisis">
+        <item>Hypertension Crisis</item>
+        <item>180 And Over</item>
+        <item>120 And Over</item>
+    </string-array>
 
 </resources>
