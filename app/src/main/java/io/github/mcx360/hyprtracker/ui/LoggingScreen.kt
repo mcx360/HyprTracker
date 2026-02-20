@@ -219,7 +219,8 @@ fun InfographicLine(
     color: Color,
     stage: Array<String>
     ) {
-    val textColor = if(color.luminance() > 0.5f) Color.Black else Color.White
+
+    val textColor: Color = if(color.luminance() > 0.5f) Color.Black else Color.White
 
         Row(modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 4.dp)

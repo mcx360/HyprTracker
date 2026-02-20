@@ -1,7 +1,9 @@
 package io.github.mcx360.hyprtracker.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -29,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -162,6 +165,10 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    Box(modifier = Modifier
+        .background(color = MaterialTheme.colorScheme.primaryContainer)
+        .safeDrawingPadding()
+    ){
     ModalNavigationDrawer(
         drawerContent = {
                 ModalDrawerSheet{
@@ -256,10 +263,14 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
                 HyprTrackerTopAppBar(drawerState = drawerState, scope = scope, title = currentRoute)
             },
             bottomBar = {
-                HyprTrackerBottomNavigationBar(currentRoute = currentRoute, navController = navController, navBackStack = navBackStackEntry)
+                HyprTrackerBottomNavigationBar(
+                    currentRoute = currentRoute,
+                    navController = navController,
+                    navBackStack = navBackStackEntry
+                )
             },
             floatingActionButton = {
-                if(currentRoute == Destinations.MEDICINESCREEN.name){
+                if (currentRoute == Destinations.MEDICINESCREEN.name) {
                     FloatingActionButton(
                         onClick = {},
                     ) {
@@ -268,12 +279,13 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
                 }
             }
         ) { innerpadding ->
-            Box(modifier = Modifier
-                .padding(innerpadding)
-            ){
+            Box(
+                modifier = Modifier
+                    .padding(innerpadding)
+            ) {
                 NavHostContainer(navController = navController)
             }
         }
-
+    }
     }
 }
