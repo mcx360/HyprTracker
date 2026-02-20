@@ -259,10 +259,12 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
                 HyprTrackerBottomNavigationBar(currentRoute = currentRoute, navController = navController, navBackStack = navBackStackEntry)
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {},
-                ) {
-                    Icon(Icons.Filled.Add, contentDescription = null)
+                if(currentRoute == Destinations.MEDICINESCREEN.name){
+                    FloatingActionButton(
+                        onClick = {},
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
+                    }
                 }
             }
         ) { innerpadding ->
