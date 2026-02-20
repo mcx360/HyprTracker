@@ -41,8 +41,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.github.mcx360.hyprtracker.navigation.Destinations
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.utils.Destinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -266,7 +266,9 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
                 }
             }
         ) { innerpadding ->
-            Box(modifier = Modifier.padding(innerpadding)){
+            Box(modifier = Modifier
+                .padding(innerpadding)
+            ){
                 NavHostContainer(navController = navController)
             }
         }

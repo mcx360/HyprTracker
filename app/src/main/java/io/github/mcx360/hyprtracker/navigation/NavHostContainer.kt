@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import io.github.mcx360.hyprtracker.ui.GraphScreen
 import io.github.mcx360.hyprtracker.ui.LoggingScreen
 import io.github.mcx360.hyprtracker.ui.MedicineScreen
-import io.github.mcx360.hyprtracker.navigation.Destinations
 
 @Composable
 fun NavHostContainer(navController: NavHostController) {
