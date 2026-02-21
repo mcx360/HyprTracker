@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
@@ -106,8 +108,13 @@ fun LogTab() {
                 label = { Text(text = stringResource(R.string.systolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
                 ),
+                /*
+                keyboardActions = KeyboardActions(
+                    onDone =
+                ),*/
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
@@ -119,7 +126,9 @@ fun LogTab() {
                 label = { Text(text = stringResource(R.string.diastolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -129,11 +138,12 @@ fun LogTab() {
             OutlinedTextField(
                 value = pulseValue,
                 onValueChange = { pulseValue = it },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 label = { Text(text = stringResource(R.string.pulse)) },
                 shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
@@ -220,15 +230,14 @@ fun InfographicLine(
     stage: Array<String>
     ) {
 
-    val textColor: Color = if(color.luminance() > 0.5f) Color.Black else Color.White
+    val textColor = if(color.luminance() > 0.5f) Color.Black else Color.White
 
-        Row(modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 4.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = color),
-            )
-        {
+    Row(modifier = Modifier
+        .padding(vertical = 4.dp, horizontal = 4.dp)
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(12.dp))
+        .background(color = color),
+        ) {
             Text(
                 text = stage[0],
                 modifier = Modifier

@@ -2,8 +2,13 @@ package io.github.mcx360.hyprtracker.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -157,6 +162,7 @@ fun NavHostContainer(navController: NavHostController) {
   }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HyprTrackerScreen(modifier: Modifier = Modifier){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -167,7 +173,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
-        .safeDrawingPadding()
+        .statusBarsPadding()
     ){
     ModalNavigationDrawer(
         drawerContent = {
