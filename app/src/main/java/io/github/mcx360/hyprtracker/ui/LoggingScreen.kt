@@ -17,6 +17,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -83,6 +84,7 @@ fun NavTabRow() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogTab() {
     Card(
@@ -110,10 +112,6 @@ fun LogTab() {
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
-                /*
-                keyboardActions = KeyboardActions(
-                    onDone =
-                ),*/
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
@@ -151,26 +149,8 @@ fun LogTab() {
 
         Row(modifier = Modifier) {
             Button(
-                onClick = {},
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp),
-            ) {
-                Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
-                Text(" date")
-            }
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-
-            ) {
-                Icon(painter = painterResource(R.drawable.ic_time), contentDescription = null)
-                Text(" Time")
-            }
-            Button(
-                onClick = {},
+                onClick = {
+                },
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
@@ -178,13 +158,11 @@ fun LogTab() {
                 Icon(painter = painterResource(R.drawable.ic_notes), contentDescription = null)
                 Text(" notes")
             }
-        }
 
-        Row(modifier = Modifier) {
             Button(
                 onClick = {},
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(2f)
                     .padding(8.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
