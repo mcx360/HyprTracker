@@ -26,8 +26,13 @@
     <string name="diastolic">Diastolic</string>
     <string name="pulse">Pulse</string>
 
+    <!--Strings for Log BLood Pressure tab in logging screen-->
+    <string name="Log_BP">Log Blood Pressure</string>
+    <string name="Confirm_BP_Log">Confirm</string>
+    <string name="edit_BP_Log_Details">Edit</string>
 
-    <!--Strings for the blood pressure section info card in logging screen-->
+
+    <!--Strings for the blood pressure stages info card in logging screen-->
     <string name="BP_stages_title">Blood Pressure Stages</string>
     <string-array name="hypertension_subheading">
         <item>Stage</item>

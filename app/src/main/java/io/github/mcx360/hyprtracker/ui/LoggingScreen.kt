@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -50,13 +51,13 @@ fun LoggingScreen(modifier: Modifier = Modifier){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        NavTabRow()
+        LoggingScreenTabs()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavTabRow() {
+fun LoggingScreenTabs() {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column(
@@ -96,8 +97,15 @@ fun LogTab() {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
     ) {
+        Text(
+            text = stringResource(R.string.Log_BP),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
+            style = MaterialTheme.typography.titleLarge,
+            )
+
         Row(modifier = Modifier) {
             var systolicValue by remember { mutableStateOf("") }
             var diastolicValue by remember { mutableStateOf("") }
@@ -147,17 +155,28 @@ fun LogTab() {
             )
         }
 
-        Row(modifier = Modifier) {
-            Button(
-                onClick = {
-                },
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_date),
+                contentDescription = null
+            )
+            Text("23/02/2026")
+            Spacer(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Icon(painter = painterResource(R.drawable.ic_notes), contentDescription = null)
-                Text(" notes")
-            }
+                .width(32.dp)
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_time),
+                contentDescription = null
+            )
+            Text("13:56")
+        }
+
+        Row(modifier = Modifier) {
 
             Button(
                 onClick = {},
@@ -166,7 +185,18 @@ fun LogTab() {
                     .padding(8.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
-                Text("confirm")
+                Text(text = stringResource(R.string.Confirm_BP_Log))
+            }
+
+            Button(
+                onClick = {
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+            ) {
+                Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
+                Text(text = stringResource(R.string.edit_BP_Log_Details))
             }
         }
     }
@@ -187,7 +217,7 @@ fun LogTab() {
             verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(stringResource(R.string.BP_stages_title),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
