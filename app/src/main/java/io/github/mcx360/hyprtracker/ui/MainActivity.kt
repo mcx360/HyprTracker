@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import io.github.mcx360.hyprtracker.ui.theme.HyprTrackerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel : HyprTrackerViewModel by viewModels()
         enableEdgeToEdge()
         setContent {
             HyprTrackerTheme {

@@ -38,13 +38,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.navigation.Destinations
+import io.github.mcx360.hyprtracker.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -138,28 +138,10 @@ fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStac
     }
 }
 
-@Composable
-fun NavHostContainer(navController: NavHostController) {
-  NavHost(
-      navController = navController,
-      startDestination = Destinations.LOGGINGSCREEN.name,
-      modifier = Modifier
-  ){
-      composable(route = Destinations.LOGGINGSCREEN.name){
-          LoggingScreen()
-      }
-      composable(route = Destinations.MEDICINESCREEN.name){
-          MedicineScreen()
-      }
-      composable(route = Destinations.GRAPHVIEWSCREEN.name){
-          GraphScreen()
-      }
-  }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HyprTrackerScreen(modifier: Modifier = Modifier){
+fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel = viewModel()){
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -284,7 +266,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier){
                 modifier = Modifier
                     .padding(innerpadding)
             ) {
-                NavHostContainer(navController = navController)
+                NavHostContainer(navController = navController, hyprTrackerViewModel)
             }
         }
     }

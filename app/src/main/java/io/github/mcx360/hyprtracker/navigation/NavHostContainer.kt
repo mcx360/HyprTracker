@@ -6,18 +6,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.mcx360.hyprtracker.ui.GraphScreen
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.LoggingScreen
 import io.github.mcx360.hyprtracker.ui.MedicineScreen
 
 @Composable
-fun NavHostContainer(navController: NavHostController) {
+fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel) {
     NavHost(
         navController = navController,
         startDestination = Destinations.LOGGINGSCREEN.name,
         modifier = Modifier
     ){
         composable(route = Destinations.LOGGINGSCREEN.name){
-            LoggingScreen()
+            LoggingScreen(hyprTrackerViewModel = hyprTrackerViewModel)
         }
         composable(route = Destinations.MEDICINESCREEN.name){
             MedicineScreen()

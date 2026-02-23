@@ -18,16 +18,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,19 +43,19 @@ import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 
 @Composable
-fun LoggingScreen(modifier: Modifier = Modifier){
+fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        LoggingScreenTabs()
+        LoggingScreenTabs(hyprTrackerViewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoggingScreenTabs() {
+fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column(
@@ -79,15 +77,15 @@ fun LoggingScreenTabs() {
         }
 
         when (selectedTab) {
-            0 -> LogTab()
-            1 -> HistoryTab()
+            0 -> LogTab(hyprTrackerViewModel)
+            1 -> HistoryTab(hyprTrackerViewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogTab() {
+fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -99,6 +97,7 @@ fun LogTab() {
             .fillMaxWidth()
             .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
     ) {
+        val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
         Text(
             text = stringResource(R.string.Log_BP),
             fontWeight = FontWeight.Bold,
@@ -107,13 +106,12 @@ fun LogTab() {
             )
 
         Row(modifier = Modifier) {
-            var systolicValue by remember { mutableStateOf("") }
-            var diastolicValue by remember { mutableStateOf("") }
-            var pulseValue by remember { mutableStateOf("") }
+
 
             OutlinedTextField(
-                value = systolicValue,
-                onValueChange = { systolicValue = it },
+                singleLine = true,
+                value = hyprTackerUiState.systolicValue,
+                onValueChange = { hyprTrackerViewModel.updateSystolicValue(it) },
                 label = { Text(text = stringResource(R.string.systolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
@@ -126,8 +124,9 @@ fun LogTab() {
             )
 
             OutlinedTextField(
-                value = diastolicValue,
-                onValueChange = { diastolicValue = it },
+                singleLine = true,
+                value = hyprTackerUiState.diastolicValue,
+                onValueChange = { hyprTrackerViewModel.updateDiastolicValue(it) },
                 label = { Text(text = stringResource(R.string.diastolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
@@ -141,8 +140,9 @@ fun LogTab() {
             )
 
             OutlinedTextField(
-                value = pulseValue,
-                onValueChange = { pulseValue = it },
+                singleLine = true,
+                value = hyprTackerUiState.pulseValue,
+                onValueChange = { hyprTrackerViewModel.updatePulseValue(it) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -164,7 +164,7 @@ fun LogTab() {
                 painter = painterResource(R.drawable.ic_date),
                 contentDescription = null
             )
-            Text("23/02/2026")
+            Text(hyprTackerUiState.date.toString())
             Spacer(
                 modifier = Modifier
                 .width(32.dp)
@@ -173,7 +173,7 @@ fun LogTab() {
                 painter = painterResource(R.drawable.ic_time),
                 contentDescription = null
             )
-            Text("13:56")
+            Text(hyprTackerUiState.time.toString())
         }
 
         Row(modifier = Modifier) {
@@ -184,8 +184,9 @@ fun LogTab() {
                     .weight(2f)
                     .padding(8.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
                 Text(text = stringResource(R.string.Confirm_BP_Log))
+                Spacer(modifier = Modifier.padding(4.dp))
+                Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
             }
 
             Button(
@@ -195,8 +196,9 @@ fun LogTab() {
                     .weight(1f)
                     .padding(8.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
                 Text(text = stringResource(R.string.edit_BP_Log_Details))
+                Spacer(modifier = Modifier.padding(4.dp))
+                Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
             }
         }
     }
@@ -271,6 +273,6 @@ fun InfographicLine(
 }
 
 @Composable
-fun HistoryTab(){
+fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel){
     Text("History Screen")
 }
