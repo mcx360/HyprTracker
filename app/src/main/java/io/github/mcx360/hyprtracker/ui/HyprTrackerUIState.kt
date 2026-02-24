@@ -1,19 +1,16 @@
 package io.github.mcx360.hyprtracker.ui
 
+import io.github.mcx360.hyprtracker.data.FakeData
+import io.github.mcx360.hyprtracker.data.HyprReading
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.Date
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
-
-
 
 data class HyprTrackerUIState(
     val systolicValue: String = "",
     val diastolicValue: String = "",
     val pulseValue: String = "",
-    val date: LocalDate = LocalDate.now(),
-    val time: LocalTime = LocalTime.now().withSecond(0).withNano(0)
+    val date: String = LocalDate.now().toString(),
+    val time: String = LocalTime.now().withSecond(0).withNano(0).toString(),
+    val notes: String = "N/A",
+    val readings: List<HyprReading> = FakeData.getInitialReadings()
 )

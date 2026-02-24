@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -19,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -26,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,6 +46,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.data.HyprReading
 
 @Composable
 fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
@@ -164,7 +170,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 painter = painterResource(R.drawable.ic_date),
                 contentDescription = null
             )
-            Text(hyprTackerUiState.date.toString())
+            Text(hyprTackerUiState.date)
             Spacer(
                 modifier = Modifier
                 .width(32.dp)
@@ -173,13 +179,25 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 painter = painterResource(R.drawable.ic_time),
                 contentDescription = null
             )
-            Text(hyprTackerUiState.time.toString())
+            Text(hyprTackerUiState.time)
         }
 
         Row(modifier = Modifier) {
 
-            Button(
-                onClick = {},
+                Button(
+                onClick = {hyprTrackerViewModel.addReading(
+                    HyprReading(
+                        systolicValue = hyprTackerUiState.systolicValue,
+                        diastolicValue = hyprTackerUiState.diastolicValue,
+                        pulseValue = hyprTackerUiState.pulseValue,
+                        time = hyprTackerUiState.time,
+                        date = hyprTackerUiState.date,
+                        notes = "N/A"
+                    )
+                )
+                    hyprTrackerViewModel.resetBloodPressureLog()
+                          },
+
                 modifier = Modifier
                     .weight(2f)
                     .padding(8.dp)
@@ -274,5 +292,11 @@ fun InfographicLine(
 
 @Composable
 fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel){
-    Text("History Screen")
+    val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
+    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+            item {
+                Text(hyprTrackerUIState.readings.toString())
+            }
+
+    }
 }

@@ -26,7 +26,7 @@
     <string name="diastolic">Diastolic</string>
     <string name="pulse">Pulse</string>
 
-    <!--Strings for Log BLood Pressure tab in logging screen-->
+    <!--Strings for Log Blood Pressure tab in logging screen-->
     <string name="Log_BP">Log Blood Pressure</string>
     <string name="Confirm_BP_Log">Confirm</string>
     <string name="edit_BP_Log_Details">Edit</string>
