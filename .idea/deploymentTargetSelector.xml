@@ -13,10 +13,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="SystloicValueIsShowingInLogTab()">
+      <SelectionState runConfigName="LoggingScreenUiTests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SystolicValueTextFieldSetsAndUnsets()">
+      <SelectionState runConfigName="ConfirmButtonClearsAllTextFields()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="CheckNavigationDrawerOpensAndShowsCorrectly()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="checkExportButtonWorksInNavigationDrawer()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

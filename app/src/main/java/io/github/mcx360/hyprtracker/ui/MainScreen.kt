@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -49,10 +50,25 @@ import io.github.mcx360.hyprtracker.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+const val TOPAPPBAR_TAG = "topAppBar"
+const val BOTTOMNAVBAR_TAG = "bottomNavBar"
+const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
+const val EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG = "exportLogs"
+const val SHARELOGS_IN_NAVIGATIONDRAWER_TAG = "share logs"
+const val MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG = "myDocuments"
+const val BIN_IN_NAVIGATIONDRAWER_TAG = "bin"
+const val BACKUP_IN_NAVIGATIONDRAWER_TAG = "backup"
+const val RATEAPP_IN_NAVIGATIONDRAWER_TAG = "rateApp"
+const val REPORTBUG_IN_NAVIGATIONDRAWER_TAG = "reportBug"
+const val USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG = "settingsAndUsers"
+const val ABOUT_IN_NAVIGATIONDRAWER_TAG = "about"
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title: String?){
+fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title: String?, modifier: Modifier = Modifier){
     CenterAlignedTopAppBar(
+        modifier = Modifier.testTag(TOPAPPBAR_TAG),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
@@ -89,9 +105,10 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title:
 }
 
 @Composable
-fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStack: NavBackStackEntry?, currentRoute: String?){
+fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStack: NavBackStackEntry?, currentRoute: String?, modifier: Modifier){
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.onPrimary
+        containerColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
             selected = currentRoute == Destinations.LOGGINGSCREEN.name,
@@ -153,6 +170,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
         .statusBarsPadding()
     ){
     ModalNavigationDrawer(
+        modifier = Modifier.testTag(NAVIGATIONDRAWER_TAG),
         drawerContent = {
                 ModalDrawerSheet{
                     Text(stringResource(R.string.app_name), modifier = Modifier
@@ -167,7 +185,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG)
 
                     )
                     NavigationDrawerItem(
@@ -176,7 +195,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(SHARELOGS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.documents_label))},
@@ -184,7 +204,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.bin_label))},
@@ -192,7 +213,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
                     NavigationDrawerItem(
@@ -201,7 +223,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.rating_label))},
@@ -209,7 +232,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(RATEAPP_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.bug_report_label))},
@@ -217,7 +241,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(REPORTBUG_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
                     NavigationDrawerItem(
@@ -226,7 +251,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.about_label))},
@@ -234,7 +260,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         onClick = {},
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
-                        }
+                        },
+                        modifier = Modifier.testTag(ABOUT_IN_NAVIGATIONDRAWER_TAG)
                     )
             }
         },
@@ -249,7 +276,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 HyprTrackerBottomNavigationBar(
                     currentRoute = currentRoute,
                     navController = navController,
-                    navBackStack = navBackStackEntry
+                    navBackStack = navBackStackEntry,
+                    modifier = Modifier
                 )
             },
             floatingActionButton = {
