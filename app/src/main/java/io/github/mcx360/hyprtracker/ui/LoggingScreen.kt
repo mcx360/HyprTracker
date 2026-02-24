@@ -20,8 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -29,8 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +44,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
+import kotlinx.serialization.Contextual
+
+const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
+const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
+const val PULSE_OUTLINEDTEXTFIELD_TAG = "PulseOutlinedTextField"
+const val CONFIRM_BUTTON = "confirmButton"
 
 @Composable
 fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
@@ -113,7 +116,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
         Row(modifier = Modifier) {
 
-
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.systolicValue,
@@ -127,6 +129,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
+                    .testTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG)
             )
 
             OutlinedTextField(
@@ -143,6 +146,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
+                    .testTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG)
             )
 
             OutlinedTextField(
@@ -158,6 +162,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
+                    .testTag(PULSE_OUTLINEDTEXTFIELD_TAG)
             )
         }
 
@@ -201,6 +206,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 modifier = Modifier
                     .weight(2f)
                     .padding(8.dp)
+                    .testTag(CONFIRM_BUTTON)
             ) {
                 Text(text = stringResource(R.string.Confirm_BP_Log))
                 Spacer(modifier = Modifier.padding(4.dp))
