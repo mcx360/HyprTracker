@@ -56,10 +56,8 @@ class LoggingScreenUiTests() {
 
         composeTestRule.onNodeWithTag(CONFIRM_BUTTON).performClick()
 
-
         composeTestRule.onNodeWithTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
         composeTestRule.onNodeWithTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
         composeTestRule.onNodeWithTag(PULSE_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
-
     }
 }
