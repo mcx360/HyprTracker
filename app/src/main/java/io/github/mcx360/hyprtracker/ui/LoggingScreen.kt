@@ -3,8 +3,10 @@ package io.github.mcx360.hyprtracker.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,11 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LeadingIconTab
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
@@ -41,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
@@ -297,12 +304,46 @@ fun InfographicLine(
 }
 
 @Composable
-fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel){
+fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
-    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-            item {
-                Text(hyprTrackerUIState.readings.toString())
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        items(hyprTrackerUIState.readings.size,) { index ->
+            Card() {
+                Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.Center) {
+                    Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
+                    Text(hyprTrackerUIState.readings.get(index).date)
+                    Spacer(modifier = Modifier.padding(start = 16.dp))
+                    Icon(painter = painterResource(R.drawable.ic_time), contentDescription = null)
+                    Text(hyprTrackerUIState.readings.get(index).time)
+
+                }
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(hyprTrackerUIState.readings.get(index).systolicValue)
+                        Text("SYS")
+                    }
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(hyprTrackerUIState.readings.get(index).diastolicValue)
+                        Text("DIA")
+                    }
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(hyprTrackerUIState.readings.get(index).pulseValue)
+                        Text("BPM")
+                    }
+                }
+
+                Row(modifier = Modifier.padding(16.dp)) {
+                    Text("Notes: " + hyprTrackerUIState.readings.get(index).notes)
+                }
             }
 
+        }
     }
 }
