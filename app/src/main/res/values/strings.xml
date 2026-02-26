@@ -77,5 +77,12 @@
     <string name="Hypertension_stage_2">Hypertension Stage 2</string>
     <string name="Hypertension_crisis">Hypertension Crisis</string>
     <string name="Error">Error</string>
+    <string name="Hypertension_Stage_Category">Category</string>
+
+    <!--Strings for history tab-->
+    <string name="Systolic_Value">SYS</string>
+    <string name="Diastolic_Value">DIA</string>
+    <string name="Pulse_Value">BPM</string>
+    <string name="Notes_Value">Notes:</string>
 
 </resources>

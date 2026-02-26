@@ -333,15 +333,15 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(hyprTrackerUIState.readings.get(index).systolicValue)
-                        Text("SYS")
+                        Text(stringResource(R.string.Systolic_Value))
                     }
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(hyprTrackerUIState.readings.get(index).diastolicValue)
-                        Text("DIA")
+                        Text(stringResource(R.string.Diastolic_Value))
                     }
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(hyprTrackerUIState.readings.get(index).pulseValue)
-                        Text("BPM")
+                        Text(stringResource(R.string.Pulse_Value))
                     }
                     Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -357,14 +357,14 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                                     else -> stringResource(R.string.Error)
                                 })
                         }
-                        Text("Category", modifier = Modifier.padding(start = 24.dp))
+                        Text(stringResource(R.string.Hypertension_Stage_Category), modifier = Modifier.padding(start = 24.dp))
                     }
 
                 }
 
                 Row(modifier = Modifier.padding(16.dp)) {
                     Column() {
-                        Text("Notes: " + hyprTrackerUIState.readings.get(index).notes)
+                        Text(stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings.get(index).notes)
                     }
                     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
                         Icon(
