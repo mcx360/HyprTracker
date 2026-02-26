@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -261,11 +262,11 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             InfographicLine(MaterialTheme.colorScheme.surfaceContainerHighest, stringArrayResource(R.array.hypertension_subheading),)
-            InfographicLine(Color(0xFF2E7D32), stringArrayResource(R.array.hypertension_stage_normal))
-            InfographicLine(Color(0xFFF9A825), stringArrayResource(R.array.hypertension_stage_elevated))
-            InfographicLine(Color(0xFFF57C00), stringArrayResource(R.array.hypertension_stage_one))
-            InfographicLine(Color(0xFFD32F2F),stringArrayResource(R.array.hypertension_stage_two))
-            InfographicLine(Color(0xFFB71C1C), stringArrayResource(R.array.hypertension_stage_crisis))
+            InfographicLine(colorResource(R.color.Hypertension_Normal_Stage_Colour), stringArrayResource(R.array.hypertension_stage_normal))
+            InfographicLine(colorResource(R.color.Hypertension_Elevated_Stage_Colour), stringArrayResource(R.array.hypertension_stage_elevated))
+            InfographicLine(colorResource(R.color.Hypertension_Stage1_Colour), stringArrayResource(R.array.hypertension_stage_one))
+            InfographicLine(colorResource(R.color.Hypertension_Stage2_Colour),stringArrayResource(R.array.hypertension_stage_two))
+            InfographicLine(colorResource(R.color.Hypertension_crisis_Colour), stringArrayResource(R.array.hypertension_stage_crisis))
         }
     }
 }
@@ -384,11 +385,11 @@ fun Dot(
      hyperTensionStage : String
 ) {
     val colour = when(hyperTensionStage){
-        "Normal" -> Color(0xFF2E7D32)
-        "Elevated" -> Color(0xFFF9A825)
-        "Stage 1" -> Color(0xFFF57C00)
-        "Stage 2" -> Color(0xFFD32F2F)
-        "Hypertension Crisis" -> Color(0xFFB71C1C)
+        "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
+        "Elevated" -> colorResource(R.color.Hypertension_Elevated_Stage_Colour)
+        "Stage 1" -> colorResource(R.color.Hypertension_Stage1_Colour)
+        "Stage 2" -> colorResource(R.color.Hypertension_Stage2_Colour)
+        "Hypertension Crisis" -> colorResource(R.color.Hypertension_crisis_Colour)
         else -> Color.Gray
     }
 
