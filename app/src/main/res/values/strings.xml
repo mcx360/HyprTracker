@@ -70,4 +70,12 @@
         <item>120 And Over</item>
     </string-array>
 
+    <!--Strings for Hypertension stages-->
+    <string name="Normal">Normal</string>
+    <string name="Elevated">Elevated</string>
+    <string name="Hypertension_stage_1">Hypertension Stage 1</string>
+    <string name="Hypertension_stage_2">Hypertension Stage 2</string>
+    <string name="Hypertension_crisis">Hypertension Crisis</string>
+    <string name="Error">Error</string>
+
 </resources>

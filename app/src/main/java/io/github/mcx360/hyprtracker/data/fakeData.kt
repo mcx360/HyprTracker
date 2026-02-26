@@ -1,6 +1,10 @@
 //fake data class to be used for simulating the data layer of the app while I focus on creating the UI layer first, file to be removed
 package io.github.mcx360.hyprtracker.data
 
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+import io.github.mcx360.hyprtracker.R
+
 data class HyprReading(
     val systolicValue: String,
     val diastolicValue: String,
@@ -16,7 +20,7 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
     val systolicValue = systolicValue.toInt()
 
     if(systolicValue > 180 || diastolicValue >= 120){
-        return "Hypertension crisis"
+        return "Hypertension Crisis"
     }else if (systolicValue >= 140 || diastolicValue >= 90 ){
         return "Stage 2"
     }else if (systolicValue >= 130 || diastolicValue >= 80){

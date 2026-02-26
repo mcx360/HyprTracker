@@ -343,13 +343,21 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         Text(hyprTrackerUIState.readings.get(index).pulseValue)
                         Text("BPM")
                     }
-                    Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                    Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Dot(hyprTrackerUIState.readings.get(index).stage)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(hyprTrackerUIState.readings.get(index).stage)
+                            Text(
+                                when(hyprTrackerUIState.readings.get(index).stage){
+                                    "Normal" -> stringResource(R.string.Normal)
+                                    "Elevated" -> stringResource(R.string.Elevated)
+                                    "Stage 1" -> stringResource(R.string.Hypertension_stage_1)
+                                    "Stage 2" -> stringResource(R.string.Hypertension_stage_2)
+                                    "Hypertension Crisis" -> stringResource(R.string.Hypertension_crisis)
+                                    else -> stringResource(R.string.Error)
+                                })
                         }
-                        Text("Category")
+                        Text("Category", modifier = Modifier.padding(start = 24.dp))
                     }
 
                 }
@@ -367,7 +375,6 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
                 }
             }
-
         }
     }
 }
@@ -381,7 +388,7 @@ fun Dot(
         "Elevated" -> Color(0xFFF9A825)
         "Stage 1" -> Color(0xFFF57C00)
         "Stage 2" -> Color(0xFFD32F2F)
-        "Hypertension crisis" -> Color(0xFFB71C1C)
+        "Hypertension Crisis" -> Color(0xFFB71C1C)
         else -> Color.Gray
     }
 
