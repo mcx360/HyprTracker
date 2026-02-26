@@ -1,7 +1,9 @@
 package io.github.mcx360.hyprtracker.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,11 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -48,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
@@ -337,13 +343,51 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         Text(hyprTrackerUIState.readings.get(index).pulseValue)
                         Text("BPM")
                     }
+                    Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Dot(hyprTrackerUIState.readings.get(index).stage)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(hyprTrackerUIState.readings.get(index).stage)
+                        }
+                        Text("Category")
+                    }
+
                 }
 
                 Row(modifier = Modifier.padding(16.dp)) {
-                    Text("Notes: " + hyprTrackerUIState.readings.get(index).notes)
+                    Column() {
+                        Text("Notes: " + hyprTrackerUIState.readings.get(index).notes)
+                    }
+                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = null
+                        )
+                    }
+
                 }
             }
 
         }
     }
+}
+
+@Composable
+fun Dot(
+     hyperTensionStage : String
+) {
+    val colour = when(hyperTensionStage){
+        "Normal" -> Color(0xFF2E7D32)
+        "Elevated" -> Color(0xFFF9A825)
+        "Stage 1" -> Color(0xFFF57C00)
+        "Stage 2" -> Color(0xFFD32F2F)
+        "Hypertension crisis" -> Color(0xFFB71C1C)
+        else -> Color.Gray
+    }
+
+    Box(
+        modifier = Modifier
+            .size(16.dp)
+            .background(colour, shape = CircleShape)
+    )
 }

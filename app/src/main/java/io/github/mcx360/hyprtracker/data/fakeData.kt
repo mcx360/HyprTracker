@@ -7,8 +7,30 @@ data class HyprReading(
     val pulseValue: String,
     val date: String,
     val time: String,
-    val notes: String
+    val notes: String,
+    val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
 )
+
+fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String {
+    val diastolicValue = diastolicValue.toInt()
+    val systolicValue = systolicValue.toInt()
+
+    if(systolicValue > 180 || diastolicValue >= 120){
+        return "Hypertension crisis"
+    }else if (systolicValue >= 140 || diastolicValue >= 90 ){
+        return "Stage 2"
+    }else if (systolicValue >= 130 || diastolicValue >= 80){
+        return "Stage 1"
+    }
+    else if (systolicValue >= 120 && diastolicValue < 80){
+        return "Elevated"
+    }
+    else if (systolicValue <120 && diastolicValue < 80){
+        return "Normal"
+    } else{
+        return "error"
+    }
+}
 
 object FakeData {
     fun getInitialReadings(): List<HyprReading> {
