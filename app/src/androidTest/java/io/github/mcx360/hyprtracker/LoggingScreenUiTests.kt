@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import io.github.mcx360.hyprtracker.ui.CONFIRM_BUTTON
+import io.github.mcx360.hyprtracker.ui.CONFIRM_BUTTON_TAG
 import io.github.mcx360.hyprtracker.ui.DIASTOLIC_OUTLINEDTEXTFIELD_TAG
 import io.github.mcx360.hyprtracker.ui.HyprTrackerScreen
 import io.github.mcx360.hyprtracker.ui.PULSE_OUTLINEDTEXTFIELD_TAG
@@ -54,7 +54,7 @@ class LoggingScreenUiTests() {
         composeTestRule.onNodeWithTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG).performTextInput("70")
         composeTestRule.onNodeWithTag(PULSE_OUTLINEDTEXTFIELD_TAG).performTextInput("70")
 
-        composeTestRule.onNodeWithTag(CONFIRM_BUTTON).performClick()
+        composeTestRule.onNodeWithTag(CONFIRM_BUTTON_TAG).performClick()
 
         composeTestRule.onNodeWithTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
         composeTestRule.onNodeWithTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))

@@ -1,14 +1,12 @@
 package io.github.mcx360.hyprtracker.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,14 +19,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LeadingIconTab
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
@@ -53,17 +48,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
-import kotlinx.serialization.Contextual
 
 const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
 const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
 const val PULSE_OUTLINEDTEXTFIELD_TAG = "PulseOutlinedTextField"
-const val CONFIRM_BUTTON = "confirmButton"
+const val CONFIRM_BUTTON_TAG = "confirmButton"
 
 @Composable
 fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
@@ -71,7 +63,7 @@ fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTracke
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         LoggingScreenTabs(hyprTrackerViewModel)
     }
 }
@@ -79,6 +71,7 @@ fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTracke
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
+
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column(
@@ -155,7 +148,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
-
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -220,7 +212,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 modifier = Modifier
                     .weight(2f)
                     .padding(8.dp)
-                    .testTag(CONFIRM_BUTTON)
+                    .testTag(CONFIRM_BUTTON_TAG)
             ) {
                 Text(text = stringResource(R.string.Confirm_BP_Log))
                 Spacer(modifier = Modifier.padding(4.dp))

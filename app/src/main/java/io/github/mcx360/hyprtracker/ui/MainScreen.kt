@@ -29,6 +29,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +68,12 @@ const val ABOUT_IN_NAVIGATIONDRAWER_TAG = "about"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title: String?, modifier: Modifier = Modifier){
+fun HyprTrackerTopAppBar(
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    title: String?,
+    modifier: Modifier = Modifier,
+){
     CenterAlignedTopAppBar(
         modifier = Modifier.testTag(TOPAPPBAR_TAG),
         colors = TopAppBarDefaults.topAppBarColors(
@@ -105,7 +112,12 @@ fun HyprTrackerTopAppBar(scope: CoroutineScope, drawerState: DrawerState, title:
 }
 
 @Composable
-fun HyprTrackerBottomNavigationBar(navController: NavHostController, navBackStack: NavBackStackEntry?, currentRoute: String?, modifier: Modifier){
+fun HyprTrackerBottomNavigationBar(
+    navController: NavHostController,
+    navBackStack: NavBackStackEntry?,
+    currentRoute: String?,
+    modifier: Modifier
+){
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier.testTag(BOTTOMNAVBAR_TAG)
@@ -164,6 +176,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val expanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
