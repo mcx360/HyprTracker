@@ -56,6 +56,9 @@ const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
 const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
 const val PULSE_OUTLINEDTEXTFIELD_TAG = "PulseOutlinedTextField"
 const val CONFIRM_BUTTON_TAG = "confirmButton"
+const val LOG_SCREEN_TAB = "Logtab"
+const val HISTRORY_SCREEN_TAG = "HistoryTab"
+const val HISTORY_COLUMN_TAG = "HistoryColumm"
 
 @Composable
 fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
@@ -83,12 +86,14 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
             Tab(
                 selected = selectedTab == 0,
                 onClick = { selectedTab = 0 },
-                text = { Text(text = stringResource(R.string.log_tab)) }
+                text = { Text(text = stringResource(R.string.log_tab)) },
+                modifier = Modifier.testTag(LOG_SCREEN_TAB)
             )
             Tab(
                 selected = selectedTab == 1,
                 onClick = { selectedTab = 1 },
-                text = { Text(stringResource(R.string.History_tab)) }
+                text = { Text(stringResource(R.string.History_tab)) },
+                modifier = Modifier.testTag(HISTRORY_SCREEN_TAG)
             )
         }
 
@@ -309,7 +314,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(HISTORY_COLUMN_TAG)
     ) {
 
         items(hyprTrackerUIState.readings.size,) { index ->
