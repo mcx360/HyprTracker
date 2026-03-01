@@ -10,52 +10,52 @@ class DataTests{
     @Test
     fun test_Hypertension_Normal_Stage_Is_correct(){
         val stage = getHyperTensionStage("79","79")
-        assertEquals(stage, "Normal")
+        assertEquals("Normal", stage)
     }
 
     @Test
     fun test_Hypertension_Elevated_Stage_Is_Correct(){
         val stage = getHyperTensionStage("122","79")
-        assertEquals(stage, "Elevated")
+        assertEquals("Elevated", stage)
     }
 
     @Test
     fun test_Hypertension_Stage_1_is_Correct(){
         val stage = getHyperTensionStage("135", "85")
-        assertEquals(stage, "Stage 1")
+        assertEquals("Stage 1", stage)
     }
 
     @Test
     fun test_Hypertension_Stage_2_is_Correct(){
         val stage = getHyperTensionStage("150", "95")
-        assertEquals(stage, "Stage 2")
+        assertEquals("Stage 2", stage)
     }
 
     @Test
     fun Test_Hypertension_Crisis_Stage_Is_Correct(){
         val stage = getHyperTensionStage("200", "140")
-        assertEquals(stage, "Hypertension Crisis")
+        assertEquals("Hypertension Crisis", stage)
     }
 
     @Test
     fun Test_ErrorHandling(){
         val stage = getHyperTensionStage("abc","67")
-        assertEquals(stage, "error")
+        assertEquals("error", stage)
     }
 
     @Test
     fun test_Hypertension_Boundary_Normal_Elevated(){
-        val stage = getHyperTensionStage("120", "79") // upper limit of Normal
-        assertEquals(stage, "Elevated") // check if it correctly moves to Elevated
+        val stage = getHyperTensionStage("120", "79")
+        assertEquals("Elevated", stage)
     }
 
     @Test
     fun test_Hypertension_Boundary_Elevated_Stage1(){
-        val stage = getHyperTensionStage("129", "79") // upper limit of Elevated
-        assertEquals(stage, "Elevated") // should still be Elevated
+        val stage = getHyperTensionStage("129", "79")
+        assertEquals("Elevated", stage)
 
-        val stage2 = getHyperTensionStage("130", "80") // first Stage 1
-        assertEquals(stage2, "Stage 1")
+        val stage2 = getHyperTensionStage("130", "80")
+        assertEquals("Stage 1", stage2)
     }
 
     @Test
@@ -70,19 +70,19 @@ class DataTests{
     @Test
     fun test_Hypertension_NegativeValues(){
         val stage = getHyperTensionStage("-120", "80")
-        assertEquals(stage, "error")
+        assertEquals("error", stage)
 
         val stage2 = getHyperTensionStage("120", "-80")
-        assertEquals(stage2, "error")
+        assertEquals("error", stage2)
 
         val stage3 = getHyperTensionStage("0", "0")
-        assertEquals(stage3, "error")
+        assertEquals("error", stage3)
     }
 
     @Test
     fun test_Hypertension_ExtremelyHighValues(){
         val stage = getHyperTensionStage("1000", "800")
-        assertEquals(stage, "Hypertension Crisis")
+        assertEquals("Hypertension Crisis", stage)
     }
 
     @Test
@@ -95,6 +95,6 @@ class DataTests{
     @Test
     fun test_Hypertension_DecimalValues(){
         val stage = getHyperTensionStage("120.5", "79.5")
-        assertEquals(stage, "Elevated")
+        assertEquals("Elevated", stage)
     }
 }

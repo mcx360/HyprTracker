@@ -59,6 +59,7 @@ const val CONFIRM_BUTTON_TAG = "confirmButton"
 const val LOG_SCREEN_TAB = "Logtab"
 const val HISTRORY_SCREEN_TAG = "HistoryTab"
 const val HISTORY_COLUMN_TAG = "HistoryColumm"
+const val HISTORY_TAB_ITEM = "HistoryTabItem"
 
 @Composable
 fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
@@ -321,7 +322,12 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
         items(hyprTrackerUIState.readings.size,) { index ->
             Card() {
-                Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.Center) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .testTag(HISTORY_TAB_ITEM),
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
                     Text(hyprTrackerUIState.readings.get(index).date)
                     Spacer(modifier = Modifier.padding(start = 16.dp))

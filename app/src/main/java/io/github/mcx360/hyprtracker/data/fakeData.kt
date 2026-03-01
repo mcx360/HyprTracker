@@ -17,7 +17,10 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
         val diastolicValue = diastolicValue.toInt()
         val systolicValue = systolicValue.toInt()
 
-        if(systolicValue > 180 || diastolicValue >= 120){
+        if (systolicValue <=0 || diastolicValue <=0){
+            return "error"
+        }
+        else if(systolicValue > 180 || diastolicValue >= 120){
             return "Hypertension Crisis"
         }else if (systolicValue >= 140 || diastolicValue >= 90 ){
             return "Stage 2"
@@ -29,7 +32,8 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
         }
         else if (systolicValue <120 && diastolicValue < 80){
             return "Normal"
-        } else{
+        }
+        else{
             return "error"
         }
     } catch (e : NumberFormatException){
