@@ -193,7 +193,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 .width(32.dp)
             )
             Icon(
-                painter = painterResource(R.drawable.ic_time),
+                painter = painterResource(R.drawable.ic_analogue_clock),
                 contentDescription = null
             )
             Text(hyprTackerUiState.time)
@@ -331,7 +331,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                     Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
                     Text(hyprTrackerUIState.readings.get(index).date)
                     Spacer(modifier = Modifier.padding(start = 16.dp))
-                    Icon(painter = painterResource(R.drawable.ic_time), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.ic_analogue_clock), contentDescription = null)
                     Text(hyprTrackerUIState.readings.get(index).time)
 
                 }
