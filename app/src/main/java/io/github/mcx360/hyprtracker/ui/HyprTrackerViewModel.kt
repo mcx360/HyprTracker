@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 
 class HyprTrackerViewModel : ViewModel() {
@@ -21,7 +22,11 @@ class HyprTrackerViewModel : ViewModel() {
         viewModelScope.launch {
             while(isActive){
                 _uiState.update { currentState ->
-                    currentState.copy(time = LocalTime.now().withSecond(0).withNano(0).toString())
+                    currentState.copy(
+                        time = LocalTime.now().withSecond(0).withNano(0).toString(),
+                        date = LocalDate.now().toString()
+                    )
+
                 }
                 delay(1000)
             }

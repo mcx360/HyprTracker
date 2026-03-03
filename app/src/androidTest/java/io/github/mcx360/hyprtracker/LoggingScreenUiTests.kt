@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -140,5 +141,23 @@ class LoggingScreenUiTests() {
         composeTestRule.onAllNodesWithTag(HISTORY_TAB_ITEM).filter(hasAnyChild(hasText("150")))
         composeTestRule.onAllNodesWithTag(HISTORY_TAB_ITEM).filter(hasAnyChild(hasText("120")))
         composeTestRule.onAllNodesWithTag(HISTORY_TAB_ITEM).filter(hasAnyChild(hasText("Hypertension Crisis")))
+    }
+
+    @Test
+    fun assertThatConfirmButtonOnlyClearsWhenSystolicAndDiastolicValuesAreInputted(){
+        composeTestRule.onNodeWithTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG).performTextInput("200")
+        composeTestRule.onNodeWithTag(CONFIRM_BUTTON_TAG).performClick()
+        composeTestRule.onNodeWithTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText("200"))
+
+        composeTestRule.onNodeWithTag(PULSE_OUTLINEDTEXTFIELD_TAG).performTextInput("120")
+        composeTestRule.onNodeWithTag(CONFIRM_BUTTON_TAG).performClick()
+        composeTestRule.onNodeWithTag(PULSE_OUTLINEDTEXTFIELD_TAG).assert(hasText("120"))
+
+        composeTestRule.onNodeWithTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG).performTextInput("150")
+        composeTestRule.onNodeWithTag(CONFIRM_BUTTON_TAG).performClick()
+
+        composeTestRule.onNodeWithTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
+        composeTestRule.onNodeWithTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
+        composeTestRule.onNodeWithTag(PULSE_OUTLINEDTEXTFIELD_TAG).assert(hasText(""))
     }
 }

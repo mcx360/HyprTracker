@@ -95,6 +95,6 @@ class DataTests{
     @Test
     fun test_Hypertension_DecimalValues(){
         val stage = getHyperTensionStage("120.5", "79.5")
-        assertEquals("Elevated", stage)
+        assertEquals("error", stage)
     }
 }

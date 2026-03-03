@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
 
@@ -132,7 +133,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.systolicValue,
-                onValueChange = { hyprTrackerViewModel.updateSystolicValue(it) },
+                onValueChange = { if (it.isDigitsOnly()){
+                    hyprTrackerViewModel.updateSystolicValue(it)
+                } },
                 label = { Text(text = stringResource(R.string.systolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
@@ -148,7 +151,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.diastolicValue,
-                onValueChange = { hyprTrackerViewModel.updateDiastolicValue(it) },
+                onValueChange = { if (it.isDigitsOnly()){
+                    hyprTrackerViewModel.updateDiastolicValue(it)
+                } },
                 label = { Text(text = stringResource(R.string.diastolic)) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
@@ -202,17 +207,20 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
         Row(modifier = Modifier) {
 
                 Button(
-                onClick = {hyprTrackerViewModel.addReading(
-                    HyprReading(
-                        systolicValue = hyprTackerUiState.systolicValue,
-                        diastolicValue = hyprTackerUiState.diastolicValue,
-                        pulseValue = hyprTackerUiState.pulseValue,
-                        time = hyprTackerUiState.time,
-                        date = hyprTackerUiState.date,
-                        notes = "N/A"
-                    )
-                )
-                    hyprTrackerViewModel.resetBloodPressureLog()
+                onClick = {
+                    if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != ""){
+                        hyprTrackerViewModel.addReading(
+                            HyprReading(
+                                systolicValue = hyprTackerUiState.systolicValue,
+                                diastolicValue = hyprTackerUiState.diastolicValue,
+                                pulseValue = hyprTackerUiState.pulseValue,
+                                time = hyprTackerUiState.time,
+                                date = hyprTackerUiState.date,
+                                notes = "N/A"
+                            )
+                        )
+                        hyprTrackerViewModel.resetBloodPressureLog()
+                    }
                           },
 
                 modifier = Modifier
