@@ -133,7 +133,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.systolicValue,
-                onValueChange = { if (it.isDigitsOnly()){
+                onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length<3){
                     hyprTrackerViewModel.updateSystolicValue(it)
                 } },
                 label = { Text(text = stringResource(R.string.systolic)) },
@@ -151,7 +151,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.diastolicValue,
-                onValueChange = { if (it.isDigitsOnly()){
+                onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length<3){
                     hyprTrackerViewModel.updateDiastolicValue(it)
                 } },
                 label = { Text(text = stringResource(R.string.diastolic)) },
@@ -169,7 +169,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
             OutlinedTextField(
                 singleLine = true,
                 value = hyprTackerUiState.pulseValue,
-                onValueChange = { hyprTrackerViewModel.updatePulseValue(it) },
+                onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length<3){
+                    hyprTrackerViewModel.updatePulseValue(it)
+                } },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
