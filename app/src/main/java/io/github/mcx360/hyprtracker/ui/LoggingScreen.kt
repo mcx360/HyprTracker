@@ -25,14 +25,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,6 +57,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
 const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
@@ -77,6 +84,9 @@ fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTracke
 @Composable
 fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
 
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column(
@@ -100,15 +110,46 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
         }
 
         when (selectedTab) {
-            0 -> LogTab(hyprTrackerViewModel)
+            0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true})
             1 -> HistoryTab(hyprTrackerViewModel)
         }
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Edit Blood pressure Log details",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 16.dp, bottom = 16.dp),
+                        style = MaterialTheme.typography.titleLarge,)
+
+
+
+                    Button(onClick = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible){
+                                showBottomSheet = false
+                            }
+                        }
+                    }) {
+                        Text("Accept")
+                    }
+                }
+                }
+
+            }
+        }
     }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
+fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -237,6 +278,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
             Button(
                 onClick = {
+                    updateShowBottomSheet(true)
                 },
                 modifier = Modifier
                     .weight(1f)
