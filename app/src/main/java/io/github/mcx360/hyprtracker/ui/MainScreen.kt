@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui
 
+import android.app.Dialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -205,6 +207,38 @@ fun AboutDialog(onDismissRequest: () -> Unit, ){
     }
 }
 
+@Composable
+fun BugReportDialog(onDismissRequest: () -> Unit){
+    Dialog(onDismissRequest = {}){
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(375.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text("Please Describe bug report")
+                TextField(
+                    value = "toDO",
+                    onValueChange = {},
+                    modifier = Modifier.padding(16.dp)
+                )
+                Button(onClick = {
+                    onDismissRequest()
+                }) {
+                    Text("Confirm")
+                }
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel = viewModel()){
@@ -215,6 +249,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val openAboutDialog = remember { mutableStateOf(false) }
+    val openBugReportDialog = remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
@@ -289,7 +324,14 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.bug_report_label))},
                         selected = false,
-                        onClick = {},
+                        onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isOpen) close() else open()
+                                }
+                            }
+                            openBugReportDialog.value = true
+                        },
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
                         },
@@ -361,6 +403,18 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                                     drawerState.apply {
                                         if (isOpen) close() else open()                                    }
                                 }
+                            }
+                        )
+                    }
+                }
+                when{
+                    openBugReportDialog.value -> {
+                        BugReportDialog(
+                            onDismissRequest = {
+                                openBugReportDialog.value = false
+                                scope.launch { drawerState.apply {
+                                    if (isOpen) close() else open()
+                                } }
                             }
                         )
                     }
