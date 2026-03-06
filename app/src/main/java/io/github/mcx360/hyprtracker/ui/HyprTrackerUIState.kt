@@ -11,6 +11,6 @@ data class HyprTrackerUIState(
     val pulseValue: String = "",
     val date: String = LocalDate.now().toString(),
     val time: String = LocalTime.now().withSecond(0).withNano(0).toString(),
-    val notes: String = "N/A",
+    val notes: String = "",
     val readings: List<HyprReading> = FakeData.getInitialReadings()
 )

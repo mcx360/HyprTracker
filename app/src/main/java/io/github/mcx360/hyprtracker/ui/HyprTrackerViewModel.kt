@@ -44,7 +44,7 @@ class HyprTrackerViewModel : ViewModel() {
                 systolicValue = "",
                 diastolicValue = "",
                 pulseValue = "",
-                notes = "N/A",
+                notes = "",
                 date = LocalDate.now().toString(),
                 time = LocalTime.now().withSecond(0).withNano(0).toString()
                 )
@@ -70,6 +70,13 @@ class HyprTrackerViewModel : ViewModel() {
             currentState.copy(pulseValue = inputtedValue)
         }
     }
+
+    fun updateNotesValue(inputtedValue: String){
+        _uiState.update { currentState ->
+            currentState.copy(notes = inputtedValue)
+        }
+    }
+
 
     fun updateDateValue(date: String){
         getCurrentDateAndTime = false

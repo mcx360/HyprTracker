@@ -142,23 +142,40 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                         style = MaterialTheme.typography.titleLarge,)
 
                     Box(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        OutlinedTextField(
-                            value = selectedDate,
-                            onValueChange = {},
-                            label = { Text("Enter Custom Log date")},
-                            readOnly = true,
-                            trailingIcon = {
-                                IconButton(onClick = {showDatePicker = !showDatePicker}) {
+                        Column() {
+                            OutlinedTextField(
+                                value = selectedDate,
+                                onValueChange = {},
+                                label = { Text("Enter Custom Log date")},
+                                readOnly = true,
+                                trailingIcon = {
+                                    IconButton(onClick = {showDatePicker = !showDatePicker}) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_date),
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().height(64.dp)
+                            )
+
+                            OutlinedTextField(
+                                value = hyprTackerUiState.notes,
+                                onValueChange = {hyprTrackerViewModel.updateNotesValue(it)},
+                                label = {Text("Enter custom note")},
+                                maxLines = 2,
+                                trailingIcon = {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_date),
+                                        painter = painterResource(R.drawable.ic_notes),
                                         contentDescription = null
                                     )
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth().height(64.dp)
-                        )
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
 
                         if (showDatePicker) {
                             Popup(
@@ -336,7 +353,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                                 pulseValue = hyprTackerUiState.pulseValue,
                                 time = hyprTackerUiState.time,
                                 date = hyprTackerUiState.date,
-                                notes = "N/A"
+                                notes = hyprTackerUiState.notes
                             )
                         )
                         hyprTrackerViewModel.resetBloodPressureLog()
