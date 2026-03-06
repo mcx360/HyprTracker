@@ -22,14 +22,18 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.testTag
@@ -54,11 +59,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
 const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
@@ -80,6 +88,11 @@ fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTracke
     }
 }
 
+fun convertMillisToDate(millis: Long): String {
+    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    return formatter.format(Date(millis))
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
@@ -88,6 +101,12 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+    val selectedDate = datePickerState.selectedDateMillis?.let {
+        convertMillisToDate(it)
+    } ?: ""
+
 
     Column(
         modifier = Modifier,
@@ -120,7 +139,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                 },
                 sheetState = sheetState
             ) {
-                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(modifier = Modifier.fillMaxWidth().height(350.dp).padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Edit Blood pressure Log details",
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -128,7 +147,56 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                             .padding(top = 16.dp, bottom = 16.dp),
                         style = MaterialTheme.typography.titleLarge,)
 
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            value = selectedDate,
+                            onValueChange = {showDatePicker = false},
+                            label = { Text("Enter Custom Log date")},
+                            readOnly = true,
+                            trailingIcon = {
+                                IconButton(onClick = {showDatePicker = !showDatePicker}) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_date),
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth().height(64.dp)
+                        )
 
+                        if (showDatePicker) {
+                            Popup(
+                                onDismissRequest = {showDatePicker = false },
+                                alignment = Alignment.TopStart
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .shadow(elevation = 4.dp)
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .padding(16.dp)
+
+                                ){
+                                        DatePicker(
+                                            state = datePickerState,
+                                            showModeToggle = false,
+                                        )
+                                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                        TextButton(onClick = {showDatePicker = false}, modifier = Modifier.padding(8.dp)) {
+                                            Text("Ok")
+                                        }
+                                        TextButton(onClick = {showDatePicker = false}, modifier = Modifier.padding(8.dp)) {
+                                            Text("Cancel")
+                                        }
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
 
                     Button(onClick = {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
