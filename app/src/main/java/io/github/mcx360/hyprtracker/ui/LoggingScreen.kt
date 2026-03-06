@@ -88,11 +88,6 @@ fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTracke
     }
 }
 
-fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
@@ -103,11 +98,10 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+    val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    } ?: ""
-
-
+        hyprTrackerViewModel.convertMillisToDate(it)
+    } ?: hyprTackerUiState.date
     Column(
         modifier = Modifier,
         verticalArrangement = Arrangement.Center,
@@ -152,7 +146,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                     ) {
                         OutlinedTextField(
                             value = selectedDate,
-                            onValueChange = {showDatePicker = false},
+                            onValueChange = {},
                             label = { Text("Enter Custom Log date")},
                             readOnly = true,
                             trailingIcon = {
@@ -192,21 +186,36 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                         }
                                     }
 
-
                                 }
                             }
                         }
                     }
 
-                    Button(onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible){
-                                showBottomSheet = false
+                    Row(horizontalArrangement = Arrangement.Center) {
+                        Button(modifier = Modifier.padding(8.dp), onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                hyprTrackerViewModel.updateDateValue(selectedDate)
+                                if (!sheetState.isVisible){
+                                    showBottomSheet = false
+                                }
                             }
+                        }) {
+                            Text("Accept")
                         }
-                    }) {
-                        Text("Accept")
+
+                        Button(modifier = Modifier.padding(8.dp), onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                hyprTrackerViewModel.resetBloodPressureLog()
+                                datePickerState.selectedDateMillis = hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
+                                if (!sheetState.isVisible){
+                                    showBottomSheet = false
+                                }
+                            }
+                        }) {
+                            Text("Reset")
+                        }
                     }
+
                 }
                 }
 

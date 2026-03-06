@@ -10,23 +10,28 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Date
+import java.util.Locale
 
 class HyprTrackerViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(HyprTrackerUIState())
     val uiState: StateFlow<HyprTrackerUIState> = _uiState.asStateFlow()
+    var getCurrentDateAndTime = true
 
     init {
         viewModelScope.launch {
             while(isActive){
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        time = LocalTime.now().withSecond(0).withNano(0).toString(),
-                        date = LocalDate.now().toString()
-                    )
-
+                if (getCurrentDateAndTime){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            time = LocalTime.now().withSecond(0).withNano(0).toString(),
+                            date = LocalDate.now().toString()
+                        )
+                    }
                 }
                 delay(1000)
             }
@@ -39,9 +44,13 @@ class HyprTrackerViewModel : ViewModel() {
                 systolicValue = "",
                 diastolicValue = "",
                 pulseValue = "",
-                notes = "N/A"
+                notes = "N/A",
+                date = LocalDate.now().toString(),
+                time = LocalTime.now().withSecond(0).withNano(0).toString()
                 )
+
         }
+        getCurrentDateAndTime = true
     }
 
     fun updateSystolicValue(inputtedValue: String){
@@ -62,11 +71,39 @@ class HyprTrackerViewModel : ViewModel() {
         }
     }
 
+    fun updateDateValue(date: String){
+        getCurrentDateAndTime = false
+        _uiState.update { currentState ->
+            currentState.copy(date = date)
+        }
+    }
+
+    fun convertMillisToDate(millis: Long?): String {
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        if (millis == null){
+            return ""
+        } else{
+            return formatter.format(Date(millis))
+        }
+    }
+
+    fun convertDateToMillis(dateString: String?): Long? {
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        return if (dateString.isNullOrEmpty()) {
+            null
+        } else {
+            try {
+                formatter.parse(dateString)?.time
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
     fun addReading(reading: HyprReading) {
         _uiState.value = _uiState.value.copy(
             readings = _uiState.value.readings + reading
         )
     }
-
 
 }
