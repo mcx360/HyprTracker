@@ -33,8 +33,10 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,6 +67,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -102,6 +105,14 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
     val selectedDate = datePickerState.selectedDateMillis?.let {
         hyprTrackerViewModel.convertMillisToDate(it)
     } ?: hyprTackerUiState.date
+    val currentime = Calendar.getInstance()
+    val timePickerState = rememberTimePickerState(
+        initialHour = currentime.get(Calendar.HOUR_OF_DAY),
+        initialMinute = currentime.get(Calendar.MINUTE),
+        is24Hour = true
+    )
+    var showTimePicker by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier,
         verticalArrangement = Arrangement.Center,
@@ -133,7 +144,10 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                 },
                 sheetState = sheetState
             ) {
-                Column(modifier = Modifier.fillMaxWidth().height(350.dp).padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp)
+                    .padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Edit Blood pressure Log details",
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -158,7 +172,25 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                         )
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth().height(64.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(64.dp)
+                            )
+
+                            OutlinedTextField(
+                                value = hyprTackerUiState.time,
+                                onValueChange = {},
+                                label = {Text("Enter Custom Time")},
+                                readOnly = true,
+                                trailingIcon = {
+                                    IconButton(onClick = {showTimePicker = !showTimePicker}) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_analogue_clock),
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
                             )
 
                             OutlinedTextField(
@@ -176,6 +208,39 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                             )
                         }
 
+                        if (showTimePicker){
+                            Popup(
+                                onDismissRequest = {showTimePicker = false },
+                                alignment = Alignment.TopStart
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .shadow(elevation = 4.dp)
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .padding(16.dp)
+
+                                ){
+                                    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                                        TimePicker(
+                                            state = timePickerState,
+                                        )
+                                        Button(onClick = {showTimePicker = false}) {
+                                            Text("Dismiss picker")
+                                        }
+                                        Button(onClick = {
+                                            hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
+                                            showTimePicker = false
+                                        }) {
+                                            Text("Confirm selection")
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+                        }
 
                         if (showDatePicker) {
                             Popup(
@@ -206,6 +271,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                 }
                             }
                         }
+
                     }
 
                     Row(horizontalArrangement = Arrangement.Center) {
@@ -259,7 +325,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
         Text(
             text = stringResource(R.string.Log_BP),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 16.dp),
             style = MaterialTheme.typography.titleLarge,
             )
 
@@ -401,7 +469,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(stringResource(R.string.BP_stages_title),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp),
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -495,7 +565,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         Text(hyprTrackerUIState.readings.get(index).pulseValue)
                         Text(stringResource(R.string.Pulse_Value))
                     }
-                    Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                    Column(modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Dot(hyprTrackerUIState.readings.get(index).stage)
                             Spacer(modifier = Modifier.width(8.dp))

@@ -77,11 +77,17 @@ class HyprTrackerViewModel : ViewModel() {
         }
     }
 
-
-    fun updateDateValue(date: String){
+    fun updateDateValue(inputtedValue: String){
         getCurrentDateAndTime = false
         _uiState.update { currentState ->
-            currentState.copy(date = date)
+            currentState.copy(date = inputtedValue)
+        }
+    }
+
+    fun updateTimeValue(inputtedValue: String){
+        getCurrentDateAndTime = false
+        _uiState.update { currentState ->
+            currentState.copy(time = inputtedValue)
         }
     }
 
