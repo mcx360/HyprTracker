@@ -31,6 +31,17 @@
     <string name="Confirm_BP_Log">Confirm</string>
     <string name="edit_BP_Log_Details">Edit</string>
 
+    <!--LoggingScreen Edit Section-->
+    <string name="Edit_BP_Log_Title">Edit Blood pressure Log details</string>
+    <string name="Custom_Log_Date_TextField">Enter Custom Log date</string>
+    <string name="Custom_Log_Time_TextField">Enter Custom Time</string>
+    <string name="Custom_Log_Note_TextField">Enter Custom Note</string>
+    <string name="Dismiss_TimePicker_Button">Dismiss picker</string>
+    <string name="Confirm_TimePicker_Button">Confirm selection</string>
+    <string name="DateSelection_Ok_Button">OK</string>
+    <string name="ACCEPT_BP_LOG_EDIT_BUTTON">Accept</string>
+    <string name="RESET_BP_LOG_EDIT_BUTTON">Reset</string>
+
 
     <!--Strings for the blood pressure stages info card in logging screen-->
     <string name="BP_stages_title">Blood Pressure Stages</string>

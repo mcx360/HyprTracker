@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui
 
-import android.app.Dialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

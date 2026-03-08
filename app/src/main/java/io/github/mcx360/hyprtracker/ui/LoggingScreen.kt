@@ -138,6 +138,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
             0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true})
             1 -> HistoryTab(hyprTrackerViewModel)
         }
+
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
@@ -145,16 +146,20 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                 },
                 sheetState = sheetState
             ) {
-                Column(modifier = Modifier
+                Column(
+                    modifier = Modifier
                     .fillMaxWidth()
                     .height(350.dp)
-                    .padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Edit Blood pressure Log details",
+                    .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.Edit_BP_Log_Title),
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 16.dp, bottom = 16.dp),
-                        style = MaterialTheme.typography.titleLarge,)
+                        style = MaterialTheme.typography.titleLarge)
 
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -163,7 +168,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                             OutlinedTextField(
                                 value = selectedDate,
                                 onValueChange = {},
-                                label = { Text("Enter Custom Log date")},
+                                label = { Text(stringResource(R.string.Custom_Log_Date_TextField))},
                                 readOnly = true,
                                 trailingIcon = {
                                     IconButton(onClick = {showDatePicker = !showDatePicker}) {
@@ -181,7 +186,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                             OutlinedTextField(
                                 value = hyprTackerUiState.time,
                                 onValueChange = {},
-                                label = {Text("Enter Custom Time")},
+                                label = {Text(stringResource(R.string.Custom_Log_Time_TextField))},
                                 readOnly = true,
                                 trailingIcon = {
                                     IconButton(onClick = {showTimePicker = !showTimePicker}) {
@@ -197,7 +202,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                             OutlinedTextField(
                                 value = hyprTackerUiState.notes,
                                 onValueChange = {hyprTrackerViewModel.updateNotesValue(it)},
-                                label = {Text("Enter custom note")},
+                                label = {Text(stringResource(R.string.Custom_Log_Note_TextField))},
                                 maxLines = 1,
                                 trailingIcon = {
                                     Icon(
@@ -230,13 +235,13 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                             state = timePickerState,
                                         )
                                         Button(onClick = {showTimePicker = false}) {
-                                            Text("Dismiss picker")
+                                            Text(stringResource(R.string.Dismiss_TimePicker_Button))
                                         }
                                         Button(onClick = {
                                             hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
                                             showTimePicker = false
                                         }) {
-                                            Text("Confirm selection")
+                                            Text(stringResource(R.string.Confirm_TimePicker_Button))
                                         }
                                     }
                                 }
@@ -263,16 +268,18 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                             state = datePickerState,
                                             showModeToggle = false,
                                         )
-                                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
                                         TextButton(onClick = {
                                             showDatePicker = false
                                             hyprTrackerViewModel.updateDateValue(selectedDate)
-
-                                                             }, modifier = Modifier.padding(8.dp)) {
-                                            Text("Ok")
-                                        }
-                                        TextButton(onClick = {showDatePicker = false}, modifier = Modifier.padding(8.dp)) {
-                                            Text("Cancel")
+                                            },
+                                            modifier = Modifier.padding(8.dp)
+                                        ) {
+                                            Text(stringResource(R.string.DateSelection_Ok_Button))
                                         }
                                     }
 
@@ -302,17 +309,14 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                 }
                             }
                         }) {
-                            Text("Reset")
+                            Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
                         }
                     }
-
                 }
                 }
-
             }
         }
     }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -417,7 +421,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
         }
 
         Row(modifier = Modifier) {
-
                 Button(
                 onClick = {
                     if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != ""){
@@ -434,7 +437,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         hyprTrackerViewModel.resetBloodPressureLog()
                     }
                           },
-
                 modifier = Modifier
                     .weight(2f)
                     .padding(8.dp)
