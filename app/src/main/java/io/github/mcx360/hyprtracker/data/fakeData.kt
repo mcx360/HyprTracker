@@ -43,12 +43,17 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
 }
 
 object FakeData {
+    /*
     fun getInitialReadings(): List<HyprReading> {
         return listOf(
             HyprReading("120", "80", "72", "2026-02-20", "08:30", "Morning reading"),
             HyprReading("135", "85", "75", "2026-02-21", "14:15", "After lunch"),
             HyprReading("140", "90", "78", "2026-02-22", "21:00", "Before bed")
         )
+    }
+    */
+    fun getInitialReadings() : List<HyprReading> {
+        return listOf()
     }
 }
 

@@ -100,4 +100,8 @@
     <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>
     <string name="Empty_Medicine_Screen_Text">Press the plus button to start tracking your medications</string>
 
+    <!--Insights Screen Strings-->
+    <string name="Empty_Graph_Screen_Title">No insights available</string>
+    <string name="Empty_Graph_Screen_Text">Once you have logged blood pressure, insights will display the data visually for you</string>
+
 </resources>

@@ -25,14 +25,14 @@ import io.github.mcx360.hyprtracker.R
 @Composable
 fun MedicineScreen(modifier: Modifier = Modifier){
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(R.drawable.empty_medicine_screen_image),
             contentDescription = null,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp)
         )
@@ -40,11 +40,11 @@ fun MedicineScreen(modifier: Modifier = Modifier){
             text = stringResource(R.string.Empty_Medicine_Screen_Title),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = modifier.padding(top = 16.dp)
         )
         Text(
             text = stringResource(R.string.Empty_Medicine_Screen_Text),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(all = 16.dp))
+            modifier = modifier.padding(all = 16.dp))
     }
 }

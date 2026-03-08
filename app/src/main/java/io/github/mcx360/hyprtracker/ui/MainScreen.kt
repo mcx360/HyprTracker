@@ -260,7 +260,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 ModalDrawerSheet{
                     Text(stringResource(R.string.app_name), modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 32.dp),
+                        .padding(all = 32.dp),
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider()
