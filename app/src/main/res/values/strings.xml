@@ -96,4 +96,8 @@
     <string name="Pulse_Value">BPM</string>
     <string name="Notes_Value">Notes:</string>
 
+    <!--Medicine Screen Strings-->
+    <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>
+    <string name="Empty_Medicine_Screen_Text">Press the plus button to start tracking your medications</string>
+
 </resources>
