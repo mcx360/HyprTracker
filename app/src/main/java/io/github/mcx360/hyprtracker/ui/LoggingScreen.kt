@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -197,14 +198,17 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                 value = hyprTackerUiState.notes,
                                 onValueChange = {hyprTrackerViewModel.updateNotesValue(it)},
                                 label = {Text("Enter custom note")},
-                                maxLines = 2,
+                                maxLines = 1,
                                 trailingIcon = {
                                     Icon(
                                         painter = painterResource(R.drawable.ic_notes),
                                         contentDescription = null
                                     )
                                 },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Done
+                                )
                             )
                         }
 
@@ -260,7 +264,11 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                                             showModeToggle = false,
                                         )
                                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                                        TextButton(onClick = {showDatePicker = false}, modifier = Modifier.padding(8.dp)) {
+                                        TextButton(onClick = {
+                                            showDatePicker = false
+                                            hyprTrackerViewModel.updateDateValue(selectedDate)
+
+                                                             }, modifier = Modifier.padding(8.dp)) {
                                             Text("Ok")
                                         }
                                         TextButton(onClick = {showDatePicker = false}, modifier = Modifier.padding(8.dp)) {
@@ -277,7 +285,6 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
                     Row(horizontalArrangement = Arrangement.Center) {
                         Button(modifier = Modifier.padding(8.dp), onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                hyprTrackerViewModel.updateDateValue(selectedDate)
                                 if (!sheetState.isVisible){
                                     showBottomSheet = false
                                 }
