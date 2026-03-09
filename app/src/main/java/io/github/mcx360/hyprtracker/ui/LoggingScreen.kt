@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,6 +62,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.core.text.isDigitsOnly
@@ -535,7 +537,35 @@ fun InfographicLine(
 
 @Composable
 fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
+
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
+    if (hyprTrackerUIState.readings.isEmpty()){
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.undraw_add_notes_9xls),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp)
+            )
+            Text(
+                text = stringResource(R.string.Empty_BP_Log_History_Tab_Title),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+            Text(
+                text = stringResource(R.string.Empty_BP_Log_History_Tab_Text),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(all = 16.dp))
+        }
+    } else {
+
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -547,16 +577,20 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
         items(hyprTrackerUIState.readings.size,) { index ->
             Card() {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .testTag(HISTORY_TAB_ITEM),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                        .testTag(HISTORY_TAB_ITEM),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
                     Text(hyprTrackerUIState.readings.get(index).date)
                     Spacer(modifier = Modifier.padding(start = 16.dp))
-                    Icon(painter = painterResource(R.drawable.ic_analogue_clock), contentDescription = null)
+                    Icon(
+                        painter = painterResource(R.drawable.ic_analogue_clock),
+                        contentDescription = null
+                    )
                     Text(hyprTrackerUIState.readings.get(index).time)
 
                 }
@@ -574,32 +608,45 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         Text(hyprTrackerUIState.readings.get(index).pulseValue)
                         Text(stringResource(R.string.Pulse_Value))
                     }
-                    Column(modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(), horizontalAlignment = Alignment.Start
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Dot(hyprTrackerUIState.readings.get(index).stage)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                when(hyprTrackerUIState.readings.get(index).stage){
+                                when (hyprTrackerUIState.readings.get(index).stage) {
                                     "Normal" -> stringResource(R.string.Normal)
                                     "Elevated" -> stringResource(R.string.Elevated)
                                     "Stage 1" -> stringResource(R.string.Hypertension_stage_1)
                                     "Stage 2" -> stringResource(R.string.Hypertension_stage_2)
                                     "Hypertension Crisis" -> stringResource(R.string.Hypertension_crisis)
                                     else -> stringResource(R.string.Error)
-                                })
+                                }
+                            )
                         }
-                        Text(stringResource(R.string.Hypertension_Stage_Category), modifier = Modifier.padding(start = 24.dp))
+                        Text(
+                            stringResource(R.string.Hypertension_Stage_Category),
+                            modifier = Modifier.padding(start = 24.dp)
+                        )
                     }
 
                 }
 
                 Row(modifier = Modifier.padding(16.dp)) {
                     Column() {
-                        Text(stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings.get(index).notes)
+                        Text(
+                            stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings.get(
+                                index
+                            ).notes
+                        )
                     }
-                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
+                    ) {
                         Icon(
                             Icons.Filled.Edit,
                             contentDescription = null
@@ -609,6 +656,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 }
             }
         }
+    }
     }
 }
 

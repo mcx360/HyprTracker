@@ -90,11 +90,14 @@
     <string name="Error">Error</string>
     <string name="Hypertension_Stage_Category">Category</string>
 
-    <!--Strings for history tab-->
+    <!--Strings for logging screen history tab-->
     <string name="Systolic_Value">SYS</string>
     <string name="Diastolic_Value">DIA</string>
     <string name="Pulse_Value">BPM</string>
     <string name="Notes_Value">Notes:</string>
+    <string name="Empty_BP_Log_History_Tab_Title">No Log History</string>
+    <string name="Empty_BP_Log_History_Tab_Text">Once you have started logging blood pressure readings they will appear here for you</string>
+
 
     <!--Medicine Screen Strings-->
     <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>
