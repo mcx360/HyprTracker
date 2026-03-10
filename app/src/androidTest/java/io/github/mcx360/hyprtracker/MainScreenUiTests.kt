@@ -21,7 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MainScreenUITests {
+class MainScreenUiTests {
 
     @get: Rule
     val composeTestRule = createComposeRule()

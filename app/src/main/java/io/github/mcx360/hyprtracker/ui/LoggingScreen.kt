@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -64,6 +65,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
@@ -538,7 +540,9 @@ fun InfographicLine(
 @Composable
 fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
+    val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
+
     if (hyprTrackerUIState.readings.isEmpty()){
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -565,6 +569,31 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
         }
     } else {
 
+        when{
+            showDeleteConfirmationDialog.value -> {
+                Dialog(onDismissRequest = {}) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.background(
+                        MaterialTheme.colorScheme.inverseOnSurface)) {
+                        Text(text = stringResource(R.string.Delete_Confirmation_Dialog_Text), textAlign = TextAlign.Center)
+                        Row() {
+                            Button(onClick = {
+                                showDeleteConfirmationDialog.value = false
+                            },
+                                modifier = Modifier.padding(8.dp)
+                                ) {
+                                Text(stringResource(R.string.Confirm_Button_Text))
+                            }
+                            Button(onClick = {showDeleteConfirmationDialog.value = false},
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(stringResource(R.string.Cancel_Button_Text))
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -647,10 +676,14 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.End
                     ) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = null
-                        )
+                        IconButton(
+                            onClick = { showDeleteConfirmationDialog.value = true}
+                        ) {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = null
+                            )
+                        }
                     }
 
                 }

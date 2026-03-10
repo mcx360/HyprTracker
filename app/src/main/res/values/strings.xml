@@ -97,6 +97,12 @@
     <string name="Notes_Value">Notes:</string>
     <string name="Empty_BP_Log_History_Tab_Title">No Log History</string>
     <string name="Empty_BP_Log_History_Tab_Text">Once you have started logging blood pressure readings they will appear here for you</string>
+    <string name="Delete_Confirmation_Dialog_Text">Are you sure you want to delete this log entry?
+        Deletions will be placed in the bin</string>
+    <string name="Confirm_Button_Text">Confirm</string>
+    <string name="Cancel_Button_Text">Cancel</string>
+
+
 
 
     <!--Medicine Screen Strings-->
