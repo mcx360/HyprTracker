@@ -17,11 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -71,10 +69,7 @@ import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.data.HyprReading
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 const val SYSTOLIC_OUTLINEDTEXTFIELD_TAG = "SystolicOutlinedTextField"
 const val DIASTOLIC_OUTLINEDTEXTFIELD_TAG = "DiastolicOutlinedTextField"
@@ -542,6 +537,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
 
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
+    val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
 
     if (hyprTrackerUIState.readings.isEmpty()){
         Column(
@@ -578,6 +574,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         Row() {
                             Button(onClick = {
                                 showDeleteConfirmationDialog.value = false
+                                hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
                             },
                                 modifier = Modifier.padding(8.dp)
                                 ) {
@@ -677,7 +674,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         horizontalAlignment = Alignment.End
                     ) {
                         IconButton(
-                            onClick = { showDeleteConfirmationDialog.value = true}
+                            onClick = { showDeleteConfirmationDialog.value = true
+                                        listIndexToBeDeleted.intValue = index
+                            }
                         ) {
                             Icon(
                                 Icons.Filled.Delete,

@@ -112,10 +112,15 @@ class HyprTrackerViewModel : ViewModel() {
             }
         }
     }
-
     fun addReading(reading: HyprReading) {
         _uiState.value = _uiState.value.copy(
             readings = _uiState.value.readings + reading
+        )
+    }
+
+    fun removeReading(index: Int){
+        _uiState.value = _uiState.value.copy(
+            readings = _uiState.value.readings - _uiState.value.readings[index]
         )
     }
 
