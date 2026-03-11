@@ -611,27 +611,27 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
-                    Text(hyprTrackerUIState.readings.get(index).date)
+                    Text(hyprTrackerUIState.readings[index].date)
                     Spacer(modifier = Modifier.padding(start = 16.dp))
                     Icon(
                         painter = painterResource(R.drawable.ic_analogue_clock),
                         contentDescription = null
                     )
-                    Text(hyprTrackerUIState.readings.get(index).time)
+                    Text(hyprTrackerUIState.readings[index].time)
 
                 }
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(hyprTrackerUIState.readings.get(index).systolicValue)
+                        Text(hyprTrackerUIState.readings[index].systolicValue)
                         Text(stringResource(R.string.Systolic_Value))
                     }
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(hyprTrackerUIState.readings.get(index).diastolicValue)
+                        Text(hyprTrackerUIState.readings[index].diastolicValue)
                         Text(stringResource(R.string.Diastolic_Value))
                     }
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(hyprTrackerUIState.readings.get(index).pulseValue)
+                        Text(hyprTrackerUIState.readings[index].pulseValue)
                         Text(stringResource(R.string.Pulse_Value))
                     }
                     Column(
@@ -640,10 +640,10 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                             .fillMaxWidth(), horizontalAlignment = Alignment.Start
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Dot(hyprTrackerUIState.readings.get(index).stage)
+                            Dot(hyprTrackerUIState.readings[index].stage)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                when (hyprTrackerUIState.readings.get(index).stage) {
+                                when (hyprTrackerUIState.readings[index].stage) {
                                     "Normal" -> stringResource(R.string.Normal)
                                     "Elevated" -> stringResource(R.string.Elevated)
                                     "Stage 1" -> stringResource(R.string.Hypertension_stage_1)
@@ -664,9 +664,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                 Row(modifier = Modifier.padding(16.dp)) {
                     Column() {
                         Text(
-                            stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings.get(
-                                index
-                            ).notes
+                            stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings[index].notes
                         )
                     }
                     Column(
