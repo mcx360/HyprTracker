@@ -32,6 +32,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
@@ -249,6 +251,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
     val currentRoute = navBackStackEntry?.destination?.route
     val openAboutDialog = remember { mutableStateOf(false) }
     val openBugReportDialog = remember { mutableStateOf(false) }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
@@ -386,13 +389,16 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         Icon(Icons.Filled.Add, contentDescription = null)
                     }
                 }
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHostState)
             }
         ) { innerpadding ->
             Box(
                 modifier = Modifier
                     .padding(innerpadding)
             ) {
-                NavHostContainer(navController = navController, hyprTrackerViewModel)
+                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState)
                 when{
                     openAboutDialog.value -> {
                         AboutDialog(

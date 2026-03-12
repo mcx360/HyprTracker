@@ -30,6 +30,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -81,19 +84,23 @@ const val HISTORY_COLUMN_TAG = "HistoryColumm"
 const val HISTORY_TAB_ITEM = "HistoryTabItem"
 
 @Composable
-fun LoggingScreen(modifier: Modifier = Modifier,hyprTrackerViewModel: HyprTrackerViewModel){
+fun LoggingScreen(
+    modifier: Modifier = Modifier,
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    snackBarHostState: SnackbarHostState
+){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        LoggingScreenTabs(hyprTrackerViewModel)
+        LoggingScreenTabs(hyprTrackerViewModel, snackBarHostState)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
+fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState) {
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -134,7 +141,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
         }
 
         when (selectedTab) {
-            0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true})
+            0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true}, snackBarHostState)
             1 -> HistoryTab(hyprTrackerViewModel)
         }
 
@@ -319,7 +326,8 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit) {
+fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit, snackBarHostState: SnackbarHostState) {
+    val scope = rememberCoroutineScope()
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -434,6 +442,10 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                             )
                         )
                         hyprTrackerViewModel.resetBloodPressureLog()
+                        scope.launch {
+                            snackBarHostState.showSnackbar(message = "Logged!", duration = SnackbarDuration.Short)
+                        }
+
                     }
                           },
                 modifier = Modifier
@@ -572,6 +584,11 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                         MaterialTheme.colorScheme.inverseOnSurface)) {
                         Text(text = stringResource(R.string.Delete_Confirmation_Dialog_Text), textAlign = TextAlign.Center)
                         Row() {
+                            Button(onClick = {showDeleteConfirmationDialog.value = false},
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(stringResource(R.string.Cancel_Button_Text))
+                            }
                             Button(onClick = {
                                 showDeleteConfirmationDialog.value = false
                                 hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
@@ -579,11 +596,6 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                                 modifier = Modifier.padding(8.dp)
                                 ) {
                                 Text(stringResource(R.string.Confirm_Button_Text))
-                            }
-                            Button(onClick = {showDeleteConfirmationDialog.value = false},
-                                modifier = Modifier.padding(8.dp)
-                            ) {
-                                Text(stringResource(R.string.Cancel_Button_Text))
                             }
                         }
 
