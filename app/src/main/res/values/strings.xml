@@ -30,6 +30,7 @@
     <string name="Log_BP">Log Blood Pressure</string>
     <string name="Confirm_BP_Log">Confirm</string>
     <string name="edit_BP_Log_Details">Edit</string>
+    <string name="Confirm_Log_Button_snackBar_message">Log entry added!</string>
 
     <!--LoggingScreen Edit Section-->
     <string name="Edit_BP_Log_Title">Edit Blood pressure Log details</string>
@@ -41,6 +42,7 @@
     <string name="DateSelection_Ok_Button">OK</string>
     <string name="ACCEPT_BP_LOG_EDIT_BUTTON">Accept</string>
     <string name="RESET_BP_LOG_EDIT_BUTTON">Reset</string>
+    <string name="Rest_button_snackBar_message">Log entry reset</string>
 
 
     <!--Strings for the blood pressure stages info card in logging screen-->
@@ -101,9 +103,7 @@
         Deletions will be placed in the bin</string>
     <string name="Confirm_Button_Text">Confirm</string>
     <string name="Cancel_Button_Text">Cancel</string>
-
-
-
+    <string name="Delete_Log_entry_snackBar_message">Log entry removed</string>
 
     <!--Medicine Screen Strings-->
     <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>

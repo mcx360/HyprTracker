@@ -142,7 +142,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
 
         when (selectedTab) {
             0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true}, snackBarHostState)
-            1 -> HistoryTab(hyprTrackerViewModel)
+            1 -> HistoryTab(hyprTrackerViewModel, snackBarHostState)
         }
 
         if (showBottomSheet) {
@@ -301,18 +301,24 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                 if (!sheetState.isVisible){
                                     showBottomSheet = false
                                 }
+
                             }
                         }) {
                             Text("Accept")
                         }
 
                         Button(modifier = Modifier.padding(8.dp), onClick = {
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion {
                                 hyprTrackerViewModel.resetBloodPressureLog()
                                 datePickerState.selectedDateMillis = hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
                                 if (!sheetState.isVisible){
                                     showBottomSheet = false
                                 }
+                            scope.launch {
+                                snackBarHostState.showSnackbar("Log entry reset")
+                            }
                             }
                         }) {
                             Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
@@ -443,7 +449,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         )
                         hyprTrackerViewModel.resetBloodPressureLog()
                         scope.launch {
-                            snackBarHostState.showSnackbar(message = "Logged!", duration = SnackbarDuration.Short)
+                            snackBarHostState.showSnackbar(message = "Log entry added!", duration = SnackbarDuration.Short)
                         }
 
                     }
@@ -545,11 +551,12 @@ fun InfographicLine(
 }
 
 @Composable
-fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
+fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState) {
 
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
+    val scope = rememberCoroutineScope()
 
     if (hyprTrackerUIState.readings.isEmpty()){
         Column(
@@ -592,6 +599,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel) {
                             Button(onClick = {
                                 showDeleteConfirmationDialog.value = false
                                 hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
+                                scope.launch {
+                                    snackBarHostState.showSnackbar("Log entry removed")
+                                }
                             },
                                 modifier = Modifier.padding(8.dp)
                                 ) {
