@@ -10,7 +10,6 @@ import io.github.mcx360.hyprtracker.ui.theme.HyprTrackerTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel : HyprTrackerViewModel by viewModels()
         enableEdgeToEdge()
         setContent {
             HyprTrackerTheme {

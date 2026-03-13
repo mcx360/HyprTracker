@@ -1,10 +1,12 @@
 package io.github.mcx360.hyprtracker.ui
 
+import android.graphics.Paint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,6 +53,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -192,10 +195,17 @@ fun AboutDialog(onDismissRequest: () -> Unit, ){
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                Text("About dialog text")
+                Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primaryContainer).padding(16.dp), horizontalArrangement = Arrangement.Center) {
+                    Text(text = "About", fontWeight = FontWeight.Bold)
+
+                }
+                Text("Hyprtrek is an app used to be used as a journal for logging blood pressure readings",modifier = Modifier.padding(all = 16.dp))
+                Text("Contact", fontWeight = FontWeight.Bold)
+                Text(textAlign = TextAlign.Left, text = "Email: email@email.com")
+
                 Button(onClick = {
                     onDismissRequest()
 
