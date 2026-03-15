@@ -350,13 +350,13 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             .draggable(
                 orientation = Orientation.Horizontal,
                 state = rememberDraggableState { delta ->
-                    offset.floatValue += delta
+                    offset.floatValue += delta.coerceIn(-300f, 0f )
                 },
                 onDragStopped = {
-                    if (offset.value < -50){
+                    if (offset.floatValue < -50){
                         updateTab(1)
                     }
-                    offset.value = 0f
+                    offset.floatValue = 0f
                 }
             )
     ) {
@@ -630,11 +630,12 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
-                        offset.floatValue += delta
+                        offset.floatValue += delta.coerceIn(0f, 300f )
                     },
                     onDragStopped = {
                         if (offset.floatValue > 50){
                             updateTab(0)
+
                         }
                         offset.floatValue = 0f
                     }
