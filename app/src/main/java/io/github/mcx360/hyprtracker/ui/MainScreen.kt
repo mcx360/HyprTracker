@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -183,8 +184,10 @@ fun HyprTrackerBottomNavigationBar(
 }
 
 @Composable
-fun AboutDialog(onDismissRequest: () -> Unit, ){
-    Dialog(onDismissRequest = {}) {
+fun AboutDialog(onDismissRequest: () -> Unit) {
+
+    Dialog(onDismissRequest = onDismissRequest) {
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -192,28 +195,55 @@ fun AboutDialog(onDismissRequest: () -> Unit, ){
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
+
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ){
-                Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primaryContainer).padding(16.dp), horizontalArrangement = Arrangement.Center) {
-                    Text(text = "About", fontWeight = FontWeight.Bold)
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "About",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
-                Text("Hyprtrek is an app used to be used as a journal for logging blood pressure readings",modifier = Modifier.padding(all = 16.dp))
-                Text("Contact", fontWeight = FontWeight.Bold)
-                Text(textAlign = TextAlign.Left, text = "Email: email@email.com")
 
-                Button(onClick = {
-                    onDismissRequest()
+                Spacer(modifier = Modifier.height(16.dp))
 
-                }) {
-                    Text("Okay")
+                Text(
+                    text = "HyprTrek is an app designed to help you keep a journal of your blood pressure readings.",
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Contact",
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Email: email@email.com",
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Button(
+                    onClick = onDismissRequest,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                ) {
+                    Text("OK")
                 }
             }
-
         }
     }
 }
