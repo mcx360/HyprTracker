@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui
+package io.github.mcx360.hyprtracker.ui.GraphScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -19,28 +19,29 @@ import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 
 @Composable
-fun MedicineScreen(modifier: Modifier = Modifier){
+fun GraphScreen(modifier: Modifier = Modifier){
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.empty_medicine_screen_image),
+            painter = painterResource(R.drawable.undraw_key_insights),
             contentDescription = null,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp)
         )
         Text(
-            text = stringResource(R.string.Empty_Medicine_Screen_Title),
+            text = stringResource(R.string.Empty_Graph_Screen_Title),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier.padding(top = 16.dp)
         )
         Text(
-            text = stringResource(R.string.Empty_Medicine_Screen_Text),
+            text = stringResource(R.string.Empty_Graph_Screen_Text),
             textAlign = TextAlign.Center,
-            modifier = modifier.padding(all = 16.dp))
+            modifier = modifier.padding(16.dp)
+        )
     }
 }
