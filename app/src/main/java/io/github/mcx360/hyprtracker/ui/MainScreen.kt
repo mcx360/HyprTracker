@@ -291,6 +291,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
     val openAboutDialog = remember { mutableStateOf(false) }
     val openBugReportDialog = remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
+    val openAddMedicationScreen = remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
@@ -421,9 +422,9 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 )
             },
             floatingActionButton = {
-                if (currentRoute == Destinations.MEDICINESCREEN.name) {
+                if (currentRoute == Destinations.MEDICINESCREEN.name && !openAddMedicationScreen.value) {
                     FloatingActionButton(
-                        onClick = {},
+                        onClick = {openAddMedicationScreen.value = !openAddMedicationScreen.value},
                     ) {
                         Icon(Icons.Filled.Add, contentDescription = null)
                     }
@@ -437,7 +438,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 modifier = Modifier
                     .padding(innerpadding)
             ) {
-                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState)
+                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen)
                 when{
                     openAboutDialog.value -> {
                         AboutDialog(

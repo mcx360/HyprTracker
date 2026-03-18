@@ -2,6 +2,7 @@ package io.github.mcx360.hyprtracker.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +13,7 @@ import io.github.mcx360.hyprtracker.ui.LoggingScreen.LoggingScreen
 import io.github.mcx360.hyprtracker.ui.MedicineScreen.MedicineScreen
 
 @Composable
-fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState) {
+fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, openAddMedicationScreen: MutableState<Boolean>) {
     NavHost(
         navController = navController,
         startDestination = Destinations.LOGGINGSCREEN.name,
@@ -22,7 +23,7 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
             LoggingScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
         }
         composable(route = Destinations.MEDICINESCREEN.name){
-            MedicineScreen()
+            MedicineScreen(openAddMedicationScreen = openAddMedicationScreen)
         }
         composable(route = Destinations.GRAPHVIEWSCREEN.name){
             GraphScreen()
