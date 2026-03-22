@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.data.HyprReading
+import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt

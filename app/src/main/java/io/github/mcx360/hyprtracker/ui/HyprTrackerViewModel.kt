@@ -5,9 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.github.mcx360.hyprtracker.data.BloodPressureRepository
-import io.github.mcx360.hyprtracker.data.FakeData
-import io.github.mcx360.hyprtracker.data.HyprReading
-import io.github.mcx360.hyprtracker.data.OfflineBloodPressureRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,13 +18,8 @@ import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
-
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -104,6 +96,18 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun addReading(reading: HyprReading) {
+        _uiState.value = _uiState.value.copy(
+            readings = _uiState.value.readings + reading
+        )
+    }
+
+    fun removeReading(index: Int){
+        _uiState.value = _uiState.value.copy(
+            readings = _uiState.value.readings - _uiState.value.readings[index]
+        )
+    }
+
     fun convertMillisToDate(millis: Long?): String {
         val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         if (millis == null){
@@ -125,17 +129,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             }
         }
     }
-    fun addReading(reading: HyprReading) {
-        _uiState.value = _uiState.value.copy(
-            readings = _uiState.value.readings + reading
-        )
-    }
 
-    fun removeReading(index: Int){
-        _uiState.value = _uiState.value.copy(
-            readings = _uiState.value.readings - _uiState.value.readings[index]
-        )
-    }
 
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -160,5 +154,45 @@ data class HyprTrackerUIState(
     val date: String = LocalDate.now().toString(),
     val time: String = LocalTime.now().withSecond(0).withNano(0).toString(),
     val notes: String = "",
-    val readings: List<HyprReading> = FakeData.getInitialReadings()
+    val readings: List<HyprReading> = listOf()
 )
+
+data class HyprReading(
+    val systolicValue: String,
+    val diastolicValue: String,
+    val pulseValue: String,
+    val date: String,
+    val time: String,
+    val notes: String,
+    val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
+)
+
+fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String {
+        try {
+
+            val diastolicValue = diastolicValue.toInt()
+            val systolicValue = systolicValue.toInt()
+
+            if (systolicValue <=0 || diastolicValue <=0){
+                return "error"
+            }
+            else if(systolicValue > 180 || diastolicValue >= 120){
+                return "Hypertension Crisis"
+            }else if (systolicValue >= 140 || diastolicValue >= 90 ){
+                return "Stage 2"
+            }else if (systolicValue >= 130 || diastolicValue >= 80){
+                return "Stage 1"
+            }
+            else if (systolicValue >= 120 && diastolicValue < 80){
+                return "Elevated"
+            }
+            else if (systolicValue <120 && diastolicValue < 80){
+                return "Normal"
+            }
+            else{
+                return "error"
+            }
+        } catch (e : NumberFormatException){
+            return "error"
+        }
+    }
