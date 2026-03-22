@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui
+package io.github.mcx360.hyprtracker.ui.MainScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -61,9 +61,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.mcx360.hyprtracker.navigation.Destinations
-import io.github.mcx360.hyprtracker.navigation.NavHostContainer
+import io.github.mcx360.hyprtracker.ui.MainScreen.navigation.Destinations
+import io.github.mcx360.hyprtracker.ui.MainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

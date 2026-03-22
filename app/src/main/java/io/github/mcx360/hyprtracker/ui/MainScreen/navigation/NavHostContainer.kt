@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.navigation
+package io.github.mcx360.hyprtracker.ui.MainScreen.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
