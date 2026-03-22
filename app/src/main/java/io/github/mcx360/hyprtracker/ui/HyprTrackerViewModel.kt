@@ -2,6 +2,7 @@ package io.github.mcx360.hyprtracker.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.mcx360.hyprtracker.data.FakeData
 import io.github.mcx360.hyprtracker.data.HyprReading
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -125,3 +126,13 @@ class HyprTrackerViewModel : ViewModel() {
     }
 
 }
+
+data class HyprTrackerUIState(
+    val systolicValue: String = "",
+    val diastolicValue: String = "",
+    val pulseValue: String = "",
+    val date: String = LocalDate.now().toString(),
+    val time: String = LocalTime.now().withSecond(0).withNano(0).toString(),
+    val notes: String = "",
+    val readings: List<HyprReading> = FakeData.getInitialReadings()
+)
