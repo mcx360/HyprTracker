@@ -248,6 +248,7 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
     }
 }
 
+//Note to self: Report bug functionallity will have a link to a page where you can report the bug so that the app itself does not make any internet connection as this is a strictly offline app
 @Composable
 fun BugReportDialog(onDismissRequest: () -> Unit){
     Dialog(onDismissRequest = {}){
@@ -282,7 +283,7 @@ fun BugReportDialog(onDismissRequest: () -> Unit){
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel = viewModel()){
+fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory)){
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()

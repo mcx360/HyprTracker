@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.Local
+package io.github.mcx360.hyprtracker.data.Source.Local
 
 import android.content.Context
 import androidx.room.Database

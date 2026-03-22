@@ -1,10 +1,12 @@
-package io.github.mcx360.hyprtracker.data.Local
+package io.github.mcx360.hyprtracker.data.Source.Local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity(primaryKeys = ["dateAdded", "timeAdded"], tableName = "RecordedBloodPressureReadings")
+@Entity(tableName = "RecordedBloodPressureReadings")
 data class RecordedBloodPressure(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val  dateAdded: String,
     val timeAdded: String,
     @ColumnInfo(name = "systolic_value") val systolicValue: String,

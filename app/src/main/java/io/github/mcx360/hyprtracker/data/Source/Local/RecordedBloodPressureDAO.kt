@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.Local
+package io.github.mcx360.hyprtracker.data.Source.Local
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -13,8 +13,8 @@ interface RecordedBloodPressureDAO{
     fun getAllBloodPressureReadings(): Flow<List<RecordedBloodPressure>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
+    suspend fun insertBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
 
     @Delete
-    fun deleteBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
+    suspend fun deleteBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
 }

@@ -1,9 +1,13 @@
 package io.github.mcx360.hyprtracker.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import io.github.mcx360.hyprtracker.data.BloodPressureRepository
 import io.github.mcx360.hyprtracker.data.FakeData
 import io.github.mcx360.hyprtracker.data.HyprReading
+import io.github.mcx360.hyprtracker.data.OfflineBloodPressureRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +21,15 @@ import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 
-class HyprTrackerViewModel : ViewModel() {
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import io.github.mcx360.hyprtracker.HyprTrackerApplication
+
+
+class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HyprTrackerUIState())
     val uiState: StateFlow<HyprTrackerUIState> = _uiState.asStateFlow()
@@ -125,6 +137,20 @@ class HyprTrackerViewModel : ViewModel() {
         )
     }
 
+    companion object {
+        val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+                ): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                return HyprTrackerViewModel(
+                    (application as HyprTrackerApplication).container.bloodPressureRepository
+                ) as T
+            }
+        }
+    }
 }
 
 data class HyprTrackerUIState(
