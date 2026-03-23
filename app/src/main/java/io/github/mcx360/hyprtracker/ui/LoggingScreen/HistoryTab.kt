@@ -189,7 +189,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             Text(stringResource(R.string.Diastolic_Value))
                         }
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(hyprTrackerUIState.readings[index].pulseValue)
+                            hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
                             Text(stringResource(R.string.Pulse_Value))
                         }
                         Column(

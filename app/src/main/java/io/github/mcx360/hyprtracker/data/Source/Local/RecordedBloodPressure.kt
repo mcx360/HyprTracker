@@ -12,5 +12,6 @@ data class RecordedBloodPressure(
     @ColumnInfo(name = "systolic_value") val systolicValue: String,
     @ColumnInfo(name = "diastolic_Value") val diastolicValue: String,
     @ColumnInfo(name = "pulse_value") val pulseValue: String?,
-    @ColumnInfo(name = "note_value") val noteValue: String?
+    @ColumnInfo(name = "note_value") val noteValue: String?,
+    @ColumnInfo(name = "hypertension_stage") val hypertensionStage: String
 )

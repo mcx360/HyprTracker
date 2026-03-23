@@ -20,6 +20,7 @@ import java.util.Locale
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
+import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressure
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -130,6 +131,29 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(
+        id = 0,
+        dateAdded = date,
+        timeAdded = time,
+        systolicValue = systolicValue,
+        diastolicValue = diastolicValue,
+        pulseValue = pulseValue,
+        noteValue = notes,
+        hypertensionStage = stage
+        )
+
+    fun RecordedBloodPressure.toHyprReading() : HyprReading = HyprReading(
+        date = dateAdded,
+        time = timeAdded,
+        systolicValue = systolicValue,
+        diastolicValue = diastolicValue,
+        pulseValue = pulseValue,
+        notes = noteValue,
+        stage = hypertensionStage
+    )
+
+
+
 
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -160,10 +184,10 @@ data class HyprTrackerUIState(
 data class HyprReading(
     val systolicValue: String,
     val diastolicValue: String,
-    val pulseValue: String,
+    val pulseValue: String?,
     val date: String,
     val time: String,
-    val notes: String,
+    val notes: String?,
     val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
 )
 
@@ -195,4 +219,4 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
         } catch (e : NumberFormatException){
             return "error"
         }
-    }
+}
