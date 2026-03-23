@@ -30,6 +30,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     init {
         viewModelScope.launch {
+            bloodPressureRepository.getAllRecordingsStream().collect { readings ->
+                _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
+            }
             while(isActive){
                 if (getCurrentDateAndTime){
                     _uiState.update { currentState ->
@@ -40,6 +43,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                     }
                 }
                 delay(1000)
+            }
+            bloodPressureRepository.getAllRecordingsStream().collect { readings ->
+                _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
             }
         }
     }
@@ -52,7 +58,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 pulseValue = "",
                 notes = "",
                 date = LocalDate.now().toString(),
-                time = LocalTime.now().withSecond(0).withNano(0).toString()
+                time = LocalTime.now().withNano(0).toString()
                 )
 
         }
@@ -97,16 +103,13 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
-    fun addReading(reading: HyprReading) {
-        _uiState.value = _uiState.value.copy(
-            readings = _uiState.value.readings + reading
-        )
+    suspend fun addReading(reading: HyprReading) {
+        bloodPressureRepository.addBloodPressureReading(reading.toRecordedBloodPressure())
     }
 
-    fun removeReading(index: Int){
-        _uiState.value = _uiState.value.copy(
-            readings = _uiState.value.readings - _uiState.value.readings[index]
-        )
+    suspend fun removeReading(index: Int){
+        val reading: HyprReading = _uiState.value.readings[index]
+        bloodPressureRepository.removeBloodPressureReading(reading.systolicValue, reading.diastolicValue, reading.pulseValue, reading.date, reading.time)
     }
 
     fun convertMillisToDate(millis: Long?): String {
@@ -154,7 +157,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
 
 
-
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
@@ -176,9 +178,9 @@ data class HyprTrackerUIState(
     val diastolicValue: String = "",
     val pulseValue: String = "",
     val date: String = LocalDate.now().toString(),
-    val time: String = LocalTime.now().withSecond(0).withNano(0).toString(),
+    val time: String = LocalTime.now().withNano(0).toString(),
     val notes: String = "",
-    val readings: List<HyprReading> = listOf()
+    var readings: List<HyprReading> = listOf()
 )
 
 data class HyprReading(

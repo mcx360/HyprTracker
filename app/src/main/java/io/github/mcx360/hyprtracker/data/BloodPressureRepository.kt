@@ -7,7 +7,7 @@ interface BloodPressureRepository {
 
     fun getAllRecordingsStream() : Flow<List<RecordedBloodPressure>>
 
-    suspend fun  removeBloodPressureReading(reading: RecordedBloodPressure)
+    suspend fun  removeBloodPressureReading(systolicValue: String, diastolicValue: String, pulseValue: String?, date: String, time: String)
 
     suspend fun addBloodPressureReading(reading: RecordedBloodPressure)
 

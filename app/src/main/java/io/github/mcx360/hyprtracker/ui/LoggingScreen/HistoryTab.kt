@@ -121,8 +121,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             }
                             Button(onClick = {
                                 showDeleteConfirmationDialog.value = false
-                                hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
+                                //hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
                                 scope.launch {
+                                    hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
                                     snackBarHostState.showSnackbar("Log entry removed")
                                 }
                             },

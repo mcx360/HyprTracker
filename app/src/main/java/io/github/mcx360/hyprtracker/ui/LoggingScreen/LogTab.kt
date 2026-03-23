@@ -59,7 +59,6 @@ import kotlin.math.roundToInt
 fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit, snackBarHostState: SnackbarHostState, updateTab: (Int) -> Unit) {
     val scope = rememberCoroutineScope()
     val offset = remember { mutableFloatStateOf(0f) }
-
     Column(
         modifier = Modifier
             .offset{ IntOffset(offset.floatValue.roundToInt(), 0)}
@@ -186,16 +185,18 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 Button(
                     onClick = {
                         if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
-                            hyprTrackerViewModel.addReading(
-                                HyprReading(
-                                    systolicValue = hyprTackerUiState.systolicValue,
-                                    diastolicValue = hyprTackerUiState.diastolicValue,
-                                    pulseValue = hyprTackerUiState.pulseValue,
-                                    time = hyprTackerUiState.time,
-                                    date = hyprTackerUiState.date,
-                                    notes = hyprTackerUiState.notes
+                            scope.launch {
+                                hyprTrackerViewModel.addReading(
+                                    HyprReading(
+                                        systolicValue = hyprTackerUiState.systolicValue,
+                                        diastolicValue = hyprTackerUiState.diastolicValue,
+                                        pulseValue = hyprTackerUiState.pulseValue,
+                                        time = hyprTackerUiState.time,
+                                        date = hyprTackerUiState.date,
+                                        notes = hyprTackerUiState.notes
+                                    )
                                 )
-                            )
+                            }
                             hyprTrackerViewModel.resetBloodPressureLog()
                             scope.launch {
                                 snackBarHostState.showSnackbar(
