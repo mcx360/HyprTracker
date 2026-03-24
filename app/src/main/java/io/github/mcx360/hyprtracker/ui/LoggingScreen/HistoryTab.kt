@@ -19,10 +19,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -107,32 +109,42 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
         when{
             showDeleteConfirmationDialog.value -> {
                 Dialog(onDismissRequest = {}) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface)
-                    ) {
-                        Text(text = stringResource(R.string.Delete_Confirmation_Dialog_Text), textAlign = TextAlign.Center)
-                        Row() {
-                            Button(onClick = {showDeleteConfirmationDialog.value = false},
-                                modifier = Modifier.padding(8.dp)
-                            ) {
-                                Text(stringResource(R.string.Cancel_Button_Text))
-                            }
-                            Button(onClick = {
-                                showDeleteConfirmationDialog.value = false
-                                //hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
-                                scope.launch {
-                                    hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
-                                    snackBarHostState.showSnackbar("Log entry removed")
-                                }
-                            },
-                                modifier = Modifier.padding(8.dp)
-                            ) {
-                                Text(stringResource(R.string.Confirm_Button_Text))
-                            }
-                        }
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp)) {
 
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface).padding(16.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.Delete_Confirmation_Dialog_Text),
+                                textAlign = TextAlign.Center
+                            )
+                            Row() {
+                                Button(
+                                    onClick = { showDeleteConfirmationDialog.value = false },
+                                    modifier = Modifier.padding(8.dp)
+                                ) {
+                                    Text(stringResource(R.string.Cancel_Button_Text))
+                                }
+                                Button(
+                                    onClick = {
+                                        showDeleteConfirmationDialog.value = false
+                                        //hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
+                                        scope.launch {
+                                            hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
+                                            snackBarHostState.showSnackbar("Log entry removed")
+                                        }
+                                    },
+                                    modifier = Modifier.padding(8.dp)
+                                ) {
+                                    Text(stringResource(R.string.Confirm_Button_Text))
+                                }
+                            }
+
+                        }
                     }
                 }
             }
@@ -149,7 +161,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
-                        offset.floatValue += delta
+                        offset.floatValue += delta.coerceIn(0f, 300f)
                     },
                     onDragStopped = {
                         if (offset.floatValue > 50){
@@ -161,7 +173,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
         ) {
 
             items(hyprTrackerUIState.readings.size,) { index ->
-                Card() {
+                Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -177,21 +189,23 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             contentDescription = null
                         )
                         Text(hyprTrackerUIState.readings[index].time.substring(0,5))
-
                     }
-
+                    HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(hyprTrackerUIState.readings[index].systolicValue)
                             Text(stringResource(R.string.Systolic_Value))
+                            Text(hyprTrackerUIState.readings[index].systolicValue)
+                            Text("mmHg")
                         }
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(hyprTrackerUIState.readings[index].diastolicValue)
                             Text(stringResource(R.string.Diastolic_Value))
+                            Text(hyprTrackerUIState.readings[index].diastolicValue)
+                            Text("mmHg")
                         }
                         Column(modifier = Modifier.padding(16.dp)) {
-                            hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
                             Text(stringResource(R.string.Pulse_Value))
+                            if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
+                            Text("BPM")
                         }
                         Column(
                             modifier = Modifier
@@ -223,7 +237,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                     Row(modifier = Modifier.padding(16.dp)) {
                         Column() {
                             Text(
-                                stringResource(R.string.Notes_Value) + " " + hyprTrackerUIState.readings[index].notes
+                                stringResource(R.string.Notes_Value) + " " + if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes
                             )
                         }
                         Column(
