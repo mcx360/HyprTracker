@@ -180,7 +180,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     painter = painterResource(R.drawable.ic_analogue_clock),
                     contentDescription = null
                 )
-                Text(hyprTackerUiState.time)
+                Text(hyprTackerUiState.time.substring(0,5))
             }
 
             Row(modifier = Modifier) {

@@ -15,6 +15,10 @@
     <string name="bug_report_label">Report bug</string>
     <string name="settings_label">Users &amp; settings</string>
     <string name="about_label">About</string>
+    <string name="title_one_label">My Data</string>
+    <string name="title_two_label">External</string>
+    <string name="title_three_label">Settings</string>
+
 
 
     <!--Strings for tab rows names (subsections names) in logging screen-->

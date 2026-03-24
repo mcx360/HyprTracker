@@ -176,7 +176,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             painter = painterResource(R.drawable.ic_analogue_clock),
                             contentDescription = null
                         )
-                        Text(hyprTrackerUIState.readings[index].time)
+                        Text(hyprTrackerUIState.readings[index].time.substring(0,5))
 
                     }
 

@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -113,17 +112,6 @@ fun HyprTrackerTopAppBar(
                 )
             }
         },
-        actions = {
-            IconButton(
-                onClick = {},
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ){
-                Icon(
-                    Icons.Filled.MoreVert,
-                    contentDescription = null
-                )
-            }
-        }
     )
 }
 
@@ -303,12 +291,16 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
         modifier = Modifier.testTag(NAVIGATIONDRAWER_TAG),
         drawerContent = {
                 ModalDrawerSheet{
-                    Text(stringResource(R.string.app_name), modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(all = 32.dp),
-                        fontWeight = FontWeight.Bold
-                    )
+                    Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth(),) {
+                        Text(stringResource(R.string.app_name),
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).fillMaxWidth()
+                        )
+                    }
                     HorizontalDivider()
+                    Text(stringResource(R.string.title_one_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
                     NavigationDrawerItem(
                         label = { Text(text= stringResource(R.string.export_label)) },
                         selected = false,
@@ -347,6 +339,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         modifier = Modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
+                    Text(stringResource(R.string.title_two_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.backup_label))},
                         selected = false,
@@ -382,6 +375,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         modifier = Modifier.testTag(REPORTBUG_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
+                    Text(stringResource(R.string.title_three_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.settings_label))},
                         selected = false,
