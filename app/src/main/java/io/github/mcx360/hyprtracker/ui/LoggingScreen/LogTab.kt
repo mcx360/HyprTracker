@@ -52,6 +52,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +60,8 @@ import kotlin.math.roundToInt
 fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit, snackBarHostState: SnackbarHostState, updateTab: (Int) -> Unit) {
     val scope = rememberCoroutineScope()
     val offset = remember { mutableFloatStateOf(0f) }
+    val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .offset{ IntOffset(offset.floatValue.roundToInt(), 0)}
@@ -87,7 +90,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
         ) {
-            val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
             Text(
                 text = stringResource(R.string.Log_BP),
                 fontWeight = FontWeight.Bold,

@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui
 
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,7 @@ import java.util.Locale
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressure
+import kotlin.String
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -30,23 +32,20 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     init {
         viewModelScope.launch {
-            bloodPressureRepository.getAllRecordingsStream().collect { readings ->
-                _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
-            }
             while(isActive){
                 if (getCurrentDateAndTime){
                     _uiState.update { currentState ->
                         currentState.copy(
-                            time = LocalTime.now().withSecond(0).withNano(0).toString(),
-                            date = LocalDate.now().toString()
+                            time = LocalTime.now().withNano(0).toString(),
+                            date = LocalDate.now().toString(),
                         )
                     }
                 }
                 delay(1000)
             }
-            bloodPressureRepository.getAllRecordingsStream().collect { readings ->
-                _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
-            }
+        }
+        viewModelScope.launch {
+            fetchBPReadings()
         }
     }
 
@@ -60,7 +59,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 date = LocalDate.now().toString(),
                 time = LocalTime.now().withNano(0).toString()
                 )
-
         }
         getCurrentDateAndTime = true
     }
@@ -105,11 +103,18 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     suspend fun addReading(reading: HyprReading) {
         bloodPressureRepository.addBloodPressureReading(reading.toRecordedBloodPressure())
+
     }
 
     suspend fun removeReading(index: Int){
         val reading: HyprReading = _uiState.value.readings[index]
         bloodPressureRepository.removeBloodPressureReading(reading.systolicValue, reading.diastolicValue, reading.pulseValue, reading.date, reading.time)
+    }
+
+    suspend fun fetchBPReadings(){
+        return bloodPressureRepository.getAllRecordingsStream().collect { readings ->
+            _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
+        }
     }
 
     fun convertMillisToDate(millis: Long?): String {
