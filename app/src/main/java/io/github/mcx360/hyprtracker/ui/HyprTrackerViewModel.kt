@@ -118,7 +118,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     }
 
     fun convertMillisToDate(millis: Long?): String {
-        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         if (millis == null){
             return ""
         } else{
@@ -127,7 +127,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     }
 
     fun convertDateToMillis(dateString: String?): Long? {
-        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return if (dateString.isNullOrEmpty()) {
             null
         } else {

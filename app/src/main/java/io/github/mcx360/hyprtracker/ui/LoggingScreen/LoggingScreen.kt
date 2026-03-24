@@ -168,7 +168,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                             )
 
                             OutlinedTextField(
-                                value = hyprTackerUiState.time,
+                                value = hyprTackerUiState.time.substring(0,5),
                                 onValueChange = {},
                                 label = {Text(stringResource(R.string.Custom_Log_Time_TextField))},
                                 readOnly = true,
@@ -249,6 +249,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
 
                                 ){
                                         DatePicker(
+                                            dateFormatter = DatePickerDefaults.dateFormatter(),
                                             state = datePickerState,
                                             showModeToggle = false,
                                         )
