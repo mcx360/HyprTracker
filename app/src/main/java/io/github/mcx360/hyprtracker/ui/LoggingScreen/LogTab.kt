@@ -171,7 +171,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     painter = painterResource(R.drawable.ic_date),
                     contentDescription = null
                 )
-                Text(hyprTackerUiState.date)
+                Text(hyprTrackerViewModel.formatToRegularDate(hyprTackerUiState.date))
                 Spacer(
                     modifier = Modifier
                         .width(32.dp)

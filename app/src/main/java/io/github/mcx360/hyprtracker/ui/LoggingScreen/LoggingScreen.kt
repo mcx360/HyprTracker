@@ -150,7 +150,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                     ) {
                         Column() {
                             OutlinedTextField(
-                                value = selectedDate,
+                                value = hyprTrackerViewModel.formatToRegularDate(selectedDate),
                                 onValueChange = {},
                                 label = { Text(stringResource(R.string.Custom_Log_Date_TextField))},
                                 readOnly = true,

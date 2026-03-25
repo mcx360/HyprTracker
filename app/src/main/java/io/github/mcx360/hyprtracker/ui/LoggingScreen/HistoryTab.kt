@@ -182,7 +182,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
-                        Text(hyprTrackerUIState.readings[index].date)
+                        Text(hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date))
                         Spacer(modifier = Modifier.padding(start = 16.dp))
                         Icon(
                             painter = painterResource(R.drawable.ic_analogue_clock),

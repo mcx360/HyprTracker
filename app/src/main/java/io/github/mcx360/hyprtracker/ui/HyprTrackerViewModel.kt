@@ -160,6 +160,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         stage = hypertensionStage
     )
 
+    //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
+    fun formatToRegularDate(date: String) : String{
+        val dateInfo = date.split('-')
+        return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
+    }
+
 
 
     companion object {
