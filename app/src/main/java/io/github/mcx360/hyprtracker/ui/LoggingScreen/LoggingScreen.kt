@@ -280,7 +280,9 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                 if (!sheetState.isVisible){
                                     showBottomSheet = false
                                 }
-
+                            }
+                            scope.launch {
+                                snackBarHostState.showSnackbar("Log entry updated")
                             }
                         }) {
                             Text("Accept")

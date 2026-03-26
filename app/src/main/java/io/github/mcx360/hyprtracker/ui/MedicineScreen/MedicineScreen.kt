@@ -47,7 +47,6 @@ fun MedicineScreen(
     openAddMedicationScreen: MutableState<Boolean>
 ){
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
-    var sliderState = r
 
     if (openAddMedicationScreen.value){
         Column(modifier = modifier

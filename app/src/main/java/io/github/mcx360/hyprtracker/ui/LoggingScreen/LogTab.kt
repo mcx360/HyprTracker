@@ -1,5 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.LoggingScreen
 
+import android.view.MotionEvent
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -37,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -61,6 +65,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
     val scope = rememberCoroutineScope()
     val offset = remember { mutableFloatStateOf(0f) }
     val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
+    val haptic = LocalHapticFeedback.current
 
     Column(
         modifier = Modifier
@@ -200,13 +205,23 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                                 )
                             }
                             hyprTrackerViewModel.resetBloodPressureLog()
+
                             scope.launch {
                                 snackBarHostState.showSnackbar(
                                     message = "Log entry added!",
                                     duration = SnackbarDuration.Short
                                 )
                             }
-
+                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        }
+                        else{
+                            haptic.performHapticFeedback(HapticFeedbackType.Reject)
+                            scope.launch {
+                                snackBarHostState.showSnackbar(
+                                    message = "Add systolic and diastolic values before logging",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
                     },
                     modifier = Modifier
