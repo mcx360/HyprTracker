@@ -96,7 +96,7 @@ fun HyprTrackerTopAppBar(
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title.lowercase())
+            if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title)
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -127,9 +127,9 @@ fun HyprTrackerBottomNavigationBar(
         modifier = Modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
-            selected = currentRoute == Destinations.LOGGINGSCREEN.name,
+            selected = currentRoute == Destinations.Logging.name,
             onClick = {
-                navController.navigate(Destinations.LOGGINGSCREEN.name)
+                navController.navigate(Destinations.Logging.name)
             },
             icon = {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_log_blood_pressure),
@@ -141,9 +141,9 @@ fun HyprTrackerBottomNavigationBar(
             alwaysShowLabel = true
         )
         NavigationBarItem(
-            selected = currentRoute == Destinations.MEDICINESCREEN.name,
+            selected = currentRoute == Destinations.Medicine.name,
             onClick = {
-                navController.navigate(Destinations.MEDICINESCREEN.name)
+                navController.navigate(Destinations.Medicine.name)
             },
             icon = {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
@@ -155,9 +155,9 @@ fun HyprTrackerBottomNavigationBar(
             alwaysShowLabel = true
         )
         NavigationBarItem(
-            selected = currentRoute == Destinations.GRAPHVIEWSCREEN.name,
+            selected = currentRoute == Destinations.Insight.name,
             onClick = {
-                navController.navigate(Destinations.GRAPHVIEWSCREEN.name)
+                navController.navigate(Destinations.Insight.name)
             },
             icon = {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight),
@@ -418,7 +418,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 )
             },
             floatingActionButton = {
-                if (currentRoute == Destinations.MEDICINESCREEN.name && !openAddMedicationScreen.value) {
+                if (currentRoute == Destinations.Medicine.name && !openAddMedicationScreen.value) {
                     FloatingActionButton(
                         onClick = {openAddMedicationScreen.value = !openAddMedicationScreen.value},
                     ) {

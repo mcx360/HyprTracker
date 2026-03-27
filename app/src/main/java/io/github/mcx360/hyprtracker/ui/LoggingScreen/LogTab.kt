@@ -85,9 +85,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             )
     ) {
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp
             ),
@@ -253,9 +250,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
         }
 
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp
             ),

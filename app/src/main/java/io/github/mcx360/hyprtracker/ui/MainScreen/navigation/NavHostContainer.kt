@@ -16,16 +16,16 @@ import io.github.mcx360.hyprtracker.ui.MedicineScreen.MedicineScreen
 fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, openAddMedicationScreen: MutableState<Boolean>) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.LOGGINGSCREEN.name,
+        startDestination = Destinations.Logging.name,
         modifier = Modifier
     ){
-        composable(route = Destinations.LOGGINGSCREEN.name){
+        composable(route = Destinations.Logging.name){
             LoggingScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
         }
-        composable(route = Destinations.MEDICINESCREEN.name){
+        composable(route = Destinations.Medicine.name){
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState)
         }
-        composable(route = Destinations.GRAPHVIEWSCREEN.name){
+        composable(route = Destinations.Insight.name){
             GraphScreen()
         }
     }
