@@ -41,6 +41,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -433,8 +434,9 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
             Box(
                 modifier = Modifier
                     .padding(innerpadding)
-            ) {
+            ) { key(currentRoute) {
                 NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen)
+            }
                 when{
                     openAboutDialog.value -> {
                         AboutDialog(

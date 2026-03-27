@@ -55,6 +55,8 @@ import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.Utils.Dot
+import io.github.mcx360.hyprtracker.ui.Utils.DotWithColour
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -254,12 +256,13 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 defaultElevation = 8.dp
             ),
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(8.dp)
         ) {
             Column(
                 modifier = Modifier.padding(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     stringResource(R.string.BP_stages_title),
@@ -305,27 +308,25 @@ fun InfographicLine(
     stage: Array<String>
 ) {
 
-    val textColor = if(color.luminance() > 0.5f) Color.Black else Color.White
-
     Row(modifier = Modifier
         .padding(vertical = 4.dp, horizontal = 4.dp)
         .fillMaxWidth()
-        .clip(RoundedCornerShape(12.dp))
-        .background(color = color),
+        .clip(RoundedCornerShape(12.dp)),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
+        DotWithColour(color)
         Text(
             text = stage[0],
             modifier = Modifier
                 .weight(2f)
-                .padding(4.dp),
-            color = textColor
+                .padding(4.dp)
         )
         Text(text = stage[1],
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),
             fontWeight = FontWeight.Bold,
-            color = textColor
         )
         Text(
             text = stage[2],
@@ -333,7 +334,6 @@ fun InfographicLine(
                 .weight(1f)
                 .padding(4.dp),
             fontWeight = FontWeight.Bold,
-            color = textColor
         )
     }
 }

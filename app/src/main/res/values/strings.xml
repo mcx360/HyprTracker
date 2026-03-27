@@ -59,32 +59,32 @@
 
     <string-array name="hypertension_stage_normal">
         <item>Normal</item>
-        <item>Less Than 120</item>
-        <item>Less Than 80</item>
+        <item>&lt;120</item>
+        <item>&lt;80</item>
     </string-array>
 
     <string-array name="hypertension_stage_elevated">
         <item>Elevated</item>
-        <item>120 To 129</item>
-        <item>Less Than 80</item>
+        <item>120 – 129</item>
+        <item>&lt;80</item>
     </string-array>
 
     <string-array name="hypertension_stage_one">
         <item>Hypertension Stage 1</item>
-        <item>130 To 139</item>
-        <item>80 To 89</item>
+        <item>130 – 139</item>
+        <item>80 – 89</item>
     </string-array>
 
     <string-array name="hypertension_stage_two">
         <item>Hypertension Stage 2</item>
-        <item>140 Or Higher</item>
-        <item>90 Or More</item>
+        <item>140=&lt;</item>
+        <item>90=&lt;</item>
     </string-array>
 
     <string-array name="hypertension_stage_crisis">
         <item>Hypertension Crisis</item>
-        <item>180 And Over</item>
-        <item>120 And Over</item>
+        <item>180=&lt;</item>
+        <item>120&lt;</item>
     </string-array>
 
     <!--Strings for Hypertension stages-->
