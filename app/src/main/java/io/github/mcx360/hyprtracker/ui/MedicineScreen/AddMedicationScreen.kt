@@ -1,8 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.MedicineScreen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -39,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -49,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.Unit
 
 @Composable
 fun AddMedicationScreen(
@@ -59,14 +59,19 @@ fun AddMedicationScreen(
 ){
     val haptic = LocalHapticFeedback.current
     var checked by remember {mutableStateOf(false)}
-    val radioButtons = listOf("Continuous", "Number of days", "until selected date")
+    val radioButtons = listOf("Continuous", "Specified number of days", "Until a selected date")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioButtons[0]) }
     var showFrequencyDropDOwnMenu by remember { mutableStateOf(false) }
     var showIntakeDropDownMenu by remember { mutableStateOf(false) }
+    var showFrequencyInfoDialog by remember { mutableStateOf(false) }
+    var showIntakeInfoDialog by remember { mutableStateOf(false) }
+    var showDosageInfoDialog by remember { mutableStateOf(false) }
+
+
 
     Column(modifier = modifier
         .fillMaxSize()
-        .padding(8.dp)
+        .padding(16.dp)
         .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -75,29 +80,30 @@ fun AddMedicationScreen(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 16.dp
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = "Medication Info",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = modifier.padding(4.dp),
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
 
                 OutlinedTextField(
                     onValueChange = {},
                     value = "",
-                    label = { Text("Medication name") }
+                    label = { Text("Medication name") },
+                    maxLines = 1,
                 )
 
                 OutlinedTextField(
                     onValueChange = {},
                     value = "",
-                    label = { Text("Medication description") }
+                    label = { Text("Medication description") },
+                    maxLines = 1,
+                    placeholder = {Text("Description, e.g. 1 tablet daily")}
                 )
             }
         }
@@ -108,21 +114,21 @@ fun AddMedicationScreen(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = "Medication Dosage",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = modifier.padding(4.dp),
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary
                 )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
                         readOnly = true,
-                        onValueChange = {/*daily intake describes how many times a day you take this medicine e.g. 4 times a day*/ },
+                        onValueChange = {},
                         value = "",
                         label = { Text("Frequency") },
                         trailingIcon = {
@@ -132,34 +138,40 @@ fun AddMedicationScreen(
                                 }) {
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                             }
-                        }
+                        },
                     )
                     DropdownMenu(
                         expanded = showFrequencyDropDOwnMenu,
-                        onDismissRequest = {showFrequencyDropDOwnMenu = false}
+                        onDismissRequest = {showFrequencyDropDOwnMenu = false},
                     ) {
                         DropdownMenuItem(
-                            text = {Text("Daily")},
+                            text = {Text("Every single day")},
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = {Text("Every nth day")},
+                            text = {Text("Every specified amount of days")},
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = {Text("selected dates")},
+                            text = {Text("on selected days only ")},
                             onClick = {}
                         )
                     }
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {showFrequencyInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
+                    if (showFrequencyInfoDialog){
+                        InfoDialog(
+                            onDismissRequest = {showFrequencyInfoDialog = false},
+                            info = "Frequency specifies how frequently you take the medicine e.g. daily, weekly, or every certain amount of days")
+                    }
+
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
                         readOnly = true,
-                        onValueChange = {/*Intake describes how many times a day you take this medicine if you are scheduled to take it that day e.g. if frequency is 2, how many times you take it every second daye.g. 4 times a day*/ },
+                        onValueChange = {},
                         value = "",
                         label = { Text("Intake ") },
                         trailingIcon = {
@@ -176,11 +188,11 @@ fun AddMedicationScreen(
                         onDismissRequest = {showIntakeDropDownMenu = false}
                     ) {
                         DropdownMenuItem(
-                            text = {Text("Once daily")},
+                            text = {Text("One time daily")},
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = {Text("Twice daily")},
+                            text = {Text("Two times daily")},
                             onClick = {}
                         )
                         DropdownMenuItem(
@@ -200,8 +212,13 @@ fun AddMedicationScreen(
                             onClick = {}
                         )
                     }
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {showIntakeInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
+                    }
+                    if(showIntakeInfoDialog){
+                        InfoDialog(
+                            info = "Intake describes how many times a day you take this medicine if you are scheduled to take it that day e.g. if frequency is 2, how many times you take it every second daye.g. 4 times a day",
+                            onDismissRequest = {showIntakeInfoDialog = false})
                     }
                 }
 
@@ -211,8 +228,14 @@ fun AddMedicationScreen(
                         value = "",
                         label = { Text("Dosage") }
                     )
-                    IconButton(onClick = {/*dosage per intake describes what dosage you take each time e.g. take 1 red and 1 blue tablet*/ }) {
+                    IconButton(onClick = {showDosageInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
+                    }
+                    if (showDosageInfoDialog){
+                        InfoDialog(
+                            info = "dosage per intake describes what dosage you take each time e.g. take 1 red and 1 blue tablet",
+                            onDismissRequest = {showDosageInfoDialog = false}
+                        )
                     }
                 }
             }
@@ -229,10 +252,11 @@ fun AddMedicationScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "Reminders",
+                        text = "Notification Reminders",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = modifier.padding(4.dp).weight(0.8f),
                         fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.secondary
                     )
                     Switch(
                         modifier = modifier.align(Alignment.CenterVertically),
@@ -273,7 +297,13 @@ fun AddMedicationScreen(
         Spacer(modifier = modifier.height(16.dp))
 
         Card() {
-            Text("Duration", modifier = modifier.padding(start = 16.dp))
+            Text(
+                text = "Duration",
+                modifier = modifier.padding(start = 16.dp, top = 16.dp),
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+                )
             Text("Start date: 06/07/2067", modifier = modifier.padding(start = 16.dp))
 
             Column(modifier.selectableGroup()) {
@@ -335,3 +365,26 @@ fun AddMedicationScreen(
         }
     }
 }
+
+@Composable
+fun InfoDialog(info: String, onDismissRequest: () -> Unit){
+    Dialog(onDismissRequest = {onDismissRequest()}) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(8.dp)
+                ) {
+                Text(info)
+                Button(onClick = {onDismissRequest()}, modifier = Modifier.padding(8.dp)) {
+                    Text("Ok")
+                }
+            }
+        }
+    }
+}
+

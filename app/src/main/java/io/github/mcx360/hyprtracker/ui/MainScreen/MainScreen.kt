@@ -297,11 +297,12 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center,
-                            modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).fillMaxWidth()
+                            modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
                     HorizontalDivider()
-                    Text(stringResource(R.string.title_one_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.title_one_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
                     NavigationDrawerItem(
                         label = { Text(text= stringResource(R.string.export_label)) },
                         selected = false,
@@ -340,7 +341,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         modifier = Modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
-                    Text(stringResource(R.string.title_two_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.title_two_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.backup_label))},
                         selected = false,
@@ -376,7 +377,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         modifier = Modifier.testTag(REPORTBUG_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
-                    Text(stringResource(R.string.title_three_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.title_three_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.settings_label))},
                         selected = false,
