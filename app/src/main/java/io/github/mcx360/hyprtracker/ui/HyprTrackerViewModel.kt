@@ -233,3 +233,13 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
             return "error"
         }
 }
+
+data class Medicine(
+    val name: String,
+    val description: String,
+    val frequency: String,
+    val intake: Int,
+    val dosage: String,
+    val notificationEnabled: Boolean
+
+)

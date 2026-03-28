@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.MedicineScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -21,8 +23,11 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +36,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -44,6 +51,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +76,9 @@ fun AddMedicationScreen(
     var showFrequencyInfoDialog by remember { mutableStateOf(false) }
     var showIntakeInfoDialog by remember { mutableStateOf(false) }
     var showDosageInfoDialog by remember { mutableStateOf(false) }
+    var showSelectSpecifiedNumberOfDaysDialog by remember { mutableStateOf(false) }
+    var showDurationDatePicker by remember { mutableStateOf(false) }
+
 
 
 
@@ -96,6 +109,10 @@ fun AddMedicationScreen(
                     value = "",
                     label = { Text("Medication name") },
                     maxLines = 1,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
                 )
 
                 OutlinedTextField(
@@ -103,7 +120,11 @@ fun AddMedicationScreen(
                     value = "",
                     label = { Text("Medication description") },
                     maxLines = 1,
-                    placeholder = {Text("Description, e.g. 1 tablet daily")}
+                    placeholder = {Text("Description, e.g. 1 tablet daily")},
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
                 )
             }
         }
@@ -226,7 +247,11 @@ fun AddMedicationScreen(
                     OutlinedTextField(
                         onValueChange = {},
                         value = "",
-                        label = { Text("Dosage") }
+                        label = { Text("Dosage") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        )
                     )
                     IconButton(onClick = {showDosageInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
@@ -314,13 +339,25 @@ fun AddMedicationScreen(
                             .height(56.dp)
                             .selectable(
                                 selected = (text == selectedOption),
-                                onClick = {onOptionSelected(text)},
+                                onClick = { onOptionSelected(text)
+                                    when(text){
+                                        "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog = true
+                                        "Until a selected date" -> showDurationDatePicker = true
+                                    }
+                                          },
                                 role = Role.RadioButton
                             )
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(selected = (text ==selectedOption), onClick = null)
+                        RadioButton(selected = (text==selectedOption), onClick = {
+                            onOptionSelected(text)
+                            when(text){
+                                "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog = true
+                                "Until a selected date" -> showDurationDatePicker = true
+                            }
+                        }
+                        )
                         Text(
                             text = text,
                             style = MaterialTheme.typography.bodyLarge,
@@ -328,7 +365,21 @@ fun AddMedicationScreen(
                         )
                     }
                 }
+                if (selectedOption == "Specified number of days"){
+                    Text("medicine recorded for next 66 days", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                } else if(selectedOption == "Until a selected date"){
+                    Text("Medicine recorded until 07/07/2067", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                }else{
+
+                }
             }
+            if (showSelectSpecifiedNumberOfDaysDialog) {
+                SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {showSelectSpecifiedNumberOfDaysDialog = false})
+            }
+            if (showDurationDatePicker) {
+                DurationDatePicker(onDateSelected = {}, onDismiss = {showDurationDatePicker = false})
+            }
+
         }
 
         Row(
@@ -385,6 +436,67 @@ fun InfoDialog(info: String, onDismissRequest: () -> Unit){
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SelectSpecifiedNumberOfDaysDialog(onDismissRequest: () -> Unit){
+        Dialog(onDismissRequest = {onDismissRequest}) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Enter the amount of days that the medicine will be taken for")
+                    OutlinedTextField(
+                        onValueChange = {},
+                        value = "",
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        label = {Text("Days")}
+                    )
+                    Button(onClick = onDismissRequest) {
+                        Text("Confirm")
+                    }
+                }
+            }
+        }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DurationDatePicker(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                onDateSelected(datePickerState.selectedDateMillis)
+                onDismiss()
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
     }
 }
 
