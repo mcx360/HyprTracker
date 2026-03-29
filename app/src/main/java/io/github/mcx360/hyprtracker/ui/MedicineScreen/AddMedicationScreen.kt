@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.TestOnly
 import kotlin.Unit
 
 @Composable
@@ -78,6 +80,7 @@ fun AddMedicationScreen(
     var showDosageInfoDialog by remember { mutableStateOf(false) }
     var showSelectSpecifiedNumberOfDaysDialog by remember { mutableStateOf(false) }
     var showDurationDatePicker by remember { mutableStateOf(false) }
+    var showSelectedDaysPicker by remember { mutableStateOf(false) }
 
 
 
@@ -170,13 +173,13 @@ fun AddMedicationScreen(
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = {Text("Every specified amount of days")},
-                            onClick = {}
+                            text = {Text("On selected days only ")},
+                            onClick = {showSelectedDaysPicker = true}
                         )
-                        DropdownMenuItem(
-                            text = {Text("on selected days only ")},
-                            onClick = {}
-                        )
+                        if (showSelectedDaysPicker){
+                            SelectDaysForMedication(onDismiss = {showSelectedDaysPicker = false})
+                        }
+
                     }
                     IconButton(onClick = {showFrequencyInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
@@ -500,3 +503,85 @@ fun DurationDatePicker(
     }
 }
 
+@Composable
+fun SelectDaysForMedication(onDismiss: () -> Unit){
+    var mondayChecked by remember { mutableStateOf(false) }
+    var tuesdayChecked by remember { mutableStateOf(false) }
+    var wednesdayhecked by remember { mutableStateOf(false) }
+    var thursdayChecked by remember { mutableStateOf(false) }
+    var fridayChecked by remember { mutableStateOf(false) }
+    var saturdayChecked by remember { mutableStateOf(false) }
+    var sundayChecked by remember { mutableStateOf(false) }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text("Select days")
+                Row() {
+                    Text("Monday")
+                    Checkbox(
+                        checked = mondayChecked,
+                        onCheckedChange = { mondayChecked = it }
+                    )
+                }
+                Row() {
+                    Text("Tuesday")
+                    Checkbox(
+                        checked = tuesdayChecked,
+                        onCheckedChange = { tuesdayChecked = it }
+                    )
+                }
+                Row() {
+                    Text("Wednesday")
+                    Checkbox(
+                        checked = wednesdayhecked,
+                        onCheckedChange = { wednesdayhecked = it }
+                    )
+                }
+                Row() {
+                    Text("Thursday")
+                    Checkbox(
+                        checked = thursdayChecked,
+                        onCheckedChange = { thursdayChecked = it }
+                    )
+                }
+                Row() {
+                    Text("Friday")
+                    Checkbox(
+                        checked = fridayChecked,
+                        onCheckedChange = {
+                            fridayChecked = it
+                        }
+                    )
+                }
+                Row() {
+                    Text("Saturday")
+                    Checkbox(
+                        checked = saturdayChecked,
+                        onCheckedChange = { saturdayChecked = it }
+                    )
+                }
+                Row() {
+                    Text("Sunday")
+                    Checkbox(
+                        checked = sundayChecked,
+                        onCheckedChange = { sundayChecked = it }
+                    )
+                }
+                Row() {
+                    Button(onClick = {onDismiss()}) {
+                        Text("Ok")
+                    }
+                }
+            }
+        }
+    }
+}
