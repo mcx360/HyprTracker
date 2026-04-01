@@ -85,6 +85,7 @@ fun AddMedicationScreen(
     var showSelectedDaysPicker by remember { mutableStateOf(false) }
     val uiState = hyprTrackerViewModel.uiState.collectAsState()
 
+    //Medication Info
     Column(modifier = modifier
         .fillMaxSize()
         .padding(16.dp)
@@ -135,6 +136,7 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
+        //Medication schedule and dosage
         Card() {
             Column(
                 modifier = modifier
@@ -318,6 +320,7 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
+        //Notification reminders
         Card() {
             Column(
                 modifier = modifier
@@ -345,7 +348,15 @@ fun AddMedicationScreen(
 
                 if (checked) {
                     Row() {
-                        Text("Reminders daily: 2")
+                        if (uiState.value.medicationSchedule == "Every single day"){
+                            Text("You will receive reminders every day")
+                        }else{
+                            Text("You will receive reminders on the following days: " + uiState.value.selectedDays.toString())
+                        }
+                    }
+                    Row() {
+
+                        Text("Reminders daily: " + uiState.value.medicationTimesPerDay)
                         IconButton(onClick = {}) {
                             Image(Icons.Filled.Edit, contentDescription = null)
                         }
@@ -373,6 +384,7 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
+        //Duration
         Card() {
             Text(
                 text = "Duration",
@@ -382,7 +394,7 @@ fun AddMedicationScreen(
                 fontWeight = FontWeight.Bold
                 )
 
-            Text("Start date: "+uiState.value.date, modifier = modifier.padding(start = 16.dp))
+            Text("Start date: "+ hyprTrackerViewModel.formatToRegularDate(uiState.value.date), modifier = modifier.padding(start = 16.dp))
 
             Column(modifier.selectableGroup()) {
                 radioButtons.forEach { text ->
@@ -631,15 +643,30 @@ fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTra
                         Text("Cancel")
                     }
                     Button(onClick = {
+                        listOf(
+                            mondayChecked to days.Monday,
+                            tuesdayChecked to days.Tuesday,
+                            wednesdayChecked to days.Wednesday,
+                            thursdayChecked to days.Thursday,
+                            fridayChecked to days.Friday,
+                            saturdayChecked to days.Saturday,
+                            sundayChecked to days.Sunday
+                            ).forEach { (isChecked, day) ->
+                            if (isChecked) {
+                                hyprTrackerViewModel.addSelectedDays(day.name)
+                            }
+                            if (!isChecked) {
+                                hyprTrackerViewModel.removeSelectedDays(day.name)
+                            }
+                        }
                         onDismiss()
-                        hyprTrackerViewModel.updateMedicationSchedule("Selected days only")
-                                     }, modifier = Modifier.padding(4.dp)) {
+                        hyprTrackerViewModel.updateMedicationSchedule("Selected days only") },
+                        modifier = Modifier.padding(4.dp)) {
                         Text("Ok")
                     }
                 }
             }
         }
-
     }
 }
 

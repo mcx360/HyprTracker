@@ -72,6 +72,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 medicationTimesPerDay= 0,
                 medicationIntake = 0,
                 dosage= "",
+                selectedDays = setOf()
             )
         }
     }
@@ -210,6 +211,20 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun addSelectedDays(day: String){
+        val selectedDays = _uiState.value.selectedDays
+        _uiState.update { currentState ->
+            currentState.copy(selectedDays = selectedDays + day)
+        }
+    }
+
+    fun removeSelectedDays(day: String){
+        val selectedDays = _uiState.value.selectedDays
+        _uiState.update { currentState ->
+            currentState.copy(selectedDays = selectedDays - day)
+        }
+    }
+
 
 
 
@@ -244,6 +259,7 @@ data class HyprTrackerUIState(
     val medicationTimesPerDay: Int = 0,
     val medicationIntake: Int = 0,
     val dosage: String = "",
+    val selectedDays: Set<String> = setOf()
 )
 
 data class HyprReading(
