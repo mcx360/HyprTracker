@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui
 
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -71,8 +70,8 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 medicationSchedule = "",
                 medicationTimesPerDay= 0,
                 medicationIntake = 0,
-                dosage= "",
-                selectedDays = setOf()
+                medicationDosage= "",
+                medicationSelectedDays = setOf()
             )
         }
     }
@@ -201,7 +200,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     fun updateMedicationDose(dose: String){
         _uiState.update { currentState ->
-            currentState.copy(dosage = dose)
+            currentState.copy(medicationDosage = dose)
         }
     }
 
@@ -212,16 +211,26 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     }
 
     fun addSelectedDays(day: String){
-        val selectedDays = _uiState.value.selectedDays
+        val selectedDays = _uiState.value.medicationSelectedDays
         _uiState.update { currentState ->
-            currentState.copy(selectedDays = selectedDays + day)
+            currentState.copy(medicationSelectedDays = selectedDays + day)
         }
     }
 
     fun removeSelectedDays(day: String){
-        val selectedDays = _uiState.value.selectedDays
+        val selectedDays = _uiState.value.medicationSelectedDays
         _uiState.update { currentState ->
-            currentState.copy(selectedDays = selectedDays - day)
+            currentState.copy(medicationSelectedDays = selectedDays - day)
+        }
+    }
+
+    fun updateMedicationReminderTime(inputtedValue: String, reminder: Int){
+        val currentReminders = _uiState.value.medicationReminderTimes
+        val newReminders = currentReminders.toMutableList().apply {
+            this[reminder] = inputtedValue
+        }
+        _uiState.update { currentState ->
+            currentState.copy(medicationReminderTimes = newReminders )
         }
     }
 
@@ -258,8 +267,9 @@ data class HyprTrackerUIState(
     val medicationSchedule: String = "",
     val medicationTimesPerDay: Int = 0,
     val medicationIntake: Int = 0,
-    val dosage: String = "",
-    val selectedDays: Set<String> = setOf()
+    val medicationDosage: String = "",
+    val medicationSelectedDays: Set<String> = setOf(),
+    val medicationReminderTimes: List<String> = listOf("","","","","","","")
 )
 
 data class HyprReading(
@@ -301,8 +311,6 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
             return "error"
         }
 }
-
-
 
 data class Medicine(
     val name: String,
