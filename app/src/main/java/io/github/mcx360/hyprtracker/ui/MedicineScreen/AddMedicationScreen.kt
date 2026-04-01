@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui.MedicineScreen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +40,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +54,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.TestOnly
 import kotlin.Unit
 
 @Composable
@@ -67,23 +66,22 @@ fun AddMedicationScreen(
     modifier: Modifier,
     openAddMedicationScreen: MutableState<Boolean>,
     snackBarHostState: SnackbarHostState,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    hyprTrackerViewModel: HyprTrackerViewModel
 ){
     val haptic = LocalHapticFeedback.current
     var checked by remember {mutableStateOf(false)}
     val radioButtons = listOf("Continuous", "Specified number of days", "Until a selected date")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioButtons[0]) }
-    var showFrequencyDropDOwnMenu by remember { mutableStateOf(false) }
-    var showIntakeDropDownMenu by remember { mutableStateOf(false) }
-    var showFrequencyInfoDialog by remember { mutableStateOf(false) }
-    var showIntakeInfoDialog by remember { mutableStateOf(false) }
-    var showDosageInfoDialog by remember { mutableStateOf(false) }
+    var showScheduleDropDownMenu by remember { mutableStateOf(false) }
+    var showTimesPerDayDropDownMenu by remember { mutableStateOf(false) }
+    var showScheduleInfoDialog by remember { mutableStateOf(false) }
+    var showTimesPerDayInfoDialog by remember { mutableStateOf(false) }
+    var showDosePerIntakeInfoDialog by remember { mutableStateOf(false) }
     var showSelectSpecifiedNumberOfDaysDialog by remember { mutableStateOf(false) }
     var showDurationDatePicker by remember { mutableStateOf(false) }
     var showSelectedDaysPicker by remember { mutableStateOf(false) }
-
-
-
+    val uiState = hyprTrackerViewModel.uiState.collectAsState()
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -108,22 +106,23 @@ fun AddMedicationScreen(
                 )
 
                 OutlinedTextField(
-                    onValueChange = {},
-                    value = "",
+                    onValueChange = {hyprTrackerViewModel.updateMedicationName(it)},
+                    value = uiState.value.medicationName,
                     label = { Text("Medication name") },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
+                    placeholder = {Text("e.g. Lisinopril")}
                 )
 
                 OutlinedTextField(
-                    onValueChange = {},
-                    value = "",
+                    onValueChange = {hyprTrackerViewModel.updateMedicationDescription(it)},
+                    value = uiState.value.medicationDescription,
                     label = { Text("Medication description") },
                     maxLines = 1,
-                    placeholder = {Text("Description, e.g. 1 tablet daily")},
+                    placeholder = {Text("e.g. Lowers high blood pressure")},
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
@@ -142,7 +141,7 @@ fun AddMedicationScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Medication Dosage",
+                    text = "Medication Schedule & Dosage",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = modifier.padding(4.dp),
                     fontWeight = FontWeight.Bold,
@@ -154,19 +153,22 @@ fun AddMedicationScreen(
                         readOnly = true,
                         onValueChange = {},
                         value = "",
-                        label = { Text("Frequency") },
+                        label = { Text("Schedule") },
+                        placeholder = {Text("e.g. Every day")},
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    showFrequencyDropDOwnMenu = true
+                                    showScheduleDropDownMenu = true
                                 }) {
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                             }
                         },
+                        maxLines = 1
                     )
+
                     DropdownMenu(
-                        expanded = showFrequencyDropDOwnMenu,
-                        onDismissRequest = {showFrequencyDropDOwnMenu = false},
+                        expanded = showScheduleDropDownMenu,
+                        onDismissRequest = {showScheduleDropDownMenu = false},
                     ) {
                         DropdownMenuItem(
                             text = {Text("Every single day")},
@@ -181,13 +183,15 @@ fun AddMedicationScreen(
                         }
 
                     }
-                    IconButton(onClick = {showFrequencyInfoDialog = true}) {
+
+                    IconButton(onClick = {showScheduleInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
-                    if (showFrequencyInfoDialog){
+
+                    if (showScheduleInfoDialog){
                         InfoDialog(
-                            onDismissRequest = {showFrequencyInfoDialog = false},
-                            info = "Frequency specifies how frequently you take the medicine e.g. daily, weekly, or every certain amount of days")
+                            onDismissRequest = {showScheduleInfoDialog = false},
+                            info = "Schedule defines how often you take this medication (e.g. every day or on specific days).")
                     }
 
                 }
@@ -197,19 +201,21 @@ fun AddMedicationScreen(
                         readOnly = true,
                         onValueChange = {},
                         value = "",
-                        label = { Text("Intake ") },
+                        label = { Text("Times per day") },
+                        placeholder = {Text("e.g. Once daily")},
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    showIntakeDropDownMenu = true
+                                    showTimesPerDayDropDownMenu = true
                                 }) {
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                             }
                         },
                     )
+
                     DropdownMenu(
-                        expanded = showIntakeDropDownMenu,
-                        onDismissRequest = {showIntakeDropDownMenu = false}
+                        expanded = showTimesPerDayDropDownMenu,
+                        onDismissRequest = {showTimesPerDayDropDownMenu = false}
                     ) {
                         DropdownMenuItem(
                             text = {Text("One time daily")},
@@ -236,13 +242,15 @@ fun AddMedicationScreen(
                             onClick = {}
                         )
                     }
-                    IconButton(onClick = {showIntakeInfoDialog = true}) {
+
+                    IconButton(onClick = {showTimesPerDayInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
-                    if(showIntakeInfoDialog){
+
+                    if(showTimesPerDayInfoDialog){
                         InfoDialog(
-                            info = "Intake describes how many times a day you take this medicine if you are scheduled to take it that day e.g. if frequency is 2, how many times you take it every second daye.g. 4 times a day",
-                            onDismissRequest = {showIntakeInfoDialog = false})
+                            info = "Times per day indicates how many times you take the medication on a scheduled day.",
+                            onDismissRequest = {showTimesPerDayInfoDialog = false})
                     }
                 }
 
@@ -250,19 +258,22 @@ fun AddMedicationScreen(
                     OutlinedTextField(
                         onValueChange = {},
                         value = "",
-                        label = { Text("Dosage") },
+                        label = { Text("Dose per Intake") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Done
-                        )
+                        ),
+                        placeholder = {Text("e.g. 1 x 10mg tablet")}
                     )
-                    IconButton(onClick = {showDosageInfoDialog = true}) {
+
+                    IconButton(onClick = {showDosePerIntakeInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
-                    if (showDosageInfoDialog){
+
+                    if (showDosePerIntakeInfoDialog){
                         InfoDialog(
-                            info = "dosage per intake describes what dosage you take each time e.g. take 1 red and 1 blue tablet",
-                            onDismissRequest = {showDosageInfoDialog = false}
+                            info = "Dose per intake describes the amount of medication you take each time (e.g. 1 tablet or 10 mg).",
+                            onDismissRequest = {showDosePerIntakeInfoDialog = false}
                         )
                     }
                 }
@@ -286,6 +297,7 @@ fun AddMedicationScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.secondary
                     )
+
                     Switch(
                         modifier = modifier.align(Alignment.CenterVertically),
                         checked = checked,
@@ -294,6 +306,7 @@ fun AddMedicationScreen(
                         }
                     )
                 }
+
                 if (checked) {
                     Row() {
                         Text("Reminders daily: 2")
@@ -332,7 +345,8 @@ fun AddMedicationScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
                 )
-            Text("Start date: 06/07/2067", modifier = modifier.padding(start = 16.dp))
+
+            Text(uiState.value.date, modifier = modifier.padding(start = 16.dp))
 
             Column(modifier.selectableGroup()) {
                 radioButtons.forEach { text ->
@@ -359,8 +373,7 @@ fun AddMedicationScreen(
                                 "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog = true
                                 "Until a selected date" -> showDurationDatePicker = true
                             }
-                        }
-                        )
+                        })
                         Text(
                             text = text,
                             style = MaterialTheme.typography.bodyLarge,
@@ -507,7 +520,7 @@ fun DurationDatePicker(
 fun SelectDaysForMedication(onDismiss: () -> Unit){
     var mondayChecked by remember { mutableStateOf(false) }
     var tuesdayChecked by remember { mutableStateOf(false) }
-    var wednesdayhecked by remember { mutableStateOf(false) }
+    var wednesdaychecked by remember { mutableStateOf(false) }
     var thursdayChecked by remember { mutableStateOf(false) }
     var fridayChecked by remember { mutableStateOf(false) }
     var saturdayChecked by remember { mutableStateOf(false) }
@@ -526,58 +539,61 @@ fun SelectDaysForMedication(onDismiss: () -> Unit){
             ) {
                 Text("Select days")
                 Row() {
-                    Text("Monday")
                     Checkbox(
                         checked = mondayChecked,
                         onCheckedChange = { mondayChecked = it }
                     )
+                    Text("Monday")
                 }
                 Row() {
-                    Text("Tuesday")
                     Checkbox(
                         checked = tuesdayChecked,
                         onCheckedChange = { tuesdayChecked = it }
                     )
+                    Text("Tuesday")
                 }
                 Row() {
-                    Text("Wednesday")
                     Checkbox(
-                        checked = wednesdayhecked,
-                        onCheckedChange = { wednesdayhecked = it }
+                        checked = wednesdaychecked,
+                        onCheckedChange = { wednesdaychecked = it }
                     )
+                    Text("Wednesday")
                 }
                 Row() {
-                    Text("Thursday")
                     Checkbox(
                         checked = thursdayChecked,
                         onCheckedChange = { thursdayChecked = it }
                     )
+                    Text("Thursday")
                 }
                 Row() {
-                    Text("Friday")
                     Checkbox(
                         checked = fridayChecked,
                         onCheckedChange = {
                             fridayChecked = it
                         }
                     )
+                    Text("Friday")
                 }
                 Row() {
-                    Text("Saturday")
                     Checkbox(
                         checked = saturdayChecked,
                         onCheckedChange = { saturdayChecked = it }
                     )
+                    Text("Saturday")
                 }
                 Row() {
-                    Text("Sunday")
                     Checkbox(
                         checked = sundayChecked,
                         onCheckedChange = { sundayChecked = it }
                     )
+                    Text("Sunday")
                 }
-                Row() {
-                    Button(onClick = {onDismiss()}) {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    Button(onClick = {onDismiss()}, modifier = Modifier.padding(4.dp)) {
+                        Text("Cancel")
+                    }
+                    Button(onClick = {onDismiss()}, modifier = Modifier.padding(4.dp)) {
                         Text("Ok")
                     }
                 }

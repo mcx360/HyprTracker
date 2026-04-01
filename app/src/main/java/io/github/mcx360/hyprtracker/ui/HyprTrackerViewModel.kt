@@ -166,6 +166,18 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
     }
 
+    fun updateMedicationName(name: String){
+        _uiState.update { currentState ->
+            currentState.copy(medicationName = name)
+        }
+    }
+
+    fun updateMedicationDescription(description: String){
+        _uiState.update { currentState ->
+            currentState.copy(medicationDescription = description)
+        }
+    }
+
 
 
     companion object {
@@ -191,7 +203,12 @@ data class HyprTrackerUIState(
     val date: String = LocalDate.now().toString(),
     val time: String = LocalTime.now().withNano(0).toString(),
     val notes: String = "",
-    var readings: List<HyprReading> = listOf()
+    var readings: List<HyprReading> = listOf(),
+    val medicationName: String = "",
+    val medicationDescription: String = "",
+    val medicationFrequency: String = "",
+    val medicationIntake: Int = 0,
+    val dosage: String = "",
 )
 
 data class HyprReading(
@@ -234,6 +251,8 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
         }
 }
 
+
+
 data class Medicine(
     val name: String,
     val description: String,
@@ -241,5 +260,4 @@ data class Medicine(
     val intake: Int,
     val dosage: String,
     val notificationEnabled: Boolean
-
 )

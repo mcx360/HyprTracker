@@ -20,12 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 
 @Composable
 fun MedicineScreen(
     modifier: Modifier = Modifier,
     openAddMedicationScreen: MutableState<Boolean>,
-    snackBarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState,
+    hyprTrackerViewModel: HyprTrackerViewModel
 ){
     val scope = rememberCoroutineScope()
     if (openAddMedicationScreen.value){
@@ -33,7 +35,8 @@ fun MedicineScreen(
             modifier = modifier,
             openAddMedicationScreen = openAddMedicationScreen,
             snackBarHostState = snackBarHostState,
-            scope = scope
+            scope = scope,
+            hyprTrackerViewModel = hyprTrackerViewModel
         )
     } else{
         Column(
