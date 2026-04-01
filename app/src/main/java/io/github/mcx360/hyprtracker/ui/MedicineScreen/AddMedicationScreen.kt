@@ -25,12 +25,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
@@ -61,6 +62,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.Unit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedicationScreen(
     modifier: Modifier,
@@ -149,41 +151,50 @@ fun AddMedicationScreen(
                 )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        readOnly = true,
-                        onValueChange = {},
-                        value = "",
-                        label = { Text("Schedule") },
-                        placeholder = {Text("e.g. Every day")},
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    showScheduleDropDownMenu = true
-                                }) {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            }
-                        },
-                        maxLines = 1
-                    )
 
-                    DropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = showScheduleDropDownMenu,
-                        onDismissRequest = {showScheduleDropDownMenu = false},
-                    ) {
-                        DropdownMenuItem(
-                            text = {Text("Every single day")},
-                            onClick = {}
+                        onExpandedChange = { showScheduleDropDownMenu = it }) {
+                        OutlinedTextField(
+                            readOnly = true,
+                            onValueChange = {},
+                            value = uiState.value.medicationSchedule,
+                            label = { Text("Schedule") },
+                            placeholder = { Text("e.g. Every day") },
+                            trailingIcon = {
+                                IconButton(
+                                    onClick = {
+                                        showScheduleDropDownMenu = true
+                                    }) {
+                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                                }
+                            },
+                            maxLines = 1,
+                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
                         )
-                        DropdownMenuItem(
-                            text = {Text("On selected days only ")},
-                            onClick = {showSelectedDaysPicker = true}
-                        )
-                        if (showSelectedDaysPicker){
-                            SelectDaysForMedication(onDismiss = {showSelectedDaysPicker = false})
+                        ExposedDropdownMenu(
+                            expanded = showScheduleDropDownMenu,
+                            onDismissRequest = { showScheduleDropDownMenu = false }) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    hyprTrackerViewModel.updateMedicationSchedule("Every single day")
+                                    showScheduleDropDownMenu = false
+                                },
+                                text = { Text("Every single day") }
+                            )
+                            DropdownMenuItem(
+                                onClick = {
+                                    showSelectedDaysPicker = true
+                                },
+                                text = { Text("On selected days only") }
+                            )
                         }
 
                     }
-
+                    if (showSelectedDaysPicker){
+                        SelectDaysForMedication(onDismiss = {showSelectedDaysPicker = false}, hyprTrackerViewModel)
+                        showScheduleDropDownMenu = false
+                    }
                     IconButton(onClick = {showScheduleInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
@@ -193,56 +204,81 @@ fun AddMedicationScreen(
                             onDismissRequest = {showScheduleInfoDialog = false},
                             info = "Schedule defines how often you take this medication (e.g. every day or on specific days).")
                     }
-
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        readOnly = true,
-                        onValueChange = {},
-                        value = "",
-                        label = { Text("Times per day") },
-                        placeholder = {Text("e.g. Once daily")},
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    showTimesPerDayDropDownMenu = true
-                                }) {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            }
-                        },
-                    )
 
-                    DropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = showTimesPerDayDropDownMenu,
-                        onDismissRequest = {showTimesPerDayDropDownMenu = false}
+                        onExpandedChange = {showTimesPerDayDropDownMenu = it}
                     ) {
-                        DropdownMenuItem(
-                            text = {Text("One time daily")},
-                            onClick = {}
+                        OutlinedTextField(
+                            readOnly = true,
+                            onValueChange = {},
+                            value = when(uiState.value.medicationTimesPerDay){
+                                0 -> ""
+                                1 -> "One time daily"
+                                2 -> "Two times daily"
+                                3 -> "Three times daily"
+                                4 -> "Four times daily"
+                                5 -> "Five times daily"
+                                6 -> "Six times daily"
+                                else -> ""
+                            },
+                            label = { Text("Times per day") },
+                            placeholder = {Text("e.g. Once daily")},
+                            trailingIcon = {
+                                IconButton(
+                                    onClick = {
+                                        showTimesPerDayDropDownMenu = true
+                                    }) {
+                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                                }
+                            },
+                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
                         )
-                        DropdownMenuItem(
-                            text = {Text("Two times daily")},
-                            onClick = {}
-                        )
-                        DropdownMenuItem(
-                            text = {Text("Three times daily")},
-                            onClick = {}
-                        )
-                        DropdownMenuItem(
-                            text = {Text("Four times daily")},
-                            onClick = {}
-                        )
-                        DropdownMenuItem(
-                            text = {Text("Five times daily")},
-                            onClick = {}
-                        )
-                        DropdownMenuItem(
-                            text = {Text("Six times daily")},
-                            onClick = {}
-                        )
+                        ExposedDropdownMenu(
+                            expanded = showTimesPerDayDropDownMenu,
+                            onDismissRequest = {showTimesPerDayDropDownMenu = false}
+                        ) {
+                            DropdownMenuItem(
+                                text = {Text("One time daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(1)
+                                showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Two times daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(2)
+                                    showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Three times daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(3)
+                                    showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Four times daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(4)
+                                    showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Five times daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(5)
+                                    showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Six times daily")},
+                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(6)
+                                    showTimesPerDayDropDownMenu = false
+                                }
+                            )
+                        }
                     }
-
                     IconButton(onClick = {showTimesPerDayInfoDialog = true}) {
                         Icon(Icons.Default.Info, contentDescription = null)
                     }
@@ -256,8 +292,8 @@ fun AddMedicationScreen(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
-                        onValueChange = {},
-                        value = "",
+                        onValueChange = {hyprTrackerViewModel.updateMedicationDose(it)},
+                        value = uiState.value.dosage,
                         label = { Text("Dose per Intake") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -346,7 +382,7 @@ fun AddMedicationScreen(
                 fontWeight = FontWeight.Bold
                 )
 
-            Text(uiState.value.date, modifier = modifier.padding(start = 16.dp))
+            Text("Start date: "+uiState.value.date, modifier = modifier.padding(start = 16.dp))
 
             Column(modifier.selectableGroup()) {
                 radioButtons.forEach { text ->
@@ -408,6 +444,7 @@ fun AddMedicationScreen(
                     openAddMedicationScreen.value = !openAddMedicationScreen.value
                     haptic.performHapticFeedback(HapticFeedbackType.Reject)
                     scope.launch {
+                        hyprTrackerViewModel.resetAddMedication()
                         snackBarHostState.showSnackbar("Canceled adding medication")
                     }
                 },
@@ -507,7 +544,7 @@ fun DurationDatePicker(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = {onDismiss()}) {
                 Text("Cancel")
             }
         }
@@ -517,10 +554,10 @@ fun DurationDatePicker(
 }
 
 @Composable
-fun SelectDaysForMedication(onDismiss: () -> Unit){
+fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTrackerViewModel){
     var mondayChecked by remember { mutableStateOf(false) }
     var tuesdayChecked by remember { mutableStateOf(false) }
-    var wednesdaychecked by remember { mutableStateOf(false) }
+    var wednesdayChecked by remember { mutableStateOf(false) }
     var thursdayChecked by remember { mutableStateOf(false) }
     var fridayChecked by remember { mutableStateOf(false) }
     var saturdayChecked by remember { mutableStateOf(false) }
@@ -554,8 +591,8 @@ fun SelectDaysForMedication(onDismiss: () -> Unit){
                 }
                 Row() {
                     Checkbox(
-                        checked = wednesdaychecked,
-                        onCheckedChange = { wednesdaychecked = it }
+                        checked = wednesdayChecked,
+                        onCheckedChange = { wednesdayChecked = it }
                     )
                     Text("Wednesday")
                 }
@@ -590,14 +627,28 @@ fun SelectDaysForMedication(onDismiss: () -> Unit){
                     Text("Sunday")
                 }
                 Row(horizontalArrangement = Arrangement.Center) {
-                    Button(onClick = {onDismiss()}, modifier = Modifier.padding(4.dp)) {
+                    Button(onClick = {onDismiss() }, modifier = Modifier.padding(4.dp)) {
                         Text("Cancel")
                     }
-                    Button(onClick = {onDismiss()}, modifier = Modifier.padding(4.dp)) {
+                    Button(onClick = {
+                        onDismiss()
+                        hyprTrackerViewModel.updateMedicationSchedule("Selected days only")
+                                     }, modifier = Modifier.padding(4.dp)) {
                         Text("Ok")
                     }
                 }
             }
         }
+
     }
+}
+
+enum class days{
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
 }

@@ -63,6 +63,19 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         getCurrentDateAndTime = true
     }
 
+    fun resetAddMedication(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                medicationName = "",
+                medicationDescription = "",
+                medicationSchedule = "",
+                medicationTimesPerDay= 0,
+                medicationIntake = 0,
+                dosage= "",
+            )
+        }
+    }
+
     fun updateSystolicValue(inputtedValue: String){
         _uiState.update { currentState ->
             currentState.copy(systolicValue = inputtedValue)
@@ -178,6 +191,27 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun updateMedicationSchedule(schedule: String){
+        _uiState.update { currentState ->
+            currentState.copy(medicationSchedule = schedule)
+        }
+    }
+
+
+    fun updateMedicationDose(dose: String){
+        _uiState.update { currentState ->
+            currentState.copy(dosage = dose)
+        }
+    }
+
+    fun updateMedicationTimesPerDay(timesPerDay: Int){
+        _uiState.update { currentState ->
+            currentState.copy(medicationTimesPerDay = timesPerDay)
+        }
+    }
+
+
+
 
 
     companion object {
@@ -206,7 +240,8 @@ data class HyprTrackerUIState(
     var readings: List<HyprReading> = listOf(),
     val medicationName: String = "",
     val medicationDescription: String = "",
-    val medicationFrequency: String = "",
+    val medicationSchedule: String = "",
+    val medicationTimesPerDay: Int = 0,
     val medicationIntake: Int = 0,
     val dosage: String = "",
 )
