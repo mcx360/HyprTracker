@@ -15,7 +15,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldDecorator
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -55,9 +58,14 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
@@ -394,22 +402,12 @@ fun AddMedicationScreen(
 
                     Column() {
                         for (i in 1..uiState.value.medicationTimesPerDay){
+
                             TextField(
-                                placeholder = {Text("HH:MM")},
                                 value = uiState.value.medicationReminderTimes[i],
-                                onValueChange = { input ->
-                                    val digits = input.filter { it.isDigit() }.take(4)
-
-                                    val formatted = when {
-                                        digits.length == 0 -> ""
-                                        digits.length < 2 -> digits
-                                        digits.length == 2 -> "$digits:"
-                                        else -> digits.substring(0, 2) + ":" + digits.substring(2)
-                                    }
-
-                                    hyprTrackerViewModel.updateMedicationReminderTime(formatted, i)
-                                },
                                 label = {Text("Reminder" + i)},
+                                placeholder = {Text("HH:MM")},
+                                onValueChange = {if (it.length <5 && it.isDigitsOnly()) hyprTrackerViewModel.updateMedicationReminderTime(it, i)},
                                 trailingIcon = {Icon(
                                     painter = painterResource(R.drawable.ic_date),
                                     contentDescription = null
@@ -421,7 +419,31 @@ fun AddMedicationScreen(
                                     }else{
                                         ImeAction.Done
                                     }
-                                )
+                                ),
+                                visualTransformation = VisualTransformation { text ->
+                                    var out = ""
+                                    for (i in text.indices){
+                                        if (i == 2) out += ":$i" else out += text[i]
+
+                                    }
+                                    TransformedText(
+                                        text = AnnotatedString(out),
+                                        offsetMapping = object : OffsetMapping {
+                                            override fun originalToTransformed(offset: Int): Int {
+                                                if (offset<3) return offset
+                                                if (offset==3) return offset + 1
+                                                if (offset==4) return offset + 1
+                                                return offset
+                                            }
+
+                                            override fun transformedToOriginal(offset: Int): Int {
+                                                if (offset >= 4) return offset -1
+                                                return offset
+                                            }
+
+                                        }
+                                    )
+                                }
                             )
                         }
                     }

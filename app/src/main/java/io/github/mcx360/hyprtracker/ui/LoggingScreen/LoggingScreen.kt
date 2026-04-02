@@ -251,7 +251,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                         DatePicker(
                                             dateFormatter = DatePickerDefaults.dateFormatter(),
                                             state = datePickerState,
-                                            showModeToggle = false,
+                                            showModeToggle = false
                                         )
 
                                     Row(
