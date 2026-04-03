@@ -38,7 +38,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -501,16 +503,18 @@ fun AddMedicationScreen(
                 if (selectedOption == "Specified number of days"){
                     Text("medicine recorded until 07/07/2077\n(for next 66 days)", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                 } else if(selectedOption == "Until a selected date"){
-                    Text("Medicine recorded until 07/07/2067", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    if (uiState.value.medicationEndDate != ""){
+                        Text(hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    }
                 }else{
-
+                    Text("Medicine will be recorded indefinitely unless cancelled by the user", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                 }
             }
             if (showSelectSpecifiedNumberOfDaysDialog) {
                 SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {showSelectSpecifiedNumberOfDaysDialog = false})
             }
             if (showDurationDatePicker) {
-                DurationDatePicker(onDateSelected = {}, onDismiss = {showDurationDatePicker = false})
+                DurationDatePicker(onDateSelected = {hyprTrackerViewModel.updateMedicationEndDate(hyprTrackerViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
             }
 
         }
@@ -597,7 +601,7 @@ fun SelectSpecifiedNumberOfDaysDialog(onDismissRequest: () -> Unit){
                                 imeAction = ImeAction.Done
                             ),
                             label = {Text("Days")},
-                            modifier = Modifier.width(96.dp)
+                            modifier = Modifier.width(96.dp),
                         )
                     }
 

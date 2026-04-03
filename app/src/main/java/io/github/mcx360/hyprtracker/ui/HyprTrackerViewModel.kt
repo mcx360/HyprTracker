@@ -210,6 +210,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun updateMedicationEndDate(date: String){
+        _uiState.update { currentState ->
+            currentState.copy(medicationEndDate = date)
+        }
+    }
+
     fun addSelectedDays(day: String){
         val selectedDays = _uiState.value.medicationSelectedDays
         _uiState.update { currentState ->
@@ -269,7 +275,8 @@ data class HyprTrackerUIState(
     val medicationIntake: Int = 0,
     val medicationDosage: String = "",
     val medicationSelectedDays: Set<String> = setOf(),
-    val medicationReminderTimes: List<String> = listOf("","","","","","","")
+    val medicationReminderTimes: List<String> = listOf("","","","","","",""),
+    val medicationEndDate: String = ""
 )
 
 data class HyprReading(
