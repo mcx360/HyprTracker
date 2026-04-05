@@ -75,6 +75,8 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
 import kotlin.Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -456,7 +458,7 @@ fun AddMedicationScreen(
         Spacer(modifier = modifier.height(16.dp))
 
         //Duration
-        Card() {
+        Card {
             Text(
                 text = "Duration",
                 modifier = modifier.padding(start = 16.dp, top = 16.dp),
@@ -501,17 +503,26 @@ fun AddMedicationScreen(
                     }
                 }
                 if (selectedOption == "Specified number of days"){
-                    Text("medicine recorded until 07/07/2077\n(for next 66 days)", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    if (uiState.value.medicationEndDate != ""){
+                        Text("medicine recorded until "+hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    }
                 } else if(selectedOption == "Until a selected date"){
                     if (uiState.value.medicationEndDate != ""){
-                        Text(hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                         Text(hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                     }
                 }else{
                     Text("Medicine will be recorded indefinitely unless cancelled by the user", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                 }
             }
             if (showSelectSpecifiedNumberOfDaysDialog) {
-                SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {showSelectSpecifiedNumberOfDaysDialog = false})
+                SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {
+                    showSelectSpecifiedNumberOfDaysDialog = false
+                }, onNumOfDaysSelected = {
+                    if (it != "") {
+                        hyprTrackerViewModel.updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString())
+                    }
+                }
+                    )
             }
             if (showDurationDatePicker) {
                 DurationDatePicker(onDateSelected = {hyprTrackerViewModel.updateMedicationEndDate(hyprTrackerViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
@@ -578,8 +589,12 @@ fun InfoDialog(info: String, onDismissRequest: () -> Unit){
 }
 
 @Composable
-fun SelectSpecifiedNumberOfDaysDialog(onDismissRequest: () -> Unit){
-        Dialog(onDismissRequest = {onDismissRequest}) {
+fun SelectSpecifiedNumberOfDaysDialog(
+    onDismissRequest: () -> Unit,
+    onNumOfDaysSelected: (String) -> Unit
+){
+    var days by remember { mutableStateOf("") }
+        Dialog(onDismissRequest = {onDismissRequest()}) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -594,8 +609,8 @@ fun SelectSpecifiedNumberOfDaysDialog(onDismissRequest: () -> Unit){
                     Text("Enter the amount of days that the medicine will be taken for", textAlign = TextAlign.Center)
                     Row(horizontalArrangement = Arrangement.Center) {
                         OutlinedTextField(
-                            onValueChange = {},
-                            value = "",
+                            onValueChange = {if (it.isDigitsOnly()) days = it},
+                            value = days,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Done
@@ -605,7 +620,12 @@ fun SelectSpecifiedNumberOfDaysDialog(onDismissRequest: () -> Unit){
                         )
                     }
 
-                    Button(onClick = onDismissRequest) {
+                    Button(
+                        onClick = {
+                            onDismissRequest()
+                            onNumOfDaysSelected(days)
+                        }
+                    ) {
                         Text("Confirm")
                     }
                 }
