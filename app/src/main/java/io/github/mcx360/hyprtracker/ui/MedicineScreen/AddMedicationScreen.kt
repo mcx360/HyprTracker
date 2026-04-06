@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.Medicine
 import io.github.mcx360.hyprtracker.ui.Utils.DAYS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -636,10 +637,17 @@ fun SelectSpecifiedNumberOfDaysDialog(
                     ) {
                         Text("Confirm")
                     }
+
+                    Button(
+                        onClick = {
+                            onDismissRequest()
+                        }
+                    ) {
+                        Text("Cancel")
+                    }
                 }
             }
         }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

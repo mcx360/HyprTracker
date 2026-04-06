@@ -10,6 +10,7 @@ data class RecordedMedication(
     @ColumnInfo(name = "medication_name") val name: String,
     @ColumnInfo(name = "medication_description") val description: String,
     @ColumnInfo(name = "medication_schedule") val schedule: String,
+    @ColumnInfo(name = "scheduled_days") val scheduledDays: String,
     @ColumnInfo(name = "medication_times_per_day") val timesPerDay: Int,
     @ColumnInfo(name = "medication_dosage") val dosePerIntake: String,
     @ColumnInfo(name = "notifications_enabled") val notificationsEnabled: Boolean,

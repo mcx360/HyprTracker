@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
 import kotlin.String
 
 class HyprTrackerViewModel(
@@ -134,6 +135,19 @@ class HyprTrackerViewModel(
         }
     }
 
+    suspend fun addMedication(medicine: Medicine){
+        medicationRepository.addMedication(medicine.toRecordedMedication())
+    }
+
+    suspend fun removeMedication(medicine: Medicine){
+        medicationRepository.removeMedication(medicine.toRecordedMedication())
+    }
+
+    suspend fun fetchMedications(){
+        val list : MutableList<Medicine> = mutableListOf()
+        return medicationRepository.getAllMedications().forEach { recordedMedication -> list.add(recordedMedication.toMedicine()) }
+    }
+
     fun convertMillisToDate(millis: Long?): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         if (millis == null){
@@ -175,6 +189,34 @@ class HyprTrackerViewModel(
         pulseValue = pulseValue,
         notes = noteValue,
         stage = hypertensionStage
+    )
+
+    fun RecordedMedication.toMedicine() : Medicine = Medicine(
+
+        name = name,
+        description = description,
+        schedule = schedule,
+        timesPerDay = timesPerDay,
+        dosePerIntake = dosePerIntake,
+        notificationsEnabled = notificationsEnabled,
+        scheduledNotificationsTime = reminders.split(","),
+        scheduledDays = schedule.split(","),
+        startDate = startDate,
+        endDate = endDate
+    )
+
+    fun Medicine.toRecordedMedication() : RecordedMedication = RecordedMedication(
+        id = 0,
+        name = name,
+        description = description,
+        schedule = schedule,
+        timesPerDay = timesPerDay,
+        dosePerIntake = dosePerIntake,
+        scheduledDays = scheduledDays.toString(),
+        notificationsEnabled = notificationsEnabled,
+        reminders = scheduledNotificationsTime.toString(),
+        startDate = startDate,
+        endDate = endDate
     )
 
     //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
@@ -247,9 +289,6 @@ class HyprTrackerViewModel(
     }
 
 
-
-
-
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
@@ -284,6 +323,8 @@ data class HyprTrackerUIState(
     val medicationSelectedDays: Set<String> = setOf(),
     val medicationReminderTimes: List<String> = listOf("","","","","","",""),
     val medicationEndDate: String = ""
+    var medicineList: List<String> = listOf()
+
 )
 
 data class HyprReading(
@@ -294,6 +335,19 @@ data class HyprReading(
     val time: String,
     val notes: String?,
     val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
+)
+
+data class Medicine(
+    val name: String,
+    val description: String,
+    val schedule: String,
+    val scheduledDays: List<String>,
+    val timesPerDay: Int,
+    val dosePerIntake: String,
+    val notificationsEnabled: Boolean,
+    val scheduledNotificationsTime: List<String>,
+    val startDate: String,
+    val endDate: String
 )
 
 fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String {
@@ -325,12 +379,3 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
             return "error"
         }
 }
-
-data class Medicine(
-    val name: String,
-    val description: String,
-    val schedule: String,
-    val intake: Int,
-    val dosage: String,
-    val notificationEnabled: Boolean
-)
