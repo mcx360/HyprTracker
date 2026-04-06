@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.Source.Local
+package io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RecordedMedication(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int, //might remove
     @ColumnInfo(name = "medication_name") val name: String,
     @ColumnInfo(name = "medication_description") val description: String,
     @ColumnInfo(name = "medication_schedule") val schedule: String,

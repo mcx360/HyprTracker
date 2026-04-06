@@ -1,6 +1,6 @@
-package io.github.mcx360.hyprtracker.data
+package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure
 
-import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
 import kotlinx.coroutines.flow.Flow
 
 interface BloodPressureRepository {

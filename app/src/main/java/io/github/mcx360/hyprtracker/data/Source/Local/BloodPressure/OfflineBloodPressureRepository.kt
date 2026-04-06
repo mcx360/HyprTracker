@@ -1,10 +1,11 @@
-package io.github.mcx360.hyprtracker.data
+package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure
 
-import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressure
-import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressureDAO
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressureDAO
 import kotlinx.coroutines.flow.Flow
 
-class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) : BloodPressureRepository {
+class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) :
+    BloodPressureRepository {
 
     override fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
 

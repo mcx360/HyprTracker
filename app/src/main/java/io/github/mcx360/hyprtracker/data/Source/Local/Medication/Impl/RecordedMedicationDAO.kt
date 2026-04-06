@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.Source.Local
+package io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl
 
 import androidx.room.Dao
 import androidx.room.Delete

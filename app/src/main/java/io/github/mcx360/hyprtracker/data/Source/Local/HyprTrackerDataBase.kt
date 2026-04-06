@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressureDAO
+import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
+import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedicationDAO
 
 @Database(entities = [RecordedBloodPressure::class, RecordedMedication::class], version = 2, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {

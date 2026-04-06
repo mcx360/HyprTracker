@@ -1,7 +1,6 @@
-package io.github.mcx360.hyprtracker.data.Source.Local
+package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -12,7 +11,7 @@ interface RecordedBloodPressureDAO {
     @Query("SELECT * FROM RecordedBloodPressureReadings ORDER BY dateAdded DESC, timeAdded DESC")
     fun getAllBloodPressureReadings(): Flow<List<RecordedBloodPressure>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
     suspend fun insertBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
 
     @Query(

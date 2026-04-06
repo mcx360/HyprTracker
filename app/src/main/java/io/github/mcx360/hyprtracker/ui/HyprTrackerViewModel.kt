@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.github.mcx360.hyprtracker.data.BloodPressureRepository
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.BloodPressureRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,11 +20,14 @@ import java.util.Locale
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
-import io.github.mcx360.hyprtracker.data.Source.Local.RecordedBloodPressure
-import kotlinx.serialization.Serializer
+import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
+import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
 import kotlin.String
 
-class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
+class HyprTrackerViewModel(
+    private val bloodPressureRepository: BloodPressureRepository,
+    private val medicationRepository: MedicationRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HyprTrackerUIState())
     val uiState: StateFlow<HyprTrackerUIState> = _uiState.asStateFlow()
@@ -254,7 +257,8 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 ): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
                 return HyprTrackerViewModel(
-                    (application as HyprTrackerApplication).container.bloodPressureRepository
+                    bloodPressureRepository = (application as HyprTrackerApplication).container.bloodPressureRepository,
+                    medicationRepository = (application).container.medicationRepository
                 ) as T
             }
         }
