@@ -15,10 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldDecorator
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -38,9 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -65,7 +60,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -73,10 +67,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.Utils.DAYS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalTime
 import kotlin.Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,7 +104,7 @@ fun AddMedicationScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card() {
+        Card {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
@@ -134,8 +128,8 @@ fun AddMedicationScreen(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-                    placeholder = {Text("e.g. Lisinopril")}
-                )
+                    placeholder = {Text("e.g. Lisinopril")},
+                    )
 
                 OutlinedTextField(
                     onValueChange = {hyprTrackerViewModel.updateMedicationDescription(it)},
@@ -146,7 +140,7 @@ fun AddMedicationScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
-                    ),
+                    )
                 )
             }
         }
@@ -197,6 +191,9 @@ fun AddMedicationScreen(
                             DropdownMenuItem(
                                 onClick = {
                                     hyprTrackerViewModel.updateMedicationSchedule("Every single day")
+                                    for (day in DAYS.entries){
+                                        hyprTrackerViewModel.addSelectedDays(day.name)
+                                    }
                                     showScheduleDropDownMenu = false
                                 },
                                 text = { Text("Every single day") }
@@ -211,7 +208,18 @@ fun AddMedicationScreen(
 
                     }
                     if (showSelectedDaysPicker){
-                        SelectDaysForMedication(onDismiss = {showSelectedDaysPicker = false}, hyprTrackerViewModel)
+                        SelectDaysForMedication(onDismiss = {
+                            showSelectedDaysPicker = false
+                            if (!it.isNullOrEmpty()) {
+                                hyprTrackerViewModel.updateMedicationSchedule(it)
+                            } },
+                            onDaySelected = {
+                                hyprTrackerViewModel.addSelectedDays(it)
+                            },
+                            onDayRemoved = {
+                                hyprTrackerViewModel.removeSelectedDays(it)
+                            }
+                        )
                         showScheduleDropDownMenu = false
                     }
                     IconButton(onClick = {showScheduleInfoDialog = true}) {
@@ -364,7 +372,7 @@ fun AddMedicationScreen(
                 }
 
                 if (checked) {
-                    Row() {
+                    Row {
                         if (uiState.value.medicationSchedule == ""){
                             Text("Enter your medication schedule into the fields above to set reminders", color = MaterialTheme.colorScheme.error,
                                 modifier = modifier.padding(8.dp)
@@ -380,7 +388,7 @@ fun AddMedicationScreen(
                             )
                         }
                     }
-                    Row() {
+                    Row {
                         if (uiState.value.medicationTimesPerDay == 0){
                             Text("Enter how many times per scheduled day you take the medicine in the fields above before setting reminders", color = MaterialTheme.colorScheme.error,
                                 modifier = modifier.padding(8.dp)
@@ -427,7 +435,7 @@ fun AddMedicationScreen(
                                 visualTransformation = VisualTransformation { text ->
                                     var out = ""
                                     for (i in text.indices){
-                                        if (i == 2) out += ":$i" else out += text[i]
+                                        out += if (i == 2) ":${text[i]}" else text[i]
 
                                     }
                                     TransformedText(
@@ -667,7 +675,11 @@ fun DurationDatePicker(
 }
 
 @Composable
-fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTrackerViewModel){
+fun SelectDaysForMedication(
+    onDismiss: (String?) -> Unit,
+    onDaySelected: (String) -> Unit,
+    onDayRemoved: (String) -> Unit
+){
     var mondayChecked by remember { mutableStateOf(false) }
     var tuesdayChecked by remember { mutableStateOf(false) }
     var wednesdayChecked by remember { mutableStateOf(false) }
@@ -677,7 +689,7 @@ fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTra
     var sundayChecked by remember { mutableStateOf(false) }
     var showWarning = remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = {onDismiss()
+    Dialog(onDismissRequest = {onDismiss(null)
     showWarning.value = false
     }) {
         Card(
@@ -743,29 +755,29 @@ fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTra
                     Text("Sunday")
                 }
                 Row(horizontalArrangement = Arrangement.Center) {
-                    Button(onClick = {onDismiss() }, modifier = Modifier.padding(4.dp)) {
+                    Button(onClick = {onDismiss(null) }, modifier = Modifier.padding(4.dp)) {
                         Text("Cancel")
                     }
                     Button(onClick = {
                         if (mondayChecked || tuesdayChecked || wednesdayChecked || thursdayChecked || fridayChecked || saturdayChecked || sundayChecked){
                         listOf(
-                            mondayChecked to Days.Monday,
-                            tuesdayChecked to Days.Tuesday,
-                            wednesdayChecked to Days.Wednesday,
-                            thursdayChecked to Days.Thursday,
-                            fridayChecked to Days.Friday,
-                            saturdayChecked to Days.Saturday,
-                            sundayChecked to Days.Sunday
+                            mondayChecked to DAYS.Monday,
+                            tuesdayChecked to DAYS.Tuesday,
+                            wednesdayChecked to DAYS.Wednesday,
+                            thursdayChecked to DAYS.Thursday,
+                            fridayChecked to DAYS.Friday,
+                            saturdayChecked to DAYS.Saturday,
+                            sundayChecked to DAYS.Sunday
                             ).forEach { (isChecked, day) ->
                             if (isChecked) {
-                                hyprTrackerViewModel.addSelectedDays(day.name)
+                                onDaySelected(day.name)
                             }
                             if (!isChecked) {
-                                hyprTrackerViewModel.removeSelectedDays(day.name)
+                                onDayRemoved(day.name)
                             }
                         }
-                        onDismiss()
-                        hyprTrackerViewModel.updateMedicationSchedule("Selected days only") }else{
+                        onDismiss("Selected days only")
+                        } else{
                             showWarning.value = true
                         }},
                         modifier = Modifier.padding(4.dp)) {
@@ -778,14 +790,4 @@ fun SelectDaysForMedication(onDismiss: () -> Unit, hyprTrackerViewModel: HyprTra
             }
         }
     }
-}
-
-enum class Days{
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-    Sunday
 }

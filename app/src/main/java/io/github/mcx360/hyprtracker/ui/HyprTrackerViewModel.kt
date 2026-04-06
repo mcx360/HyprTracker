@@ -220,10 +220,12 @@ class HyprTrackerViewModel(
         }
     }
 
-    fun addSelectedDays(day: String){
+    fun addSelectedDays(vararg days: String){
         val selectedDays = _uiState.value.medicationSelectedDays
-        _uiState.update { currentState ->
-            currentState.copy(medicationSelectedDays = selectedDays + day)
+        for (day in days){
+            _uiState.update { currentState ->
+                currentState.copy(medicationSelectedDays = selectedDays + day)
+            }
         }
     }
 
@@ -327,7 +329,7 @@ fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String
 data class Medicine(
     val name: String,
     val description: String,
-    val frequency: String,
+    val schedule: String,
     val intake: Int,
     val dosage: String,
     val notificationEnabled: Boolean
