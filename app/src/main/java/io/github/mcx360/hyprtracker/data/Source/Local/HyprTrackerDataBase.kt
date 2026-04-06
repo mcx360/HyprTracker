@@ -5,9 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [RecordedBloodPressure::class], version = 1, exportSchema = false)
+@Database(entities = [RecordedBloodPressure::class, RecordedMedication::class], version = 2, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun recordedBloodPressureDAO() : RecordedBloodPressureDAO
+
+    abstract fun recordedMedicationDAO() : RecordedMedicationDAO
 
     companion object {
      @Volatile
