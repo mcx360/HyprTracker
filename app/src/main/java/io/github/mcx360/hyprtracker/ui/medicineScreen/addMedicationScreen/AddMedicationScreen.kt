@@ -62,6 +62,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectDaysForMedication
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import io.github.mcx360.hyprtracker.ui.utils.Days
 import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
 import kotlinx.coroutines.CoroutineScope
@@ -97,7 +98,6 @@ fun AddMedicationScreen(
     var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
 
 
-    //Medication Info
     Column(modifier = modifier
         .fillMaxSize()
         .padding(16.dp)
@@ -105,65 +105,27 @@ fun AddMedicationScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Medication Info",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = modifier.padding(4.dp),
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-
-                OutlinedTextField(
-                    isError = isMedicationNameFieldInError,
-                    onValueChange = {
-                        medicineViewModel.updateMedicationName(it)
-                                    if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
-                                    },
-                    value = uiState.value.medicationName,
-                    label = { Text("Medication name*") },
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("e.g. Lisinopril")},
-                    supportingText = {
-                        if (isMedicationNameFieldInError){
-                            Text("Medication name needed!", color = MaterialTheme.colorScheme.error)}
-                        else{
-                            Text("*required")
-                        }
-                    }
-                )
-
-                OutlinedTextField(
-                    isError = isMedicationDescriptionFieldInError,
-                    onValueChange = { medicineViewModel.updateMedicationDescription(it)},
-                    value = uiState.value.medicationDescription,
-                    label = { Text("Medication description*") },
-                    maxLines = 1,
-                    placeholder = {Text("e.g. Lowers high blood pressure")},
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
-                    supportingText = {
-                        if (isMedicationDescriptionFieldInError){
-                            Text("Medication description needed!", color = MaterialTheme.colorScheme.error)}
-                        else{
-                            Text("*required")
-                        }
-                    }
-                )
+        //Medication Info
+        medicationInfoCard(
+            medicationName = uiState.value.medicationName,
+            medicationDescription = uiState.value.medicationDescription,
+            isMedicationNameFieldInError = isMedicationNameFieldInError,
+            isMedicationDescriptionFieldInError = isMedicationDescriptionFieldInError,
+            updateMedicationName = {
+                medicineViewModel.updateMedicationName(it)
+                if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
+            },
+            updateMedicationDescription = {
+                medicineViewModel.updateMedicationDescription(it)
+                if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
+            },
+            setMedicationNameErrorStatusTrue = {
+                isMedicationNameFieldInError = true
+            },
+            setMedicationDescriptionErrorStatusTrue = {
+                isMedicationDescriptionFieldInError = true
             }
-        }
+        )
 
         Spacer(modifier = modifier.height(16.dp))
 
