@@ -337,7 +337,6 @@ data class HyprTrackerUIState(
     val medicationEndDate: String = "",
     var medicineList: List<String> = listOf(),
     val medicationNotifications: Boolean = false
-
 )
 
 data class HyprReading(

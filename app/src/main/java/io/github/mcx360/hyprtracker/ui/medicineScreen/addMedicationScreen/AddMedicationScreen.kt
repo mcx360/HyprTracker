@@ -1,7 +1,6 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen
 
 import androidx.compose.foundation.Image
-import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,10 +20,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -40,9 +33,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -63,17 +54,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.Medicine
-import io.github.mcx360.hyprtracker.ui.utils.DAYS
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationDatePicker
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectDaysForMedication
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
+import io.github.mcx360.hyprtracker.ui.utils.Days
+import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import kotlin.Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -226,7 +219,7 @@ fun AddMedicationScreen(
                             DropdownMenuItem(
                                 onClick = {
                                     hyprTrackerViewModel.updateMedicationSchedule("Every single day")
-                                    for (day in DAYS.entries){
+                                    for (day in Days.entries){
                                         hyprTrackerViewModel.addSelectedDays(day.name)
                                     }
                                     showScheduleDropDownMenu = false
@@ -596,7 +589,6 @@ fun AddMedicationScreen(
             if (showDurationDatePicker) {
                 DurationDatePicker(onDateSelected = {hyprTrackerViewModel.updateMedicationEndDate(hyprTrackerViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
             }
-
         }
 
         Row(
@@ -672,238 +664,11 @@ fun AddMedicationScreen(
                             //hyprTrackerViewModel.resetAddMedication()
                         }
 
-
-
                     }
                 },
                 modifier = Modifier.weight(1f).padding(16.dp)
             ) {
                 Text("Add medication")
-            }
-        }
-    }
-}
-
-@Composable
-fun InfoDialog(info: String, onDismissRequest: () -> Unit){
-    Dialog(onDismissRequest = {onDismissRequest()}) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(8.dp)
-                ) {
-                Text(info)
-                Button(onClick = {onDismissRequest()}, modifier = Modifier.padding(8.dp)) {
-                    Text("Ok")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SelectSpecifiedNumberOfDaysDialog(
-    onDismissRequest: () -> Unit,
-    onNumOfDaysSelected: (String) -> Unit
-){
-    var days by remember { mutableStateOf("") }
-        Dialog(onDismissRequest = {onDismissRequest()}) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("Enter the amount of days that the medicine will be taken for", textAlign = TextAlign.Center)
-                    Row(horizontalArrangement = Arrangement.Center) {
-                        OutlinedTextField(
-                            onValueChange = {if (it.isDigitsOnly()) days = it},
-                            value = days,
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done
-                            ),
-                            label = {Text("Days")},
-                            modifier = Modifier.width(96.dp),
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-                            onDismissRequest()
-                            onNumOfDaysSelected(days)
-                        }
-                    ) {
-                        Text("Confirm")
-                    }
-
-                    Button(
-                        onClick = {
-                            onDismissRequest()
-                        }
-                    ) {
-                        Text("Cancel")
-                    }
-                }
-            }
-        }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DurationDatePicker(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = {onDismiss()}) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(
-            state = datePickerState,
-            dateFormatter = DatePickerDefaults.dateFormatter(),
-            showModeToggle = false,
-            )
-    }
-}
-
-@Composable
-fun SelectDaysForMedication(
-    onDismiss: (String?) -> Unit,
-    onDaySelected: (String) -> Unit,
-    onDayRemoved: (String) -> Unit
-){
-    var mondayChecked by remember { mutableStateOf(false) }
-    var tuesdayChecked by remember { mutableStateOf(false) }
-    var wednesdayChecked by remember { mutableStateOf(false) }
-    var thursdayChecked by remember { mutableStateOf(false) }
-    var fridayChecked by remember { mutableStateOf(false) }
-    var saturdayChecked by remember { mutableStateOf(false) }
-    var sundayChecked by remember { mutableStateOf(false) }
-    val showWarning = remember { mutableStateOf(false) }
-
-    Dialog(onDismissRequest = {onDismiss(null)
-    showWarning.value = false
-    }) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                Text("Select days")
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = mondayChecked,
-                        onCheckedChange = { mondayChecked = it }
-                    )
-                    Text("Monday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = tuesdayChecked,
-                        onCheckedChange = { tuesdayChecked = it }
-                    )
-                    Text("Tuesday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = wednesdayChecked,
-                        onCheckedChange = { wednesdayChecked = it }
-                    )
-                    Text("Wednesday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = thursdayChecked,
-                        onCheckedChange = { thursdayChecked = it }
-                    )
-                    Text("Thursday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = fridayChecked,
-                        onCheckedChange = {
-                            fridayChecked = it
-                        }
-                    )
-                    Text("Friday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = saturdayChecked,
-                        onCheckedChange = { saturdayChecked = it }
-                    )
-                    Text("Saturday")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = sundayChecked,
-                        onCheckedChange = { sundayChecked = it }
-                    )
-                    Text("Sunday")
-                }
-                Row(horizontalArrangement = Arrangement.Center) {
-                    Button(onClick = {onDismiss(null) }, modifier = Modifier.padding(4.dp)) {
-                        Text("Cancel")
-                    }
-                    Button(onClick = {
-                        if (mondayChecked || tuesdayChecked || wednesdayChecked || thursdayChecked || fridayChecked || saturdayChecked || sundayChecked){
-                        listOf(
-                            mondayChecked to DAYS.Monday,
-                            tuesdayChecked to DAYS.Tuesday,
-                            wednesdayChecked to DAYS.Wednesday,
-                            thursdayChecked to DAYS.Thursday,
-                            fridayChecked to DAYS.Friday,
-                            saturdayChecked to DAYS.Saturday,
-                            sundayChecked to DAYS.Sunday
-                            ).forEach { (isChecked, day) ->
-                            if (isChecked) {
-                                onDaySelected(day.name)
-                            }
-                            if (!isChecked) {
-                                onDayRemoved(day.name)
-                            }
-                        }
-                        onDismiss("Selected days only")
-                        } else{
-                            showWarning.value = true
-                        }},
-                        modifier = Modifier.padding(4.dp)) {
-                        Text("Ok")
-                    }
-                }
-                if (showWarning.value){
-                    Text("You must select at least one day!", color = MaterialTheme.colorScheme.error)
-                }
             }
         }
     }

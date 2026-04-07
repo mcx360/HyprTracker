@@ -1,6 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.utils
 
-enum class DAYS{
+enum class Days{
     Monday,
     Tuesday,
     Wednesday,
