@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.LoggingScreen
+package io.github.mcx360.hyprtracker.ui.loggingScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,10 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -40,9 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.Utils.Dot
+import io.github.mcx360.hyprtracker.ui.utils.Dot
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -123,7 +118,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                 text = stringResource(R.string.Delete_Confirmation_Dialog_Text),
                                 textAlign = TextAlign.Center
                             )
-                            Row() {
+                            Row {
                                 Button(
                                     onClick = { showDeleteConfirmationDialog.value = false },
                                     modifier = Modifier.padding(8.dp)
@@ -173,7 +168,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                 )
         ) {
 
-            items(hyprTrackerUIState.readings.size,) { index ->
+            items(hyprTrackerUIState.readings.size) { index ->
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
                     Row(
                         modifier = Modifier
@@ -236,7 +231,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                     }
 
                     Row(modifier = Modifier.padding(16.dp)) {
-                        Column() {
+                        Column {
                             Text(
                                 stringResource(R.string.Notes_Value) + " " + if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes
                             )

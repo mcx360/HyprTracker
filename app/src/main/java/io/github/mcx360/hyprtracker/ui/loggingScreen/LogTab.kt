@@ -1,8 +1,5 @@
-package io.github.mcx360.hyprtracker.ui.LoggingScreen
+package io.github.mcx360.hyprtracker.ui.loggingScreen
 
-import android.view.MotionEvent
-import android.view.View
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -38,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
@@ -55,10 +51,8 @@ import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.Utils.Dot
-import io.github.mcx360.hyprtracker.ui.Utils.DotWithColour
+import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)

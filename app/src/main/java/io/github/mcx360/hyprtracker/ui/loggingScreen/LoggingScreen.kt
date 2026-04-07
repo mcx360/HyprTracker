@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.LoggingScreen
+package io.github.mcx360.hyprtracker.ui.loggingScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -119,7 +118,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
         }
 
         when (selectedTab) {
-            0 -> LogTab(hyprTrackerViewModel, {updatedValue -> showBottomSheet = true}, snackBarHostState, updateTab = {selectedTab = it})
+            0 -> LogTab(hyprTrackerViewModel, {showBottomSheet = true}, snackBarHostState, updateTab = {selectedTab = it})
             1 -> HistoryTab(hyprTrackerViewModel, snackBarHostState) { selectedTab = it }
         }
 
@@ -148,7 +147,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Column() {
+                        Column {
                             OutlinedTextField(
                                 value = hyprTrackerViewModel.formatToRegularDate(selectedDate),
                                 onValueChange = {},

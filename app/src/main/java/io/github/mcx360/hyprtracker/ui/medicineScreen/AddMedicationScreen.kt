@@ -69,7 +69,7 @@ import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.Medicine
-import io.github.mcx360.hyprtracker.ui.Utils.DAYS
+import io.github.mcx360.hyprtracker.ui.utils.DAYS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -175,7 +175,7 @@ fun AddMedicationScreen(
         Spacer(modifier = modifier.height(16.dp))
 
         //Medication schedule and dosage
-        Card() {
+        Card {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
@@ -397,7 +397,7 @@ fun AddMedicationScreen(
         Spacer(modifier = modifier.height(16.dp))
 
         //Notification reminders
-        Card() {
+        Card {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
@@ -425,19 +425,26 @@ fun AddMedicationScreen(
                 if (checked) {
                     hyprTrackerViewModel.updateMedicationNotificationStatus(true)
                     Row {
-                        if (uiState.value.medicationSchedule == ""){
-                            Text("Enter your medication schedule into the fields above to set reminders", color = MaterialTheme.colorScheme.error,
-                                modifier = modifier.padding(8.dp)
-                            )
-                        }
-                        else if (uiState.value.medicationSchedule == "Every single day"){
-                            Text("You are scheduled to receive reminders every single day",
-                                modifier = modifier.padding(8.dp)
-                            )
-                        }else{
-                            Text("You are scheduled to receive reminders on the following days: " + uiState.value.medicationSelectedDays.toString(),
-                                modifier = modifier.padding(8.dp)
-                            )
+                        when (uiState.value.medicationSchedule) {
+                            "" -> {
+                                Text(
+                                    "Enter your medication schedule into the fields above to set reminders",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = modifier.padding(8.dp)
+                                )
+                            }
+                            "Every single day" -> {
+                                Text(
+                                    "You are scheduled to receive reminders every single day",
+                                    modifier = modifier.padding(8.dp)
+                                )
+                            }
+                            else -> {
+                                Text(
+                                    "You are scheduled to receive reminders on the following days: " + uiState.value.medicationSelectedDays.toString(),
+                                    modifier = modifier.padding(8.dp)
+                                )
+                            }
                         }
                     }
                     Row {
@@ -454,7 +461,7 @@ fun AddMedicationScreen(
                             Image(Icons.Filled.Edit, contentDescription = null)
                         }
                     }
-                    Row() {
+                    Row {
                         if (uiState.value.medicationTimesPerDay > 0){
                             Text(
                                 text = "Enter reminder time(s) below",
@@ -464,12 +471,12 @@ fun AddMedicationScreen(
                         }
                     }
 
-                    Column() {
+                    Column {
                         for (i in 1..uiState.value.medicationTimesPerDay){
 
                             TextField(
                                 value = uiState.value.medicationReminderTimes[i],
-                                label = {Text("Reminder" + i)},
+                                label = {Text("Reminder$i")},
                                 placeholder = {Text("HH:MM")},
                                 onValueChange = {if (it.length <5 && it.isDigitsOnly()) hyprTrackerViewModel.updateMedicationReminderTime(it, i)},
                                 trailingIcon = {Icon(
@@ -797,7 +804,7 @@ fun SelectDaysForMedication(
     var fridayChecked by remember { mutableStateOf(false) }
     var saturdayChecked by remember { mutableStateOf(false) }
     var sundayChecked by remember { mutableStateOf(false) }
-    var showWarning = remember { mutableStateOf(false) }
+    val showWarning = remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = {onDismiss(null)
     showWarning.value = false

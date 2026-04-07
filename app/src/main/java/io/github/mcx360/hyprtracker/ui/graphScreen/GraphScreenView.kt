@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.GraphScreen
+package io.github.mcx360.hyprtracker.ui.graphScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

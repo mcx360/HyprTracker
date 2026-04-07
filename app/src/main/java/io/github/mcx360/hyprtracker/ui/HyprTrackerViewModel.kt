@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui
 
-import android.media.tv.ad.TvAdView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
