@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.MedicineScreen
+package io.github.mcx360.hyprtracker.ui.medicineScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.ui.window.Dialog
@@ -36,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -48,7 +49,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -599,11 +599,12 @@ fun AddMedicationScreen(
         ) {
             Button(
                 onClick = {
-                    openAddMedicationScreen.value = !openAddMedicationScreen.value
                     haptic.performHapticFeedback(HapticFeedbackType.Reject)
                     scope.launch {
                         hyprTrackerViewModel.resetAddMedication()
-                        snackBarHostState.showSnackbar("Canceled adding medication")
+                        snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
+                        openAddMedicationScreen.value = !openAddMedicationScreen.value
+
                     }
                 },
                 modifier = Modifier
@@ -637,8 +638,15 @@ fun AddMedicationScreen(
                         }
                     }
                     else{
-                        openAddMedicationScreen.value = !openAddMedicationScreen.value
                         haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        scope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = "Medication added",
+                                duration = SnackbarDuration.Short
+                            )
+                            openAddMedicationScreen.value = !openAddMedicationScreen.value
+                        }
+
                         scope.launch {
                             hyprTrackerViewModel.addMedication(
                                 Medicine(
@@ -656,9 +664,9 @@ fun AddMedicationScreen(
                             )
                             //hyprTrackerViewModel.resetAddMedication()
                         }
-                        scope.launch {
-                            snackBarHostState.showSnackbar("Medication added")
-                        }
+
+
+
                     }
                 },
                 modifier = Modifier.weight(1f).padding(16.dp)
