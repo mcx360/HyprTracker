@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui
 
+import android.media.tv.ad.TvAdView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -23,7 +24,9 @@ import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
+import kotlinx.coroutines.Dispatchers
 import kotlin.String
+import kotlin.collections.List
 
 class HyprTrackerViewModel(
     private val bloodPressureRepository: BloodPressureRepository,
@@ -76,7 +79,10 @@ class HyprTrackerViewModel(
                 medicationTimesPerDay= 0,
                 medicationIntake = 0,
                 medicationDosage= "",
-                medicationSelectedDays = setOf()
+                medicationSelectedDays = setOf(),
+                medicationReminderTimes = listOf("","","","","","",""),
+                medicationEndDate = "",
+                medicineList = listOf()
             )
         }
     }
@@ -135,8 +141,10 @@ class HyprTrackerViewModel(
         }
     }
 
-    suspend fun addMedication(medicine: Medicine){
-        medicationRepository.addMedication(medicine.toRecordedMedication())
+    fun addMedication(medicine: Medicine){
+        viewModelScope.launch(Dispatchers.IO) {
+            medicationRepository.addMedication(medicine.toRecordedMedication())
+        }
     }
 
     suspend fun removeMedication(medicine: Medicine){
@@ -192,7 +200,6 @@ class HyprTrackerViewModel(
     )
 
     fun RecordedMedication.toMedicine() : Medicine = Medicine(
-
         name = name,
         description = description,
         schedule = schedule,
@@ -200,7 +207,7 @@ class HyprTrackerViewModel(
         dosePerIntake = dosePerIntake,
         notificationsEnabled = notificationsEnabled,
         scheduledNotificationsTime = reminders.split(","),
-        scheduledDays = schedule.split(","),
+        scheduledDays = schedule.split(",").toSet(),
         startDate = startDate,
         endDate = endDate
     )
@@ -259,6 +266,12 @@ class HyprTrackerViewModel(
     fun updateMedicationEndDate(date: String){
         _uiState.update { currentState ->
             currentState.copy(medicationEndDate = date)
+        }
+    }
+
+    fun updateMedicationNotificationStatus(status: Boolean){
+        _uiState.update { currentState ->
+            currentState.copy(medicationNotifications = status)
         }
     }
 
@@ -322,8 +335,9 @@ data class HyprTrackerUIState(
     val medicationDosage: String = "",
     val medicationSelectedDays: Set<String> = setOf(),
     val medicationReminderTimes: List<String> = listOf("","","","","","",""),
-    val medicationEndDate: String = ""
-    var medicineList: List<String> = listOf()
+    val medicationEndDate: String = "",
+    var medicineList: List<String> = listOf(),
+    val medicationNotifications: Boolean = false
 
 )
 
@@ -341,7 +355,7 @@ data class Medicine(
     val name: String,
     val description: String,
     val schedule: String,
-    val scheduledDays: List<String>,
+    val scheduledDays: Set<String>,
     val timesPerDay: Int,
     val dosePerIntake: String,
     val notificationsEnabled: Boolean,

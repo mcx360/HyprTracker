@@ -4,7 +4,7 @@ import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMe
 
 interface MedicationRepository {
 
-    fun getAllMedications() : List<RecordedMedication>
+    suspend fun getAllMedications() : List<RecordedMedication>
 
     suspend fun addMedication(medication: RecordedMedication)
 

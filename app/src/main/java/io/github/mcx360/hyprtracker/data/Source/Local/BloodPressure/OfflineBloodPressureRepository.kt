@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) :
     BloodPressureRepository {
 
-    override fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
+    override suspend fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
 
     override suspend fun addBloodPressureReading(reading: RecordedBloodPressure) = bloodPressureDAO.insertBloodPressureReading(reading)
 

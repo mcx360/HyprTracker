@@ -11,6 +11,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,16 +30,16 @@ fun MedicineScreen(
     snackBarHostState: SnackbarHostState,
     hyprTrackerViewModel: HyprTrackerViewModel
 ){
-    val scope = rememberCoroutineScope()
+    val uiState = hyprTrackerViewModel.uiState.collectAsState()
     if (openAddMedicationScreen.value){
         AddMedicationScreen(
             modifier = modifier,
             openAddMedicationScreen = openAddMedicationScreen,
             snackBarHostState = snackBarHostState,
-            scope = scope,
+            scope = rememberCoroutineScope(),
             hyprTrackerViewModel = hyprTrackerViewModel
         )
-    } else{
+    }else{
         Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,

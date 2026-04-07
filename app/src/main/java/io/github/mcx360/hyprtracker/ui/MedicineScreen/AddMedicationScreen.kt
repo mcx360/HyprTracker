@@ -48,6 +48,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,6 +97,12 @@ fun AddMedicationScreen(
     var showDurationDatePicker by remember { mutableStateOf(false) }
     var showSelectedDaysPicker by remember { mutableStateOf(false) }
     val uiState = hyprTrackerViewModel.uiState.collectAsState()
+    var isMedicationNameFieldInError by remember { mutableStateOf(false) }
+    var isMedicationDescriptionFieldInError by remember { mutableStateOf(false) }
+    var isMedicationScheduleFieldInError by remember { mutableStateOf(false) }
+    var isMedicationTimesPerDayFieldInError by remember { mutableStateOf(false) }
+    var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
+
 
     //Medication Info
     Column(modifier = modifier
@@ -121,27 +128,46 @@ fun AddMedicationScreen(
                 )
 
                 OutlinedTextField(
-                    onValueChange = {hyprTrackerViewModel.updateMedicationName(it)},
+                    isError = isMedicationNameFieldInError,
+                    onValueChange = {
+                        hyprTrackerViewModel.updateMedicationName(it)
+                                    if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
+                                    },
                     value = uiState.value.medicationName,
-                    label = { Text("Medication name") },
+                    label = { Text("Medication name*") },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
                     placeholder = {Text("e.g. Lisinopril")},
-                    )
+                    supportingText = {
+                        if (isMedicationNameFieldInError){
+                            Text("Medication name needed!", color = MaterialTheme.colorScheme.error)}
+                        else{
+                            Text("*required")
+                        }
+                    }
+                )
 
                 OutlinedTextField(
+                    isError = isMedicationDescriptionFieldInError,
                     onValueChange = {hyprTrackerViewModel.updateMedicationDescription(it)},
                     value = uiState.value.medicationDescription,
-                    label = { Text("Medication description") },
+                    label = { Text("Medication description*") },
                     maxLines = 1,
                     placeholder = {Text("e.g. Lowers high blood pressure")},
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
-                    )
+                    ),
+                    supportingText = {
+                        if (isMedicationDescriptionFieldInError){
+                            Text("Medication description needed!", color = MaterialTheme.colorScheme.error)}
+                        else{
+                            Text("*required")
+                        }
+                    }
                 )
             }
         }
@@ -170,10 +196,11 @@ fun AddMedicationScreen(
                         expanded = showScheduleDropDownMenu,
                         onExpandedChange = { showScheduleDropDownMenu = it }) {
                         OutlinedTextField(
+                            isError = isMedicationScheduleFieldInError,
                             readOnly = true,
                             onValueChange = {},
                             value = uiState.value.medicationSchedule,
-                            label = { Text("Schedule") },
+                            label = { Text("Schedule*") },
                             placeholder = { Text("e.g. Every day") },
                             trailingIcon = {
                                 IconButton(
@@ -184,7 +211,14 @@ fun AddMedicationScreen(
                                 }
                             },
                             maxLines = 1,
-                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
+                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
+                            supportingText = {
+                                if (isMedicationScheduleFieldInError){
+                                    Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error)
+                                } else{
+                                    Text("*required")
+                                }
+                            }
                         )
                         ExposedDropdownMenu(
                             expanded = showScheduleDropDownMenu,
@@ -241,6 +275,7 @@ fun AddMedicationScreen(
                         onExpandedChange = {showTimesPerDayDropDownMenu = it}
                     ) {
                         OutlinedTextField(
+                            isError = isMedicationTimesPerDayFieldInError,
                             readOnly = true,
                             onValueChange = {},
                             value = when(uiState.value.medicationTimesPerDay){
@@ -253,7 +288,7 @@ fun AddMedicationScreen(
                                 6 -> "Six times daily"
                                 else -> ""
                             },
-                            label = { Text("Times per day") },
+                            label = { Text("Times per day*") },
                             placeholder = {Text("e.g. Once daily")},
                             trailingIcon = {
                                 IconButton(
@@ -263,7 +298,14 @@ fun AddMedicationScreen(
                                     Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                                 }
                             },
-                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
+                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
+                            supportingText = {
+                                if (isMedicationTimesPerDayFieldInError){
+                                    Text("Enter amount of time per day!")
+                                } else{
+                                    Text("*required")
+                                }
+                            }
                         )
                         ExposedDropdownMenu(
                             expanded = showTimesPerDayDropDownMenu,
@@ -320,6 +362,7 @@ fun AddMedicationScreen(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
+                        isError = isMedicationDosePerIntakeInError,
                         onValueChange = {hyprTrackerViewModel.updateMedicationDose(it)},
                         value = uiState.value.medicationDosage,
                         label = { Text("Dose per Intake") },
@@ -327,7 +370,14 @@ fun AddMedicationScreen(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Done
                         ),
-                        placeholder = {Text("e.g. 1 x 10mg tablet")}
+                        placeholder = {Text("e.g. 1 x 10mg tablet")},
+                        supportingText = {
+                            if (isMedicationDosePerIntakeInError){
+                                Text("Dose per intake is needed")
+                            } else{
+                                Text("*required")
+                            }
+                        }
                     )
 
                     IconButton(onClick = {showDosePerIntakeInfoDialog = true}) {
@@ -373,6 +423,7 @@ fun AddMedicationScreen(
                 }
 
                 if (checked) {
+                    hyprTrackerViewModel.updateMedicationNotificationStatus(true)
                     Row {
                         if (uiState.value.medicationSchedule == ""){
                             Text("Enter your medication schedule into the fields above to set reminders", color = MaterialTheme.colorScheme.error,
@@ -460,6 +511,8 @@ fun AddMedicationScreen(
                             )
                         }
                     }
+                }else{
+                    hyprTrackerViewModel.updateMedicationNotificationStatus(false)
                 }
             }
         }
@@ -561,10 +614,51 @@ fun AddMedicationScreen(
             }
             Button(
                 onClick = {
-                    openAddMedicationScreen.value = !openAddMedicationScreen.value
-                    haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                    scope.launch {
-                        snackBarHostState.showSnackbar("Medication added")
+                    when {
+                        uiState.value.medicationName.isEmpty() -> isMedicationNameFieldInError = true
+                    }
+                    when {
+                        uiState.value.medicationDescription.isEmpty() -> isMedicationDescriptionFieldInError = true
+                    }
+                    when {
+                        uiState.value.medicationSchedule.isEmpty() -> isMedicationScheduleFieldInError = true
+                    }
+                    when {
+                        uiState.value.medicationTimesPerDay == 0 -> isMedicationTimesPerDayFieldInError = true
+                    }
+                    when{
+                        uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError = true
+                    }
+
+                    if (isMedicationNameFieldInError || isMedicationDescriptionFieldInError || isMedicationScheduleFieldInError || isMedicationTimesPerDayFieldInError || isMedicationDosePerIntakeInError){
+                        haptic.performHapticFeedback(HapticFeedbackType.Reject)
+                        scope.launch {
+                            snackBarHostState.showSnackbar("Invalid data inputted!")
+                        }
+                    }
+                    else{
+                        openAddMedicationScreen.value = !openAddMedicationScreen.value
+                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        scope.launch {
+                            hyprTrackerViewModel.addMedication(
+                                Medicine(
+                                    name = uiState.value.medicationName,
+                                    description = uiState.value.medicationDescription,
+                                    schedule = uiState.value.medicationSchedule,
+                                    scheduledDays = uiState.value.medicationSelectedDays,
+                                    timesPerDay = uiState.value.medicationTimesPerDay,
+                                    dosePerIntake = uiState.value.medicationDosage,
+                                    notificationsEnabled = uiState.value.medicationNotifications,
+                                    scheduledNotificationsTime = uiState.value.medicationReminderTimes,
+                                    startDate = uiState.value.date,
+                                    endDate = uiState.value.medicationEndDate
+                                )
+                            )
+                            //hyprTrackerViewModel.resetAddMedication()
+                        }
+                        scope.launch {
+                            snackBarHostState.showSnackbar("Medication added")
+                        }
                     }
                 },
                 modifier = Modifier.weight(1f).padding(16.dp)
