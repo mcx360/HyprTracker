@@ -140,9 +140,9 @@ fun HyprTrackerBottomNavigationBar(
             alwaysShowLabel = true
         )
         NavigationBarItem(
-            selected = currentRoute == Destinations.Medicine.name,
+            selected = currentRoute == Destinations.Medicines.name,
             onClick = {
-                navController.navigate(Destinations.Medicine.name)
+                navController.navigate(Destinations.Medicines.name)
             },
             icon = {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
@@ -425,7 +425,7 @@ fun HyprTrackerScreen(
                 )
             },
             floatingActionButton = {
-                if (currentRoute == Destinations.Medicine.name && !openAddMedicationScreen.value) {
+                if (currentRoute == Destinations.Medicines.name && !openAddMedicationScreen.value) {
                     FloatingActionButton(
                         onClick = {openAddMedicationScreen.value = !openAddMedicationScreen.value},
                     ) {

@@ -57,11 +57,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.Medicine
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationDatePicker
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectDaysForMedication
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.utils.Days
 import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
 import kotlinx.coroutines.CoroutineScope
@@ -75,7 +75,7 @@ fun AddMedicationScreen(
     openAddMedicationScreen: MutableState<Boolean>,
     snackBarHostState: SnackbarHostState,
     scope: CoroutineScope,
-    hyprTrackerViewModel: HyprTrackerViewModel
+    medicineViewModel: MedicineViewModel
 ){
     val haptic = LocalHapticFeedback.current
     var checked by remember {mutableStateOf(false)}
@@ -89,7 +89,7 @@ fun AddMedicationScreen(
     var showSelectSpecifiedNumberOfDaysDialog by remember { mutableStateOf(false) }
     var showDurationDatePicker by remember { mutableStateOf(false) }
     var showSelectedDaysPicker by remember { mutableStateOf(false) }
-    val uiState = hyprTrackerViewModel.uiState.collectAsState()
+    val uiState = medicineViewModel.uiState.collectAsState()
     var isMedicationNameFieldInError by remember { mutableStateOf(false) }
     var isMedicationDescriptionFieldInError by remember { mutableStateOf(false) }
     var isMedicationScheduleFieldInError by remember { mutableStateOf(false) }
@@ -123,7 +123,7 @@ fun AddMedicationScreen(
                 OutlinedTextField(
                     isError = isMedicationNameFieldInError,
                     onValueChange = {
-                        hyprTrackerViewModel.updateMedicationName(it)
+                        medicineViewModel.updateMedicationName(it)
                                     if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
                                     },
                     value = uiState.value.medicationName,
@@ -145,7 +145,7 @@ fun AddMedicationScreen(
 
                 OutlinedTextField(
                     isError = isMedicationDescriptionFieldInError,
-                    onValueChange = {hyprTrackerViewModel.updateMedicationDescription(it)},
+                    onValueChange = { medicineViewModel.updateMedicationDescription(it)},
                     value = uiState.value.medicationDescription,
                     label = { Text("Medication description*") },
                     maxLines = 1,
@@ -218,9 +218,9 @@ fun AddMedicationScreen(
                             onDismissRequest = { showScheduleDropDownMenu = false }) {
                             DropdownMenuItem(
                                 onClick = {
-                                    hyprTrackerViewModel.updateMedicationSchedule("Every single day")
+                                    medicineViewModel.updateMedicationSchedule("Every single day")
                                     for (day in Days.entries){
-                                        hyprTrackerViewModel.addSelectedDays(day.name)
+                                        medicineViewModel.addSelectedDays(day.name)
                                     }
                                     showScheduleDropDownMenu = false
                                 },
@@ -239,13 +239,13 @@ fun AddMedicationScreen(
                         SelectDaysForMedication(onDismiss = {
                             showSelectedDaysPicker = false
                             if (!it.isNullOrEmpty()) {
-                                hyprTrackerViewModel.updateMedicationSchedule(it)
+                                medicineViewModel.updateMedicationSchedule(it)
                             } },
                             onDaySelected = {
-                                hyprTrackerViewModel.addSelectedDays(it)
+                                medicineViewModel.addSelectedDays(it)
                             },
                             onDayRemoved = {
-                                hyprTrackerViewModel.removeSelectedDays(it)
+                                medicineViewModel.removeSelectedDays(it)
                             }
                         )
                         showScheduleDropDownMenu = false
@@ -306,37 +306,43 @@ fun AddMedicationScreen(
                         ) {
                             DropdownMenuItem(
                                 text = {Text("One time daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(1)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(1)
                                 showTimesPerDayDropDownMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Two times daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(2)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(2)
                                     showTimesPerDayDropDownMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Three times daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(3)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(3)
                                     showTimesPerDayDropDownMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Four times daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(4)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(4)
                                     showTimesPerDayDropDownMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Five times daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(5)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(5)
                                     showTimesPerDayDropDownMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Six times daily")},
-                                onClick = {hyprTrackerViewModel.updateMedicationTimesPerDay(6)
+                                onClick = {
+                                    medicineViewModel.updateMedicationTimesPerDay(6)
                                     showTimesPerDayDropDownMenu = false
                                 }
                             )
@@ -356,7 +362,7 @@ fun AddMedicationScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
                         isError = isMedicationDosePerIntakeInError,
-                        onValueChange = {hyprTrackerViewModel.updateMedicationDose(it)},
+                        onValueChange = { medicineViewModel.updateMedicationDose(it)},
                         value = uiState.value.medicationDosage,
                         label = { Text("Dose per Intake") },
                         keyboardOptions = KeyboardOptions(
@@ -416,7 +422,7 @@ fun AddMedicationScreen(
                 }
 
                 if (checked) {
-                    hyprTrackerViewModel.updateMedicationNotificationStatus(true)
+                    medicineViewModel.updateMedicationNotificationStatus(true)
                     Row {
                         when (uiState.value.medicationSchedule) {
                             "" -> {
@@ -471,7 +477,7 @@ fun AddMedicationScreen(
                                 value = uiState.value.medicationReminderTimes[i],
                                 label = {Text("Reminder$i")},
                                 placeholder = {Text("HH:MM")},
-                                onValueChange = {if (it.length <5 && it.isDigitsOnly()) hyprTrackerViewModel.updateMedicationReminderTime(it, i)},
+                                onValueChange = {if (it.length <5 && it.isDigitsOnly()) medicineViewModel.updateMedicationReminderTime(it, i)},
                                 trailingIcon = {Icon(
                                     painter = painterResource(R.drawable.ic_date),
                                     contentDescription = null
@@ -512,7 +518,7 @@ fun AddMedicationScreen(
                         }
                     }
                 }else{
-                    hyprTrackerViewModel.updateMedicationNotificationStatus(false)
+                    medicineViewModel.updateMedicationNotificationStatus(false)
                 }
             }
         }
@@ -529,7 +535,7 @@ fun AddMedicationScreen(
                 fontWeight = FontWeight.Bold
                 )
 
-            Text("Start date: "+ hyprTrackerViewModel.formatToRegularDate(uiState.value.date), modifier = modifier.padding(start = 16.dp))
+            Text("Start date: "+ medicineViewModel.formatToRegularDate(uiState.value.date), modifier = modifier.padding(start = 16.dp))
 
             Column(modifier.selectableGroup()) {
                 radioButtons.forEach { text ->
@@ -566,11 +572,11 @@ fun AddMedicationScreen(
                 }
                 if (selectedOption == "Specified number of days"){
                     if (uiState.value.medicationEndDate != ""){
-                        Text("medicine recorded until "+hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                        Text("medicine recorded until "+medicineViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                     }
                 } else if(selectedOption == "Until a selected date"){
                     if (uiState.value.medicationEndDate != ""){
-                         Text(hyprTrackerViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                         Text(medicineViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
                     }
                 }else{
                     Text("Medicine will be recorded indefinitely unless cancelled by the user", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
@@ -581,13 +587,13 @@ fun AddMedicationScreen(
                     showSelectSpecifiedNumberOfDaysDialog = false
                 }, onNumOfDaysSelected = {
                     if (it != "") {
-                        hyprTrackerViewModel.updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString())
+                        medicineViewModel.updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString())
                     }
                 }
                     )
             }
             if (showDurationDatePicker) {
-                DurationDatePicker(onDateSelected = {hyprTrackerViewModel.updateMedicationEndDate(hyprTrackerViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
+                DurationDatePicker(onDateSelected = { medicineViewModel.updateMedicationEndDate(medicineViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
             }
         }
 
@@ -600,7 +606,7 @@ fun AddMedicationScreen(
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.Reject)
                     scope.launch {
-                        hyprTrackerViewModel.resetAddMedication()
+                        medicineViewModel.resetAddMedication()
                         snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
                         openAddMedicationScreen.value = !openAddMedicationScreen.value
 
@@ -647,7 +653,7 @@ fun AddMedicationScreen(
                         }
 
                         scope.launch {
-                            hyprTrackerViewModel.addMedication(
+                            medicineViewModel.addMedication(
                                 Medicine(
                                     name = uiState.value.medicationName,
                                     description = uiState.value.medicationDescription,

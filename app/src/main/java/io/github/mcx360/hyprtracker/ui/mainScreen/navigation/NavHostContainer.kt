@@ -17,13 +17,12 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
     NavHost(
         navController = navController,
         startDestination = Destinations.Logging.name,
-        modifier = Modifier
     ){
         composable(route = Destinations.Logging.name){
             LoggingScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
         }
-        composable(route = Destinations.Medicine.name){
-            MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, hyprTrackerViewModel = hyprTrackerViewModel)
+        composable(route = Destinations.Medicines.name){
+            MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState)
         }
         composable(route = Destinations.Insight.name){
             GraphScreen()
