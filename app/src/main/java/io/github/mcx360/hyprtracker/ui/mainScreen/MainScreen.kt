@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.MainScreen
+package io.github.mcx360.hyprtracker.ui.mainScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,12 +57,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.mcx360.hyprtracker.ui.MainScreen.navigation.Destinations
-import io.github.mcx360.hyprtracker.ui.MainScreen.navigation.NavHostContainer
+import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
+import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -71,14 +70,14 @@ import kotlinx.coroutines.launch
 const val TOPAPPBAR_TAG = "topAppBar"
 const val BOTTOMNAVBAR_TAG = "bottomNavBar"
 const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
-const val EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG = "exportLogs"
-const val SHARELOGS_IN_NAVIGATIONDRAWER_TAG = "share logs"
+const val EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG = "exportLogs"
+const val SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG = "share logs"
 const val MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG = "myDocuments"
 const val BIN_IN_NAVIGATIONDRAWER_TAG = "bin"
 const val BACKUP_IN_NAVIGATIONDRAWER_TAG = "backup"
-const val RATEAPP_IN_NAVIGATIONDRAWER_TAG = "rateApp"
-const val REPORTBUG_IN_NAVIGATIONDRAWER_TAG = "reportBug"
-const val USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG = "settingsAndUsers"
+const val RATE_APP_IN_NAVIGATIONDRAWER_TAG = "rateApp"
+const val REPORT_BUG_IN_NAVIGATIONDRAWER_TAG = "reportBug"
+const val USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG = "settingsAndUsers"
 const val ABOUT_IN_NAVIGATIONDRAWER_TAG = "about"
 
 
@@ -91,7 +90,7 @@ fun HyprTrackerTopAppBar(
     modifier: Modifier = Modifier,
 ){
     CenterAlignedTopAppBar(
-        modifier = Modifier.testTag(TOPAPPBAR_TAG),
+        modifier = modifier.testTag(TOPAPPBAR_TAG),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
@@ -119,13 +118,12 @@ fun HyprTrackerTopAppBar(
 @Composable
 fun HyprTrackerBottomNavigationBar(
     navController: NavHostController,
-    navBackStack: NavBackStackEntry?,
     currentRoute: String?,
     modifier: Modifier
 ){
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.testTag(BOTTOMNAVBAR_TAG)
+        modifier = modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
             selected = currentRoute == Destinations.Logging.name,
@@ -173,12 +171,15 @@ fun HyprTrackerBottomNavigationBar(
 }
 
 @Composable
-fun AboutDialog(onDismissRequest: () -> Unit) {
+fun AboutDialog(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier
+) {
 
     Dialog(onDismissRequest = onDismissRequest) {
 
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(375.dp)
                 .padding(16.dp),
@@ -186,12 +187,12 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
         ) {
 
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Row(
-                    modifier = Modifier
+                    modifier = modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(16.dp),
@@ -221,14 +222,14 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
 
                 Text(
                     text = "Email: email@email.com",
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = modifier.padding(top = 4.dp)
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = modifier.weight(1f))
 
                 Button(
                     onClick = onDismissRequest,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = modifier.padding(bottom = 16.dp)
                 ) {
                     Text("OK")
                 }
@@ -237,19 +238,22 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
     }
 }
 
-//Note to self: Report bug functionallity will have a link to a page where you can report the bug so that the app itself does not make any internet connection as this is a strictly offline app
+//Note to self: Report bug functionality will have a link to a page where you can report the bug so that the app itself does not make any internet connection as this is a strictly offline app
 @Composable
-fun BugReportDialog(onDismissRequest: () -> Unit){
+fun BugReportDialog(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier
+){
     Dialog(onDismissRequest = {}){
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(375.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -258,7 +262,7 @@ fun BugReportDialog(onDismissRequest: () -> Unit){
                 TextField(
                     value = "toDO",
                     onValueChange = {},
-                    modifier = Modifier.padding(16.dp)
+                    modifier = modifier.padding(16.dp)
                 )
                 Button(onClick = {
                     onDismissRequest()
@@ -272,8 +276,10 @@ fun BugReportDialog(onDismissRequest: () -> Unit){
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory)){
-
+fun HyprTrackerScreen(
+    modifier: Modifier = Modifier,
+    hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory)
+){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -284,15 +290,15 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
     val snackBarHostState = remember { SnackbarHostState() }
     val openAddMedicationScreen = remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier
+    Box(modifier = modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
         .statusBarsPadding()
     ){
     ModalNavigationDrawer(
-        modifier = Modifier.testTag(NAVIGATIONDRAWER_TAG),
+        modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
         drawerContent = {
                 ModalDrawerSheet{
-                    Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth(),) {
+                    Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth()) {
                         Text(stringResource(R.string.app_name),
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
@@ -310,7 +316,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG)
 
                     )
                     NavigationDrawerItem(
@@ -320,7 +326,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(SHARELOGS_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.documents_label))},
@@ -329,7 +335,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.bin_label))},
@@ -338,7 +344,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
                     Text(stringResource(R.string.title_two_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
@@ -349,7 +355,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.rating_label))},
@@ -358,7 +364,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(RATEAPP_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(RATE_APP_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.bug_report_label))},
@@ -374,7 +380,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(REPORTBUG_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(REPORT_BUG_IN_NAVIGATIONDRAWER_TAG)
                     )
                     HorizontalDivider()
                     Text(stringResource(R.string.title_three_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
@@ -385,7 +391,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG)
                     )
                     NavigationDrawerItem(
                         label = {Text(text = stringResource(R.string.about_label))},
@@ -400,7 +406,7 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         icon = {
                             Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
                         },
-                        modifier = Modifier.testTag(ABOUT_IN_NAVIGATIONDRAWER_TAG)
+                        modifier = modifier.testTag(ABOUT_IN_NAVIGATIONDRAWER_TAG)
                     )
             }
         },
@@ -415,7 +421,6 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 HyprTrackerBottomNavigationBar(
                     currentRoute = currentRoute,
                     navController = navController,
-                    navBackStack = navBackStackEntry,
                     modifier = Modifier
                 )
             },
@@ -447,7 +452,8 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                                     drawerState.apply {
                                         if (isOpen) close() else open()                                    }
                                 }
-                            }
+                            },
+                            modifier = modifier
                         )
                     }
                 }
@@ -456,10 +462,13 @@ fun HyprTrackerScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         BugReportDialog(
                             onDismissRequest = {
                                 openBugReportDialog.value = false
-                                scope.launch { drawerState.apply {
-                                    if (isOpen) close() else open()
-                                } }
-                            }
+                                scope.launch {
+                                    drawerState.apply {
+                                        if (isOpen) close() else open()
+                                    }
+                                }
+                            },
+                            modifier = modifier
                         )
                     }
                 }

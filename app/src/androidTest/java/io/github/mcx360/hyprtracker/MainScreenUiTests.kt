@@ -5,17 +5,17 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import io.github.mcx360.hyprtracker.ui.MainScreen.ABOUT_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.BACKUP_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.BIN_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.HyprTrackerScreen
-import io.github.mcx360.hyprtracker.ui.MainScreen.MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.RATEAPP_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.REPORTBUG_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.SHARELOGS_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.MainScreen.USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.ABOUT_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.BACKUP_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.BIN_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerScreen
+import io.github.mcx360.hyprtracker.ui.mainScreen.MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.RATE_APP_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.REPORT_BUG_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.theme.HyprTrackerTheme
 import org.junit.Before
 import org.junit.Rule
@@ -44,14 +44,14 @@ class MainScreenUiTests {
     @Test
     fun checkNavigationDrawerContentsAreAllClickable(){
         composeTestRule.onNodeWithTag(NAVIGATIONDRAWER_TAG).performClick()
-        composeTestRule.onNodeWithTag(EXPORTLOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
-        composeTestRule.onNodeWithTag(SHARELOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
+        composeTestRule.onNodeWithTag(EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
+        composeTestRule.onNodeWithTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(BIN_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(BACKUP_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
-        composeTestRule.onNodeWithTag(RATEAPP_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
-        composeTestRule.onNodeWithTag(REPORTBUG_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
-        composeTestRule.onNodeWithTag(USERSANDSETTINGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
+        composeTestRule.onNodeWithTag(RATE_APP_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
+        composeTestRule.onNodeWithTag(REPORT_BUG_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
+        composeTestRule.onNodeWithTag(USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(ABOUT_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
     }
 }

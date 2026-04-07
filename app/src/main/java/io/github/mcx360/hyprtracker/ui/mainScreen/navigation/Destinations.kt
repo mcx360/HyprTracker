@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.MainScreen.navigation
+package io.github.mcx360.hyprtracker.ui.mainScreen.navigation
 
 enum class Destinations {
 
