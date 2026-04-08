@@ -30,12 +30,13 @@ fun MedicineScreen(
     snackBarHostState: SnackbarHostState,
     medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory)
 ){
+    val  scope = rememberCoroutineScope()
     if (openAddMedicationScreen.value){
         AddMedicationScreen(
             modifier = modifier,
             openAddMedicationScreen = openAddMedicationScreen,
             snackBarHostState = snackBarHostState,
-            scope = rememberCoroutineScope(),
+            scope = scope,
             medicineViewModel = medicineViewModel
         )
     }else{

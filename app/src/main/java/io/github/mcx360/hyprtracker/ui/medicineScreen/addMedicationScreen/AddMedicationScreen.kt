@@ -33,6 +33,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,10 +163,9 @@ fun AddMedicationScreen(
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.Reject)
                     scope.launch {
+                        openAddMedicationScreen.value = !openAddMedicationScreen.value
                         medicineViewModel.resetAddMedication()
                         snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
-                        openAddMedicationScreen.value = !openAddMedicationScreen.value
-
                     }
                 },
                 modifier = Modifier
@@ -200,12 +200,12 @@ fun AddMedicationScreen(
                     }
                     else{
                         haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        openAddMedicationScreen.value = !openAddMedicationScreen.value
                         scope.launch {
                             snackBarHostState.showSnackbar(
                                 message = "Medication added",
                                 duration = SnackbarDuration.Short
                             )
-                            openAddMedicationScreen.value = !openAddMedicationScreen.value
                         }
 
                         scope.launch {
