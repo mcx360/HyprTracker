@@ -35,6 +35,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNavigationBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
 const val TOPAPPBAR_TAG = "topAppBar"
@@ -54,7 +55,8 @@ const val ABOUT_IN_NAVIGATIONDRAWER_TAG = "about"
 @Composable
 fun HyprTrackerScreen(
     modifier: Modifier = Modifier,
-    hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory)
+    hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory) ,
+    medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory)
 ){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -109,7 +111,7 @@ fun HyprTrackerScreen(
         ) { innerpadding ->
             Box(modifier = Modifier.padding(innerpadding)) {
                 key(currentRoute) {
-                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen)
+                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen, medicineViewModel)
             }
                 when{
                     openAboutDialog.value -> {

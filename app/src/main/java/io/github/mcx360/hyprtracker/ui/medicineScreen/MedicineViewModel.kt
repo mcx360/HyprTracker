@@ -50,7 +50,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     }
 
     fun fetchMedications(){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             medicationRepository.getAllMedicationsStream().collect { recordedMedications ->
                 _uiState.value.medicineList = recordedMedications.map { recordedMedication -> recordedMedication.toMedicine() }
             }

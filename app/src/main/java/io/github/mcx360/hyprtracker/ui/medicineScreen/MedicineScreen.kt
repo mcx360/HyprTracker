@@ -25,13 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun MedicineScreen(
     modifier: Modifier = Modifier,
     openAddMedicationScreen: MutableState<Boolean>,
     snackBarHostState: SnackbarHostState,
-    medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory)
+    medicineViewModel: MedicineViewModel
 ){
     val  scope = rememberCoroutineScope()
     val uiState = medicineViewModel.uiState.collectAsState()
@@ -44,7 +46,11 @@ fun MedicineScreen(
             scope = scope,
             medicineViewModel = medicineViewModel
         )
-    } else {
+    } else if (uiState.value.medicineList.isNotEmpty()){
+        Text(uiState.value.medicineList.toString())
+    }
+
+    else {
         Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -66,7 +72,6 @@ fun MedicineScreen(
                 text = stringResource(R.string.Empty_Medicine_Screen_Text),
                 textAlign = TextAlign.Center,
                 modifier = modifier.padding(all = 16.dp))
-            Text(uiState.value.medicineList.isNotEmpty().toString())
         }
     }
 }
