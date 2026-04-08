@@ -3,24 +3,18 @@ package io.github.mcx360.hyprtracker.ui.mainScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,21 +24,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
-import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNavigationBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
 import kotlinx.coroutines.launch
 
@@ -84,118 +73,12 @@ fun HyprTrackerScreen(
     ModalNavigationDrawer(
         modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
         drawerContent = {
-                ModalDrawerSheet{
-                    Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth()) {
-                        Text(stringResource(R.string.app_name),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                    HorizontalDivider()
-                    Text(stringResource(R.string.title_one_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
-                    NavigationDrawerItem(
-                        label = { Text(text= stringResource(R.string.export_label)) },
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG)
-
-                    )
-                    NavigationDrawerItem(
-                        label = { Text(text= stringResource(R.string.share_label)) },
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.documents_label))},
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.bin_label))},
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    HorizontalDivider()
-                    Text(stringResource(R.string.title_two_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.backup_label))},
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.rating_label))},
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(RATE_APP_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.bug_report_label))},
-                        selected = false,
-                        onClick = {
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isOpen) close() else open()
-                                }
-                            }
-                            openBugReportDialog.value = true
-                        },
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_bug_report), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(REPORT_BUG_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    HorizontalDivider()
-                    Text(stringResource(R.string.title_three_label), modifier = modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.settings_label))},
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG)
-                    )
-                    NavigationDrawerItem(
-                        label = {Text(text = stringResource(R.string.about_label))},
-                        selected = false,
-                        onClick = {
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isOpen) close() else open()                                    }
-                            }
-                            openAboutDialog.value = true
-                        },
-                        icon = {
-                            Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null)
-                        },
-                        modifier = modifier.testTag(ABOUT_IN_NAVIGATIONDRAWER_TAG)
-                    )
-            }
+            HyprTrackerDrawerContent(
+                scope = scope,
+                drawerState = drawerState,
+                updateOpenBugReportDialogToTrue = {openBugReportDialog.value = true},
+                updateOpenAboutDialogToTrue = {openAboutDialog.value = true}
+            )
         },
         drawerState = drawerState
     ) {
@@ -224,10 +107,8 @@ fun HyprTrackerScreen(
                 SnackbarHost(hostState = snackBarHostState)
             }
         ) { innerpadding ->
-            Box(
-                modifier = Modifier
-                    .padding(innerpadding)
-            ) { key(currentRoute) {
+            Box(modifier = Modifier.padding(innerpadding)) {
+                key(currentRoute) {
                 NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen)
             }
                 when{
