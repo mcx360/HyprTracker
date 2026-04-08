@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -35,7 +36,9 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
                 medicationSelectedDays = setOf(),
                 medicationReminderTimes = listOf("","","","","","",""),
                 medicationEndDate = "",
-                medicineList = listOf()
+                medicineList = listOf(),
+                medicationNotifications = false,
+                date = LocalDate.now().toString()
             )
         }
     }

@@ -25,8 +25,8 @@ fun medicationInfoCard(
     isMedicationDescriptionFieldInError: Boolean,
     updateMedicationName : (String) -> Unit,
     updateMedicationDescription : (String) -> Unit,
-    setMedicationNameErrorStatusTrue : () -> Unit,
-    setMedicationDescriptionErrorStatusTrue : () -> Unit
+    setMedicationNameErrorStatusFalse : () -> Unit,
+    setMedicationDescriptionErrorStatusFalse : () -> Unit
 ) {
     Card {
         Column(
@@ -47,7 +47,7 @@ fun medicationInfoCard(
                 isError = isMedicationNameFieldInError,
                 onValueChange = {
                     updateMedicationName(it)
-                    if (medicationName.isNotEmpty()) setMedicationNameErrorStatusTrue
+                    if (medicationName.isNotEmpty()) setMedicationNameErrorStatusFalse()
                 },
                 value = medicationName,
                 label = { Text("Medication name*") },
@@ -70,7 +70,7 @@ fun medicationInfoCard(
                 isError = isMedicationDescriptionFieldInError,
                 onValueChange = {
                     updateMedicationDescription(it)
-                    if (medicationDescription.isNotEmpty()) setMedicationDescriptionErrorStatusTrue
+                    if (medicationDescription.isNotEmpty()) setMedicationDescriptionErrorStatusFalse()
                 },
                 value = medicationDescription,
                 label = { Text("Medication description*") },

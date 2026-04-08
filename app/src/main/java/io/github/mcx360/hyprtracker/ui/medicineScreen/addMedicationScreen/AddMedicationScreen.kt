@@ -15,19 +15,13 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -59,12 +53,10 @@ import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationDatePicker
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectDaysForMedication
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
-import io.github.mcx360.hyprtracker.ui.utils.Days
-import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -119,241 +111,45 @@ fun AddMedicationScreen(
                 medicineViewModel.updateMedicationDescription(it)
                 if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
             },
-            setMedicationNameErrorStatusTrue = {
-                isMedicationNameFieldInError = true
+            setMedicationNameErrorStatusFalse = {
+                isMedicationNameFieldInError = false
             },
-            setMedicationDescriptionErrorStatusTrue = {
-                isMedicationDescriptionFieldInError = true
+            setMedicationDescriptionErrorStatusFalse = {
+                isMedicationDescriptionFieldInError = false
             }
         )
 
         Spacer(modifier = modifier.height(16.dp))
 
         //Medication schedule and dosage
-        Card {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Medication Schedule & Dosage",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = modifier.padding(4.dp),
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    ExposedDropdownMenuBox(
-                        expanded = showScheduleDropDownMenu,
-                        onExpandedChange = { showScheduleDropDownMenu = it }) {
-                        OutlinedTextField(
-                            isError = isMedicationScheduleFieldInError,
-                            readOnly = true,
-                            onValueChange = {},
-                            value = uiState.value.medicationSchedule,
-                            label = { Text("Schedule*") },
-                            placeholder = { Text("e.g. Every day") },
-                            trailingIcon = {
-                                IconButton(
-                                    onClick = {
-                                        showScheduleDropDownMenu = true
-                                    }) {
-                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                                }
-                            },
-                            maxLines = 1,
-                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
-                            supportingText = {
-                                if (isMedicationScheduleFieldInError){
-                                    Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error)
-                                } else{
-                                    Text("*required")
-                                }
-                            }
-                        )
-                        ExposedDropdownMenu(
-                            expanded = showScheduleDropDownMenu,
-                            onDismissRequest = { showScheduleDropDownMenu = false }) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    medicineViewModel.updateMedicationSchedule("Every single day")
-                                    for (day in Days.entries){
-                                        medicineViewModel.addSelectedDays(day.name)
-                                    }
-                                    showScheduleDropDownMenu = false
-                                },
-                                text = { Text("Every single day") }
-                            )
-                            DropdownMenuItem(
-                                onClick = {
-                                    showSelectedDaysPicker = true
-                                },
-                                text = { Text("On selected days only") }
-                            )
-                        }
-
-                    }
-                    if (showSelectedDaysPicker){
-                        SelectDaysForMedication(onDismiss = {
-                            showSelectedDaysPicker = false
-                            if (!it.isNullOrEmpty()) {
-                                medicineViewModel.updateMedicationSchedule(it)
-                            } },
-                            onDaySelected = {
-                                medicineViewModel.addSelectedDays(it)
-                            },
-                            onDayRemoved = {
-                                medicineViewModel.removeSelectedDays(it)
-                            }
-                        )
-                        showScheduleDropDownMenu = false
-                    }
-                    IconButton(onClick = {showScheduleInfoDialog = true}) {
-                        Icon(Icons.Default.Info, contentDescription = null)
-                    }
-
-                    if (showScheduleInfoDialog){
-                        InfoDialog(
-                            onDismissRequest = {showScheduleInfoDialog = false},
-                            info = "Schedule defines how often you take this medication (e.g. every day or on specific days).")
-                    }
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    ExposedDropdownMenuBox(
-                        expanded = showTimesPerDayDropDownMenu,
-                        onExpandedChange = {showTimesPerDayDropDownMenu = it}
-                    ) {
-                        OutlinedTextField(
-                            isError = isMedicationTimesPerDayFieldInError,
-                            readOnly = true,
-                            onValueChange = {},
-                            value = when(uiState.value.medicationTimesPerDay){
-                                0 -> ""
-                                1 -> "One time daily"
-                                2 -> "Two times daily"
-                                3 -> "Three times daily"
-                                4 -> "Four times daily"
-                                5 -> "Five times daily"
-                                6 -> "Six times daily"
-                                else -> ""
-                            },
-                            label = { Text("Times per day*") },
-                            placeholder = {Text("e.g. Once daily")},
-                            trailingIcon = {
-                                IconButton(
-                                    onClick = {
-                                        showTimesPerDayDropDownMenu = true
-                                    }) {
-                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                                }
-                            },
-                            modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
-                            supportingText = {
-                                if (isMedicationTimesPerDayFieldInError){
-                                    Text("Enter amount of time per day!")
-                                } else{
-                                    Text("*required")
-                                }
-                            }
-                        )
-                        ExposedDropdownMenu(
-                            expanded = showTimesPerDayDropDownMenu,
-                            onDismissRequest = {showTimesPerDayDropDownMenu = false}
-                        ) {
-                            DropdownMenuItem(
-                                text = {Text("One time daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(1)
-                                showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {Text("Two times daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(2)
-                                    showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {Text("Three times daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(3)
-                                    showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {Text("Four times daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(4)
-                                    showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {Text("Five times daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(5)
-                                    showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {Text("Six times daily")},
-                                onClick = {
-                                    medicineViewModel.updateMedicationTimesPerDay(6)
-                                    showTimesPerDayDropDownMenu = false
-                                }
-                            )
-                        }
-                    }
-                    IconButton(onClick = {showTimesPerDayInfoDialog = true}) {
-                        Icon(Icons.Default.Info, contentDescription = null)
-                    }
-
-                    if(showTimesPerDayInfoDialog){
-                        InfoDialog(
-                            info = "Times per day indicates how many times you take the medication on a scheduled day.",
-                            onDismissRequest = {showTimesPerDayInfoDialog = false})
-                    }
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        isError = isMedicationDosePerIntakeInError,
-                        onValueChange = { medicineViewModel.updateMedicationDose(it)},
-                        value = uiState.value.medicationDosage,
-                        label = { Text("Dose per Intake") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Done
-                        ),
-                        placeholder = {Text("e.g. 1 x 10mg tablet")},
-                        supportingText = {
-                            if (isMedicationDosePerIntakeInError){
-                                Text("Dose per intake is needed")
-                            } else{
-                                Text("*required")
-                            }
-                        }
-                    )
-
-                    IconButton(onClick = {showDosePerIntakeInfoDialog = true}) {
-                        Icon(Icons.Default.Info, contentDescription = null)
-                    }
-
-                    if (showDosePerIntakeInfoDialog){
-                        InfoDialog(
-                            info = "Dose per intake describes the amount of medication you take each time (e.g. 1 tablet or 10 mg).",
-                            onDismissRequest = {showDosePerIntakeInfoDialog = false}
-                        )
-                    }
-                }
-            }
-        }
+        MedicationScheduleAndDosageCard(
+            showScheduleDropDownMenu = showScheduleDropDownMenu,
+            showSelectedDaysPicker = showSelectedDaysPicker,
+            showTimesPerDayDropDownMenu = showTimesPerDayDropDownMenu,
+            showDosePerIntakeInfoDialog = showDosePerIntakeInfoDialog,
+            showTimesPerDayInfoDialog = showTimesPerDayInfoDialog,
+            showScheduleInfoDialog = showScheduleInfoDialog,
+            changeScheduleDropDownMenuStatus = {showScheduleDropDownMenu = it},
+            changeShowTimesPerDayDropDownMenuStatus = {showTimesPerDayDropDownMenu = it},
+            changeShowSelectedDaysPickerStatus = {showSelectedDaysPicker = it},
+            changeShowScheduleInfoDialogStatus = {showScheduleInfoDialog = it},
+            changeShowDosePerIntakeDialogStatus = {showDosePerIntakeInfoDialog = it},
+            changeShowTimesPerDayInfoDialogStatus = {showTimesPerDayInfoDialog = it},
+            isMedicationScheduleFieldInError = isMedicationScheduleFieldInError,
+            isMedicationDosePerIntakeInError = isMedicationDosePerIntakeInError,
+            isMedicationTimesPerDayFieldInError = isMedicationTimesPerDayFieldInError,
+            updateMedicationSchedule = {medicineViewModel.updateMedicationSchedule(it)},
+            updateMedicationDose = {medicineViewModel.updateMedicationDose(it)},
+            updateMedicationTimesPerDay = {medicineViewModel.updateMedicationTimesPerDay(it)},
+            addSelectedDay = {medicineViewModel.addSelectedDays(it)},
+            removeSelectedDay = {medicineViewModel.removeSelectedDays(it)},
+            medicationSchedule = uiState.value.medicationSchedule,
+            medicationTimesPerDay = uiState.value.medicationTimesPerDay,
+            medicationDosage = uiState.value.medicationDosage,
+            setIsMedicationScheduleFieldInErrorToFalse = {isMedicationScheduleFieldInError = false},
+            setIsMedicationDosePerIntakeInErrorToFalse = {isMedicationDosePerIntakeInError = false},
+            setIsMedicationTimesPerDayFieldInErrorToFalse = {isMedicationTimesPerDayFieldInError = false}
+        )
 
         Spacer(modifier = modifier.height(16.dp))
 
@@ -629,7 +425,7 @@ fun AddMedicationScreen(
                                     endDate = uiState.value.medicationEndDate
                                 )
                             )
-                            //hyprTrackerViewModel.resetAddMedication()
+                            medicineViewModel.resetAddMedication()
                         }
 
                     }
