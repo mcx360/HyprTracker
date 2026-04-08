@@ -56,6 +56,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -154,132 +155,17 @@ fun AddMedicationScreen(
         Spacer(modifier = modifier.height(16.dp))
 
         //Notification reminders
-        Card {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Notification Reminders",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = modifier.padding(4.dp).weight(0.8f),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-
-                    Switch(
-                        modifier = modifier.align(Alignment.CenterVertically),
-                        checked = checked,
-                        onCheckedChange = {
-                            checked = it
-                        }
-                    )
-                }
-
-                if (checked) {
-                    medicineViewModel.updateMedicationNotificationStatus(true)
-                    Row {
-                        when (uiState.value.medicationSchedule) {
-                            "" -> {
-                                Text(
-                                    "Enter your medication schedule into the fields above to set reminders",
-                                    color = MaterialTheme.colorScheme.error,
-                                    modifier = modifier.padding(8.dp)
-                                )
-                            }
-                            "Every single day" -> {
-                                Text(
-                                    "You are scheduled to receive reminders every single day",
-                                    modifier = modifier.padding(8.dp)
-                                )
-                            }
-                            else -> {
-                                Text(
-                                    "You are scheduled to receive reminders on the following days: " + uiState.value.medicationSelectedDays.toString(),
-                                    modifier = modifier.padding(8.dp)
-                                )
-                            }
-                        }
-                    }
-                    Row {
-                        if (uiState.value.medicationTimesPerDay == 0){
-                            Text("Enter how many times per scheduled day you take the medicine in the fields above before setting reminders", color = MaterialTheme.colorScheme.error,
-                                modifier = modifier.padding(8.dp)
-                                )
-                        } else{
-                            Text("On each scheduled day you will receive this much reminder(s): " + uiState.value.medicationTimesPerDay,
-                                modifier = modifier.padding(8.dp)
-                            )
-                        }
-                        IconButton(onClick = {}) {
-                            Image(Icons.Filled.Edit, contentDescription = null)
-                        }
-                    }
-                    Row {
-                        if (uiState.value.medicationTimesPerDay > 0){
-                            Text(
-                                text = "Enter reminder time(s) below",
-                                style = MaterialTheme.typography.titleSmall,
-                                modifier = modifier.padding(8.dp),
-                            )
-                        }
-                    }
-
-                    Column {
-                        for (i in 1..uiState.value.medicationTimesPerDay){
-
-                            TextField(
-                                value = uiState.value.medicationReminderTimes[i],
-                                label = {Text("Reminder$i")},
-                                placeholder = {Text("HH:MM")},
-                                onValueChange = {if (it.length <5 && it.isDigitsOnly()) medicineViewModel.updateMedicationReminderTime(it, i)},
-                                trailingIcon = {Icon(
-                                    painter = painterResource(R.drawable.ic_date),
-                                    contentDescription = null
-                                )},
-                                keyboardOptions =  KeyboardOptions(
-                                    keyboardType = KeyboardType.Number,
-                                    imeAction = if (i != uiState.value.medicationTimesPerDay){
-                                        ImeAction.Next
-                                    }else{
-                                        ImeAction.Done
-                                    }
-                                ),
-                                visualTransformation = VisualTransformation { text ->
-                                    var out = ""
-                                    for (i in text.indices){
-                                        out += if (i == 2) ":${text[i]}" else text[i]
-
-                                    }
-                                    TransformedText(
-                                        text = AnnotatedString(out),
-                                        offsetMapping = object : OffsetMapping {
-                                            override fun originalToTransformed(offset: Int): Int {
-                                                if (offset<3) return offset
-                                                if (offset==3) return offset + 1
-                                                if (offset==4) return offset + 1
-                                                return offset
-                                            }
-
-                                            override fun transformedToOriginal(offset: Int): Int {
-                                                if (offset >= 4) return offset -1
-                                                return offset
-                                            }
-
-                                        }
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }else{
-                    medicineViewModel.updateMedicationNotificationStatus(false)
-                }
-            }
-        }
+        NotificationsCard(
+            checked = checked,
+            updateCheckedStatus = {checked = it},
+            updateMedicationNotificationStatus = {medicineViewModel.updateMedicationNotificationStatus(it)},
+            updateMedicationReminderTime = {value, reminder ->
+                medicineViewModel.updateMedicationReminderTime(value, reminder)},
+            medicationSchedule = uiState.value.medicationSchedule,
+            medicationSelectedDays = uiState.value.medicationSelectedDays,
+            medicationTimesPerDay = uiState.value.medicationTimesPerDay,
+            medicationReminderTimes = uiState.value.medicationReminderTimes
+        )
 
         Spacer(modifier = modifier.height(16.dp))
 
@@ -427,7 +313,6 @@ fun AddMedicationScreen(
                             )
                             medicineViewModel.resetAddMedication()
                         }
-
                     }
                 },
                 modifier = Modifier.weight(1f).padding(16.dp)
