@@ -1,6 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen
 
 import java.time.LocalDate
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 
 data class MedicineState(
     val medicationName: String = "",
@@ -12,7 +13,7 @@ data class MedicineState(
     val medicationSelectedDays: Set<String> = setOf(),
     val medicationReminderTimes: List<String> = listOf("","","","","","",""),
     val medicationEndDate: String = "",
-    var medicineList: List<String> = listOf(),
+    var medicineList: List<Medicine> = listOf(),
     val medicationNotifications: Boolean = false,
     val date: String = LocalDate.now().toString()
 )
