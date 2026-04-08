@@ -1,33 +1,19 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -39,28 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
-import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationDatePicker
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.SelectSpecifiedNumberOfDaysDialog
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,8 +46,6 @@ fun AddMedicationScreen(
 ){
     val haptic = LocalHapticFeedback.current
     var checked by remember {mutableStateOf(false)}
-    val radioButtons = listOf("Continuous", "Specified number of days", "Until a selected date")
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioButtons[0]) }
     var showScheduleDropDownMenu by remember { mutableStateOf(false) }
     var showTimesPerDayDropDownMenu by remember { mutableStateOf(false) }
     var showScheduleInfoDialog by remember { mutableStateOf(false) }
@@ -122,7 +93,7 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
-        //Medication schedule and dosage
+        //Medication schedule and dosage Card
         MedicationScheduleAndDosageCard(
             showScheduleDropDownMenu = showScheduleDropDownMenu,
             showSelectedDaysPicker = showSelectedDaysPicker,
@@ -154,7 +125,7 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
-        //Notification reminders
+        //Notification reminders Card
         NotificationsCard(
             checked = checked,
             updateCheckedStatus = {checked = it},
@@ -169,77 +140,18 @@ fun AddMedicationScreen(
 
         Spacer(modifier = modifier.height(16.dp))
 
-        //Duration
-        Card {
-            Text(
-                text = "Duration",
-                modifier = modifier.padding(start = 16.dp, top = 16.dp),
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-                )
-
-            Text("Start date: "+ medicineViewModel.formatToRegularDate(uiState.value.date), modifier = modifier.padding(start = 16.dp))
-
-            Column(modifier.selectableGroup()) {
-                radioButtons.forEach { text ->
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .selectable(
-                                selected = (text == selectedOption),
-                                onClick = { onOptionSelected(text)
-                                    when(text){
-                                        "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog = true
-                                        "Until a selected date" -> showDurationDatePicker = true
-                                    }
-                                          },
-                                role = Role.RadioButton
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(selected = (text==selectedOption), onClick = {
-                            onOptionSelected(text)
-                            when(text){
-                                "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog = true
-                                "Until a selected date" -> showDurationDatePicker = true
-                            }
-                        })
-                        Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-                if (selectedOption == "Specified number of days"){
-                    if (uiState.value.medicationEndDate != ""){
-                        Text("medicine recorded until "+medicineViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
-                    }
-                } else if(selectedOption == "Until a selected date"){
-                    if (uiState.value.medicationEndDate != ""){
-                         Text(medicineViewModel.formatToRegularDate(uiState.value.medicationEndDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
-                    }
-                }else{
-                    Text("Medicine will be recorded indefinitely unless cancelled by the user", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
-                }
-            }
-            if (showSelectSpecifiedNumberOfDaysDialog) {
-                SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {
-                    showSelectSpecifiedNumberOfDaysDialog = false
-                }, onNumOfDaysSelected = {
-                    if (it != "") {
-                        medicineViewModel.updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString())
-                    }
-                }
-                    )
-            }
-            if (showDurationDatePicker) {
-                DurationDatePicker(onDateSelected = { medicineViewModel.updateMedicationEndDate(medicineViewModel.convertMillisToDate(it))}, onDismiss = {showDurationDatePicker = false})
-            }
-        }
+        //Duration Card
+        DurationCard(
+            formatToRegularDate = { medicineViewModel.formatToRegularDate(it) },
+            startDate = uiState.value.date,
+            endDate = uiState.value.medicationEndDate,
+            showSelectSpecifiedNumberOfDaysDialog = showSelectSpecifiedNumberOfDaysDialog,
+            showDurationDatePicker = showDurationDatePicker,
+            updateShowDurationDatePicker = {showDurationDatePicker = it},
+            updateShowSelectSpecifiedNumberOfDaysDialog = {showSelectSpecifiedNumberOfDaysDialog = it},
+            updateMedicationEndDateString = {medicineViewModel.updateMedicationEndDate(it)},
+            updateMedicationEndDateLong = {medicineViewModel.updateMedicationEndDate(medicineViewModel.convertMillisToDate(it))}
+        )
 
         Row(
             modifier = modifier.fillMaxSize(),
