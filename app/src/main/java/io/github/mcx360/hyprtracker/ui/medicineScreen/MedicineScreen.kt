@@ -1,17 +1,24 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
+import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
 fun MedicineScreen(
@@ -58,49 +66,85 @@ fun MedicineScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxSize()
+                .padding()
         ){
             items(uiState.value.medicineList.size){ index ->
+                val medication = uiState.value.medicineList[index]
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Column(horizontalAlignment = Alignment.Start){
-                            Text(uiState.value.medicineList[index].name, fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleLarge,)
-                            Text(uiState.value.medicineList[index].description)
+                    Column() {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
 
-                        }
-                        Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-                            IconButton(
-                                onClick = {}
-                            ){
-                                Icon(Icons.Filled.MoreVert,
-                                    contentDescription = null
+                            Column(horizontalAlignment = Alignment.Start) {
+                                Row() {
+                                    Text(
+                                    medication.name,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                                    Icon(painter = painterResource(R.drawable.ic_medicine), contentDescription = null)
+                                }
+
+                                Text(medication.description)
+                                Spacer(modifier = Modifier.padding(4.dp))
+                                Text("Start Date: ${medication.startDate}")
+                                Text(if (medication.endDate.isEmpty()){
+                                    "Duration: Continuous"
+                                } else{
+                                    "End: ${medication.endDate}"
+                                })
+
+
+                            }
+                            Column(
+                                horizontalAlignment = Alignment.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+
+                                IconButton(
+                                    onClick = {}
+                                ) {
+                                    Icon(
+                                        Icons.Filled.MoreVert,
+                                        contentDescription = null
                                     )
+                                }
                             }
                         }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
-                    ){
-                        HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            DotWithColour(MaterialTheme.colorScheme.secondary)
+                            Text(medication.schedule, modifier = modifier.padding())
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
 
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                        ,
-                        horizontalArrangement = Arrangement.Start
-                    ){
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            FilledTonalButton(onClick = {}) {Text("Reminder 1") }
+                            FilledTonalButton(onClick = {}) {Text("Reminder 2") }
+                            FilledTonalButton(onClick = {}) {Text("Reminder 3") }
 
                         }
                     }
+                }
                 }
         }
     }
