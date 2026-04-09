@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,7 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.util.query
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +39,7 @@ fun MedicineScreen(
     medicineViewModel: MedicineViewModel
 ){
     val  scope = rememberCoroutineScope()
-    val uiState = medicineViewModel.uiState.collectAsState()
+    val uiState = medicineViewModel.uiState.collectAsStateWithLifecycle()
 
     if (openAddMedicationScreen.value){
         AddMedicationScreen(
@@ -72,6 +75,8 @@ fun MedicineScreen(
                 text = stringResource(R.string.Empty_Medicine_Screen_Text),
                 textAlign = TextAlign.Center,
                 modifier = modifier.padding(all = 16.dp))
+            Text(uiState.value.medicationNotifications.toString())
+
         }
     }
 }

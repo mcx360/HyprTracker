@@ -25,9 +25,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     val uiState: StateFlow<MedicineState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
             fetchMedications()
-        }
     }
 
     fun resetAddMedication(){
@@ -49,10 +47,11 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    fun fetchMedications(){
+    fun fetchMedications() {
         viewModelScope.launch {
             medicationRepository.getAllMedicationsStream().collect { recordedMedications ->
-                _uiState.value.medicineList = recordedMedications.map { recordedMedication -> recordedMedication.toMedicine() }
+                val list = recordedMedications.map { it.toMedicine() }
+                updateMedicationList(list)
             }
         }
     }
@@ -70,6 +69,12 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     fun updateMedicationName(name: String){
         _uiState.update { currentState ->
             currentState.copy(medicationName = name)
+        }
+    }
+
+    fun updateMedicationList(medicineList: List<Medicine>){
+        _uiState.update { currentState ->
+            currentState.copy(medicineList = medicineList)
         }
     }
 

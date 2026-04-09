@@ -166,6 +166,7 @@ fun AddMedicationScreen(
                         openAddMedicationScreen.value = !openAddMedicationScreen.value
                         medicineViewModel.resetAddMedication()
                         snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
+                        medicineViewModel.fetchMedications()
                     }
                 },
                 modifier = Modifier
