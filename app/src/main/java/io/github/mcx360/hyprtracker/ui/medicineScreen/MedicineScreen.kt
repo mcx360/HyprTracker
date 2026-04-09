@@ -3,9 +3,18 @@ package io.github.mcx360.hyprtracker.ui.medicineScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -42,7 +51,58 @@ fun MedicineScreen(
             medicineViewModel = medicineViewModel
         )
     } else if (uiState.value.medicineList.isNotEmpty()){
-        Text(uiState.value.medicineList.toString())
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize()
+        ){
+            items(uiState.value.medicineList.size){ index ->
+                Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Column(horizontalAlignment = Alignment.Start){
+                            Text(uiState.value.medicineList[index].name, fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleLarge,)
+                            Text(uiState.value.medicineList[index].description)
+
+                        }
+                        Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+                            IconButton(
+                                onClick = {}
+                            ){
+                                Icon(Icons.Filled.MoreVert,
+                                    contentDescription = null
+                                    )
+                            }
+                        }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start
+                    ){
+                        HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
+
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                        ,
+                        horizontalArrangement = Arrangement.Start
+                    ){
+
+                        }
+                    }
+                }
+        }
     }
 
     else {
@@ -66,9 +126,8 @@ fun MedicineScreen(
             Text(
                 text = stringResource(R.string.Empty_Medicine_Screen_Text),
                 textAlign = TextAlign.Center,
-                modifier = modifier.padding(all = 16.dp))
-            Text(uiState.value.medicationNotifications.toString())
-
+                modifier = modifier.padding(all = 16.dp)
+            )
         }
     }
 }
