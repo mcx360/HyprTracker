@@ -78,9 +78,8 @@ fun MedicineScreen(
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.Start
                         ) {
-
                             Column(horizontalAlignment = Alignment.Start) {
-                                Row() {
+                                Row {
                                     Text(
                                     medication.name,
                                     fontWeight = FontWeight.Bold,
@@ -89,22 +88,19 @@ fun MedicineScreen(
                                     Icon(painter = painterResource(R.drawable.ic_medicine), contentDescription = null)
                                 }
 
-                                Text(medication.description)
+                                Text(medication.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Spacer(modifier = Modifier.padding(4.dp))
-                                Text("Start Date: ${medication.startDate}")
                                 Text(if (medication.endDate.isEmpty()){
-                                    "Duration: Continuous"
+                                    "Started ${medication.startDate} • Continuous"
                                 } else{
-                                    "End: ${medication.endDate}"
+                                    "Duration: ${medication.startDate} ➩ ${medication.endDate}"
                                 })
-
-
+                                Text("Dose: ${medication.dosePerIntake}")
                             }
                             Column(
                                 horizontalAlignment = Alignment.End,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-
                                 IconButton(
                                     onClick = {}
                                 ) {
@@ -119,10 +115,21 @@ fun MedicineScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             DotWithColour(MaterialTheme.colorScheme.secondary)
-                            Text(medication.schedule, modifier = modifier.padding())
+                            Spacer(modifier = modifier.padding(4.dp))
+                            if (medication.schedule == "Every single day"){
+                                Text("Taken daily •")
+                                when(medication.timesPerDay){
+                                    1 -> Text("Once")
+                                    else -> Text("${medication.timesPerDay} times")
+                                }
+                            } else{
+                                Text("Taken on selected days • ")
+                                Text("${medication.timesPerDay} taken every selected day")
+                            }
                         }
                         Row(
                             modifier = Modifier
@@ -136,11 +143,9 @@ fun MedicineScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            FilledTonalButton(onClick = {}) {Text("Reminder 1") }
-                            FilledTonalButton(onClick = {}) {Text("Reminder 2") }
-                            FilledTonalButton(onClick = {}) {Text("Reminder 3") }
+
 
                         }
                     }

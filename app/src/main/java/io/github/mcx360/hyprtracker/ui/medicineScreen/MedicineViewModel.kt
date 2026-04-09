@@ -167,7 +167,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         timesPerDay = timesPerDay,
         dosePerIntake = dosePerIntake,
         notificationsEnabled = notificationsEnabled,
-        scheduledNotificationsTime = reminders.split(","),
+        scheduledNotificationsTime = reminders.removePrefix("[").removeSuffix("]").split(","),
         scheduledDays = schedule.split(",").toSet(),
         startDate = startDate,
         endDate = endDate
