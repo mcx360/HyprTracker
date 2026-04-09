@@ -165,8 +165,8 @@ fun AddMedicationScreen(
                     scope.launch {
                         openAddMedicationScreen.value = !openAddMedicationScreen.value
                         medicineViewModel.resetAddMedication()
-                        snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
                         medicineViewModel.fetchMedications()
+                        snackBarHostState.showSnackbar("Canceled adding medication", duration = SnackbarDuration.Short)
                     }
                 },
                 modifier = Modifier
@@ -203,6 +203,7 @@ fun AddMedicationScreen(
                         haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                         openAddMedicationScreen.value = !openAddMedicationScreen.value
                         scope.launch {
+                            medicineViewModel.fetchMedications()
                             snackBarHostState.showSnackbar(
                                 message = "Medication added",
                                 duration = SnackbarDuration.Short
