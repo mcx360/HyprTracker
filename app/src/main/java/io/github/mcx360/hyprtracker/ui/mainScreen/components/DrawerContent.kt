@@ -132,7 +132,7 @@ fun HyprTrackerDrawerContent(
                 selected = false,
                 onClick = {},
                 icon = {
-                    Icon(painter = painterResource(R.drawable.ic_settings_and_users), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.outline_settings_24), contentDescription = null)
                 },
                 modifier = modifier.testTag(USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG)
             )
