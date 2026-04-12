@@ -19,7 +19,9 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -115,21 +117,45 @@ fun MedicineScreen(
                         }
                         Spacer(modifier = Modifier.padding(4.dp))
 
-
                         Row(
                             horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                            Text(
-                                if (medication.endDate.isEmpty()) {
-                                    "Started ${medication.startDate} • Continuous"
-                                } else {
-                                    "Duration: ${medication.startDate} ➩ ${medication.endDate}"
-                                }
-                            )
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)) {
+                            if (medication.endDate.isEmpty()) {
+                                Text("Started: ", fontWeight = FontWeight.Bold)
+                                Text("${medication.startDate} • Continuous")
+                            } else {
+                                Text("Duration: ", fontWeight = FontWeight.Bold)
+                                Text("${medication.startDate} ➩ ${medication.endDate}")
+                            }
                         }
+
                         Row(horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                            Text("Dose: ${medication.dosePerIntake}")
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)) {
+                            Text("Dose: ", fontWeight = FontWeight.Bold)
+                            Text("${medication.dosePerIntake}")
+                        }
+
+                        if (medication.notificationsEnabled) {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                            ) {
+
+                                Text("Times: ", fontWeight = FontWeight.Bold)
+                                var text = ""
+                                medication.scheduledNotificationsTime.forEach {
+                                    if (it.length > 4) {
+                                        text += it.removePrefix(" ").replaceRange(2, 2, ":") + ", "
+                                    }
+                                }
+                                Text(text.removeSuffix(", "))
+                            }
                         }
 
                         Row(
@@ -142,7 +168,7 @@ fun MedicineScreen(
                             DotWithColour(MaterialTheme.colorScheme.secondary)
                             Spacer(modifier = modifier.padding(4.dp))
                             if (medication.schedule == "Every single day"){
-                                Text("Taken daily •")
+                                Text("Taken daily • ")
                                 when(medication.timesPerDay){
                                     1 -> Text("Once")
                                     else -> Text("${medication.timesPerDay} times")
@@ -160,20 +186,17 @@ fun MedicineScreen(
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
+                            HorizontalDivider(color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(start = 8.dp, end =8.dp))
 
                         }
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            horizontalArrangement = Arrangement.Center
+                            horizontalArrangement = Arrangement.Start
                         ) {
-                            medication.scheduledNotificationsTime.forEach {
-                                if (it.length >= 4){
 
-                                }
-                            }
                     }
                 }
                 }
