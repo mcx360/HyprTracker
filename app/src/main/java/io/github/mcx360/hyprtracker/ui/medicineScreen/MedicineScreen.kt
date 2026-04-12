@@ -2,6 +2,7 @@ package io.github.mcx360.hyprtracker.ui.medicineScreen
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,7 +73,7 @@ fun MedicineScreen(
             items(uiState.value.medicineList.size){ index ->
                 val medication = uiState.value.medicineList[index]
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
-                    Column() {
+                    Column {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -81,21 +83,21 @@ fun MedicineScreen(
                             Column(horizontalAlignment = Alignment.Start) {
                                 Row {
                                     Text(
-                                    medication.name,
-                                    fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.titleLarge,
-                                )
-                                    Icon(painter = painterResource(R.drawable.ic_medicine), contentDescription = null)
+                                        medication.name,
+                                        fontWeight = FontWeight.Bold,
+                                        style = MaterialTheme.typography.titleLarge,
+                                    )
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_medicine),
+                                        contentDescription = null
+                                    )
                                 }
 
-                                Text(medication.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Spacer(modifier = Modifier.padding(4.dp))
-                                Text(if (medication.endDate.isEmpty()){
-                                    "Started ${medication.startDate} • Continuous"
-                                } else{
-                                    "Duration: ${medication.startDate} ➩ ${medication.endDate}"
-                                })
-                                Text("Dose: ${medication.dosePerIntake}")
+                                Text(
+                                    medication.description,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                             }
                             Column(
                                 horizontalAlignment = Alignment.End,
@@ -111,6 +113,25 @@ fun MedicineScreen(
                                 }
                             }
                         }
+                        Spacer(modifier = Modifier.padding(4.dp))
+
+
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                            Text(
+                                if (medication.endDate.isEmpty()) {
+                                    "Started ${medication.startDate} • Continuous"
+                                } else {
+                                    "Duration: ${medication.startDate} ➩ ${medication.endDate}"
+                                }
+                            )
+                        }
+                        Row(horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                            Text("Dose: ${medication.dosePerIntake}")
+                        }
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -128,7 +149,10 @@ fun MedicineScreen(
                                 }
                             } else{
                                 Text("Taken on selected days • ")
-                                Text("${medication.timesPerDay} taken every selected day")
+                                if (medication.timesPerDay == 1){
+                                    Text("${medication.timesPerDay} time")
+                                }
+                                Text("${medication.timesPerDay} times")
                             }
                         }
                         Row(
@@ -145,13 +169,16 @@ fun MedicineScreen(
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
+                            medication.scheduledNotificationsTime.forEach {
+                                if (it.length >= 4){
 
-
-                        }
+                                }
+                            }
                     }
                 }
                 }
         }
+    }
     }
 
     else {
