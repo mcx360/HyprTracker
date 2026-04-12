@@ -124,10 +124,10 @@ fun MedicineScreen(
                                 .padding(8.dp)) {
                             if (medication.endDate.isEmpty()) {
                                 Text("Started: ", fontWeight = FontWeight.Bold)
-                                Text("${medication.startDate} • Continuous")
+                                Text("${medicineViewModel.formatToRegularDate(medication.startDate)} • Continuous")
                             } else {
                                 Text("Duration: ", fontWeight = FontWeight.Bold)
-                                Text("${medication.startDate} ➩ ${medication.endDate}")
+                                Text("${medicineViewModel.formatToRegularDate(medication.startDate)} ➩ ${medicineViewModel.formatToRegularDate(medication.endDate)}")
                             }
                         }
 
@@ -136,7 +136,7 @@ fun MedicineScreen(
                                 .fillMaxWidth()
                                 .padding(8.dp)) {
                             Text("Dose: ", fontWeight = FontWeight.Bold)
-                            Text("${medication.dosePerIntake}")
+                            Text(medication.dosePerIntake)
                         }
 
                         if (medication.notificationsEnabled) {
