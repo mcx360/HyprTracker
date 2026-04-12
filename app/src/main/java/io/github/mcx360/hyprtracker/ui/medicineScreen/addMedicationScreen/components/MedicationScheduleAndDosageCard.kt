@@ -149,7 +149,10 @@ fun MedicationScheduleAndDosageCard(
                 if (showScheduleInfoDialog){
                     InfoDialog(
                         onDismissRequest = {changeShowScheduleInfoDialogStatus(false)},
-                        info = "Schedule defines how often you take this medication (e.g. every day or on specific days).")
+                        info = "Schedule defines how often you take this medication (e.g. every day or on specific days).",
+                        title = "Schedule"
+
+                    )
                 }
             }
 
@@ -253,7 +256,10 @@ fun MedicationScheduleAndDosageCard(
                 if(showTimesPerDayInfoDialog){
                     InfoDialog(
                         info = "Times per day indicates how many times you take the medication on a scheduled day.",
-                        onDismissRequest = {changeShowTimesPerDayInfoDialogStatus(false)})
+                        onDismissRequest = {changeShowTimesPerDayInfoDialogStatus(false)},
+                        title = "Times Per Day"
+
+                    )
                 }
             }
 
@@ -287,7 +293,8 @@ fun MedicationScheduleAndDosageCard(
                 if (showDosePerIntakeInfoDialog){
                     InfoDialog(
                         info = "Dose per intake describes the amount of medication you take each time (e.g. 1 tablet or 10 mg).",
-                        onDismissRequest = {changeShowDosePerIntakeDialogStatus(false)}
+                        onDismissRequest = {changeShowDosePerIntakeDialogStatus(false) },
+                        title = "Dose Per Intake"
                     )
                 }
             }
