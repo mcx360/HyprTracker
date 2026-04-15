@@ -1,5 +1,8 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.components
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +34,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.SHARE_LOGS_IN_NAVIGATIONDRAWER
 import io.github.mcx360.hyprtracker.ui.mainScreen.USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.Contract
 
 @Composable
 fun HyprTrackerDrawerContent(
@@ -40,6 +44,17 @@ fun HyprTrackerDrawerContent(
     updateOpenBugReportDialogToTrue: () -> Unit,
     updateOpenAboutDialogToTrue: () -> Unit
 ){
+    val exporter = rememberLauncherForActivityResult(
+        contract = CreateDocument("text/csv"),
+        onResult = { uri ->
+        }
+    )
+    val importer = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {uri ->
+
+        }
+    )
         ModalDrawerSheet{
             Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth()) {
                 Text(stringResource(R.string.app_name),
@@ -55,7 +70,7 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = { Text(text= stringResource(R.string.export_label)) },
                 selected = false,
-                onClick = {},
+                onClick = {exporter.launch("logs.csv")},
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
                 },
@@ -94,7 +109,9 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.backup_label))},
                 selected = false,
-                onClick = {},
+                onClick = {
+                    importer.launch("text/csv")
+                },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
                 },

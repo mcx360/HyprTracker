@@ -10,7 +10,7 @@
     <string name="share_label">Share logs</string>
     <string name="documents_label">My Documents</string>
     <string name="bin_label">Bin</string>
-    <string name="backup_label">Backup</string>
+    <string name="backup_label">Import Logs</string>
     <string name="rating_label">Rate app</string>
     <string name="bug_report_label">Report bug</string>
     <string name="settings_label">Settings</string>
