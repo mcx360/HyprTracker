@@ -79,7 +79,8 @@ fun HyprTrackerScreen(
                 scope = scope,
                 drawerState = drawerState,
                 updateOpenBugReportDialogToTrue = {openBugReportDialog.value = true},
-                updateOpenAboutDialogToTrue = {openAboutDialog.value = true}
+                updateOpenAboutDialogToTrue = {openAboutDialog.value = true},
+                snackbarHostState = snackBarHostState
             )
         },
         drawerState = drawerState

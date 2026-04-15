@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.components
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
@@ -13,15 +14,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.mainScreen.ABOUT_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.BACKUP_IN_NAVIGATIONDRAWER_TAG
@@ -42,8 +46,10 @@ fun HyprTrackerDrawerContent(
     scope: CoroutineScope,
     drawerState: DrawerState,
     updateOpenBugReportDialogToTrue: () -> Unit,
-    updateOpenAboutDialogToTrue: () -> Unit
+    updateOpenAboutDialogToTrue: () -> Unit,
+    snackbarHostState: SnackbarHostState
 ){
+    val context = LocalContext.current
     val exporter = rememberLauncherForActivityResult(
         contract = CreateDocument("text/csv"),
         onResult = { uri ->
@@ -52,9 +58,11 @@ fun HyprTrackerDrawerContent(
     val importer = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri ->
-
         }
     )
+
+
+
         ModalDrawerSheet{
             Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth()) {
                 Text(stringResource(R.string.app_name),
@@ -80,7 +88,15 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = { Text(text= stringResource(R.string.share_label)) },
                 selected = false,
-                onClick = {},
+                onClick = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, "text")
+                    }
+
+                    val chooser = Intent.createChooser(intent, "Share via")
+                    context.startActivity(chooser)
+                },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_share), contentDescription = null)
                 },
@@ -120,7 +136,14 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.rating_label))},
                 selected = false,
-                onClick = {},
+                onClick = {
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                        snackbarHostState.showSnackbar("Cannot rate app yet as app has not been released yet")
+                    }
+                },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_rate), contentDescription = null)
                 },
