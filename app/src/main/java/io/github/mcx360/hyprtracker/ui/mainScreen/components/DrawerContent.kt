@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.mainScreen.ABOUT_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.BACKUP_IN_NAVIGATIONDRAWER_TAG
@@ -38,7 +37,6 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.SHARE_LOGS_IN_NAVIGATIONDRAWER
 import io.github.mcx360.hyprtracker.ui.mainScreen.USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.Contract
 
 @Composable
 fun HyprTrackerDrawerContent(
