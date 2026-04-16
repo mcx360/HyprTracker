@@ -63,20 +63,26 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     }
 
     fun updateSystolicValue(inputtedValue: String){
-        _uiState.update { currentState ->
-            currentState.copy(systolicValue = inputtedValue)
+        if (inputtedValue.length<4) {
+            _uiState.update { currentState ->
+                currentState.copy(systolicValue = inputtedValue)
+            }
         }
     }
 
     fun updateDiastolicValue(inputtedValue: String){
-        _uiState.update { currentState ->
-            currentState.copy(diastolicValue = inputtedValue)
+        if (inputtedValue.length<4) {
+            _uiState.update { currentState ->
+                currentState.copy(diastolicValue = inputtedValue)
+            }
         }
     }
 
     fun updatePulseValue(inputtedValue: String){
-        _uiState.update { currentState ->
-            currentState.copy(pulseValue = inputtedValue)
+        if (inputtedValue.length<4) {
+            _uiState.update { currentState ->
+                currentState.copy(pulseValue = inputtedValue)
+            }
         }
     }
 

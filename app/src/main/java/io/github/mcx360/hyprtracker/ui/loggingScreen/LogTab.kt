@@ -104,7 +104,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     singleLine = true,
                     value = hyprTackerUiState.systolicValue,
                     onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length < 3) {
+                        if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) {
                             hyprTrackerViewModel.updateSystolicValue(it)
                         }
                     },
@@ -124,7 +124,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     singleLine = true,
                     value = hyprTackerUiState.diastolicValue,
                     onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length < 3) {
+                        if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3) {
                             hyprTrackerViewModel.updateDiastolicValue(it)
                         }
                     },
@@ -144,7 +144,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     singleLine = true,
                     value = hyprTackerUiState.pulseValue,
                     onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length < 3) {
+                        if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3) {
                             hyprTrackerViewModel.updatePulseValue(it)
                         }
                     },
