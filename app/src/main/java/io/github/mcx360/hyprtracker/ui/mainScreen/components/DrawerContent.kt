@@ -45,7 +45,8 @@ fun HyprTrackerDrawerContent(
     drawerState: DrawerState,
     updateOpenBugReportDialogToTrue: () -> Unit,
     updateOpenAboutDialogToTrue: () -> Unit,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    updateOpenSettingsDialogToTrue: () -> Unit
 ){
     val context = LocalContext.current
     val exporter = rememberLauncherForActivityResult(
@@ -58,9 +59,6 @@ fun HyprTrackerDrawerContent(
         onResult = {uri ->
         }
     )
-
-
-
         ModalDrawerSheet{
             Card(modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer).padding(32.dp).fillMaxWidth()) {
                 Text(stringResource(R.string.app_name),
@@ -168,7 +166,7 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.settings_label))},
                 selected = false,
-                onClick = {},
+                onClick = {updateOpenSettingsDialogToTrue()},
                 icon = {
                     Icon(painter = painterResource(R.drawable.outline_settings_24), contentDescription = null)
                 },

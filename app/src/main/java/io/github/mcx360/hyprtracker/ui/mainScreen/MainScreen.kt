@@ -35,6 +35,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNavigationBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.Settings
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
@@ -67,6 +68,7 @@ fun HyprTrackerScreen(
     val openBugReportDialog = remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
     val openAddMedicationScreen = remember { mutableStateOf(false) }
+    val openSettingsDialog = remember { mutableStateOf(false) }
 
     Box(modifier = modifier
         .background(color = MaterialTheme.colorScheme.primaryContainer)
@@ -80,7 +82,8 @@ fun HyprTrackerScreen(
                 drawerState = drawerState,
                 updateOpenBugReportDialogToTrue = {openBugReportDialog.value = true},
                 updateOpenAboutDialogToTrue = {openAboutDialog.value = true},
-                snackbarHostState = snackBarHostState
+                snackbarHostState = snackBarHostState,
+                updateOpenSettingsDialogToTrue = {openSettingsDialog.value = true}
             )
         },
         drawerState = drawerState
@@ -141,6 +144,12 @@ fun HyprTrackerScreen(
                             },
                             modifier = modifier
                         )
+                    }
+                }
+
+                when{
+                    openSettingsDialog.value -> {
+                        Settings(onDismissRequest = {openSettingsDialog.value = false})
                     }
                 }
             }

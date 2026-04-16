@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.compose.ui.text.google.fonts)
+    implementation(libs.androidx.compose.foundation)
     val room_version = "2.8.4"
 
     implementation("androidx.datastore:datastore:1.2.1")
