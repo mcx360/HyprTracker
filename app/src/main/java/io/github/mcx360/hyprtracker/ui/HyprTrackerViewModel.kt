@@ -192,32 +192,35 @@ data class HyprReading(
     val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
 )
 
-fun getHyperTensionStage(systolicValue: String, diastolicValue: String) : String {
-        try {
+fun getHyperTensionStage(
+    systolicValue: String,
+    diastolicValue: String
+): String {
+    try {
 
-            val diastolicValue = diastolicValue.toInt()
-            val systolicValue = systolicValue.toInt()
+        val diastolicValue = diastolicValue.toInt()
+        val systolicValue = systolicValue.toInt()
 
-            if (systolicValue <=0 || diastolicValue <=0){
-                return "error"
-            }
-            else if(systolicValue > 180 || diastolicValue >= 120){
-                return "Hypertension Crisis"
-            }else if (systolicValue >= 140 || diastolicValue >= 90 ){
-                return "Stage 2"
-            }else if (systolicValue >= 130 || diastolicValue >= 80){
-                return "Stage 1"
-            }
-            else if (systolicValue >= 120 && diastolicValue < 80){
-                return "Elevated"
-            }
-            else if (systolicValue <120 && diastolicValue < 80){
-                return "Normal"
-            }
-            else{
-                return "error"
-            }
-        } catch (e : NumberFormatException){
+        if (systolicValue <= 0 || diastolicValue <= 0) {
             return "error"
         }
+        else if (systolicValue >= 160 || diastolicValue >= 100) {
+            return "Grade 2 Hypertension"
+        }
+        else if (systolicValue >= 140 || diastolicValue >= 90) {
+            return "Grade 1 Hypertension"
+        }
+        else if (systolicValue >= 130 || diastolicValue >= 85) {
+            return "High Normal"
+        }
+        else if (systolicValue < 130 && diastolicValue < 85) {
+            return "Normal"
+        }
+        else {
+            return "error"
+        }
+
+    } catch (e: NumberFormatException) {
+        return "error"
+    }
 }

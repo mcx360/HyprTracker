@@ -214,10 +214,9 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                 Text(
                                     when (hyprTrackerUIState.readings[index].stage) {
                                         "Normal" -> stringResource(R.string.Normal)
-                                        "Elevated" -> stringResource(R.string.Elevated)
-                                        "Stage 1" -> stringResource(R.string.Hypertension_stage_1)
-                                        "Stage 2" -> stringResource(R.string.Hypertension_stage_2)
-                                        "Hypertension Crisis" -> stringResource(R.string.Hypertension_crisis)
+                                        "High Normal" -> stringResource(R.string.High_normal)
+                                        "Grade 1 Hypertension" -> stringResource(R.string.Grade1)
+                                        "Grade 2 Hypertension" -> stringResource(R.string.Grade2)
                                         else -> stringResource(R.string.Error)
                                     }
                                 )

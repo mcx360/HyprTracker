@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
@@ -277,20 +278,19 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 )
                 InfographicLine(
                     colorResource(R.color.Hypertension_Elevated_Stage_Colour),
-                    stringArrayResource(R.array.hypertension_stage_elevated)
+                    stringArrayResource(R.array.hypertension_stage_high_normal)
                 )
                 InfographicLine(
                     colorResource(R.color.Hypertension_Stage1_Colour),
-                    stringArrayResource(R.array.hypertension_stage_one)
+                    stringArrayResource(R.array.hypertension_stage_Grade1)
                 )
                 InfographicLine(
                     colorResource(R.color.Hypertension_Stage2_Colour),
-                    stringArrayResource(R.array.hypertension_stage_two)
+                    stringArrayResource(R.array.hypertension_stage_Grade2)
                 )
-                InfographicLine(
-                    colorResource(R.color.Hypertension_crisis_Colour),
-                    stringArrayResource(R.array.hypertension_stage_crisis)
-                )
+
+                Text("Source: International Society of Hypertension", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+
             }
         }
     }

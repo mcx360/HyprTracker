@@ -50,7 +50,7 @@
 
 
     <!--Strings for the blood pressure stages info card in logging screen-->
-    <string name="BP_stages_title">Blood Pressure Stages</string>
+    <string name="BP_stages_title">Classification Of Hypertension</string>
     <string-array name="hypertension_subheading">
         <item>Stage</item>
         <item>Systolic</item>
@@ -58,41 +58,34 @@
     </string-array>
 
     <string-array name="hypertension_stage_normal">
-        <item>Normal</item>
-        <item>&lt;120</item>
-        <item>&lt;80</item>
+        <item>Normal BP</item>
+        <item>=&lt;130</item>
+        <item>&lt;85</item>
     </string-array>
 
-    <string-array name="hypertension_stage_elevated">
-        <item>Elevated</item>
-        <item>120 – 129</item>
-        <item>&lt;80</item>
-    </string-array>
-
-    <string-array name="hypertension_stage_one">
-        <item>Hypertension Stage 1</item>
+    <string-array name="hypertension_stage_high_normal">
+        <item>High-normal BP</item>
         <item>130 – 139</item>
-        <item>80 – 89</item>
+        <item>85 - 89</item>
     </string-array>
 
-    <string-array name="hypertension_stage_two">
-        <item>Hypertension Stage 2</item>
-        <item>140=&lt;</item>
-        <item>90=&lt;</item>
+    <string-array name="hypertension_stage_Grade1">
+        <item>Grade 1 Hypertension</item>
+        <item>140 - 159</item>
+        <item>90 - 99</item>
     </string-array>
 
-    <string-array name="hypertension_stage_crisis">
-        <item>Hypertension Crisis</item>
-        <item>180=&lt;</item>
-        <item>120&lt;</item>
+    <string-array name="hypertension_stage_Grade2">
+        <item>Grade 2 Hypertension</item>
+        <item>=&gt;160</item>
+        <item>=&gt;100</item>
     </string-array>
 
     <!--Strings for Hypertension stages-->
-    <string name="Normal">Normal</string>
-    <string name="Elevated">Elevated</string>
-    <string name="Hypertension_stage_1">Hypertension Stage 1</string>
-    <string name="Hypertension_stage_2">Hypertension Stage 2</string>
-    <string name="Hypertension_crisis">Hypertension Crisis</string>
+    <string name="Normal">Normal BP</string>
+    <string name="High_normal">High-normal BP</string>
+    <string name="Grade1">Grade 1 Hypertension</string>
+    <string name="Grade2">Grade 2 Hypertension</string>
     <string name="Error">Error</string>
     <string name="Hypertension_Stage_Category">Category</string>
 
