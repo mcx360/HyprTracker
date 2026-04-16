@@ -110,6 +110,7 @@ fun HyprTrackerDrawerContent(
                 },
                 modifier = modifier.testTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG)
             )
+            /*
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.documents_label))},
                 selected = false,
@@ -124,7 +125,9 @@ fun HyprTrackerDrawerContent(
                     Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
                 },
                 modifier = modifier.testTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG)
+
             )
+             */
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.bin_label))},
                 selected = false,

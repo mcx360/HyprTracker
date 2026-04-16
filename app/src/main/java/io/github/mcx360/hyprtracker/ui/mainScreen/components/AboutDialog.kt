@@ -97,7 +97,10 @@ fun AboutDialog(
                         Icon(painter = painterResource(R.drawable.outline_code_xml_24), contentDescription = null)
                         Text("Source code")
                     }
-
+                    Text(
+                        text = "•",
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     TextButton(onClick = {
                         val subject = Uri.encode("HyprTracker App Feedback")
                         uriHandler.openUri(
@@ -109,7 +112,7 @@ fun AboutDialog(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider()
+                HorizontalDivider(modifier = modifier.padding(8.dp))
 
                     TextButton(
                         onClick = onDismissRequest,

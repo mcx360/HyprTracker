@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -30,7 +31,9 @@ fun BugReportDialog(
 ){
     Dialog(onDismissRequest = {}){
         Card(
-            modifier = modifier.padding(16.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
@@ -43,7 +46,7 @@ fun BugReportDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(8.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -64,7 +67,10 @@ fun BugReportDialog(
                     }
                 }
 
-                Row {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     val uriHandler = LocalUriHandler.current
                     val subject = Uri.encode("Bug report")
                     val body = Uri.encode("Describe issue here")
@@ -74,6 +80,10 @@ fun BugReportDialog(
                         Icon(painter = painterResource(R.drawable.outline_code_blocks_24), contentDescription = null)
                         Text("Github")
                     }
+                    Text(
+                        text = "•",
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     TextButton(onClick = {
                         uriHandler.openUri(
                             "mailto:support@app.com?subject=$subject&body=$body"
