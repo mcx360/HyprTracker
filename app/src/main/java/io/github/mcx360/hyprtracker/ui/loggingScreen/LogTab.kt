@@ -1,5 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -19,6 +21,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -43,6 +48,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -158,6 +164,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         .weight(1f)
                         .padding(8.dp)
                         .testTag(PULSE_OUTLINEDTEXTFIELD_TAG)
+
                 )
             }
 
@@ -182,7 +189,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 )
                 Text(hyprTackerUiState.time.substring(0,5))
             }
-
             Row(modifier = Modifier) {
                 Button(
                     onClick = {
@@ -224,21 +230,19 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         .padding(8.dp)
                         .testTag(CONFIRM_BUTTON_TAG)
                 ) {
-                    Text(text = stringResource(R.string.Confirm_BP_Log))
-                    Spacer(modifier = Modifier.padding(4.dp))
                     Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Text(text = stringResource(R.string.Confirm_BP_Log))
                 }
 
-                Button(
+                FilledTonalIconButton(
                     onClick = {
                         updateShowBottomSheet(true)
                     },
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(0.5f)
                         .padding(8.dp)
                 ) {
-                    Text(text = stringResource(R.string.edit_BP_Log_Details))
-                    Spacer(modifier = Modifier.padding(4.dp))
                     Icon(
                         painter = painterResource(R.drawable.ic_document),
                         contentDescription = null
@@ -251,13 +255,17 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp
             ),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
             Column(
                 modifier = Modifier.padding(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -269,10 +277,12 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 InfographicLine(
-                    MaterialTheme.colorScheme.surfaceContainerHighest,
+                    MaterialTheme.colorScheme.surface,
                     stringArrayResource(R.array.hypertension_subheading),
                 )
+                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 InfographicLine(
                     colorResource(R.color.Hypertension_Normal_Stage_Colour),
                     stringArrayResource(R.array.hypertension_stage_normal)
@@ -289,8 +299,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     colorResource(R.color.Hypertension_Stage2_Colour),
                     stringArrayResource(R.array.hypertension_stage_Grade2)
                 )
-
-                Text("Source: International Society of Hypertension", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+                Text("Source: International Society of Hypertension", modifier = Modifier.fillMaxWidth().padding(start = 8.dp),style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,)
 
             }
         }
@@ -304,7 +315,7 @@ fun InfographicLine(
 ) {
 
     Row(modifier = Modifier
-        .padding(vertical = 4.dp, horizontal = 4.dp)
+        .padding(vertical = 8.dp, horizontal = 8.dp)
         .fillMaxWidth()
         .clip(RoundedCornerShape(12.dp)),
         verticalAlignment = Alignment.CenterVertically,
@@ -315,7 +326,7 @@ fun InfographicLine(
             text = stage[0],
             modifier = Modifier
                 .weight(2f)
-                .padding(4.dp)
+                .padding(4.dp),
         )
         Text(text = stage[1],
             modifier = Modifier
