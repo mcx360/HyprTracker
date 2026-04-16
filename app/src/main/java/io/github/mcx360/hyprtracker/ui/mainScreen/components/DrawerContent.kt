@@ -54,6 +54,7 @@ fun HyprTrackerDrawerContent(
         onResult = { uri ->
         }
     )
+
     val importer = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri ->
@@ -74,7 +75,13 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = { Text(text= stringResource(R.string.export_label)) },
                 selected = false,
-                onClick = {exporter.launch("logs.csv")},
+                onClick = {
+                    exporter.launch("logs.csv")
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    } },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_export), contentDescription = null)
                 },
@@ -85,6 +92,11 @@ fun HyprTrackerDrawerContent(
                 label = { Text(text= stringResource(R.string.share_label)) },
                 selected = false,
                 onClick = {
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    }
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
                         putExtra(Intent.EXTRA_TEXT, "text")
@@ -101,7 +113,13 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.documents_label))},
                 selected = false,
-                onClick = {},
+                onClick = {
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    }
+                },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_document), contentDescription = null)
                 },
@@ -110,7 +128,13 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.bin_label))},
                 selected = false,
-                onClick = {},
+                onClick = {
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    }
+                },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null)
                 },
@@ -123,6 +147,11 @@ fun HyprTrackerDrawerContent(
                 selected = false,
                 onClick = {
                     importer.launch("text/csv")
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    }
                 },
                 icon = {
                     Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null)
@@ -166,7 +195,12 @@ fun HyprTrackerDrawerContent(
             NavigationDrawerItem(
                 label = {Text(text = stringResource(R.string.settings_label))},
                 selected = false,
-                onClick = {updateOpenSettingsDialogToTrue()},
+                onClick = {updateOpenSettingsDialogToTrue()
+                    scope.launch {
+                        drawerState.apply {
+                            if (isOpen) close() else open()
+                        }
+                    }},
                 icon = {
                     Icon(painter = painterResource(R.drawable.outline_settings_24), contentDescription = null)
                 },
