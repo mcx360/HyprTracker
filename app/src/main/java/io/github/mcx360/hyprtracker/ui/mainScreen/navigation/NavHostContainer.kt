@@ -26,7 +26,7 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)
         }
         composable(route = Destinations.Insight.name){
-            GraphScreen()
+            GraphScreen(hyprTrackerViewModel = hyprTrackerViewModel)
         }
     }
 }
