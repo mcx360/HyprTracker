@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -189,25 +190,40 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                     HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(stringResource(R.string.Systolic_Value))
+                            Text(
+                                text = stringResource(R.string.Systolic_Value),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
                             Text(hyprTrackerUIState.readings[index].systolicValue)
-                            Text("mmHg")
+                            Text("mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(stringResource(R.string.Diastolic_Value))
+                            Text(
+                                text = stringResource(R.string.Diastolic_Value),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
                             Text(hyprTrackerUIState.readings[index].diastolicValue)
-                            Text("mmHg")
+                            Text("mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(stringResource(R.string.Pulse_Value))
+                            Text(
+                                text = stringResource(R.string.Pulse_Value),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
                             if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
-                            Text("BPM")
+                            Text("BPM", style = MaterialTheme.typography.bodyMedium)
                         }
                         Column(
                             modifier = Modifier
                                 .padding(16.dp)
                                 .fillMaxWidth(), horizontalAlignment = Alignment.Start
                         ) {
+                            Text(
+                                stringResource(R.string.Hypertension_Stage_Category),
+                                modifier = Modifier.padding(start = 24.dp),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Dot(hyprTrackerUIState.readings[index].stage)
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -221,10 +237,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                     }
                                 )
                             }
-                            Text(
-                                stringResource(R.string.Hypertension_Stage_Category),
-                                modifier = Modifier.padding(start = 24.dp)
-                            )
+
                         }
 
                     }
