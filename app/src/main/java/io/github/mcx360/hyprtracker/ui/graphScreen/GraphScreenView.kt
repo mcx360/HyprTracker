@@ -91,44 +91,51 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
-            Text("Filter by")
-            ExposedDropdownMenuBox(
-                expanded = showFilterByDropDownMenu.value,
-                onExpandedChange = {},
-            ) {
-                OutlinedTextField(
-                    value = "week",
-                    readOnly = true,
-                    onValueChange = {},
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                showFilterByDropDownMenu.value = !showFilterByDropDownMenu.value
-                            }) {
-                            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+
+
+                Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+                    Row(modifier = modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                        Text("Filter by")
+                        ExposedDropdownMenuBox(
+                            expanded = showFilterByDropDownMenu.value,
+                            onExpandedChange = {},
+                        ) {
+                            OutlinedTextField(
+                                value = "week",
+                                readOnly = true,
+                                onValueChange = {},
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = {
+                                            showFilterByDropDownMenu.value =
+                                                !showFilterByDropDownMenu.value
+                                        }) {
+                                        Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                                    }
+                                }
+                            )
+                            ExposedDropdownMenu(
+                                expanded = showFilterByDropDownMenu.value,
+                                onDismissRequest = { showFilterByDropDownMenu.value = false },
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text("Week") },
+                                    onClick = {},
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Month") },
+                                    onClick = {}
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("All time") },
+                                    onClick = {}
+                                )
+                            }
                         }
                     }
-                )
-                ExposedDropdownMenu(
-                    expanded = showFilterByDropDownMenu.value,
-                    onDismissRequest = { showFilterByDropDownMenu.value = false },
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Week") },
-                        onClick = {},
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Month") },
-                        onClick = {}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("All time") },
-                        onClick = {}
-                    )
                 }
-            }
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).clickable(onClick = {})) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
@@ -139,7 +146,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         Text("Average")
                     }
                 }
-                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).padding(horizontal = 8.dp).clickable(onClick = {})) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
@@ -150,7 +157,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         Text("Average")
                     }
                 }
-                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).clickable(onClick = {})) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
@@ -239,21 +246,19 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Checkbox(
-                        checked = false,
-                        onCheckedChange = {}
-                    )
-                    Text("Systolic", color = Color.Blue)
-                    Checkbox(
-                        checked = false,
-                        onCheckedChange = {}
-                    )
-                    Text("Diastolic", color = Color.Red)
-                    Checkbox(
-                        checked = false,
-                        onCheckedChange = {}
-                    )
-                    Text("Pulse", color = Color.Green)
+                    Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        DotWithColour(Color.Blue)
+                        Text(" Systolic", style = MaterialTheme.typography.bodySmall)
+                        Spacer(modifier.padding(4.dp))
+                        DotWithColour(Color.Red)
+                        Text(" Diastolic",  style = MaterialTheme.typography.bodySmall)
+                        Spacer(modifier.padding(4.dp))
+                        DotWithColour(Color.Green)
+                        Text(" Pulse",  style = MaterialTheme.typography.bodySmall)
+                    }
 
                 }
                 }
