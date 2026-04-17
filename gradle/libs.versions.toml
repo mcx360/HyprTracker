@@ -11,8 +11,10 @@ composeBom = "2024.09.00"
 navigationCompose = "2.9.7"
 uiTextGoogleFonts = "1.10.6"
 foundation = "1.10.6"
+vico = "3.1.0"
 
 [libraries]
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

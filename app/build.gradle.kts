@@ -39,10 +39,13 @@ android {
 }
 
 dependencies {
+    implementation("com.patrykandpatrick.vico:core:2.4.3")
+    implementation("com.patrykandpatrick.vico:compose:3.1.0")
+    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0")
+
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.compose.foundation)
     val room_version = "2.8.4"
-
     implementation("androidx.datastore:datastore:1.2.1")
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -56,9 +59,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     testImplementation(libs.junit)
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
