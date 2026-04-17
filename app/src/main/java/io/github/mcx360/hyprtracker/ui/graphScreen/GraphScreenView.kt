@@ -14,8 +14,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -91,6 +92,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
+            val filterOption = remember { mutableStateOf("week") }
 
 
                 Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
@@ -101,7 +103,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                             onExpandedChange = {},
                         ) {
                             OutlinedTextField(
-                                value = "week",
+                                value = filterOption.value,
                                 readOnly = true,
                                 onValueChange = {},
                                 trailingIcon = {
@@ -110,7 +112,11 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                                             showFilterByDropDownMenu.value =
                                                 !showFilterByDropDownMenu.value
                                         }) {
-                                        Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                                        if (showFilterByDropDownMenu.value){
+                                            Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
+                                        } else{
+                                            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
+                                        }
                                     }
                                 }
                             )
@@ -120,15 +126,24 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                             ) {
                                 DropdownMenuItem(
                                     text = { Text("Week") },
-                                    onClick = {},
+                                    onClick = {
+                                        filterOption.value = "Week"
+                                             showFilterByDropDownMenu.value = false
+                                              },
                                 )
                                 DropdownMenuItem(
                                     text = { Text("Month") },
-                                    onClick = {}
+                                    onClick = {
+                                        filterOption.value = "Month"
+                                        showFilterByDropDownMenu.value = false
+                                    }
                                 )
                                 DropdownMenuItem(
                                     text = { Text("All time") },
-                                    onClick = {}
+                                    onClick = {
+                                        filterOption.value = "All time"
+                                    showFilterByDropDownMenu.value = false
+                                    }
                                 )
                             }
                         }
@@ -259,9 +274,8 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         DotWithColour(Color.Green)
                         Text(" Pulse",  style = MaterialTheme.typography.bodySmall)
                     }
-
-                }
                 }
             }
         }
     }
+}
