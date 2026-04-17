@@ -2,13 +2,22 @@ package io.github.mcx360.hyprtracker.ui.graphScreen
 
 import android.view.Menu
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -67,7 +77,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
     }
     else{
         Column(
-            modifier = modifier.fillMaxSize().padding(8.dp),
+            modifier = modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -108,7 +118,40 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     )
                 }
             }
+            Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                    Column {
+                        Text("Systolic")
+                        Text("77")
+                        Text("Average")
+                    }
+                }
+                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                    Column {
+                        Text("Disatolic")
+                        Text("67")
+                        Text("Average")
+                    }
+                }
+                Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
+                    Column {
+                        Text("Pulse")
+                        Text("70")
+                        Text("Average")
+                    }
+                }
             }
-        }
-    }
+
+            Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
+
+            }
+
+            Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
+
+            }
+
+            }
+            }
+}
+
 
