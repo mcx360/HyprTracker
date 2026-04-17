@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -30,6 +32,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +51,7 @@ import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
+import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,30 +129,42 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             }
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                 Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
-                    Column {
-                        Text("Systolic")
+                    Column(
+                        modifier = modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Systolic", style = MaterialTheme.typography.titleLarge)
                         Text("77")
                         Text("Average")
                     }
                 }
                 Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
-                    Column {
-                        Text("Disatolic")
+                    Column(
+                        modifier = modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Disatolic", style = MaterialTheme.typography.titleLarge)
                         Text("67")
                         Text("Average")
                     }
                 }
                 Card(modifier = modifier.weight(0.33f).padding(8.dp).clickable(onClick = {})) {
-                    Column {
-                        Text("Pulse")
+                    Column(
+                        modifier = modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Pulse", style = MaterialTheme.typography.titleLarge)
                         Text("70")
                         Text("Average")
                     }
                 }
             }
 
-            Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
-                Text("Your data", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+            Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+                Text("BP Stages Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 val modelProducer = remember { PieChartModelProducer() }
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
@@ -162,11 +179,26 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     }
                 }
                 HypertensionStagesPieChart(modelProducer, modifier)
-                Text("Blue= Grade 1 Red= Grade 2")
+                Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
+                    Text(" Normal", style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier.padding(4.dp))
+                    DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
+                    Text(" Normal High",  style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier.padding(4.dp))
+                    DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
+                    Text(" Grade 1",  style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier.padding(4.dp))
+                    DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
+                    Text(" Grade 2",  style = MaterialTheme.typography.bodySmall)
+                }
             }
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
-                Text("Trends")
+                Text("BP Trends Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 val modelProducer = remember { CartesianChartModelProducer() }
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
@@ -203,7 +235,28 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     ),
                     modelProducer,
                 )
+                Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = false,
+                        onCheckedChange = {}
+                    )
+                    Text("Systolic", color = Color.Blue)
+                    Checkbox(
+                        checked = false,
+                        onCheckedChange = {}
+                    )
+                    Text("Diastolic", color = Color.Red)
+                    Checkbox(
+                        checked = false,
+                        onCheckedChange = {}
+                    )
+                    Text("Pulse", color = Color.Green)
+
+                }
+                }
             }
         }
     }
-}
