@@ -9,9 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="Hypertension_Normal_Stage_Colour">#FF2E7D32</color>
-    <color name="Hypertension_Elevated_Stage_Colour">#FFF9A825</color>
-    <color name="Hypertension_Stage1_Colour">#FFF57C00</color>
-    <color name="Hypertension_Stage2_Colour">#FFD32F2F</color>
-    <color name="Hypertension_crisis_Colour">#FFB71C1C</color>
-
+    <color name="Hypertension_High_Normal_Stage_Colour">#FFF9A825</color>
+    <color name="Hypertension_Grade1_Colour">#FFF57C00</color>
+    <color name="Hypertension_Grade2_Colour">#FFD32F2F</color>
 </resources>

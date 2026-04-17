@@ -17,9 +17,9 @@ fun Dot(
 ) {
     val colour = when(hyperTensionStage){
         "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
-        "High Normal" -> colorResource(R.color.Hypertension_Elevated_Stage_Colour)
-        "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Stage1_Colour)
-        "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Stage2_Colour)
+        "High Normal" -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
+        "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Colour)
+        "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Colour)
         else -> Color.Gray
     }
 

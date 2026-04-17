@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -18,10 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -48,11 +45,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
@@ -288,15 +283,15 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     stringArrayResource(R.array.hypertension_stage_normal)
                 )
                 InfographicLine(
-                    colorResource(R.color.Hypertension_Elevated_Stage_Colour),
+                    colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
                     stringArrayResource(R.array.hypertension_stage_high_normal)
                 )
                 InfographicLine(
-                    colorResource(R.color.Hypertension_Stage1_Colour),
+                    colorResource(R.color.Hypertension_Grade1_Colour),
                     stringArrayResource(R.array.hypertension_stage_Grade1)
                 )
                 InfographicLine(
-                    colorResource(R.color.Hypertension_Stage2_Colour),
+                    colorResource(R.color.Hypertension_Grade2_Colour),
                     stringArrayResource(R.array.hypertension_stage_Grade2)
                 )
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
