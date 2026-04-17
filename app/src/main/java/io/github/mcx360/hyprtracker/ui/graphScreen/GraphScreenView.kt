@@ -30,10 +30,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,17 +42,11 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProdu
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
-import com.patrykandpatrick.vico.compose.common.Fill
-import com.patrykandpatrick.vico.compose.common.component.TextComponent
-import com.patrykandpatrick.vico.compose.common.vicoTheme
-import com.patrykandpatrick.vico.compose.pie.PieChart
-import com.patrykandpatrick.vico.compose.pie.PieChartHost
 import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
-import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
-import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +84,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             modifier = modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
             Text("Filter by")
             ExposedDropdownMenuBox(
@@ -114,18 +106,18 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 )
                 ExposedDropdownMenu(
                     expanded = showFilterByDropDownMenu.value,
-                    onDismissRequest = {showFilterByDropDownMenu.value = false},
+                    onDismissRequest = { showFilterByDropDownMenu.value = false },
                 ) {
                     DropdownMenuItem(
-                        text = {Text("Week")},
+                        text = { Text("Week") },
                         onClick = {},
                     )
                     DropdownMenuItem(
-                        text = {Text("Month")},
+                        text = { Text("Month") },
                         onClick = {}
                     )
                     DropdownMenuItem(
-                        text = {Text("All time")},
+                        text = { Text("All time") },
                         onClick = {}
                     )
                 }
@@ -157,8 +149,19 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
                 Text("Your data", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Start)
                 val modelProducer = remember { PieChartModelProducer() }
-                LaunchedEffect(Unit) { modelProducer.runTransaction { pieSeries { series(60, 20, 10, 10) } } }
-                ComposeBasicPieChart(modelProducer, modifier)
+                LaunchedEffect(Unit) {
+                    modelProducer.runTransaction {
+                        pieSeries {
+                            series(
+                                60,
+                                20,
+                                10,
+                                10
+                            )
+                        }
+                    }
+                }
+                HypertensionStagesPieChart(modelProducer, modifier)
                 Text("Blue= Grade 1 Red= Grade 2")
             }
 
@@ -167,10 +170,29 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 val modelProducer = remember { CartesianChartModelProducer() }
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
-                        lineSeries { series(13, 8, 7, 12, 0, 1, 15, 14, 0, 11, 6, 12, 0, 11, 12, 11) }
+                        lineSeries {
+                            series(
+                                13,
+                                8,
+                                7,
+                                12,
+                                0,
+                                1,
+                                15,
+                                14,
+                                0,
+                                11,
+                                6,
+                                12,
+                                0,
+                                11,
+                                12,
+                                11
+                            )
+                        }
                     }
                     modelProducer.runTransaction {
-                        lineSeries { series(6,7,8,9,10) }
+                        lineSeries { series(6, 7, 8, 9, 10) }
                     }
                 }
                 CartesianChartHost(
@@ -181,37 +203,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     ),
                     modelProducer,
                 )
-
             }
-
-
-            }
-            }
-}
-
-@Composable
-private fun ComposeBasicPieChart(
-    modelProducer: PieChartModelProducer,
-    modifier: Modifier = Modifier,
-) {
-    PieChartHost(
-        chart =
-            rememberPieChart(
-                sliceProvider =
-                    PieChart.SliceProvider.series(
-                        vicoTheme.pieChartColors.mapIndexed { index, color ->
-                            PieChart.Slice(
-                                fill = Fill(color),
-                                label =
-                                    PieChart.SliceLabel.Inside(
-                                        TextComponent(TextStyle(if (index == 2) Color.Black else Color.White))
-                                    ),
-                            )
-                        }
-                    ),
-                valueFormatter = PieValueFormatter { _, value, _ -> "${value.toInt()}%" },
-            ),
-        modelProducer = modelProducer,
-        modifier = modifier.height(240.dp),
-    )
+        }
+    }
 }
