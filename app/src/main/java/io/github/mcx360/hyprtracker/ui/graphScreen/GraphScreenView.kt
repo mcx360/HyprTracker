@@ -1,10 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen
 
-import android.view.Menu
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -26,9 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,8 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,11 +41,18 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.TextComponent
+import com.patrykandpatrick.vico.compose.common.vicoTheme
+import com.patrykandpatrick.vico.compose.pie.PieChart
+import com.patrykandpatrick.vico.compose.pie.PieChartHost
+import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
+import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
+import com.patrykandpatrick.vico.compose.pie.data.pieSeries
+import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 
@@ -153,28 +155,22 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             }
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
-                val modelProducer = remember { CartesianChartModelProducer() }
-                LaunchedEffect(Unit) {
-                    modelProducer.runTransaction {
-                        columnSeries { series(5, 6, 5, 2, 11, 8, 5, 2, 15, 11, 8, 13, 12, 10, 2, 7) }
-                    }
-                }
-                CartesianChartHost(
-                    rememberCartesianChart(
-                        rememberColumnCartesianLayer(),
-                        startAxis = VerticalAxis.rememberStart(),
-                        bottomAxis = HorizontalAxis.rememberBottom(),
-                    ),
-                    modelProducer,
-                )
+                Text("Your data", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+                val modelProducer = remember { PieChartModelProducer() }
+                LaunchedEffect(Unit) { modelProducer.runTransaction { pieSeries { series(60, 20, 10, 10) } } }
+                ComposeBasicPieChart(modelProducer, modifier)
+                Text("Blue= Grade 1 Red= Grade 2")
             }
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
+                Text("Trends")
                 val modelProducer = remember { CartesianChartModelProducer() }
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
                         lineSeries { series(13, 8, 7, 12, 0, 1, 15, 14, 0, 11, 6, 12, 0, 11, 12, 11) }
-                        lineSeries { series(10,10,10) }
+                    }
+                    modelProducer.runTransaction {
+                        lineSeries { series(6,7,8,9,10) }
                     }
                 }
                 CartesianChartHost(
@@ -188,8 +184,34 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
 
             }
 
+
             }
             }
 }
 
-
+@Composable
+private fun ComposeBasicPieChart(
+    modelProducer: PieChartModelProducer,
+    modifier: Modifier = Modifier,
+) {
+    PieChartHost(
+        chart =
+            rememberPieChart(
+                sliceProvider =
+                    PieChart.SliceProvider.series(
+                        vicoTheme.pieChartColors.mapIndexed { index, color ->
+                            PieChart.Slice(
+                                fill = Fill(color),
+                                label =
+                                    PieChart.SliceLabel.Inside(
+                                        TextComponent(TextStyle(if (index == 2) Color.Black else Color.White))
+                                    ),
+                            )
+                        }
+                    ),
+                valueFormatter = PieValueFormatter { _, value, _ -> "${value.toInt()}%" },
+            ),
+        modelProducer = modelProducer,
+        modifier = modifier.height(240.dp),
+    )
+}
