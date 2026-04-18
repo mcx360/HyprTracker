@@ -176,6 +176,43 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun getDiastolicAverage(cutoffDate: String?) : Int{
+        try {
+            if (cutoffDate == null) {
+                return _uiState.value.readings.sumOf { it.diastolicValue.toInt() } / _uiState.value.readings.size
+            } else {
+                val filteredList = getFilteredList(cutoffDate)
+                return filteredList.sumOf { it.diastolicValue.toInt() } / filteredList.size
+            }
+        }catch (e: ArithmeticException){
+            return 0
+        }
+    }
+
+    fun getDiastolicMin(cutoffDate: String?) : Int{
+        return try {
+            if (cutoffDate == null){
+                _uiState.value.readings.minOf {it.diastolicValue.toInt()}
+            } else{
+                getFilteredList(cutoffDate).minOf { it.diastolicValue.toInt() }
+            }
+        }catch (e: ArithmeticException){
+            0
+        }
+    }
+
+    fun getDiastolicMax(cutoffDate: String?) : Int{
+        return try {
+            if (cutoffDate == null){
+                _uiState.value.readings.maxOf {it.diastolicValue.toInt()}
+            } else{
+                getFilteredList(cutoffDate).maxOf { it.diastolicValue.toInt() }
+            }
+        }catch (e: ArithmeticException){
+            0
+        }
+    }
+
 
     fun convertDateToMillis(dateString: String?): Long? {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

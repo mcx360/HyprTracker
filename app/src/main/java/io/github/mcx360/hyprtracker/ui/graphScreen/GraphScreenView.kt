@@ -168,8 +168,8 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         Text("Systolic", style = MaterialTheme.typography.titleLarge)
                         Text(when(filterOption.value){
                                 "All time" -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = null).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = null).toString()
-                                "Month" -> hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
-                                else -> hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusDays(7).toString()).toString()
+                                "Month" -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
+                                else -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
                             })
                         Text(dataShown.value)
                     }
