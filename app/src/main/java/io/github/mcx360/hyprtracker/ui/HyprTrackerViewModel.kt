@@ -130,6 +130,15 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun getFilteredList(cutoffDate: String): List<HyprReading> {
+        val cutoff = LocalDate.parse(cutoffDate)
+
+        return _uiState.value.readings.filter {
+            val readingDate = LocalDate.parse(it.date)
+            !readingDate.isAfter(cutoff)
+        }
+    }
+
     fun convertDateToMillis(dateString: String?): Long? {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return if (dateString.isNullOrEmpty()) {
