@@ -53,6 +53,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +94,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
             val filterOption = remember { mutableStateOf("week") }
-
+            val dataShown = remember { mutableStateOf("Average") }
 
                 Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                     Row(modifier = modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -150,15 +151,27 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     }
                 }
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-                Card(modifier = modifier.weight(0.33f).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).clickable(onClick = {
+                    if (dataShown.value == "Average"){
+                        dataShown.value = "Max"
+                    } else if (dataShown.value == "Max"){
+                        dataShown.value = "Min"
+                    } else{
+                        dataShown.value = "Average"
+                    }
+                })) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("Systolic", style = MaterialTheme.typography.titleLarge)
-                        Text("77")
-                        Text("Average")
+                        Text(when(filterOption.value){
+                                "All time" -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = null).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = null).toString()
+                                "Month" -> hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
+                                else -> hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusDays(7).toString()).toString()
+                            })
+                        Text(dataShown.value)
                     }
                 }
                 Card(modifier = modifier.weight(0.33f).padding(horizontal = 8.dp).clickable(onClick = {})) {
