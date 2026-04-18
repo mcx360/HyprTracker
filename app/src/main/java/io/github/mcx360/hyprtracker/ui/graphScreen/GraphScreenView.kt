@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -94,7 +93,8 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
             val filterOption = remember { mutableStateOf("week") }
-            val dataShown = remember { mutableStateOf("Average") }
+            val systolicDataShown = remember { mutableStateOf("Average") }
+            val diastolicDataShown = remember { mutableStateOf("Average") }
 
                 Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                     Row(modifier = modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -152,12 +152,16 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 }
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                 Card(modifier = modifier.weight(0.33f).clickable(onClick = {
-                    if (dataShown.value == "Average"){
-                        dataShown.value = "Max"
-                    } else if (dataShown.value == "Max"){
-                        dataShown.value = "Min"
-                    } else{
-                        dataShown.value = "Average"
+                    when (systolicDataShown.value) {
+                        "Average" -> {
+                            systolicDataShown.value = "Max"
+                        }
+                        "Max" -> {
+                            systolicDataShown.value = "Min"
+                        }
+                        else -> {
+                            systolicDataShown.value = "Average"
+                        }
                     }
                 })) {
                     Column(
@@ -167,22 +171,38 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     ) {
                         Text("Systolic", style = MaterialTheme.typography.titleLarge)
                         Text(when(filterOption.value){
-                                "All time" -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = null).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = null).toString()
-                                "Month" -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
-                                else -> if (dataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (dataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
+                                "All time" -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = null).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = null).toString()
+                                "Month" -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
+                                else -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
                             })
-                        Text(dataShown.value)
+                        Text(systolicDataShown.value)
                     }
                 }
-                Card(modifier = modifier.weight(0.33f).padding(horizontal = 8.dp).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).padding(horizontal = 8.dp).clickable(onClick = {
+                    when (diastolicDataShown.value) {
+                        "Average" -> {
+                            diastolicDataShown.value = "Max"
+                        }
+                        "Max" -> {
+                            diastolicDataShown.value = "Min"
+                        }
+                        else -> {
+                            diastolicDataShown.value = "Average"
+                        }
+                    }
+                })) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Disatolic", style = MaterialTheme.typography.titleLarge)
-                        Text("67")
-                        Text("Average")
+                        Text("Diastolic", style = MaterialTheme.typography.titleLarge)
+                        Text(when(filterOption.value){
+                            "All time" -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = null).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = null).toString()
+                            "Month" -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
+                            else -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
+                        })
+                        Text(diastolicDataShown.value)
                     }
                 }
                 Card(modifier = modifier.weight(0.33f).clickable(onClick = {})) {
