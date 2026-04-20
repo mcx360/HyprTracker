@@ -213,6 +213,20 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun getPulseAverage(cutoffDate: String?) : Int{
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.average().takeIf { !it.isNaN() }?.toInt() ?: 0
+    }
+
+    fun getPulseMin(cutoffDate: String?) : Int{
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.min()
+    }
+
+    fun getPulseMax(cutoffDate: String?) : Int{
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
+    }
 
     fun convertDateToMillis(dateString: String?): Long? {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

@@ -95,6 +95,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             val filterOption = remember { mutableStateOf("week") }
             val systolicDataShown = remember { mutableStateOf("Average") }
             val diastolicDataShown = remember { mutableStateOf("Average") }
+            val pulseDataShown = remember { mutableStateOf("Average") }
 
                 Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                     Row(modifier = modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -205,15 +206,31 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         Text(diastolicDataShown.value)
                     }
                 }
-                Card(modifier = modifier.weight(0.33f).clickable(onClick = {})) {
+                Card(modifier = modifier.weight(0.33f).clickable(onClick = {
+                    when (pulseDataShown.value) {
+                        "Average" -> {
+                            pulseDataShown.value = "Max"
+                        }
+                        "Max" -> {
+                            pulseDataShown.value = "Min"
+                        }
+                        else -> {
+                            pulseDataShown.value = "Average"
+                        }
+                    }
+                })) {
                     Column(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("Pulse", style = MaterialTheme.typography.titleLarge)
-                        Text("70")
-                        Text("Average")
+                        Text(when(filterOption.value){
+                            "All time" -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = null).toString() else if (pulseDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = null).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = null).toString()
+                            "Month" -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
+                            else -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (pulseDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
+                        })
+                        Text(pulseDataShown.value)
                     }
                 }
             }
