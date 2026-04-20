@@ -50,6 +50,7 @@ import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 import java.time.LocalDate
@@ -60,30 +61,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
     val uiState by hyprTrackerViewModel.uiState.collectAsState()
 
     if (uiState.readings.isEmpty()) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.undraw_key_insights),
-                contentDescription = null,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
-            )
-            Text(
-                text = stringResource(R.string.Empty_Graph_Screen_Title),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = stringResource(R.string.Empty_Graph_Screen_Text),
-                textAlign = TextAlign.Center,
-                modifier = modifier.padding(16.dp)
-            )
-        }
+        EmptyInsightsScreen()
     }
     else{
         Column(
