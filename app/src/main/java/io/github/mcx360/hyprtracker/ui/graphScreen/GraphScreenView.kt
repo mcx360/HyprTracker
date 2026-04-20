@@ -76,28 +76,19 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             val diastolicDataShown = remember { mutableStateOf("Average") }
             val pulseDataShown = remember { mutableStateOf("Average") }
 
-                Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-
                     FilterCard(
                         showFilterByDropDownMenu =showFilterByDropDownMenu.value,
                         updateShowFilterByDropDownMenu = {showFilterByDropDownMenu.value = it},
                         filterOption = filterOption.value,
                         updateFilterOption = {filterOption.value = it}
                     )
-                }
 
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                 Card(modifier = modifier.weight(0.33f).clickable(onClick = {
                     when (systolicDataShown.value) {
-                        "Average" -> {
-                            systolicDataShown.value = "Max"
-                        }
-                        "Max" -> {
-                            systolicDataShown.value = "Min"
-                        }
-                        else -> {
-                            systolicDataShown.value = "Average"
-                        }
+                        "Average" -> systolicDataShown.value = "Max"
+                        "Max" -> systolicDataShown.value = "Min"
+                        else -> systolicDataShown.value = "Average"
                     }
                 })) {
                     Column(
