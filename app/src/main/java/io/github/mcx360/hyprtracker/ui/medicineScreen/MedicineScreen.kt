@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,17 +53,19 @@ fun MedicineScreen(
     medicineViewModel: MedicineViewModel
 ){
     val  scope = rememberCoroutineScope()
-    val uiState = medicineViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = medicineViewModel.uiState.collectAsState()
 
-    if (openAddMedicationScreen.value){
-        AddMedicationScreen(
-            modifier = modifier,
-            openAddMedicationScreen = openAddMedicationScreen,
-            snackBarHostState = snackBarHostState,
-            scope = scope,
-            medicineViewModel = medicineViewModel
-        )
-    } else if (uiState.value.medicineList.isNotEmpty()){
+    if (uiState.value.medicineList.isNotEmpty()){
+
+        when{
+            openAddMedicationScreen.value -> AddMedicationScreen(
+                modifier = modifier,
+                openAddMedicationScreen = openAddMedicationScreen,
+                snackBarHostState = snackBarHostState,
+                scope = scope,
+                medicineViewModel = medicineViewModel
+            )
+        }
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
