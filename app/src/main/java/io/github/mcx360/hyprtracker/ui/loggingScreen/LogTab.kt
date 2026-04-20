@@ -1,6 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -87,6 +89,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 10.dp
             ),
+            colors =  CardDefaults.cardColors(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
@@ -247,6 +250,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
         }
 
         OutlinedCard(
+            colors =  CardDefaults.cardColors(),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp
             ),
