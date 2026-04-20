@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
 import kotlin.String
+import kotlin.math.ceil
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -226,6 +227,28 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     fun getPulseMax(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
+    }
+
+    fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
+        val counts = mutableListOf(0, 0, 0, 0)
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+
+        readings.forEach {
+            when (it.stage) {
+                "Normal" -> counts[0]++
+                "High Normal" -> counts[1]++
+                "Grade 1 Hypertension" -> counts[2]++
+                "Grade 2 Hypertension" -> counts[3]++
+            }
+        }
+
+        val total = readings.size.toFloat()
+
+        return if (total > 0) {
+            counts.map { (it / total) * 100f }
+        } else {
+            listOf(0f, 0f, 0f, 0f)
+        }
     }
 
     fun convertDateToMillis(dateString: String?): Long? {

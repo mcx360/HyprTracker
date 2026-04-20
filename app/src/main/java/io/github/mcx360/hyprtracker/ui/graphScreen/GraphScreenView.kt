@@ -236,20 +236,25 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             }
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+                //val breakdown = hyprTrackerViewModel.getBPStagesBreakdown(null)
                 Text("BP Stages Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 val modelProducer = remember { PieChartModelProducer() }
-                LaunchedEffect(Unit) {
+                val dateFilter = when (filterOption.value) {
+                    "All time" -> null
+                    "Month" -> LocalDate.now().minusMonths(1).toString()
+                    else -> LocalDate.now().minusWeeks(1).toString()
+                }
+
+                val breakdown = hyprTrackerViewModel.getBPStagesBreakdown(dateFilter)
+
+                LaunchedEffect(filterOption.value) {
                     modelProducer.runTransaction {
                         pieSeries {
-                            series(
-                                60,
-                                20,
-                                10,
-                                10
-                            )
+                            series(*breakdown.toTypedArray())
                         }
                     }
                 }
+
                 HypertensionStagesPieChart(modelProducer, modifier)
                 Row(modifier = modifier.fillMaxWidth().padding(8.dp),
                     horizontalArrangement = Arrangement.Center,
