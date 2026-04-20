@@ -51,6 +51,7 @@ import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 import java.time.LocalDate
@@ -76,59 +77,15 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             val pulseDataShown = remember { mutableStateOf("Average") }
 
                 Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-                    Row(modifier = modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                        Text("Filter by")
-                        ExposedDropdownMenuBox(
-                            expanded = showFilterByDropDownMenu.value,
-                            onExpandedChange = {},
-                        ) {
-                            OutlinedTextField(
-                                value = filterOption.value,
-                                readOnly = true,
-                                onValueChange = {},
-                                trailingIcon = {
-                                    IconButton(
-                                        onClick = {
-                                            showFilterByDropDownMenu.value =
-                                                !showFilterByDropDownMenu.value
-                                        }) {
-                                        if (showFilterByDropDownMenu.value){
-                                            Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
-                                        } else{
-                                            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
-                                        }
-                                    }
-                                }
-                            )
-                            ExposedDropdownMenu(
-                                expanded = showFilterByDropDownMenu.value,
-                                onDismissRequest = { showFilterByDropDownMenu.value = false },
-                            ) {
-                                DropdownMenuItem(
-                                    text = { Text("Week") },
-                                    onClick = {
-                                        filterOption.value = "Week"
-                                             showFilterByDropDownMenu.value = false
-                                              },
-                                )
-                                DropdownMenuItem(
-                                    text = { Text("Month") },
-                                    onClick = {
-                                        filterOption.value = "Month"
-                                        showFilterByDropDownMenu.value = false
-                                    }
-                                )
-                                DropdownMenuItem(
-                                    text = { Text("All time") },
-                                    onClick = {
-                                        filterOption.value = "All time"
-                                    showFilterByDropDownMenu.value = false
-                                    }
-                                )
-                            }
-                        }
-                    }
+
+                    FilterCard(
+                        showFilterByDropDownMenu =showFilterByDropDownMenu.value,
+                        updateShowFilterByDropDownMenu = {showFilterByDropDownMenu.value = it},
+                        filterOption = filterOption.value,
+                        updateFilterOption = {filterOption.value = it}
+                    )
                 }
+
             Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                 Card(modifier = modifier.weight(0.33f).clickable(onClick = {
                     when (systolicDataShown.value) {
