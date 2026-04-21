@@ -75,9 +75,9 @@ fun InfoCards(
             ) {
                 Text("Diastolic", style = MaterialTheme.typography.titleLarge)
                 Text(when(filterOption){
-                    "All time" -> if (diastolicDataShown == "Average") getDiastolicAverage(null).toString() else if (diastolicDataShown == "Max") getDiastolicMax(null).toString() else getDiastolicMin(null).toString()
-                    "Month" -> if (diastolicDataShown == "Average") getDiastolicAverage(LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown == "Max") getDiastolicMax(LocalDate.now().minusMonths(1).toString()).toString() else getDiastolicMin(LocalDate.now().minusMonths(1).toString()).toString()
-                    else -> if (diastolicDataShown == "Average") getDiastolicAverage(LocalDate.now().minusWeeks(1).toString()).toString() else if (diastolicDataShown == "Max") getDiastolicMax(LocalDate.now().minusWeeks(1).toString()).toString() else getDiastolicMin(LocalDate.now().minusWeeks(1).toString()).toString()
+                    "All time" -> if (diastolicDataShown == "Average") getDiastolicAverage(null) else if (diastolicDataShown == "Max") getDiastolicMax(null) else getDiastolicMin(null)
+                    "Month" -> if (diastolicDataShown == "Average") getDiastolicAverage(LocalDate.now().minusMonths(1).toString()) else if (diastolicDataShown == "Max") getDiastolicMax(LocalDate.now().minusMonths(1).toString()) else getDiastolicMin(LocalDate.now().minusMonths(1).toString())
+                    else -> if (diastolicDataShown == "Average") getDiastolicAverage(LocalDate.now().minusWeeks(1).toString()) else if (diastolicDataShown == "Max") getDiastolicMax(LocalDate.now().minusWeeks(1).toString()) else getDiastolicMin(LocalDate.now().minusWeeks(1).toString())
                 })
                 Text(diastolicDataShown)
             }
@@ -99,9 +99,9 @@ fun InfoCards(
             ) {
                 Text("Pulse", style = MaterialTheme.typography.titleLarge)
                 Text(when(filterOption){
-                    "All time" -> if (pulseDataShown == "Average") getPulseAverage(null).toString() else if (pulseDataShown == "Max") getPulseMax(null).toString() else getPulseMin(null).toString()
-                    "Month" -> if (pulseDataShown == "Average") getPulseAverage(LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown == "Max") getPulseMax(LocalDate.now().minusMonths(1).toString()).toString() else getPulseMin(LocalDate.now().minusMonths(1).toString()).toString()
-                    else -> if (pulseDataShown == "Average") getPulseAverage(LocalDate.now().minusWeeks(1).toString()).toString() else if (pulseDataShown == "Max") getPulseMax(LocalDate.now().minusWeeks(1).toString()).toString() else getPulseMin(LocalDate.now().minusWeeks(1).toString()).toString()
+                    "All time" -> if (pulseDataShown == "Average") getPulseAverage(null) else if (pulseDataShown == "Max") getPulseMax(null) else getPulseMin(null)
+                    "Month" -> if (pulseDataShown == "Average") getPulseAverage(LocalDate.now().minusMonths(1).toString()) else if (diastolicDataShown == "Max") getPulseMax(LocalDate.now().minusMonths(1).toString()) else getPulseMin(LocalDate.now().minusMonths(1).toString())
+                    else -> if (pulseDataShown == "Average") getPulseAverage(LocalDate.now().minusWeeks(1).toString()) else if (pulseDataShown == "Max") getPulseMax(LocalDate.now().minusWeeks(1).toString()) else getPulseMin(LocalDate.now().minusWeeks(1).toString())
                 })
                 Text(pulseDataShown)
             }
