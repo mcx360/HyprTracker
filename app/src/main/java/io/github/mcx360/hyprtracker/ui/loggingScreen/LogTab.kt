@@ -1,7 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -62,7 +60,12 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (Boolean) -> Unit, snackBarHostState: SnackbarHostState, updateTab: (Int) -> Unit) {
+fun LogTab(
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    updateShowBottomSheet: (Boolean) -> Unit,
+    snackBarHostState: SnackbarHostState,
+    updateTab: (Int) -> Unit
+) {
     val scope = rememberCoroutineScope()
     val offset = remember { mutableFloatStateOf(0f) }
     val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
@@ -74,26 +77,22 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             .fillMaxSize()
             .draggable(
                 orientation = Orientation.Horizontal,
-                state = rememberDraggableState { delta ->
-                    offset.floatValue += delta.coerceIn(-300f, 0f )
-                },
+                state = rememberDraggableState { delta -> offset.floatValue += delta.coerceIn(-300f, 0f ) },
                 onDragStopped = {
-                    if (offset.floatValue < -50){
-                        updateTab(1)
-                    }
+                    if (offset.floatValue < -50) updateTab(1)
                     offset.floatValue = 0f
                 }
             )
     ) {
+        // Log blood pressure card
         OutlinedCard(
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 10.dp
-            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
             colors =  CardDefaults.cardColors(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
         ) {
+            //Log blood pressure title
             Text(
                 text = stringResource(R.string.Log_BP),
                 fontWeight = FontWeight.Bold,
@@ -104,14 +103,11 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             )
 
             Row(modifier = Modifier) {
+                //systolic value text field
                 OutlinedTextField(
                     singleLine = true,
                     value = hyprTackerUiState.systolicValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) {
-                            hyprTrackerViewModel.updateSystolicValue(it)
-                        }
-                    },
+                    onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3)  hyprTrackerViewModel.updateSystolicValue(it)  },
                     label = { Text(text = stringResource(R.string.systolic)) },
                     shape = RoundedCornerShape(16.dp),
                     keyboardOptions = KeyboardOptions(
@@ -124,6 +120,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         .testTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG)
                 )
 
+                //diastolic value text field
                 OutlinedTextField(
                     singleLine = true,
                     value = hyprTackerUiState.diastolicValue,
@@ -144,6 +141,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                         .testTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG)
                 )
 
+                //Pulse value text field
                 OutlinedTextField(
                     singleLine = true,
                     value = hyprTackerUiState.pulseValue,
@@ -166,6 +164,7 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 )
             }
 
+            //Log blood pressure time and date info
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,7 +186,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                 )
                 Text(hyprTackerUiState.time.substring(0,5))
             }
+
             Row(modifier = Modifier) {
+                //Confirm button
                 Button(
                     onClick = {
                         if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
@@ -204,7 +205,6 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                                 )
                             }
                             hyprTrackerViewModel.resetBloodPressureLog()
-
                             scope.launch {
                                 snackBarHostState.showSnackbar(
                                     message = "Log entry added!",
@@ -233,10 +233,9 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     Text(text = stringResource(R.string.Confirm_BP_Log))
                 }
 
+                //Edit button
                 FilledTonalIconButton(
-                    onClick = {
-                        updateShowBottomSheet(true)
-                    },
+                    onClick = { updateShowBottomSheet(true) },
                     modifier = Modifier
                         .weight(0.5f)
                         .padding(8.dp)
@@ -249,11 +248,10 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
             }
         }
 
+        //Hypertension classification chart card
         OutlinedCard(
             colors =  CardDefaults.cardColors(),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp
-            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             border = BorderStroke(
                 1.dp,
                 MaterialTheme.colorScheme.outlineVariant
@@ -299,9 +297,14 @@ fun LogTab(hyprTrackerViewModel: HyprTrackerViewModel, updateShowBottomSheet: (B
                     stringArrayResource(R.array.hypertension_stage_Grade2)
                 )
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-                Text("Source: International Society of Hypertension", modifier = Modifier.fillMaxWidth().padding(start = 8.dp),style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,)
-
+                Text(
+                    "Source: International Society of Hypertension",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
             }
         }
     }
