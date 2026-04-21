@@ -1,6 +1,5 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -40,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -48,13 +46,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.loggingScreen.components.EmptyHistoryScreen
 import io.github.mcx360.hyprtracker.ui.utils.Dot
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, updateTab: (Int) -> Unit) {
-
+fun HistoryTab(
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    snackBarHostState: SnackbarHostState,
+    updateTab: (Int) -> Unit
+) {
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
@@ -62,53 +64,17 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
     val offset = remember { mutableFloatStateOf(0f) }
 
     if (hyprTrackerUIState.readings.isEmpty()){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth()
-                .offset{ IntOffset(offset.floatValue.roundToInt(), 0)}
-                .fillMaxSize()
-                .draggable(
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta ->
-                        offset.floatValue += delta.coerceIn(0f, 300f )
-                    },
-                    onDragStopped = {
-                        if (offset.floatValue > 50){
-                            updateTab(0)
-                        }
-                        offset.floatValue = 0f
-                    }
-                ),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.undraw_add_notes_9xls),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
-            )
-            Text(
-                text = stringResource(R.string.Empty_BP_Log_History_Tab_Title),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = stringResource(R.string.Empty_BP_Log_History_Tab_Text),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(all = 16.dp))
-        }
+        EmptyHistoryScreen {updateTab(0)}
     } else {
 
         when{
+            //Dialog to confirm deletion of history data
             showDeleteConfirmationDialog.value -> {
                 Dialog(onDismissRequest = {}) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp)) {
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
 
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -119,6 +85,7 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                 text = stringResource(R.string.Delete_Confirmation_Dialog_Text),
                                 textAlign = TextAlign.Center
                             )
+
                             Row {
                                 Button(
                                     onClick = { showDeleteConfirmationDialog.value = false },
@@ -129,7 +96,6 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                 Button(
                                     onClick = {
                                         showDeleteConfirmationDialog.value = false
-                                        //hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
                                         scope.launch {
                                             hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
                                             snackBarHostState.showSnackbar("Log entry removed")
@@ -140,13 +106,13 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                     Text(stringResource(R.string.Confirm_Button_Text))
                                 }
                             }
-
                         }
                     }
                 }
             }
         }
 
+        //History list in lazy column
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -157,20 +123,19 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                 .fillMaxSize()
                 .draggable(
                     orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta ->
-                        offset.floatValue += delta.coerceIn(0f, 300f)
-                    },
+                    state = rememberDraggableState { delta -> offset.floatValue += delta.coerceIn(0f, 300f) },
                     onDragStopped = {
-                        if (offset.floatValue > 50){
-                            updateTab(0)
-                        }
+                        if (offset.floatValue > 50) updateTab(0)
                         offset.floatValue = 0f
                     }
                 )
         ) {
 
+            //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+
+                    //Row with date and time
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -187,8 +152,13 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                         )
                         Text(hyprTrackerUIState.readings[index].time.substring(0,5))
                     }
+
                     HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+
+
                     Row(modifier = Modifier.fillMaxWidth()) {
+
+                        //Systolic value
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Systolic_Value),
@@ -197,6 +167,8 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             Text(hyprTrackerUIState.readings[index].systolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
+
+                        //Diastolic value
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Diastolic_Value),
@@ -205,6 +177,8 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             Text(hyprTrackerUIState.readings[index].diastolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
+
+                        //Pulse value
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Pulse_Value),
@@ -213,6 +187,8 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                             if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
                             Text("BPM", style = MaterialTheme.typography.bodyMedium)
                         }
+
+                        //Category value
                         Column(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -237,23 +213,23 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                     }
                                 )
                             }
-
                         }
-
                     }
 
                     Row(modifier = Modifier.padding(16.dp)) {
+                        //Notes value
                         Column {
-                            Text(
-                                stringResource(R.string.Notes_Value) + " " + if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes
-                            )
+                            Text(stringResource(R.string.Notes_Value) + " " + if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes)
                         }
+
+                        //Bin Icon
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
                         ) {
                             IconButton(
-                                onClick = { showDeleteConfirmationDialog.value = true
+                                onClick = {
+                                    showDeleteConfirmationDialog.value = true
                                     listIndexToBeDeleted.intValue = index
                                 }
                             ) {
@@ -263,7 +239,6 @@ fun HistoryTab(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: Sn
                                 )
                             }
                         }
-
                     }
                 }
             }
