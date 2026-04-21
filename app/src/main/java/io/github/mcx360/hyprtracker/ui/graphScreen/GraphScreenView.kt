@@ -39,6 +39,7 @@ import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPTrendsBreakdown
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
@@ -101,46 +102,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 })
             )
 
-            Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
-                Text("BP Trends Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                val modelProducer = remember { CartesianChartModelProducer() }
-                LaunchedEffect(Unit) {
-                    modelProducer.runTransaction {
-                        lineSeries {
-                            series(13, 8, 7, 12, 0, 1, 15, 14, 0, 11, 6, 12, 0, 11, 12, 11)
-                        }
-                    }
-                    modelProducer.runTransaction {
-                        lineSeries { series(6, 7, 8, 9, 10) }
-                    }
-                }
-                CartesianChartHost(
-                    rememberCartesianChart(
-                        rememberLineCartesianLayer(),
-                        startAxis = VerticalAxis.rememberStart(),
-                        bottomAxis = HorizontalAxis.rememberBottom(),
-                    ),
-                    modelProducer,
-                )
-                Row(modifier = modifier.fillMaxWidth().padding(8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(modifier = modifier.fillMaxWidth().padding(8.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        DotWithColour(Color.Blue)
-                        Text(" Systolic", style = MaterialTheme.typography.bodySmall)
-                        Spacer(modifier.padding(4.dp))
-                        DotWithColour(Color.Red)
-                        Text(" Diastolic",  style = MaterialTheme.typography.bodySmall)
-                        Spacer(modifier.padding(4.dp))
-                        DotWithColour(Color.Green)
-                        Text(" Pulse",  style = MaterialTheme.typography.bodySmall)
-                    }
-                }
-            }
+            BPTrendsBreakdown()
         }
     }
 }
