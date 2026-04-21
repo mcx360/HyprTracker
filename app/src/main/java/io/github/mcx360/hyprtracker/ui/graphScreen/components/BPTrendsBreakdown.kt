@@ -22,9 +22,12 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianLayerRangeProvider
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import io.github.mcx360.hyprtracker.ui.utils.Days
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
@@ -34,20 +37,19 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier){
         val modelProducer = remember { CartesianChartModelProducer() }
         LaunchedEffect(Unit) {
             modelProducer.runTransaction {
-                lineSeries {
-                    series(13, 8, 7, 12, 0, 1, 15, 14, 0, 11, 6, 12, 0, 11, 12, 11)
-                }
-            }
-            modelProducer.runTransaction {
-                lineSeries { series(6, 7, 8, 9, 10) }
+                lineSeries { series(70, 80, 9, 10, 10, 12, 90) }
             }
         }
         CartesianChartHost(
             rememberCartesianChart(
-                rememberLineCartesianLayer(),
+                rememberLineCartesianLayer(rangeProvider = CartesianLayerRangeProvider.fixed(minY = 30.0, maxY = 210.0)),
                 startAxis = VerticalAxis.rememberStart(),
-                bottomAxis = HorizontalAxis.rememberBottom(),
-            ),
+                bottomAxis = HorizontalAxis.rememberBottom(
+                    valueFormatter = CartesianValueFormatter { _, x, _ ->
+                        Days.entries.getOrNull(x.toInt())?.name?.take(3) ?: ""
+                    }
+                ),
+                ),
             modelProducer,
         )
         Row(modifier = modifier.fillMaxWidth().padding(8.dp),

@@ -62,7 +62,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
-            val filterOption = remember { mutableStateOf("week") }
+            val filterOption = remember { mutableStateOf("Week") }
             val systolicDataShown = remember { mutableStateOf("Average") }
             val diastolicDataShown = remember { mutableStateOf("Average") }
             val pulseDataShown = remember { mutableStateOf("Average") }
