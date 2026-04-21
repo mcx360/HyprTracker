@@ -15,9 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.mainScreen.TOPAPPBAR_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+const val TOPAPPBAR_TAG = "topAppBar"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,15 +34,11 @@ fun HyprTrackerTopAppBar(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
-        title = {
-            if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title)
-        },
+        title = { if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title) },
         navigationIcon = {
             IconButton(onClick = {
                 scope.launch {
-                    drawerState.apply {
-                        if (isClosed) open() else close()
-                    }
+                    drawerState.apply { if (isClosed) open() else close() }
                 }
             }) {
                 Icon(

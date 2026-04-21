@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -74,22 +73,18 @@ fun BugReportDialog(
                     val uriHandler = LocalUriHandler.current
                     val subject = Uri.encode("Bug report")
                     val body = Uri.encode("Describe issue here")
-                    TextButton(onClick = {
-                        uriHandler.openUri("https://github.com/mcx360/HyprTracker/issues/new")
-                    }) {
+
+                    TextButton(onClick = { uriHandler.openUri("https://github.com/mcx360/HyprTracker/issues/new") }) {
                         Icon(painter = painterResource(R.drawable.outline_code_blocks_24), contentDescription = null)
                         Text("Github")
                     }
+
                     Text(
                         text = "•",
                         color = MaterialTheme.colorScheme.primary
                     )
-                    TextButton(onClick = {
-                        uriHandler.openUri(
-                            "mailto:support@app.com?subject=$subject&body=$body"
-                        )
 
-                    }) {
+                    TextButton(onClick = { uriHandler.openUri("mailto:support@app.com?subject=$subject&body=$body") }) {
                         Icon(painter = painterResource(R.drawable.outline_mail_24), contentDescription = null)
                         Text("email")
                     }
@@ -97,7 +92,12 @@ fun BugReportDialog(
 
                 HorizontalDivider()
 
-                TextButton(onClick = {onDismissRequest()}, modifier = Modifier.align(Alignment.End)) {Text("Ok") }
+                TextButton(
+                    onClick = {onDismissRequest()},
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Ok")
+                }
             }
         }
     }

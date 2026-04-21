@@ -39,18 +39,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.Settings
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
-const val TOPAPPBAR_TAG = "topAppBar"
-const val BOTTOMNAVBAR_TAG = "bottomNavBar"
 const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
-const val EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG = "exportLogs"
-const val SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG = "share logs"
-const val MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG = "myDocuments"
-const val BIN_IN_NAVIGATIONDRAWER_TAG = "bin"
-const val BACKUP_IN_NAVIGATIONDRAWER_TAG = "backup"
-const val RATE_APP_IN_NAVIGATIONDRAWER_TAG = "rateApp"
-const val REPORT_BUG_IN_NAVIGATIONDRAWER_TAG = "reportBug"
-const val USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG = "settingsAndUsers"
-const val ABOUT_IN_NAVIGATIONDRAWER_TAG = "about"
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -58,7 +47,7 @@ fun HyprTrackerScreen(
     modifier: Modifier = Modifier,
     hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory) ,
     medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory)
-){
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -70,90 +59,97 @@ fun HyprTrackerScreen(
     val openAddMedicationScreen = remember { mutableStateOf(false) }
     val openSettingsDialog = remember { mutableStateOf(false) }
 
-    Box(modifier = modifier
-        .background(color = MaterialTheme.colorScheme.primaryContainer)
-        .statusBarsPadding()
-    ){
-    ModalNavigationDrawer(
-        modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
-        drawerContent = {
-            HyprTrackerDrawerContent(
-                scope = scope,
-                drawerState = drawerState,
-                updateOpenBugReportDialogToTrue = {openBugReportDialog.value = true},
-                updateOpenAboutDialogToTrue = {openAboutDialog.value = true},
-                snackbarHostState = snackBarHostState,
-                updateOpenSettingsDialogToTrue = {openSettingsDialog.value = true}
-            )
-        },
-        drawerState = drawerState
+    Box(
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
+            .statusBarsPadding()
     ) {
-        Scaffold(
-            modifier = modifier,
-            topBar = {
-                HyprTrackerTopAppBar(drawerState = drawerState, scope = scope, title = currentRoute)
-            },
-            bottomBar = {
-                HyprTrackerBottomNavigationBar(
-                    currentRoute = currentRoute,
-                    navController = navController,
-                    modifier = Modifier
+        ModalNavigationDrawer(
+            modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
+            drawerContent = {
+                HyprTrackerDrawerContent(
+                    scope = scope,
+                    drawerState = drawerState,
+                    updateOpenBugReportDialogToTrue = { openBugReportDialog.value = true },
+                    updateOpenAboutDialogToTrue = { openAboutDialog.value = true },
+                    snackbarHostState = snackBarHostState,
+                    updateOpenSettingsDialogToTrue = { openSettingsDialog.value = true }
                 )
             },
-            floatingActionButton = {
-                if (currentRoute == Destinations.Medicines.name && !openAddMedicationScreen.value) {
-                    FloatingActionButton(
-                        onClick = {openAddMedicationScreen.value = !openAddMedicationScreen.value},
-                    ) {
-                        Icon(Icons.Filled.Add, contentDescription = null)
+            drawerState = drawerState
+        ) {
+            Scaffold(
+                modifier = modifier,
+                topBar = {
+                    HyprTrackerTopAppBar(
+                        drawerState = drawerState,
+                        scope = scope,
+                        title = currentRoute
+                    )
+                },
+                bottomBar = {
+                    HyprTrackerBottomNavigationBar(
+                        currentRoute = currentRoute,
+                        navController = navController,
+                        modifier = Modifier
+                    )
+                },
+                floatingActionButton = {
+                    if (currentRoute == Destinations.Medicines.name && !openAddMedicationScreen.value) {
+                        FloatingActionButton(onClick = {
+                            openAddMedicationScreen.value = !openAddMedicationScreen.value
+                        }) {
+                            Icon(Icons.Filled.Add, contentDescription = null)
+                        }
                     }
-                }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackBarHostState)
-            }
-        ) { innerpadding ->
-            Box(modifier = Modifier.padding(innerpadding)) {
-                key(currentRoute) {
-                NavHostContainer(navController = navController, hyprTrackerViewModel, snackBarHostState, openAddMedicationScreen, medicineViewModel)
-            }
-                when{
-                    openAboutDialog.value -> {
-                        AboutDialog(
-                            onDismissRequest = {
-                                openAboutDialog.value = false
-                                scope.launch {
-                                    drawerState.apply {
-                                        if (isOpen) close() else open()                                    }
-                                }
-                            },
-                            modifier = modifier
+                },
+                snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+            ) { innerpadding ->
+                Box(modifier = Modifier.padding(innerpadding)) {
+                    key(currentRoute) {
+                        NavHostContainer(
+                            navController = navController,
+                            hyprTrackerViewModel,
+                            snackBarHostState,
+                            openAddMedicationScreen,
+                            medicineViewModel
                         )
                     }
-                }
-                when{
-                    openBugReportDialog.value -> {
-                        BugReportDialog(
-                            onDismissRequest = {
-                                openBugReportDialog.value = false
-                                scope.launch {
-                                    drawerState.apply {
-                                        if (isOpen) close() else open()
+                    when {
+                        openAboutDialog.value -> {
+                            AboutDialog(
+                                onDismissRequest = {
+                                    openAboutDialog.value = false
+                                    scope.launch {
+                                        drawerState.apply { if (isOpen) close() else open() }
                                     }
-                                }
-                            },
-                            modifier = modifier
-                        )
+                                },
+                                modifier = modifier
+                            )
+                        }
                     }
-                }
 
-                when{
-                    openSettingsDialog.value -> {
-                        Settings(onDismissRequest = {openSettingsDialog.value = false})
+                    when {
+                        openBugReportDialog.value -> {
+                            BugReportDialog(
+                                onDismissRequest = {
+                                    openBugReportDialog.value = false
+                                    scope.launch {
+                                        drawerState.apply { if (isOpen) close() else open() }
+                                    }
+                                },
+                                modifier = modifier
+                            )
+                        }
+                    }
+
+                    when {
+                        openSettingsDialog.value -> {
+                            Settings(onDismissRequest = { openSettingsDialog.value = false })
+                        }
                     }
                 }
             }
         }
-    }
     }
 }

@@ -44,7 +44,6 @@ fun Settings(
             shape = RectangleShape
         ) {
             Column {
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -53,10 +52,7 @@ fun Settings(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onDismissRequest) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
 
                     Text(
