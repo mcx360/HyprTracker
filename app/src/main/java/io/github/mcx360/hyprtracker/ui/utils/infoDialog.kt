@@ -27,8 +27,7 @@ fun InfoDialog(
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                ,
+                .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp)
         ) {
             Row(
@@ -49,7 +48,10 @@ fun InfoDialog(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(info)
-                Button(onClick = {onDismissRequest()}, modifier = Modifier.padding(8.dp)) {
+                Button(
+                    onClick = {onDismissRequest()},
+                    modifier = Modifier.padding(8.dp)
+                ) {
                     Text("Ok")
                 }
             }
