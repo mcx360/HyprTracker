@@ -177,6 +177,14 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun getSystolicValues(cutoffDate: String?): List<Int> {
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+
+        return readings.mapNotNull {
+            runCatching { it.systolicValue.toInt() }.getOrNull()
+        }
+    }
+
     fun getDiastolicAverage(cutoffDate: String?) : Int{
         try {
             if (cutoffDate == null) {
@@ -214,6 +222,14 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun getDiastolicValues(cutoffDate: String?): List<Int> {
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+
+        return readings.mapNotNull {
+            runCatching { it.diastolicValue.toInt() }.getOrNull()
+        }
+    }
+
     fun getPulseAverage(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.average().takeIf { !it.isNaN() }?.toInt() ?: 0
@@ -227,6 +243,14 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     fun getPulseMax(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
+    }
+
+    fun getPulseValues(cutoffDate: String?): List<Int> {
+        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+
+        return readings.mapNotNull {
+            runCatching { it.pulseValue?.toInt() }.getOrNull()
+        }
     }
 
     fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
