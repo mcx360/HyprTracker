@@ -1,7 +1,5 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,17 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -53,6 +41,7 @@ import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 import java.time.LocalDate
 
@@ -83,83 +72,25 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                         updateFilterOption = {filterOption.value = it}
                     )
 
-            Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-                Card(modifier = modifier.weight(0.33f).clickable(onClick = {
-                    when (systolicDataShown.value) {
-                        "Average" -> systolicDataShown.value = "Max"
-                        "Max" -> systolicDataShown.value = "Min"
-                        else -> systolicDataShown.value = "Average"
-                    }
-                })) {
-                    Column(
-                        modifier = modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Systolic", style = MaterialTheme.typography.titleLarge)
-                        Text(when(filterOption.value){
-                                "All time" -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = null).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = null).toString()
-                                "Month" -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
-                                else -> if (systolicDataShown.value == "Average") hyprTrackerViewModel.getSystolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (systolicDataShown.value == "Max") hyprTrackerViewModel.getSystolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getSystolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
-                            })
-                        Text(systolicDataShown.value)
-                    }
-                }
-                Card(modifier = modifier.weight(0.33f).padding(horizontal = 8.dp).clickable(onClick = {
-                    when (diastolicDataShown.value) {
-                        "Average" -> {
-                            diastolicDataShown.value = "Max"
-                        }
-                        "Max" -> {
-                            diastolicDataShown.value = "Min"
-                        }
-                        else -> {
-                            diastolicDataShown.value = "Average"
-                        }
-                    }
-                })) {
-                    Column(
-                        modifier = modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Diastolic", style = MaterialTheme.typography.titleLarge)
-                        Text(when(filterOption.value){
-                            "All time" -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = null).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = null).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = null).toString()
-                            "Month" -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
-                            else -> if (diastolicDataShown.value == "Average") hyprTrackerViewModel.getDiastolicAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getDiastolicMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getDiastolicMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
-                        })
-                        Text(diastolicDataShown.value)
-                    }
-                }
-                Card(modifier = modifier.weight(0.33f).clickable(onClick = {
-                    when (pulseDataShown.value) {
-                        "Average" -> {
-                            pulseDataShown.value = "Max"
-                        }
-                        "Max" -> {
-                            pulseDataShown.value = "Min"
-                        }
-                        else -> {
-                            pulseDataShown.value = "Average"
-                        }
-                    }
-                })) {
-                    Column(
-                        modifier = modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Pulse", style = MaterialTheme.typography.titleLarge)
-                        Text(when(filterOption.value){
-                            "All time" -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = null).toString() else if (pulseDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = null).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = null).toString()
-                            "Month" -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else if (diastolicDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = LocalDate.now().minusMonths(1).toString()).toString()
-                            else -> if (pulseDataShown.value == "Average") hyprTrackerViewModel.getPulseAverage(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else if (pulseDataShown.value == "Max") hyprTrackerViewModel.getPulseMax(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString() else hyprTrackerViewModel.getPulseMin(cutoffDate = LocalDate.now().minusWeeks(1).toString()).toString()
-                        })
-                        Text(pulseDataShown.value)
-                    }
-                }
-            }
+                    InfoCards(
+                        systolicDataShown = systolicDataShown.value,
+                        updateSystolicDataShown = {systolicDataShown.value = it},
+                        filterOption = filterOption.value,
+                        getSystolicAverage = { (it?.let{ hyprTrackerViewModel.getSystolicAverage(it) } ?: hyprTrackerViewModel.getSystolicAverage(null)).toString() },
+                        getSystolicMax = { (it?.let { hyprTrackerViewModel.getSystolicMax(it) } ?: hyprTrackerViewModel.getSystolicMax(null)).toString() },
+                        getSystolicMin = { (it?.let { hyprTrackerViewModel.getSystolicMin(it) } ?: hyprTrackerViewModel.getSystolicMin(null)).toString() },
+                        diastolicDataShown = diastolicDataShown.value,
+                        getDiastolicMax = { (it?.let { hyprTrackerViewModel.getDiastolicMax(it) } ?: hyprTrackerViewModel.getDiastolicMax(null)).toString() },
+                        getDiastolicMin = { (it?.let { hyprTrackerViewModel.getDiastolicMin(it) } ?: hyprTrackerViewModel.getDiastolicMin(null)).toString() },
+                        getDiastolicAverage = { (it?.let { hyprTrackerViewModel.getDiastolicAverage(it) } ?: hyprTrackerViewModel.getDiastolicAverage(null)).toString() },
+                        updateDiastolicDataShown = {diastolicDataShown.value = it},
+                        updatePulseDataShown = {pulseDataShown.value = it},
+                        pulseDataShown = pulseDataShown.value,
+                        getPulseMax = { (it?.let { hyprTrackerViewModel.getPulseMax(it) } ?: hyprTrackerViewModel.getPulseMax(null)).toString() },
+                        getPulseMin = { (it?.let { hyprTrackerViewModel.getPulseMin(it) } ?: hyprTrackerViewModel.getPulseMin(null)).toString() },
+                        getPulseAverage = { (it?.let { hyprTrackerViewModel.getPulseAverage(it) } ?: hyprTrackerViewModel.getPulseAverage(null)).toString() }
+
+                    )
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                 //val breakdown = hyprTrackerViewModel.getBPStagesBreakdown(null)
