@@ -1,12 +1,24 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.ProvideVicoTheme
@@ -17,8 +29,48 @@ import com.patrykandpatrick.vico.compose.pie.PieChart
 import com.patrykandpatrick.vico.compose.pie.PieChartHost
 import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
 import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
+import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+
+@Composable
+fun BPBreakdownCard(
+    modifier: Modifier = Modifier,
+    filterOption: String,
+    breakdown: List<Float>
+
+){
+    Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+        Text("BP Stages Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        val modelProducer = remember { PieChartModelProducer() }
+        LaunchedEffect(filterOption) {
+            modelProducer.runTransaction {
+                pieSeries {
+                    series(*breakdown.toTypedArray())
+                }
+            }
+        }
+
+        HypertensionStagesPieChart(modelProducer, modifier)
+        Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
+            Text(" Normal", style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(4.dp))
+            DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
+            Text(" Normal High",  style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(4.dp))
+            DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
+            Text(" Grade 1",  style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(4.dp))
+            DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
+            Text(" Grade 2",  style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
 
 @Composable
 fun HypertensionStagesPieChart(

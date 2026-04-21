@@ -38,6 +38,7 @@ import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.HypertensionStagesPieChart
@@ -65,71 +66,40 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             val diastolicDataShown = remember { mutableStateOf("Average") }
             val pulseDataShown = remember { mutableStateOf("Average") }
 
-                    FilterCard(
-                        showFilterByDropDownMenu =showFilterByDropDownMenu.value,
-                        updateShowFilterByDropDownMenu = {showFilterByDropDownMenu.value = it},
-                        filterOption = filterOption.value,
-                        updateFilterOption = {filterOption.value = it}
-                    )
+            FilterCard(
+                showFilterByDropDownMenu =showFilterByDropDownMenu.value,
+                updateShowFilterByDropDownMenu = {showFilterByDropDownMenu.value = it},
+                filterOption = filterOption.value,
+                updateFilterOption = {filterOption.value = it}
+            )
 
-                    InfoCards(
-                        systolicDataShown = systolicDataShown.value,
-                        updateSystolicDataShown = {systolicDataShown.value = it},
-                        filterOption = filterOption.value,
-                        getSystolicAverage = { (it?.let{ hyprTrackerViewModel.getSystolicAverage(it) } ?: hyprTrackerViewModel.getSystolicAverage(null)).toString() },
-                        getSystolicMax = { (it?.let { hyprTrackerViewModel.getSystolicMax(it) } ?: hyprTrackerViewModel.getSystolicMax(null)).toString() },
-                        getSystolicMin = { (it?.let { hyprTrackerViewModel.getSystolicMin(it) } ?: hyprTrackerViewModel.getSystolicMin(null)).toString() },
-                        diastolicDataShown = diastolicDataShown.value,
-                        getDiastolicMax = { (it?.let { hyprTrackerViewModel.getDiastolicMax(it) } ?: hyprTrackerViewModel.getDiastolicMax(null)).toString() },
-                        getDiastolicMin = { (it?.let { hyprTrackerViewModel.getDiastolicMin(it) } ?: hyprTrackerViewModel.getDiastolicMin(null)).toString() },
-                        getDiastolicAverage = { (it?.let { hyprTrackerViewModel.getDiastolicAverage(it) } ?: hyprTrackerViewModel.getDiastolicAverage(null)).toString() },
-                        updateDiastolicDataShown = {diastolicDataShown.value = it},
-                        updatePulseDataShown = {pulseDataShown.value = it},
-                        pulseDataShown = pulseDataShown.value,
-                        getPulseMax = { (it?.let { hyprTrackerViewModel.getPulseMax(it) } ?: hyprTrackerViewModel.getPulseMax(null)).toString() },
-                        getPulseMin = { (it?.let { hyprTrackerViewModel.getPulseMin(it) } ?: hyprTrackerViewModel.getPulseMin(null)).toString() },
-                        getPulseAverage = { (it?.let { hyprTrackerViewModel.getPulseAverage(it) } ?: hyprTrackerViewModel.getPulseAverage(null)).toString() }
+            InfoCards(
+                systolicDataShown = systolicDataShown.value,
+                updateSystolicDataShown = {systolicDataShown.value = it},
+                filterOption = filterOption.value,
+                getSystolicAverage = { (it?.let{ hyprTrackerViewModel.getSystolicAverage(it) } ?: hyprTrackerViewModel.getSystolicAverage(null)).toString() },
+                getSystolicMax = { (it?.let { hyprTrackerViewModel.getSystolicMax(it) } ?: hyprTrackerViewModel.getSystolicMax(null)).toString() },
+                getSystolicMin = { (it?.let { hyprTrackerViewModel.getSystolicMin(it) } ?: hyprTrackerViewModel.getSystolicMin(null)).toString() },
+                diastolicDataShown = diastolicDataShown.value,
+                getDiastolicMax = { (it?.let { hyprTrackerViewModel.getDiastolicMax(it) } ?: hyprTrackerViewModel.getDiastolicMax(null)).toString() },
+                getDiastolicMin = { (it?.let { hyprTrackerViewModel.getDiastolicMin(it) } ?: hyprTrackerViewModel.getDiastolicMin(null)).toString() },
+                getDiastolicAverage = { (it?.let { hyprTrackerViewModel.getDiastolicAverage(it) } ?: hyprTrackerViewModel.getDiastolicAverage(null)).toString() },
+                updateDiastolicDataShown = {diastolicDataShown.value = it},
+                updatePulseDataShown = {pulseDataShown.value = it},
+                pulseDataShown = pulseDataShown.value,
+                getPulseMax = { (it?.let { hyprTrackerViewModel.getPulseMax(it) } ?: hyprTrackerViewModel.getPulseMax(null)).toString() },
+                getPulseMin = { (it?.let { hyprTrackerViewModel.getPulseMin(it) } ?: hyprTrackerViewModel.getPulseMin(null)).toString() },
+                getPulseAverage = { (it?.let { hyprTrackerViewModel.getPulseAverage(it) } ?: hyprTrackerViewModel.getPulseAverage(null)).toString() }
+            )
 
-                    )
-
-            Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-                //val breakdown = hyprTrackerViewModel.getBPStagesBreakdown(null)
-                Text("BP Stages Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                val modelProducer = remember { PieChartModelProducer() }
-                val dateFilter = when (filterOption.value) {
+            BPBreakdownCard(
+                filterOption = filterOption.value,
+                breakdown = hyprTrackerViewModel.getBPStagesBreakdown(when (filterOption.value) {
                     "All time" -> null
                     "Month" -> LocalDate.now().minusMonths(1).toString()
                     else -> LocalDate.now().minusWeeks(1).toString()
-                }
-
-                val breakdown = hyprTrackerViewModel.getBPStagesBreakdown(dateFilter)
-
-                LaunchedEffect(filterOption.value) {
-                    modelProducer.runTransaction {
-                        pieSeries {
-                            series(*breakdown.toTypedArray())
-                        }
-                    }
-                }
-
-                HypertensionStagesPieChart(modelProducer, modifier)
-                Row(modifier = modifier.fillMaxWidth().padding(8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
-                    Text(" Normal", style = MaterialTheme.typography.bodySmall)
-                    Spacer(modifier.padding(4.dp))
-                    DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
-                    Text(" Normal High",  style = MaterialTheme.typography.bodySmall)
-                    Spacer(modifier.padding(4.dp))
-                    DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
-                    Text(" Grade 1",  style = MaterialTheme.typography.bodySmall)
-                    Spacer(modifier.padding(4.dp))
-                    DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
-                    Text(" Grade 2",  style = MaterialTheme.typography.bodySmall)
-                }
-            }
+                })
+            )
 
             Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
                 Text("BP Trends Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -137,24 +107,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
                         lineSeries {
-                            series(
-                                13,
-                                8,
-                                7,
-                                12,
-                                0,
-                                1,
-                                15,
-                                14,
-                                0,
-                                11,
-                                6,
-                                12,
-                                0,
-                                11,
-                                12,
-                                11
-                            )
+                            series(13, 8, 7, 12, 0, 1, 15, 14, 0, 11, 6, 12, 0, 11, 12, 11)
                         }
                     }
                     modelProducer.runTransaction {
