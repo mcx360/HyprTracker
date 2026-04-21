@@ -13,12 +13,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.github.mcx360.hyprtracker.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,15 +40,17 @@ fun FilterCard(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Filter by")
+            Text("Filter By", style = MaterialTheme.typography.titleLarge)
             ExposedDropdownMenuBox(
                 expanded = showFilterByDropDownMenu,
                 onExpandedChange = {},
             ) {
+                TextButton(onClick = {}) { }
                 OutlinedTextField(
                     value = filterOption,
                     readOnly = true,
                     onValueChange = {},
+                    leadingIcon = {Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)},
                     trailingIcon = {
                         IconButton(
                             onClick = {
@@ -57,7 +64,8 @@ fun FilterCard(
                                 Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
                             }
                         }
-                    }
+                    },
+                    modifier = modifier.padding(8.dp)
                 )
                 ExposedDropdownMenu(
                     expanded = showFilterByDropDownMenu,
