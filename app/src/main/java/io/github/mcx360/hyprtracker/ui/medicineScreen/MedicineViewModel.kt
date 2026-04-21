@@ -24,9 +24,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     private val _uiState = MutableStateFlow(MedicineState())
     val uiState: StateFlow<MedicineState> = _uiState.asStateFlow()
 
-    init {
-            fetchMedications()
-    }
+    init { fetchMedications() }
 
     fun resetAddMedication(){
         _uiState.update { currentState ->
@@ -189,10 +187,10 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
 
     fun convertMillisToDate(millis: Long?): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        if (millis == null){
-            return ""
+        return if (millis == null){
+            ""
         } else{
-            return formatter.format(Date(millis))
+            formatter.format(Date(millis))
         }
     }
 
