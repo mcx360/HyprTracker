@@ -33,7 +33,7 @@ fun DurationCard(
     updateShowDurationDatePicker: (Boolean) -> Unit,
     updateMedicationEndDateLong: (Long?) -> Unit,
     updateMedicationEndDateString: (String) -> Unit,
-    ){
+){
     val radioButtons = listOf("Continuous", "Specified number of days", "Until a selected date")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioButtons[0]) }
 
@@ -83,28 +83,37 @@ fun DurationCard(
             }
             if (selectedOption == "Specified number of days"){
                 if (endDate != ""){
-                    Text("medicine recorded until "+formatToRegularDate(endDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    Text(
+                        text = "medicine recorded until "+formatToRegularDate(endDate),
+                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
+                    )
                 }
             } else if(selectedOption == "Until a selected date"){
                 if (endDate != ""){
-                    Text(text = ""+formatToRegularDate(endDate), modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                    Text(
+                        text = ""+formatToRegularDate(endDate),
+                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
+                    )
                 }
             }else{
-                Text("Medicine will be recorded indefinitely unless cancelled by the user", modifier = modifier.padding(start = 16.dp, bottom = 16.dp))
+                Text(
+                    text = "Medicine will be recorded indefinitely unless cancelled by the user",
+                    modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
+                )
             }
         }
+
         if (showSelectSpecifiedNumberOfDaysDialog) {
-            SelectSpecifiedNumberOfDaysDialog(onDismissRequest = {
-                updateShowSelectSpecifiedNumberOfDaysDialog(false)
-            }, onNumOfDaysSelected = {
-                if (it != "") {
-                    updateMedicationEndDateString(LocalDate.now().plusDays(it.toLong()).toString())
-                }
-            }
+            SelectSpecifiedNumberOfDaysDialog(
+                onDismissRequest = { updateShowSelectSpecifiedNumberOfDaysDialog(false) },
+                onNumOfDaysSelected = { if (it != "")  updateMedicationEndDateString(LocalDate.now().plusDays(it.toLong()).toString()) }
             )
         }
+
         if (showDurationDatePicker) {
-            DurationDatePicker(onDateSelected = {updateMedicationEndDateLong(it)}, onDismiss = {updateShowDurationDatePicker(false)})
+            DurationDatePicker(
+                onDateSelected = {updateMedicationEndDateLong(it)},
+                onDismiss = {updateShowDurationDatePicker(false)})
         }
     }
 }

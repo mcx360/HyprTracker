@@ -45,7 +45,10 @@ fun SelectSpecifiedNumberOfDaysDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Enter the amount of days that the medicine will be taken for", textAlign = TextAlign.Center)
+                Text(
+                    text = "Enter the amount of days that the medicine will be taken for",
+                    textAlign = TextAlign.Center
+                )
                 Row(horizontalArrangement = Arrangement.Center) {
                     OutlinedTextField(
                         onValueChange = {if (it.isDigitsOnly()) days = it},

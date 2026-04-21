@@ -59,8 +59,10 @@ fun medicationInfoCard(
                 placeholder = {Text("e.g. Lisinopril")},
                 supportingText = {
                     if (isMedicationNameFieldInError){
-                        Text("Medication name needed!", color = MaterialTheme.colorScheme.error)}
-                    else{
+                        Text(text = "Medication name needed!",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else{
                         Text("*required")
                     }
                 }
@@ -82,8 +84,11 @@ fun medicationInfoCard(
                 ),
                 supportingText = {
                     if (isMedicationDescriptionFieldInError){
-                        Text("Medication description needed!", color = MaterialTheme.colorScheme.error)}
-                    else{
+                        Text(
+                            text = "Medication description needed!",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else{
                         Text("*required")
                     }
                 }

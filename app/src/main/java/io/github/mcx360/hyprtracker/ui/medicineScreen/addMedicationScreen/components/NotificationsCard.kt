@@ -73,33 +73,36 @@ fun NotificationsCard(
                     when (medicationSchedule) {
                         "" -> {
                             Text(
-                                "Enter your medication schedule into the fields above to set reminders",
+                                text = "Enter your medication schedule into the fields above to set reminders",
                                 color = MaterialTheme.colorScheme.error,
                                 modifier = modifier.padding(8.dp)
                             )
                         }
                         "Every single day" -> {
                             Text(
-                                "You are scheduled to receive reminders every single day",
+                                text = "You are scheduled to receive reminders every single day",
                                 modifier = modifier.padding(8.dp)
                             )
                         }
                         else -> {
                             Text(
-                                "You are scheduled to receive reminders on the following days: $medicationSelectedDays",
+                                text = "You are scheduled to receive reminders on the following days: $medicationSelectedDays",
                                 modifier = modifier.padding(8.dp)
                             )
                         }
                     }
                 }
+
                 Row {
                     if (medicationTimesPerDay == 0){
-                        Text("Enter how many times per scheduled day you take the medicine in the fields above before setting reminders", color = MaterialTheme.colorScheme.error,
+                        Text(
+                            text = "Enter how many times per scheduled day you take the medicine in the fields above before setting reminders",
+                            color = MaterialTheme.colorScheme.error,
                             modifier = modifier.padding(8.dp)
                         )
                     } else{
                         Text(
-                            "On each scheduled day you will receive this much reminder(s): $medicationTimesPerDay",
+                            text = "On each scheduled day you will receive this much reminder(s): $medicationTimesPerDay",
                             modifier = modifier.padding(8.dp)
                         )
                     }
@@ -107,6 +110,7 @@ fun NotificationsCard(
                         Image(Icons.Filled.Edit, contentDescription = null)
                     }
                 }
+
                 Row {
                     if (medicationTimesPerDay > 0){
                         Text(
@@ -131,17 +135,12 @@ fun NotificationsCard(
                             )},
                             keyboardOptions =  KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
-                                imeAction = if (i != medicationTimesPerDay){
-                                    ImeAction.Next
-                                }else{
-                                    ImeAction.Done
-                                }
+                                imeAction = if (i != medicationTimesPerDay) ImeAction.Next else ImeAction.Done
                             ),
                             visualTransformation = VisualTransformation { text ->
                                 var out = ""
                                 for (i in text.indices){
                                     out += if (i == 2) ":${text[i]}" else text[i]
-
                                 }
                                 TransformedText(
                                     text = AnnotatedString(out),
@@ -152,12 +151,10 @@ fun NotificationsCard(
                                             if (offset==4) return offset + 1
                                             return offset
                                         }
-
                                         override fun transformedToOriginal(offset: Int): Int {
                                             if (offset >= 4) return offset -1
                                             return offset
                                         }
-
                                     }
                                 )
                             }

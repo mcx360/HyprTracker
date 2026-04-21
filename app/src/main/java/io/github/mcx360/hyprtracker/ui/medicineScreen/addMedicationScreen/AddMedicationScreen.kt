@@ -86,7 +86,7 @@ fun AddMedicationScreen(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
         )
-        ) {
+    ) {
         Card(
             modifier = modifier.fillMaxSize(),
             colors = CardColors(
@@ -97,6 +97,7 @@ fun AddMedicationScreen(
             ),
             shape = RectangleShape,
         ) {
+            //Add Medication title
             Row(modifier = modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -117,8 +118,7 @@ fun AddMedicationScreen(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-                ,
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -130,20 +130,14 @@ fun AddMedicationScreen(
                     isMedicationDescriptionFieldInError = isMedicationDescriptionFieldInError,
                     updateMedicationName = {
                         medicineViewModel.updateMedicationName(it)
-                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError =
-                            false
+                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
                     },
                     updateMedicationDescription = {
                         medicineViewModel.updateMedicationDescription(it)
-                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError =
-                            false
+                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
                     },
-                    setMedicationNameErrorStatusFalse = {
-                        isMedicationNameFieldInError = false
-                    },
-                    setMedicationDescriptionErrorStatusFalse = {
-                        isMedicationDescriptionFieldInError = false
-                    }
+                    setMedicationNameErrorStatusFalse = { isMedicationNameFieldInError = false },
+                    setMedicationDescriptionErrorStatusFalse = { isMedicationDescriptionFieldInError = false }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
@@ -173,15 +167,9 @@ fun AddMedicationScreen(
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
                     medicationDosage = uiState.value.medicationDosage,
-                    setIsMedicationScheduleFieldInErrorToFalse = {
-                        isMedicationScheduleFieldInError = false
-                    },
-                    setIsMedicationDosePerIntakeInErrorToFalse = {
-                        isMedicationDosePerIntakeInError = false
-                    },
-                    setIsMedicationTimesPerDayFieldInErrorToFalse = {
-                        isMedicationTimesPerDayFieldInError = false
-                    }
+                    setIsMedicationScheduleFieldInErrorToFalse = { isMedicationScheduleFieldInError = false },
+                    setIsMedicationDosePerIntakeInErrorToFalse = { isMedicationDosePerIntakeInError = false },
+                    setIsMedicationTimesPerDayFieldInErrorToFalse = { isMedicationTimesPerDayFieldInError = false }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
@@ -190,14 +178,8 @@ fun AddMedicationScreen(
                 NotificationsCard(
                     checked = checked,
                     updateCheckedStatus = { checked = it },
-                    updateMedicationNotificationStatus = {
-                        medicineViewModel.updateMedicationNotificationStatus(
-                            it
-                        )
-                    },
-                    updateMedicationReminderTime = { value, reminder ->
-                        medicineViewModel.updateMedicationReminderTime(value, reminder)
-                    },
+                    updateMedicationNotificationStatus = { medicineViewModel.updateMedicationNotificationStatus(it) },
+                    updateMedicationReminderTime = { value, reminder -> medicineViewModel.updateMedicationReminderTime(value, reminder) },
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationSelectedDays = uiState.value.medicationSelectedDays,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
@@ -214,15 +196,9 @@ fun AddMedicationScreen(
                     showSelectSpecifiedNumberOfDaysDialog = showSelectSpecifiedNumberOfDaysDialog,
                     showDurationDatePicker = showDurationDatePicker,
                     updateShowDurationDatePicker = { showDurationDatePicker = it },
-                    updateShowSelectSpecifiedNumberOfDaysDialog = {
-                        showSelectSpecifiedNumberOfDaysDialog = it
-                    },
+                    updateShowSelectSpecifiedNumberOfDaysDialog = { showSelectSpecifiedNumberOfDaysDialog = it },
                     updateMedicationEndDateString = { medicineViewModel.updateMedicationEndDate(it) },
-                    updateMedicationEndDateLong = {
-                        medicineViewModel.updateMedicationEndDate(
-                            medicineViewModel.convertMillisToDate(it)
-                        )
-                    }
+                    updateMedicationEndDateLong = { medicineViewModel.updateMedicationEndDate(medicineViewModel.convertMillisToDate(it)) }
                 )
 
                 Row(
@@ -251,32 +227,15 @@ fun AddMedicationScreen(
                     }
                     Button(
                         onClick = {
-                            when {
-                                uiState.value.medicationName.isEmpty() -> isMedicationNameFieldInError =
-                                    true
-                            }
-                            when {
-                                uiState.value.medicationDescription.isEmpty() -> isMedicationDescriptionFieldInError =
-                                    true
-                            }
-                            when {
-                                uiState.value.medicationSchedule.isEmpty() -> isMedicationScheduleFieldInError =
-                                    true
-                            }
-                            when {
-                                uiState.value.medicationTimesPerDay == 0 -> isMedicationTimesPerDayFieldInError =
-                                    true
-                            }
-                            when {
-                                uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError =
-                                    true
-                            }
+                            when {uiState.value.medicationName.isEmpty() -> isMedicationNameFieldInError = true }
+                            when {uiState.value.medicationDescription.isEmpty() -> isMedicationDescriptionFieldInError = true }
+                            when {uiState.value.medicationSchedule.isEmpty() -> isMedicationScheduleFieldInError = true }
+                            when {uiState.value.medicationTimesPerDay == 0 -> isMedicationTimesPerDayFieldInError = true }
+                            when {uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError = true }
 
                             if (isMedicationNameFieldInError || isMedicationDescriptionFieldInError || isMedicationScheduleFieldInError || isMedicationTimesPerDayFieldInError || isMedicationDosePerIntakeInError) {
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                                scope.launch {
-                                    snackBarHostState.showSnackbar("Invalid data inputted!")
-                                }
+                                scope.launch { snackBarHostState.showSnackbar("Invalid data inputted!") }
                             } else {
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                                 openAddMedicationScreen.value = !openAddMedicationScreen.value

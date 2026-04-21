@@ -38,7 +38,8 @@ fun SelectDaysForMedication(
     var sundayChecked by remember { mutableStateOf(false) }
     val showWarning = remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = {onDismiss(null)
+    Dialog(onDismissRequest = {
+        onDismiss(null)
         showWarning.value = false
     }) {
         Card(
@@ -48,10 +49,14 @@ fun SelectDaysForMedication(
             shape = RoundedCornerShape(16.dp),
         ) {
             Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Text("Select days")
+
+                //Monday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = mondayChecked,
@@ -59,6 +64,8 @@ fun SelectDaysForMedication(
                     )
                     Text("Monday")
                 }
+
+                //Tuesday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = tuesdayChecked,
@@ -66,6 +73,8 @@ fun SelectDaysForMedication(
                     )
                     Text("Tuesday")
                 }
+
+                //Wednesday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = wednesdayChecked,
@@ -73,6 +82,8 @@ fun SelectDaysForMedication(
                     )
                     Text("Wednesday")
                 }
+
+                //Thursday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = thursdayChecked,
@@ -80,15 +91,17 @@ fun SelectDaysForMedication(
                     )
                     Text("Thursday")
                 }
+
+                //Friday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = fridayChecked,
-                        onCheckedChange = {
-                            fridayChecked = it
-                        }
+                        onCheckedChange = { fridayChecked = it }
                     )
                     Text("Friday")
                 }
+
+                //Saturday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = saturdayChecked,
@@ -96,6 +109,8 @@ fun SelectDaysForMedication(
                     )
                     Text("Saturday")
                 }
+
+                //Sunday
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = sundayChecked,
@@ -103,10 +118,16 @@ fun SelectDaysForMedication(
                     )
                     Text("Sunday")
                 }
+
                 Row(horizontalArrangement = Arrangement.Center) {
-                    Button(onClick = {onDismiss(null) }, modifier = Modifier.padding(4.dp)) {
+                    //Cancel button
+                    Button(
+                        onClick = {onDismiss(null) },
+                        modifier = Modifier.padding(4.dp)) {
                         Text("Cancel")
                     }
+
+                    //Ok button
                     Button(onClick = {
                         if (mondayChecked || tuesdayChecked || wednesdayChecked || thursdayChecked || fridayChecked || saturdayChecked || sundayChecked){
                             listOf(
@@ -118,18 +139,13 @@ fun SelectDaysForMedication(
                                 saturdayChecked to Days.Saturday,
                                 sundayChecked to Days.Sunday
                             ).forEach { (isChecked, day) ->
-                                if (isChecked) {
-                                    onDaySelected(day.name)
-                                }
-                                if (!isChecked) {
-                                    onDayRemoved(day.name)
-                                }
+                                if (isChecked) { onDaySelected(day.name) }
+                                if (!isChecked) { onDayRemoved(day.name) }
                             }
                             onDismiss("Selected days only")
-                        } else{
-                            showWarning.value = true
-                        }},
-                        modifier = Modifier.padding(4.dp)) {
+                        } else{ showWarning.value = true } },
+                        modifier = Modifier.padding(4.dp)
+                    ) {
                         Text("Ok")
                     }
                 }

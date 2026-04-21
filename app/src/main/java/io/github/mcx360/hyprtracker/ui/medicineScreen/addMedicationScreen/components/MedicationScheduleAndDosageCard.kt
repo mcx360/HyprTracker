@@ -66,6 +66,7 @@ fun MedicationScheduleAndDosageCard(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
+            //title
             Text(
                 text = "Medication Schedule & Dosage",
                 style = MaterialTheme.typography.titleMedium,
@@ -76,9 +77,12 @@ fun MedicationScheduleAndDosageCard(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
 
+                //Box for medication schedule
                 ExposedDropdownMenuBox(
                     expanded = showScheduleDropDownMenu,
                     onExpandedChange = { changeScheduleDropDownMenuStatus(true) }) {
+
+                    //Medication schedule field
                     OutlinedTextField(
                         isError = isMedicationScheduleFieldInError,
                         readOnly = true,
@@ -104,6 +108,8 @@ fun MedicationScheduleAndDosageCard(
                             }
                         }
                     )
+
+                    //Medication schedule menu
                     ExposedDropdownMenu(
                         expanded = showScheduleDropDownMenu,
                         onDismissRequest = { changeScheduleDropDownMenuStatus(false) }) {
@@ -127,25 +133,23 @@ fun MedicationScheduleAndDosageCard(
                         )
                     }
                 }
+
                 if (showSelectedDaysPicker){
                     SelectDaysForMedication(onDismiss = {
                         changeShowSelectedDaysPickerStatus(false)
                         if (!it.isNullOrEmpty()) {
                             updateMedicationSchedule(it)
                         } },
-                        onDaySelected = {
-                            addSelectedDay(it)
-                        },
-                        onDayRemoved = {
-                            removeSelectedDay(it)
-                        }
+                        onDaySelected = { addSelectedDay(it) },
+                        onDayRemoved = { removeSelectedDay(it) }
                     )
                     changeScheduleDropDownMenuStatus(false)
                 }
+
+                //Schedule info Dialog popup
                 IconButton(onClick = {changeShowScheduleInfoDialogStatus(true)}) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
-
                 if (showScheduleInfoDialog){
                     InfoDialog(
                         onDismissRequest = {changeShowScheduleInfoDialogStatus(false)},
@@ -158,10 +162,12 @@ fun MedicationScheduleAndDosageCard(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
 
+                //Box for times per day
                 ExposedDropdownMenuBox(
                     expanded = showTimesPerDayDropDownMenu,
                     onExpandedChange = {changeShowTimesPerDayDropDownMenuStatus(it)}
                 ) {
+                    //times per day field
                     OutlinedTextField(
                         isError = isMedicationTimesPerDayFieldInError,
                         readOnly = true,
@@ -180,25 +186,24 @@ fun MedicationScheduleAndDosageCard(
                         placeholder = {Text("e.g. Once daily")},
                         trailingIcon = {
                             IconButton(
-                                onClick = {
-                                    changeShowTimesPerDayDropDownMenuStatus(true)
-                                }) {
+                                onClick = { changeShowTimesPerDayDropDownMenuStatus(true) }
+                            ) {
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                             }
                         },
-                        modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
-                        supportingText = {
-                            if (isMedicationTimesPerDayFieldInError){
-                                Text("Enter amount of time per day!")
-                            } else{
-                                Text("*required")
-                            }
-                        }
+                        modifier = modifier.menuAnchor(
+                            type = MenuAnchorType.PrimaryNotEditable,
+                            enabled = true
+                        ),
+                        supportingText = { if (isMedicationTimesPerDayFieldInError) Text("Enter amount of time per day!") else Text("*required") }
                     )
+
+                    //times per day menu
                     ExposedDropdownMenu(
                         expanded = showTimesPerDayDropDownMenu,
                         onDismissRequest = {changeShowTimesPerDayDropDownMenuStatus(false)}
                     ) {
+                        //One times per day option
                         DropdownMenuItem(
                             text = {Text("One time daily")},
                             onClick = {
@@ -207,6 +212,8 @@ fun MedicationScheduleAndDosageCard(
                                 changeShowTimesPerDayDropDownMenuStatus(false)
                             }
                         )
+
+                        //Two times per day option
                         DropdownMenuItem(
                             text = {Text("Two times daily")},
                             onClick = {
@@ -215,6 +222,8 @@ fun MedicationScheduleAndDosageCard(
                                 changeShowTimesPerDayDropDownMenuStatus(false)
                             }
                         )
+
+                        //Three times per day option
                         DropdownMenuItem(
                             text = {Text("Three times daily")},
                             onClick = {
@@ -223,6 +232,8 @@ fun MedicationScheduleAndDosageCard(
                                 changeShowTimesPerDayDropDownMenuStatus(false)
                             }
                         )
+
+                        //Four times per day option
                         DropdownMenuItem(
                             text = {Text("Four times daily")},
                             onClick = {
@@ -231,6 +242,8 @@ fun MedicationScheduleAndDosageCard(
                                 changeShowTimesPerDayDropDownMenuStatus(false)
                             }
                         )
+
+                        //Five times per day option
                         DropdownMenuItem(
                             text = {Text("Five times daily")},
                             onClick = {
@@ -239,6 +252,8 @@ fun MedicationScheduleAndDosageCard(
                                 changeShowTimesPerDayDropDownMenuStatus(false)
                             }
                         )
+
+                        //Six times per day option
                         DropdownMenuItem(
                             text = {Text("Six times daily")},
                             onClick = {
@@ -249,21 +264,22 @@ fun MedicationScheduleAndDosageCard(
                         )
                     }
                 }
+
+                //times per day info dialog popup
                 IconButton(onClick = {changeShowTimesPerDayInfoDialogStatus(true)}) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
-
                 if(showTimesPerDayInfoDialog){
                     InfoDialog(
                         info = "Times per day indicates how many times you take the medication on a scheduled day.",
                         onDismissRequest = {changeShowTimesPerDayInfoDialogStatus(false)},
                         title = "Times Per Day"
-
                     )
                 }
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
+                //Dose per intake
                 OutlinedTextField(
                     isError = isMedicationDosePerIntakeInError,
                     onValueChange = {
@@ -277,15 +293,10 @@ fun MedicationScheduleAndDosageCard(
                         imeAction = ImeAction.Done
                     ),
                     placeholder = {Text("e.g. 1 x 10mg tablet")},
-                    supportingText = {
-                        if (isMedicationDosePerIntakeInError){
-                            Text("Dose per intake is needed")
-                        } else{
-                            Text("*required")
-                        }
-                    }
+                    supportingText = { if (isMedicationDosePerIntakeInError) Text("Dose per intake is needed")  else Text("*required")  }
                 )
 
+                //Dose per intake info popup
                 IconButton(onClick = {changeShowDosePerIntakeDialogStatus(true)}) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
