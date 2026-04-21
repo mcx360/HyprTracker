@@ -86,9 +86,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        hyprTrackerViewModel.convertMillisToDate(it)
-    } ?: hyprTackerUiState.date
+    val selectedDate = datePickerState.selectedDateMillis?.let { hyprTrackerViewModel.convertMillisToDate(it) } ?: hyprTackerUiState.date
     val currentTime = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
@@ -122,11 +120,10 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
             1 -> HistoryTab(hyprTrackerViewModel, snackBarHostState) { selectedTab = it }
         }
 
+        // Edit sheet bottom sheet
         if (showBottomSheet) {
             ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
+                onDismissRequest = { showBottomSheet = false },
                 sheetState = sheetState
             ) {
                 Column(
@@ -136,6 +133,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                     .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Edit Sheet title
                     Text(
                         text = stringResource(R.string.Edit_BP_Log_Title),
                         fontWeight = FontWeight.Bold,
@@ -144,10 +142,9 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                             .padding(top = 16.dp, bottom = 16.dp),
                         style = MaterialTheme.typography.titleLarge)
 
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
                         Column {
+                            // Custom date picker text field
                             OutlinedTextField(
                                 value = hyprTrackerViewModel.formatToRegularDate(selectedDate),
                                 onValueChange = {},
@@ -166,6 +163,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                     .height(64.dp)
                             )
 
+                            // Custom time picker text field
                             OutlinedTextField(
                                 value = hyprTackerUiState.time.substring(0,5),
                                 onValueChange = {},
@@ -182,6 +180,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                 modifier = Modifier.fillMaxWidth()
                             )
 
+                            // Custom note text field
                             OutlinedTextField(
                                 value = hyprTackerUiState.notes,
                                 onValueChange = {hyprTrackerViewModel.updateNotesValue(it)},
@@ -200,6 +199,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                             )
                         }
 
+                        //Edit sheet custom time picker
                         if (showTimePicker){
                             Popup(
                                 onDismissRequest = {showTimePicker = false },
@@ -211,12 +211,13 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                         .shadow(elevation = 4.dp)
                                         .background(MaterialTheme.colorScheme.surface)
                                         .padding(16.dp)
-
                                 ){
-                                    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                                        TimePicker(
-                                            state = timePickerState,
-                                        )
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        TimePicker(state = timePickerState)
                                         Button(onClick = {showTimePicker = false}) {
                                             Text(stringResource(R.string.Dismiss_TimePicker_Button))
                                         }
@@ -228,15 +229,13 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                         }
                                     }
                                 }
-
-
                             }
-
                         }
 
+                        //Edit sheet custom date picker
                         if (showDatePicker) {
                             Popup(
-                                onDismissRequest = {showDatePicker = false },
+                                onDismissRequest = {showDatePicker = false},
                                 alignment = Alignment.TopStart
                             ) {
                                 Box(
@@ -245,13 +244,12 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                         .shadow(elevation = 4.dp)
                                         .background(MaterialTheme.colorScheme.surface)
                                         .padding(16.dp)
-
                                 ){
-                                        DatePicker(
-                                            dateFormatter = DatePickerDefaults.dateFormatter(),
-                                            state = datePickerState,
-                                            showModeToggle = false
-                                        )
+                                    DatePicker(
+                                        dateFormatter = DatePickerDefaults.dateFormatter(),
+                                        state = datePickerState,
+                                        showModeToggle = false
+                                    )
 
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -266,41 +264,32 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                             Text(stringResource(R.string.DateSelection_Ok_Button))
                                         }
                                     }
-
                                 }
                             }
                         }
-
                     }
 
+                    //Edit sheet accept button
                     Row(horizontalArrangement = Arrangement.Center) {
                         Button(modifier = Modifier.padding(8.dp), onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible){
-                                    showBottomSheet = false
-                                }
+                                if (!sheetState.isVisible) showBottomSheet = false
                             }
-                            scope.launch {
-                                snackBarHostState.showSnackbar("Log entry updated")
-                            }
-                        }) {
+                            scope.launch { snackBarHostState.showSnackbar("Log entry updated") } }
+                        ) {
                             Text("Accept")
                         }
 
+                        //Edit sheet Reset button
                         Button(modifier = Modifier.padding(8.dp), onClick = {
-                            scope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 hyprTrackerViewModel.resetBloodPressureLog()
-                                datePickerState.selectedDateMillis = hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
-                                if (!sheetState.isVisible){
-                                    showBottomSheet = false
-                                }
-                            scope.launch {
-                                snackBarHostState.showSnackbar("Log entry reset")
-                            }
-                            }
-                        }) {
+                                datePickerState.selectedDateMillis =
+                                    hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
+                                if (!sheetState.isVisible) showBottomSheet = false
+                                scope.launch { snackBarHostState.showSnackbar("Log entry reset") }
+                            } }
+                        ) {
                             Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
                         }
                     }
