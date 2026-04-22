@@ -38,11 +38,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
@@ -101,16 +103,32 @@ fun AddMedicationScreen(
             Row(modifier = modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer)
-                .systemBarsPadding(),
+                .systemBarsPadding()
+                .padding(horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Start
             ) {
+                IconButton(onClick = {
+                    openAddMedicationScreen.value = !openAddMedicationScreen.value
+                    scope.launch {
+                        medicineViewModel.resetAddMedication()
+                        medicineViewModel.fetchMedications()
+                    }
+                }) {
+                    Icon(
+                        painter = painterResource(R.drawable.outline_arrow_back_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
                 Text(
                     text = "Add Medication",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = modifier.padding(horizontal = 16.dp)
+                    modifier = modifier
+                        .padding(horizontal = 16.dp)
                 )
             }
 
