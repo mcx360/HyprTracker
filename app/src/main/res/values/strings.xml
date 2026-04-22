@@ -84,8 +84,8 @@
     <!--Strings for Hypertension stages-->
     <string name="Normal">Normal BP</string>
     <string name="High_normal">High-normal BP</string>
-    <string name="Grade1">Grade 1 Hypertension</string>
-    <string name="Grade2">Grade 2 Hypertension</string>
+    <string name="Grade1">Grade 1</string>
+    <string name="Grade2">Grade 2</string>
     <string name="Error">Error</string>
     <string name="Hypertension_Stage_Category">Category</string>
 

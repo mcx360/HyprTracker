@@ -20,10 +20,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +51,7 @@ import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.components.EmptyHistoryScreen
 import io.github.mcx360.hyprtracker.ui.utils.Dot
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 @Composable
@@ -87,7 +90,7 @@ fun HistoryTab(
                             )
 
                             Row {
-                                Button(
+                                OutlinedButton(
                                     onClick = { showDeleteConfirmationDialog.value = false },
                                     modifier = Modifier.padding(8.dp)
                                 ) {
@@ -141,19 +144,30 @@ fun HistoryTab(
                             .fillMaxWidth()
                             .padding(top = 8.dp)
                             .testTag(HISTORY_TAB_ITEM),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
-                        Text(hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date))
-                        Spacer(modifier = Modifier.padding(start = 16.dp))
+                        Text(
+                            when(hyprTrackerUIState.readings[index].date){
+                                LocalDate.now().toString() -> "Today @ "
+                                LocalDate.now().minusDays(1).toString() -> "Yesterday @"
+                                LocalDate.now().minusDays(2).toString() -> "Two days ago @"
+                                else -> hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date) + " @ "
+                            },
+                            style = MaterialTheme.typography.headlineSmall
+                        )
                         Icon(
                             painter = painterResource(R.drawable.ic_analogue_clock),
                             contentDescription = null
                         )
-                        Text(hyprTrackerUIState.readings[index].time.substring(0,5))
+                        Text(
+                            text = hyprTrackerUIState.readings[index].time.substring(0,5),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+                    HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp),)
 
 
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -162,7 +176,8 @@ fun HistoryTab(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Systolic_Value),
-                                style = MaterialTheme.typography.headlineSmall
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].systolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
@@ -172,7 +187,8 @@ fun HistoryTab(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Diastolic_Value),
-                                style = MaterialTheme.typography.headlineSmall
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].diastolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
@@ -182,10 +198,11 @@ fun HistoryTab(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = stringResource(R.string.Pulse_Value),
-                                style = MaterialTheme.typography.headlineSmall
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.secondary
                             )
                             if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
-                            Text("BPM", style = MaterialTheme.typography.bodyMedium)
+                            Text("bpm", style = MaterialTheme.typography.bodyMedium)
                         }
 
                         //Category value
@@ -218,8 +235,12 @@ fun HistoryTab(
 
                     Row(modifier = Modifier.padding(16.dp)) {
                         //Notes value
-                        Column {
-                            Text(stringResource(R.string.Notes_Value) + " " + if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes)
+                        Row {
+                            Text(
+                                text = stringResource(R.string.Notes_Value) + " ",
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(""+if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes)
                         }
 
                         //Bin Icon
@@ -227,7 +248,7 @@ fun HistoryTab(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
                         ) {
-                            IconButton(
+                            FilledTonalIconButton(
                                 onClick = {
                                     showDeleteConfirmationDialog.value = true
                                     listIndexToBeDeleted.intValue = index
