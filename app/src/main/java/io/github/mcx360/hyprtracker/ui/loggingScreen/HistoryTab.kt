@@ -147,23 +147,26 @@ fun HistoryTab(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
+                        Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null, modifier = Modifier.padding(horizontal = 4.dp))
                         Text(
                             when(hyprTrackerUIState.readings[index].date){
                                 LocalDate.now().toString() -> "Today @ "
-                                LocalDate.now().minusDays(1).toString() -> "Yesterday @"
-                                LocalDate.now().minusDays(2).toString() -> "Two days ago @"
+                                LocalDate.now().minusDays(1).toString() -> "Yesterday @ "
+                                LocalDate.now().minusDays(2).toString() -> "Two days ago @ "
                                 else -> hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date) + " @ "
                             },
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                        Icon(
-                            painter = painterResource(R.drawable.ic_analogue_clock),
-                            contentDescription = null
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = hyprTrackerUIState.readings[index].time.substring(0,5),
-                            style = MaterialTheme.typography.headlineSmall
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.ic_analogue_clock),
+                            contentDescription = null,
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                     }
 

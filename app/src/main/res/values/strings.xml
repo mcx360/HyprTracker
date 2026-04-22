@@ -59,13 +59,13 @@
 
     <string-array name="hypertension_stage_normal">
         <item>Normal BP</item>
-        <item>=&lt;130</item>
+        <item>≤130</item>
         <item>&lt;85</item>
     </string-array>
 
     <string-array name="hypertension_stage_high_normal">
         <item>High-normal BP</item>
-        <item>130 – 139</item>
+        <item>130 - 139</item>
         <item>85 - 89</item>
     </string-array>
 
@@ -77,8 +77,8 @@
 
     <string-array name="hypertension_stage_Grade2">
         <item>Grade 2 Hypertension</item>
-        <item>=&gt;160</item>
-        <item>=&gt;100</item>
+        <item>≥160</item>
+        <item>≥100</item>
     </string-array>
 
     <!--Strings for Hypertension stages-->

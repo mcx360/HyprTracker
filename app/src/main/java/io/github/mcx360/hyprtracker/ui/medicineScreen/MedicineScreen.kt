@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -20,6 +23,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,12 +35,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.components.EmptyMedicineList
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import kotlinx.coroutines.launch
 
 @Composable
 fun MedicineScreen(
@@ -47,6 +55,7 @@ fun MedicineScreen(
 ){
     val  scope = rememberCoroutineScope()
     val uiState = medicineViewModel.uiState.collectAsState()
+    val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
 
     if (uiState.value.medicineList.isNotEmpty()){
 
@@ -76,6 +85,51 @@ fun MedicineScreen(
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
 
                     val showExtrasMenu = remember { mutableStateOf(false) }
+
+                    when{
+                        //Dialog to confirm deletion of Medicine
+                        showDeleteConfirmationDialog.value -> {
+                            Dialog(onDismissRequest = {}) {
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center,
+                                        modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface).padding(16.dp)
+                                    ) {
+                                        Text(
+                                            text = "Are you sure you want to delete this medication?",
+                                            textAlign = TextAlign.Center
+                                        )
+
+                                        Row {
+                                            OutlinedButton(
+                                                onClick = { showDeleteConfirmationDialog.value = false },
+                                                modifier = Modifier.padding(8.dp)
+                                            ) {
+                                                Text(stringResource(R.string.Cancel_Button_Text))
+                                            }
+                                            Button(
+                                                onClick = {
+                                                    showDeleteConfirmationDialog.value = false
+                                                    scope.launch {
+                                                        medicineViewModel.removeMedication(medication)
+                                                        snackBarHostState.showSnackbar("Medicine removed")
+                                                    }
+                                                },
+                                                modifier = Modifier.padding(8.dp)
+                                            ) {
+                                                Text(stringResource(R.string.Confirm_Button_Text))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     Column {
                         Row(
@@ -124,7 +178,11 @@ fun MedicineScreen(
                                     ) {
                                         DropdownMenuItem(
                                             text = { Text("Delete") },
-                                            onClick = {medicineViewModel.removeMedication(medication)},
+                                            onClick = {
+                                                showDeleteConfirmationDialog.value = true
+                                                showExtrasMenu.value = false
+
+                                                      },
                                             leadingIcon = { Icon(Icons.Default.Delete, contentDescription = null) },
                                         )
                                     }

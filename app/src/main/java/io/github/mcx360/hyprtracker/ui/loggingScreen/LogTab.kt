@@ -53,6 +53,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.components.InfographicLine
+import io.github.mcx360.hyprtracker.ui.loggingScreen.components.InfographicLineTitle
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -273,10 +274,7 @@ fun LogTab(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-                InfographicLine(
-                    MaterialTheme.colorScheme.surface,
-                    stringArrayResource(R.array.hypertension_subheading),
-                )
+                InfographicLineTitle()
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 InfographicLine(
                     colorResource(R.color.Hypertension_Normal_Stage_Colour),
@@ -299,7 +297,7 @@ fun LogTab(
                     "Source: International Society of Hypertension",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp),
+                        .padding(start = 16.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

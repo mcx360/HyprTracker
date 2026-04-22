@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
@@ -195,7 +196,8 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                 modifier = Modifier.fillMaxWidth(),
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Done
-                                )
+                                ),
+                                placeholder = {Text("e.g. Sitting down")}
                             )
                         }
 
@@ -269,19 +271,11 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                         }
                     }
 
-                    //Edit sheet accept button
+
                     Row(horizontalArrangement = Arrangement.Center) {
-                        Button(modifier = Modifier.padding(8.dp), onClick = {
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible) showBottomSheet = false
-                            }
-                            scope.launch { snackBarHostState.showSnackbar("Log entry updated") } }
-                        ) {
-                            Text("Accept")
-                        }
 
                         //Edit sheet Reset button
-                        Button(modifier = Modifier.padding(8.dp), onClick = {
+                        OutlinedButton(modifier = Modifier.padding(8.dp), onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 hyprTrackerViewModel.resetBloodPressureLog()
                                 datePickerState.selectedDateMillis =
@@ -292,6 +286,17 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                         ) {
                             Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
                         }
+
+                        //Edit sheet accept button
+                        Button(modifier = Modifier.padding(8.dp), onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) showBottomSheet = false
+                            }
+                            scope.launch { snackBarHostState.showSnackbar("Log entry updated") } }
+                        ) {
+                            Text("Accept")
+                        }
+
                     }
                 }
             }
