@@ -99,12 +99,11 @@ fun AboutDialog(
                         Text("Contact")
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider(modifier = modifier.padding(8.dp))
+                HorizontalDivider(modifier = modifier.padding(horizontal = 8.dp))
 
                     TextButton(
                         onClick = onDismissRequest,
-                        modifier = modifier.padding(16.dp).align(Alignment.End)
+                        modifier = modifier.align(Alignment.End).padding(8.dp)
                     ) {
                         Text("OK", fontWeight = FontWeight.Bold)
                     }

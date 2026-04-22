@@ -180,7 +180,7 @@ fun HistoryTab(
                             Text(
                                 text = stringResource(R.string.Systolic_Value),
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.secondary
+                                //color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].systolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
@@ -191,7 +191,7 @@ fun HistoryTab(
                             Text(
                                 text = stringResource(R.string.Diastolic_Value),
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.secondary
+                                //color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].diastolicValue)
                             Text("mmHg", style = MaterialTheme.typography.bodyMedium)
@@ -202,7 +202,7 @@ fun HistoryTab(
                             Text(
                                 text = stringResource(R.string.Pulse_Value),
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.secondary
+                                //color = MaterialTheme.colorScheme.secondary
                             )
                             if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
                             Text("bpm", style = MaterialTheme.typography.bodyMedium)
