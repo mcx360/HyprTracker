@@ -212,5 +212,14 @@ fun MedicineScreen(
     }
     else {
         EmptyMedicineList()
+        when{
+            openAddMedicationScreen.value -> AddMedicationScreen(
+                modifier = modifier,
+                openAddMedicationScreen = openAddMedicationScreen,
+                snackBarHostState = snackBarHostState,
+                scope = scope,
+                medicineViewModel = medicineViewModel
+            )
+        }
     }
 }
