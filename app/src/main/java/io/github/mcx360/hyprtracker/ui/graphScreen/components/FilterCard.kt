@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -14,12 +15,14 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,13 +46,12 @@ fun FilterCard(
             Text("Filter By", style = MaterialTheme.typography.titleLarge)
             ExposedDropdownMenuBox(
                 expanded = showFilterByDropDownMenu,
-                onExpandedChange = {},
+                onExpandedChange = {updateShowFilterByDropDownMenu(!showFilterByDropDownMenu)},
             ) {
-                TextButton(onClick = {}) { }
                 OutlinedTextField(
                     value = filterOption,
                     readOnly = true,
-                    onValueChange = {},
+                    onValueChange = { updateShowFilterByDropDownMenu(!showFilterByDropDownMenu) },
                     leadingIcon = {Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)},
                     trailingIcon = {
                         IconButton(
@@ -65,7 +67,12 @@ fun FilterCard(
                             }
                         }
                     },
-                    modifier = modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .menuAnchor(
+                            type = MenuAnchorType.PrimaryEditable,
+                            enabled = true
+                        )
                 )
                 ExposedDropdownMenu(
                     expanded = showFilterByDropDownMenu,

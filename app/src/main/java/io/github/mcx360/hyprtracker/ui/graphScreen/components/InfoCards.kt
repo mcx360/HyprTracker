@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,8 +47,11 @@ fun InfoCards(
 ){
     Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
 
+        val haptic = LocalHapticFeedback.current
+
         //Systolic Info
         Card(modifier = modifier.weight(0.33f).clickable(onClick = {
+            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
             when (systolicDataShown) {
                 "Average" -> updateSystolicDataShown("Max")
                 "Max" -> updateSystolicDataShown("Min")
@@ -115,6 +120,7 @@ fun InfoCards(
                 .weight(0.33f)
                 .padding(horizontal = 8.dp)
                 .clickable(onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     when (diastolicDataShown) {
                         "Average" -> updateDiastolicDataShown("Max")
                         "Max" -> updateDiastolicDataShown("Min")
@@ -183,6 +189,7 @@ fun InfoCards(
             modifier = modifier
                 .weight(0.33f)
                 .clickable(onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     when (pulseDataShown) {
                         "Average" -> updatePulseDataShown("Max")
                         "Max" -> updatePulseDataShown("Min")
