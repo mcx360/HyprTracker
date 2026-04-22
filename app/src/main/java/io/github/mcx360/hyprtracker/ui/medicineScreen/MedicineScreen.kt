@@ -169,7 +169,7 @@ fun MedicineScreen(
                                     .padding(8.dp)
                             ) {
                                 Text(
-                                    text = "Times: ",
+                                    text = "Taken at: ",
                                     fontWeight = FontWeight.Bold
                                 )
 
