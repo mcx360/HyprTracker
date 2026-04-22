@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 
@@ -48,32 +49,28 @@ fun FilterCard(
                 expanded = showFilterByDropDownMenu,
                 onExpandedChange = {updateShowFilterByDropDownMenu(!showFilterByDropDownMenu)},
             ) {
-                OutlinedTextField(
-                    value = filterOption,
-                    readOnly = true,
-                    onValueChange = { updateShowFilterByDropDownMenu(!showFilterByDropDownMenu) },
-                    leadingIcon = {Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)},
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                if (showFilterByDropDownMenu) updateShowFilterByDropDownMenu(
-                                    false
-                                ) else updateShowFilterByDropDownMenu(true)
-                            }) {
-                            if (showFilterByDropDownMenu) {
-                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
-                            } else {
-                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
-                            }
+                TextButton(onClick = {}, modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .menuAnchor(
+                        type = MenuAnchorType.PrimaryEditable,
+                        enabled = true
+                    )) {
+                    Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
+                    Text(filterOption)
+                    IconButton(
+                        onClick = {
+                            if (showFilterByDropDownMenu) updateShowFilterByDropDownMenu(
+                                false
+                            ) else updateShowFilterByDropDownMenu(true)
+                        }) {
+                        if (showFilterByDropDownMenu) {
+                            Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
+                        } else {
+                            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
                         }
-                    },
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .menuAnchor(
-                            type = MenuAnchorType.PrimaryEditable,
-                            enabled = true
-                        )
-                )
+                    }
+                }
+
                 ExposedDropdownMenu(
                     expanded = showFilterByDropDownMenu,
                     onDismissRequest = { updateShowFilterByDropDownMenu(false) },
