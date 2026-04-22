@@ -65,6 +65,7 @@ fun HyprTrackerScreen(
             .statusBarsPadding()
     ) {
         ModalNavigationDrawer(
+            gesturesEnabled = false,
             modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
             drawerContent = {
                 HyprTrackerDrawerContent(
