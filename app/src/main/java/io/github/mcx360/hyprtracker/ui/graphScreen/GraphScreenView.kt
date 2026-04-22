@@ -56,6 +56,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
         EmptyInsightsScreen()
     }
     else{
+        val list = hyprTrackerViewModel.getWeekDaysFromToday()
         Column(
             modifier = modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
@@ -102,7 +103,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 })
             )
 
-            BPTrendsBreakdown()
+            BPTrendsBreakdown(hyprTrackerViewModel = hyprTrackerViewModel)
         }
     }
 }

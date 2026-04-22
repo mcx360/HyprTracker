@@ -27,11 +27,12 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.utils.Days
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
-fun BPTrendsBreakdown(modifier: Modifier = Modifier){
+fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel){
     Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
         Text("BP Trends Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         val modelProducer = remember { CartesianChartModelProducer() }
@@ -46,7 +47,7 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier){
                 startAxis = VerticalAxis.rememberStart(),
                 bottomAxis = HorizontalAxis.rememberBottom(
                     valueFormatter = CartesianValueFormatter { _, x, _ ->
-                        Days.entries.getOrNull(x.toInt())?.name?.take(3) ?: ""
+                        hyprTrackerViewModel.getWeekDaysFromToday()[x.toInt()]
                     }
                 ),
                 ),

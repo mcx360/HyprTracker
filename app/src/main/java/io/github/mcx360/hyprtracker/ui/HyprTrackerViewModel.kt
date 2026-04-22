@@ -20,8 +20,13 @@ import java.util.Locale
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.ui.utils.Days
+import java.time.DayOfWeek
+import java.util.Collections
 import kotlin.String
 import kotlin.math.ceil
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -251,6 +256,14 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         return readings.mapNotNull {
             runCatching { it.pulseValue?.toInt() }.getOrNull()
         }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun getWeekDaysFromToday() : List<String>{
+        val daysOfWeek = listOf<String>("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
+        val today = LocalDate.now().dayOfWeek.value-1
+        Collections.rotate(daysOfWeek, -today)
+        return daysOfWeek
     }
 
     fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
