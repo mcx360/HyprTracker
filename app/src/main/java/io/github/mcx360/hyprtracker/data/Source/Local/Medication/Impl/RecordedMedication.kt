@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(primaryKeys = ["medication_name", "medication_description", "medication_schedule"])
 data class RecordedMedication(
-    @PrimaryKey(autoGenerate = true) val id: Int, //might remove
+    //@PrimaryKey(autoGenerate = true) val id: Int, //might remove
     @ColumnInfo(name = "medication_name") val name: String,
     @ColumnInfo(name = "medication_description") val description: String,
     @ColumnInfo(name = "medication_schedule") val schedule: String,

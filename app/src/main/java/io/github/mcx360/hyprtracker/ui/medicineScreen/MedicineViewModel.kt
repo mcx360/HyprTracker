@@ -60,8 +60,10 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    suspend fun removeMedication(medicine: Medicine){
-        medicationRepository.removeMedication(medicine.toRecordedMedication())
+    fun removeMedication(medicine: Medicine){
+        viewModelScope.launch(Dispatchers.IO) {
+            medicationRepository.removeMedication(medicine.toRecordedMedication())
+        }
     }
 
     fun updateMedicationName(name: String){
@@ -172,7 +174,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     )
 
     fun Medicine.toRecordedMedication() : RecordedMedication = RecordedMedication(
-        id = 0,
+        //id = 0,
         name = name,
         description = description,
         schedule = schedule,

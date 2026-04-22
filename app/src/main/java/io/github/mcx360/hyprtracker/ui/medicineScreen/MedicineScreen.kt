@@ -1,6 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,8 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +74,9 @@ fun MedicineScreen(
                 val medication = uiState.value.medicineList[index]
                 //individual medication card
                 Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+
+                    val showExtrasMenu = remember { mutableStateOf(false) }
+
                     Column {
                         Row(
                             modifier = Modifier
@@ -102,11 +111,23 @@ fun MedicineScreen(
                                 horizontalAlignment = Alignment.End,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                IconButton(onClick = {}) {
+                                Box {
+                                IconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
                                     Icon(
                                         Icons.Filled.MoreVert,
                                         contentDescription = null
                                     )
+                                }
+                                    DropdownMenu(
+                                        expanded = showExtrasMenu.value,
+                                        onDismissRequest = {showExtrasMenu.value = false}
+                                    ) {
+                                        DropdownMenuItem(
+                                            text = { Text("Delete") },
+                                            onClick = {medicineViewModel.removeMedication(medication)},
+                                            leadingIcon = { Icon(Icons.Default.Delete, contentDescription = null) },
+                                        )
+                                    }
                                 }
                             }
                         }
