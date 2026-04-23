@@ -103,6 +103,20 @@ fun HyprTrackerDrawerContent(
                 modifier = modifier.testTag(EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG)
             )
 
+            //Import logs
+            NavigationDrawerItem(
+                label = {Text(text = stringResource(R.string.backup_label))},
+                selected = false,
+                onClick = {
+                    importer.launch("text/csv")
+                    scope.launch {
+                        drawerState.apply { if (isOpen) close() else open() }
+                    }
+                },
+                icon = { Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null) },
+                modifier = modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
+            )
+
             //Share logs
             NavigationDrawerItem(
                 label = { Text(text= stringResource(R.string.share_label)) },
@@ -122,18 +136,6 @@ fun HyprTrackerDrawerContent(
                 modifier = modifier.testTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG)
             )
 
-            //bin
-            NavigationDrawerItem(
-                label = {Text(text = stringResource(R.string.bin_label))},
-                selected = false,
-                onClick = {
-                    scope.launch {
-                        drawerState.apply { if (isOpen) close() else open() } }
-                },
-                icon = { Icon(painter = painterResource(R.drawable.ic_bin), contentDescription = null) },
-                modifier = modifier.testTag(BIN_IN_NAVIGATIONDRAWER_TAG)
-            )
-
             HorizontalDivider()
 
             // External header
@@ -143,20 +145,6 @@ fun HyprTrackerDrawerContent(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold
-            )
-
-            //Import logs
-            NavigationDrawerItem(
-                label = {Text(text = stringResource(R.string.backup_label))},
-                selected = false,
-                onClick = {
-                    importer.launch("text/csv")
-                    scope.launch {
-                        drawerState.apply { if (isOpen) close() else open() }
-                    }
-                },
-                icon = { Icon(painter = painterResource(R.drawable.ic_restore), contentDescription = null) },
-                modifier = modifier.testTag(BACKUP_IN_NAVIGATIONDRAWER_TAG)
             )
 
             //Rate app
