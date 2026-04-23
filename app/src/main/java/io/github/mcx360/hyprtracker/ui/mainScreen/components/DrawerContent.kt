@@ -55,7 +55,7 @@ fun HyprTrackerDrawerContent(
         onResult = { uri -> }
     )
 
-    val importer = rememberLauncherForActivityResult(
+        val importer = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri -> }
     )

@@ -158,15 +158,15 @@ fun HistoryTab(
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
-                        Text(
-                            text = hyprTrackerUIState.readings[index].time.substring(0,5),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
                         Icon(
                             painter = painterResource(R.drawable.ic_analogue_clock),
                             contentDescription = null,
                             modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        Text(
+                            text = hyprTrackerUIState.readings[index].time.substring(0,5),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
                         )
                     }
 

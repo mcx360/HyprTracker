@@ -35,7 +35,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNavigationBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.Settings
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.Settings
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
@@ -145,7 +145,9 @@ fun HyprTrackerScreen(
 
                     when {
                         openSettingsDialog.value -> {
-                            Settings(onDismissRequest = { openSettingsDialog.value = false })
+                            Settings(
+                                onDismissRequest = { openSettingsDialog.value = false }
+                            )
                         }
                     }
                 }
