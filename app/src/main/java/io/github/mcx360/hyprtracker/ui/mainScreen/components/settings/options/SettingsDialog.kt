@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings
+package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.ThemePicker
 
 @Composable
 fun Settings(
@@ -87,19 +88,26 @@ fun Settings(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         when{
-                            showThemeDialog.value -> ThemePicker(onDismissRequest = {showThemeDialog.value = false})
+                            showThemeDialog.value -> ThemePicker(onDismissRequest = {
+                                showThemeDialog.value = false
+                            })
                         }
                     }
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showLanguageDialog.value = true})) {
                         Text("Language", fontWeight = FontWeight.Bold)
                         Text(
                             text = "English (UK)",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                    }
+                    when{
+                        showLanguageDialog.value -> LanguagePicker(onDismissRequest = {
+                            showLanguageDialog.value = false
+                        })
                     }
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
