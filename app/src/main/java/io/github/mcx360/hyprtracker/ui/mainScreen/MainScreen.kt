@@ -146,7 +146,8 @@ fun HyprTrackerScreen(
                     when {
                         openSettingsDialog.value -> {
                             Settings(
-                                onDismissRequest = { openSettingsDialog.value = false }
+                                onDismissRequest = { openSettingsDialog.value = false },
+                                hyprTrackerViewModel = hyprTrackerViewModel
                             )
                         }
                     }

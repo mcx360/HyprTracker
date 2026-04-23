@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -30,14 +31,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ClassificationTablePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.DeleteBPDataConfirmation
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemePicker
+import kotlinx.coroutines.launch
 
 @Composable
 fun Settings(
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hyprTrackerViewModel: HyprTrackerViewModel
     ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -51,6 +56,7 @@ fun Settings(
         val showClassificationTableDialog = remember { mutableStateOf(false) }
         val showDeleteBPDataDialog = remember { mutableStateOf(false) }
         val showHelpDialog = remember { mutableStateOf(false) }
+        val scope = rememberCoroutineScope()
 
         Card(
             modifier = Modifier.fillMaxSize(),
@@ -128,13 +134,21 @@ fun Settings(
 
                     Text("Data", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp),color = MaterialTheme.colorScheme.secondary)
 
-                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showDeleteBPDataDialog.value = true})) {
                         Text("Delete BP data", fontWeight = FontWeight.Bold)
                         Text(
                             "Permanently delete all bp data",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+                    when{
+                        showDeleteBPDataDialog.value -> {
+                            DeleteBPDataConfirmation(
+                                onDismissRequest = {showDeleteBPDataDialog.value = false},
+                                onDelete = {scope.launch { hyprTrackerViewModel.deleteAllBPRecords() } }
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))

@@ -11,4 +11,5 @@ interface BloodPressureRepository {
 
     suspend fun addBloodPressureReading(reading: RecordedBloodPressure)
 
+    suspend fun removeAllBloodPressureReadings()
 }

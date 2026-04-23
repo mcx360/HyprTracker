@@ -266,6 +266,10 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         return daysOfWeek
     }
 
+    suspend fun deleteAllBPRecords(){
+        bloodPressureRepository.removeAllBloodPressureReadings()
+    }
+
     fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
         val counts = mutableListOf(0, 0, 0, 0)
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings

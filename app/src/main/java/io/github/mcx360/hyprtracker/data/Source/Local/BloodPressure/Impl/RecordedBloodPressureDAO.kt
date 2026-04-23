@@ -1,6 +1,7 @@
 package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -31,4 +32,7 @@ interface RecordedBloodPressureDAO {
         date: String,
         time: String
     )
+
+    @Query("DELETE FROM RecordedBloodPressureReadings")
+    suspend fun deleteAllBloodPressureReadings()
 }

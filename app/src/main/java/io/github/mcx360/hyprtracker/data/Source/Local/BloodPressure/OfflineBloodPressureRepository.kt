@@ -13,4 +13,7 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
 
     override suspend fun removeBloodPressureReading(systolicValue: String, diastolicValue: String, pulseValue: String?, date: String, time: String) =
         bloodPressureDAO.deleteBloodPressureReading(systolicValue,diastolicValue,pulseValue,date,time)
+
+    override suspend fun removeAllBloodPressureReadings() = bloodPressureDAO.deleteAllBloodPressureReadings()
+
 }
