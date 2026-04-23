@@ -34,15 +34,18 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ClassificationTablePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.DeleteBPDataConfirmation
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.DeleteMedicationsConfirmation
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemePicker
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun Settings(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    hyprTrackerViewModel: HyprTrackerViewModel
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    medicineViewModel: MedicineViewModel
     ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -55,6 +58,7 @@ fun Settings(
         val showLanguageDialog = remember { mutableStateOf(false) }
         val showClassificationTableDialog = remember { mutableStateOf(false) }
         val showDeleteBPDataDialog = remember { mutableStateOf(false) }
+        val showDeleteMedicationDialog = remember { mutableStateOf(false) }
         val showHelpDialog = remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
@@ -153,13 +157,22 @@ fun Settings(
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
-                        Text("Delete medication data", fontWeight = FontWeight.Bold)
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showDeleteMedicationDialog.value = true})) {
+                        Text("Delete medications?", fontWeight = FontWeight.Bold)
                         Text(
                             "Permanently delete all medication data",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+
+                    when{
+                        showDeleteMedicationDialog.value -> {
+                            DeleteMedicationsConfirmation(
+                                onDismissRequest = {showDeleteMedicationDialog.value = false},
+                                onDelete = {scope.launch {medicineViewModel.deleteAllRecordedMedications()}}
+                            )
+                        }
                     }
 
                     Text("About", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp), color = MaterialTheme.colorScheme.secondary)

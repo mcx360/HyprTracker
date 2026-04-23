@@ -11,4 +11,6 @@ class OfflineMedicationRepository(private val medicationDAO: RecordedMedicationD
 
     override suspend fun removeMedication(medication: RecordedMedication) = medicationDAO.deleteMedication(medication)
 
+    override suspend fun removeAllMedications() = medicationDAO.deleteAllMedications()
+
 }

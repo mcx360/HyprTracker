@@ -115,6 +115,12 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
+    suspend fun deleteAllRecordedMedications(){
+        viewModelScope.launch(Dispatchers.IO) {
+            medicationRepository.removeAllMedications()
+        }
+    }
+
     fun addSelectedDays(vararg days: String){
         val selectedDays = _uiState.value.medicationSelectedDays
         for (day in days){

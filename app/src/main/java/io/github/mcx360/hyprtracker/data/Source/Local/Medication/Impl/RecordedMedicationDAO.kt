@@ -16,4 +16,7 @@ interface RecordedMedicationDAO {
 
     @Delete
     fun deleteMedication(medication: RecordedMedication)
+
+    @Query("DELETE FROM RecordedMedication")
+    fun deleteAllMedications()
 }

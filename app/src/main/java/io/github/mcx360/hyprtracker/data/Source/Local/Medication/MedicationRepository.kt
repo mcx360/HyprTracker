@@ -10,4 +10,6 @@ interface MedicationRepository {
     suspend fun addMedication(medication: RecordedMedication)
 
     suspend fun removeMedication(medication: RecordedMedication)
+
+    suspend fun removeAllMedications()
 }
