@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options
+package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.ThemePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ClassificationTablePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.LanguagePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemePicker
 
 @Composable
 fun Settings(
@@ -112,13 +114,16 @@ fun Settings(
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showClassificationTableDialog.value = true})) {
                         Text("Classification table", fontWeight = FontWeight.Bold)
                         Text(
                             text = "Internation society of hypertension",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+                    when{
+                        showClassificationTableDialog.value -> ClassificationTablePicker(onDismissRequest = {showClassificationTableDialog.value = false})
                     }
 
                     Text("Data", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp),color = MaterialTheme.colorScheme.secondary)

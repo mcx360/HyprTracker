@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun LanguagePicker(
+fun ThemePicker(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit
 ) {
-    val radioOptions = listOf("English(UK)")
+    val radioOptions = listOf("Dark", "Light", "System default")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
-            Text("Select Language", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+            Text("Select theme", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider()
             Column(modifier.selectableGroup()) {
                 radioOptions.forEach { text ->

@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings
+package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun ThemePicker(
+fun ClassificationTablePicker(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit
 ) {
-    val radioOptions = listOf("Dark", "Light", "System default")
+    val radioOptions = listOf("Internation society of hypertension")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
-            Text("Select theme", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+            Text("Select classification table", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider()
             Column(modifier.selectableGroup()) {
                 radioOptions.forEach { text ->
@@ -63,10 +63,10 @@ fun ThemePicker(
             }
             HorizontalDivider()
             Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = {}) {
+                TextButton(onClick = {onDismissRequest()}) {
                     Text("Cancel")
                 }
-                TextButton(onClick = {}) {
+                TextButton(onClick = {onDismissRequest()}) {
                     Text("Ok")
                 }
             }
