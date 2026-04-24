@@ -294,13 +294,13 @@ fun LogTab(
                 )
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Text(
-                    "Source: International Society of Hypertension",
+                    text = "Source: International Society of Hypertension",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                )
             }
         }
     }

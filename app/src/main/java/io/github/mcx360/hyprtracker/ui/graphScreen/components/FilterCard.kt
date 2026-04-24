@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -16,16 +15,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 
@@ -38,31 +33,41 @@ fun FilterCard(
     filterOption : String,
     updateFilterOption: (String) -> Unit
 ){
-    Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .padding(8.dp)
+    ) {
         Row(
-            modifier = modifier.fillMaxWidth().padding(8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Filter By", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "Filter By",
+                style = MaterialTheme.typography.titleLarge
+            )
             ExposedDropdownMenuBox(
                 expanded = showFilterByDropDownMenu,
                 onExpandedChange = {updateShowFilterByDropDownMenu(!showFilterByDropDownMenu)},
             ) {
-                TextButton(onClick = {}, modifier = Modifier
+                TextButton(
+                    onClick = {},
+                    modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .menuAnchor(
                         type = MenuAnchorType.PrimaryEditable,
                         enabled = true
-                    )) {
-                    Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)
+                    )
+                ) {
+
+                    Icon(
+                        painter = painterResource(R.drawable.ic_date),
+                        contentDescription = null
+                    )
                     Text(filterOption)
-                    IconButton(
-                        onClick = {
-                            if (showFilterByDropDownMenu) updateShowFilterByDropDownMenu(
-                                false
-                            ) else updateShowFilterByDropDownMenu(true)
-                        }) {
+                    IconButton(onClick = { updateShowFilterByDropDownMenu(!showFilterByDropDownMenu)}) {
                         if (showFilterByDropDownMenu) {
                             Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
                         } else {

@@ -23,7 +23,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
@@ -180,10 +179,9 @@ fun HistoryTab(
                             Text(
                                 text = stringResource(R.string.Systolic_Value),
                                 style = MaterialTheme.typography.headlineSmall,
-                                //color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].systolicValue)
-                            Text("mmHg", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
 
                         //Diastolic value
@@ -194,7 +192,7 @@ fun HistoryTab(
                                 //color = MaterialTheme.colorScheme.secondary
                             )
                             Text(hyprTrackerUIState.readings[index].diastolicValue)
-                            Text("mmHg", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
                         }
 
                         //Pulse value
@@ -205,7 +203,7 @@ fun HistoryTab(
                                 //color = MaterialTheme.colorScheme.secondary
                             )
                             if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let { Text(it) }
-                            Text("bpm", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "bpm", style = MaterialTheme.typography.bodyMedium)
                         }
 
                         //Category value

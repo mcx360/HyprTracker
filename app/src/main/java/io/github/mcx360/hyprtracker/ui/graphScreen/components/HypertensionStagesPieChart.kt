@@ -41,9 +41,22 @@ fun BPBreakdownCard(
     breakdown: List<Float>
 
 ){
-    Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
-        Text("BP Stages Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .padding(8.dp)
+    ) {
+        Text(
+            text = "BP Stages Breakdown",
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+
+        )
         val modelProducer = remember { PieChartModelProducer() }
+
         LaunchedEffect(filterOption) {
             modelProducer.runTransaction {
                 pieSeries {
@@ -52,8 +65,11 @@ fun BPBreakdownCard(
             }
         }
 
-        HypertensionStagesPieChart(modelProducer, modifier)
-        Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+        HypertensionStagesPieChart(modelProducer)
+
+        Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {

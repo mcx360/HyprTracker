@@ -33,14 +33,29 @@ import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
 fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel){
-    Card(modifier = modifier.fillMaxWidth().padding(8.dp).height(300.dp)) {
-        Text("BP Trends Breakdown", modifier = modifier.fillMaxWidth().padding(8.dp), textAlign = TextAlign.Start, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(300.dp)
+    ) {
+        Text(
+            text = "BP Trends Breakdown",
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+
         val modelProducer = remember { CartesianChartModelProducer() }
         LaunchedEffect(Unit) {
             modelProducer.runTransaction {
                 lineSeries { series(70, 80, 9, 10, 10, 12, 90) }
             }
         }
+
         CartesianChartHost(
             rememberCartesianChart(
                 rememberLineCartesianLayer(rangeProvider = CartesianLayerRangeProvider.fixed(minY = 30.0, maxY = 210.0)),
@@ -50,25 +65,39 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                         hyprTrackerViewModel.getWeekDaysFromToday()[x.toInt()]
                     }
                 ),
-                ),
+            ),
             modelProducer,
         )
-        Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(modifier = modifier.fillMaxWidth().padding(8.dp),
+            Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DotWithColour(Color.Blue)
-                Text(" Systolic", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = " Systolic",
+                    style = MaterialTheme.typography.bodySmall
+                )
                 Spacer(modifier.padding(4.dp))
                 DotWithColour(Color.Red)
-                Text(" Diastolic",  style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = " Diastolic",
+                    style = MaterialTheme.typography.bodySmall
+                )
                 Spacer(modifier.padding(4.dp))
                 DotWithColour(Color.Green)
-                Text(" Pulse",  style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = " Pulse",
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

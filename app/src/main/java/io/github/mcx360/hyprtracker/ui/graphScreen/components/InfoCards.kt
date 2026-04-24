@@ -50,7 +50,9 @@ fun InfoCards(
         val haptic = LocalHapticFeedback.current
 
         //Systolic Info
-        Card(modifier = modifier.weight(0.33f).clickable(onClick = {
+        Card(modifier = modifier
+            .weight(0.33f)
+            .clickable(onClick = {
             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
             when (systolicDataShown) {
                 "Average" -> updateSystolicDataShown("Max")
@@ -70,7 +72,10 @@ fun InfoCards(
                     horizontalArrangement = Arrangement.Start,
                     modifier = modifier.fillMaxWidth()
                 ) {
-                    Text("Systolic", textAlign = TextAlign.Start)
+                    Text(
+                        text = "Systolic",
+                        textAlign = TextAlign.Start
+                    )
                     Spacer(modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.heart_3_),
@@ -178,7 +183,7 @@ fun InfoCards(
                     )
                 }
                 Text(
-                    diastolicDataShown,
+                    text = diastolicDataShown,
                     modifier = modifier.fillMaxWidth(),
                 )
             }
@@ -241,8 +246,8 @@ fun InfoCards(
                         },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
-
                     )
+
                     Text(
                         text = "bpm",
                         style = MaterialTheme.typography.bodySmall,

@@ -76,7 +76,8 @@ fun InfographicLineTitle() {
                 .padding(4.dp),
             style = MaterialTheme.typography.titleMedium
         )
-        Text(text = "Systolic",
+        Text(
+            text = "Systolic",
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),

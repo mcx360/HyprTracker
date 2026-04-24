@@ -296,7 +296,6 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                         ) {
                             Text("Accept")
                         }
-
                     }
                 }
             }

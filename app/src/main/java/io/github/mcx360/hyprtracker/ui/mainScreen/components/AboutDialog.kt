@@ -105,7 +105,7 @@ fun AboutDialog(
                         onClick = onDismissRequest,
                         modifier = modifier.align(Alignment.End).padding(8.dp)
                     ) {
-                        Text("OK", fontWeight = FontWeight.Bold)
+                        Text(text = "OK", fontWeight = FontWeight.Bold)
                     }
             }
         }
