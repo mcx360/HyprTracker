@@ -127,7 +127,7 @@ fun HyprTrackerDrawerContent(
                     }
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, "text")
+                        putExtra(Intent.EXTRA_TEXT, "Hi, here are my blood pressure readings from the past week:")
                     }
                     val chooser = Intent.createChooser(intent, "Share via")
                     context.startActivity(chooser)
@@ -205,7 +205,7 @@ fun HyprTrackerDrawerContent(
                 onClick = {
                     scope.launch {
                         drawerState.apply { if (isOpen) close() else open()} }
-                    updateOpenAboutDialogToTrue()
+                        updateOpenAboutDialogToTrue()
                 },
                 icon = { Icon(painter = painterResource(R.drawable.ic_about), contentDescription = null) },
                 modifier = modifier.testTag(ABOUT_IN_NAVIGATIONDRAWER_TAG)

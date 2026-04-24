@@ -20,12 +20,8 @@ import java.util.Locale
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
-import io.github.mcx360.hyprtracker.ui.utils.Days
-import java.time.DayOfWeek
 import java.util.Collections
 import kotlin.String
-import kotlin.math.ceil
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
@@ -37,6 +33,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     init {
         viewModelScope.launch {
             while(isActive){
+                //if getCurrentDateAndTime is set to true then the ui keeps updating date and time to the most current
                 if (getCurrentDateAndTime){
                     _uiState.update { currentState ->
                         currentState.copy(
@@ -53,6 +50,19 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //fetches blood pressure readings from database and loads them into uiState
+    suspend fun fetchBPReadings(){
+        return bloodPressureRepository.getAllRecordingsStream().collect { readings ->
+            _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
+        }
+    }
+
+    //delete all blood pressure readings in database
+    suspend fun deleteAllBPRecords(){
+        bloodPressureRepository.removeAllBloodPressureReadings()
+    }
+
+    //Resets uiState and enables automatic updating of date and time values
     fun resetBloodPressureLog(){
         _uiState.update { currentState ->
             currentState.copy(
@@ -67,6 +77,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         getCurrentDateAndTime = true
     }
 
+    //Updates systolic value in log tab
     fun updateSystolicValue(inputtedValue: String){
         if (inputtedValue.length<4) {
             _uiState.update { currentState ->
@@ -75,6 +86,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //updates diastolic value in log tab
     fun updateDiastolicValue(inputtedValue: String){
         if (inputtedValue.length<4) {
             _uiState.update { currentState ->
@@ -83,6 +95,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //updates pulse value in log tab
     fun updatePulseValue(inputtedValue: String){
         if (inputtedValue.length<4) {
             _uiState.update { currentState ->
@@ -91,12 +104,14 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //updates notes value in log tab
     fun updateNotesValue(inputtedValue: String){
         _uiState.update { currentState ->
             currentState.copy(notes = inputtedValue)
         }
     }
 
+    //Adds custom date value in log tab and stops updating the date
     fun updateDateValue(inputtedValue: String){
         getCurrentDateAndTime = false
         _uiState.update { currentState ->
@@ -104,6 +119,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //Adds custom time value in log tab and stops updating the time
     fun updateTimeValue(inputtedValue: String){
         getCurrentDateAndTime = false
         _uiState.update { currentState ->
@@ -111,31 +127,18 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //Adds a reading to the database
     suspend fun addReading(reading: HyprReading) {
         bloodPressureRepository.addBloodPressureReading(reading.toRecordedBloodPressure())
-
     }
 
+    //Removes a reading from the database
     suspend fun removeReading(index: Int){
         val reading: HyprReading = _uiState.value.readings[index]
         bloodPressureRepository.removeBloodPressureReading(reading.systolicValue, reading.diastolicValue, reading.pulseValue, reading.date, reading.time)
     }
 
-    suspend fun fetchBPReadings(){
-        return bloodPressureRepository.getAllRecordingsStream().collect { readings ->
-            _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
-        }
-    }
-
-    fun convertMillisToDate(millis: Long?): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        if (millis == null){
-            return ""
-        } else{
-            return formatter.format(Date(millis))
-        }
-    }
-
+    //Helper function that filters readings from current date back up until the cutoff date
     fun getFilteredList(cutoffDate: String): List<HyprReading> {
         val cutoff = LocalDate.parse(cutoffDate)
 
@@ -145,6 +148,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //gets systolic average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getSystolicAverage(cutoffDate: String?) : Int{
         try {
             if (cutoffDate == null) {
@@ -153,11 +157,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 val filteredList = getFilteredList(cutoffDate)
                 return filteredList.sumOf { it.systolicValue.toInt() } / filteredList.size
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             return 0
         }
     }
 
+    //gets systolic minimum value from now until the cutoffDate or all time minimum if no cutoffDate is provided
     fun getSystolicMin(cutoffDate: String?) : Int{
         return try {
             if (cutoffDate == null){
@@ -165,11 +170,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).minOf { it.systolicValue.toInt() }
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             0
         }
     }
 
+    //gets systolic maximum value from now until the cutoffDate or all time maximum if no cutoffDate is provided
     fun getSystolicMax(cutoffDate: String?) : Int{
         return try {
             if (cutoffDate == null){
@@ -177,11 +183,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).maxOf { it.systolicValue.toInt() }
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             0
         }
     }
 
+    /*
     fun getSystolicValues(cutoffDate: String?): List<Int> {
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
 
@@ -189,7 +196,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             runCatching { it.systolicValue.toInt() }.getOrNull()
         }
     }
+     */
 
+    //gets diastolic average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getDiastolicAverage(cutoffDate: String?) : Int{
         try {
             if (cutoffDate == null) {
@@ -198,11 +207,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 val filteredList = getFilteredList(cutoffDate)
                 return filteredList.sumOf { it.diastolicValue.toInt() } / filteredList.size
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             return 0
         }
     }
 
+    //gets diastolic minimum value from now until the cutoffDate or all time minimum if no cutoffDate is provided
     fun getDiastolicMin(cutoffDate: String?) : Int{
         return try {
             if (cutoffDate == null){
@@ -210,11 +220,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).minOf { it.diastolicValue.toInt() }
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             0
         }
     }
 
+    //gets diastolic maximum value from now until the cutoffDate or all time maximum if no cutoffDate is provided
     fun getDiastolicMax(cutoffDate: String?) : Int{
         return try {
             if (cutoffDate == null){
@@ -222,11 +233,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).maxOf { it.diastolicValue.toInt() }
             }
-        }catch (e: ArithmeticException){
+        }catch (_: ArithmeticException){
             0
         }
     }
 
+    /*
     fun getDiastolicValues(cutoffDate: String?): List<Int> {
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
 
@@ -234,22 +246,27 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             runCatching { it.diastolicValue.toInt() }.getOrNull()
         }
     }
+     */
 
+    //gets pulse average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getPulseAverage(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.average().takeIf { !it.isNaN() }?.toInt() ?: 0
     }
 
+    //gets pulse minimum value from now until the cutoffDate or all time minimum if no cutoffDate is provided
     fun getPulseMin(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.min()
     }
 
+    //gets pulse maximum value from now until the cutoffDate or all time maximum if no cutoffDate is provided
     fun getPulseMax(cutoffDate: String?) : Int{
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
         return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
     }
 
+    /*
     fun getPulseValues(cutoffDate: String?): List<Int> {
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
 
@@ -257,19 +274,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             runCatching { it.pulseValue?.toInt() }.getOrNull()
         }
     }
+     */
 
-    @OptIn(ExperimentalTime::class)
-    fun getWeekDaysFromToday() : List<String>{
-        val daysOfWeek = listOf<String>("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
-        val today = LocalDate.now().dayOfWeek.value-1
-        Collections.rotate(daysOfWeek, -today)
-        return daysOfWeek
-    }
-
-    suspend fun deleteAllBPRecords(){
-        bloodPressureRepository.removeAllBloodPressureReadings()
-    }
-
+    //Get percentage values in a list for pie chart data representation
     fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
         val counts = mutableListOf(0, 0, 0, 0)
         val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
@@ -292,6 +299,16 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    //helper method for pie chart
+    @OptIn(ExperimentalTime::class)
+    fun getWeekDaysFromToday() : List<String>{
+        val daysOfWeek = listOf("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
+        val today = LocalDate.now().dayOfWeek.value-1
+        Collections.rotate(daysOfWeek, -today)
+        return daysOfWeek
+    }
+
+    //Convert date string in format YYYY-MM-DD to millis
     fun convertDateToMillis(dateString: String?): Long? {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return if (dateString.isNullOrEmpty()) {
@@ -299,12 +316,25 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         } else {
             try {
                 formatter.parse(dateString)?.time
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }
     }
 
+    //Convert time in millis to string in format YYYY-MM-DD
+    fun convertMillisToDate(millis: Long?): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return if (millis == null) ""  else formatter.format(Date(millis))
+    }
+
+    //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
+    fun formatToRegularDate(date: String) : String{
+        val dateInfo = date.split('-')
+        return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
+    }
+
+    //Convert blood pressure from UI layer format to data layer format
     fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(
         id = 0,
         dateAdded = date,
@@ -316,6 +346,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         hypertensionStage = stage
         )
 
+    //Convert blood pressure from data layer format to ui layer format
     fun RecordedBloodPressure.toHyprReading() : HyprReading = HyprReading(
         date = dateAdded,
         time = timeAdded,
@@ -326,13 +357,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         stage = hypertensionStage
     )
 
-    //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
-    fun formatToRegularDate(date: String) : String{
-        val dateInfo = date.split('-')
-        return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
-    }
-
-
+    //Factory
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
@@ -364,30 +389,22 @@ fun getHyperTensionStage(
     diastolicValue: String
 ): String {
     try {
-
         val diastolicValue = diastolicValue.toInt()
         val systolicValue = systolicValue.toInt()
 
-        if (systolicValue <= 0 || diastolicValue <= 0) {
-            return "error"
-        }
-        else if (systolicValue >= 160 || diastolicValue >= 100) {
-            return "Grade 2 Hypertension"
-        }
-        else if (systolicValue >= 140 || diastolicValue >= 90) {
-            return "Grade 1 Hypertension"
-        }
-        else if (systolicValue >= 130 || diastolicValue >= 85) {
-            return "High Normal"
-        }
-        else if (systolicValue < 130 && diastolicValue < 85) {
-            return "Normal"
-        }
-        else {
-            return "error"
+        return if (systolicValue <= 0 || diastolicValue <= 0) {
+            "error"
+        } else if (systolicValue >= 160 || diastolicValue >= 100) {
+            "Grade 2 Hypertension"
+        } else if (systolicValue >= 140 || diastolicValue >= 90) {
+            "Grade 1 Hypertension"
+        } else if (systolicValue >= 130 || diastolicValue >= 85) {
+            "High Normal"
+        } else {
+            "Normal"
         }
 
-    } catch (e: NumberFormatException) {
+    } catch (_: NumberFormatException) {
         return "error"
     }
 }

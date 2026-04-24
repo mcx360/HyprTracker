@@ -28,7 +28,7 @@ fun DeleteMedicationsConfirmation(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Delete all Medications data?",
+                    text = "Delete Medications data?",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = modifier.padding(16.dp)
                 )
