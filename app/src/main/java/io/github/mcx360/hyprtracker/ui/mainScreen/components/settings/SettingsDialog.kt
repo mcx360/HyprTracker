@@ -37,6 +37,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.De
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.DeleteMedicationsConfirmation
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
@@ -45,7 +46,8 @@ fun Settings(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     hyprTrackerViewModel: HyprTrackerViewModel,
-    medicineViewModel: MedicineViewModel
+    medicineViewModel: MedicineViewModel,
+    themeViewModel: ThemeViewModel
     ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -100,7 +102,9 @@ fun Settings(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         when{
-                            showThemeDialog.value -> ThemePicker(onDismissRequest = {
+                            showThemeDialog.value -> ThemePicker(
+                                themeViewModel = themeViewModel,
+                                onDismissRequest = {
                                 showThemeDialog.value = false
                             })
                         }

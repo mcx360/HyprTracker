@@ -36,6 +36,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNa
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.Settings
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
@@ -46,7 +47,8 @@ const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
 fun HyprTrackerScreen(
     modifier: Modifier = Modifier,
     hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory) ,
-    medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory)
+    medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory),
+    themeViewModel: ThemeViewModel
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -73,7 +75,7 @@ fun HyprTrackerScreen(
                     updateOpenBugReportDialogToTrue = { openBugReportDialog.value = true },
                     updateOpenAboutDialogToTrue = { openAboutDialog.value = true },
                     snackbarHostState = snackBarHostState,
-                    updateOpenSettingsDialogToTrue = { openSettingsDialog.value = true }
+                    updateOpenSettingsDialogToTrue = { openSettingsDialog.value = true },
                 )
             },
             drawerState = drawerState
@@ -148,7 +150,8 @@ fun HyprTrackerScreen(
                             Settings(
                                 onDismissRequest = { openSettingsDialog.value = false },
                                 hyprTrackerViewModel = hyprTrackerViewModel,
-                                medicineViewModel = medicineViewModel
+                                medicineViewModel = medicineViewModel,
+                                themeViewModel = themeViewModel
                             )
                         }
                     }

@@ -42,7 +42,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:core:2.4.3")
     implementation("com.patrykandpatrick.vico:compose:3.1.0")
     implementation("com.patrykandpatrick.vico:compose-m3:2.0.0")
-
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.compose.foundation)
     implementation("androidx.datastore:datastore:1.2.1")
