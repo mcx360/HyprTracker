@@ -21,8 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.model.FilterOption
+import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,8 +33,8 @@ fun FilterCard(
     modifier: Modifier = Modifier,
     showFilterByDropDownMenu: Boolean,
     updateShowFilterByDropDownMenu: (Boolean) -> Unit,
-    filterOption : String,
-    updateFilterOption: (String) -> Unit
+    filterOption : FilterOption,
+    updateFilterOption: (FilterOption) -> Unit
 ){
     Card(modifier = modifier
         .fillMaxWidth()
@@ -61,12 +64,11 @@ fun FilterCard(
                         enabled = true
                     )
                 ) {
-
                     Icon(
                         painter = painterResource(R.drawable.ic_date),
                         contentDescription = null
                     )
-                    Text(filterOption)
+                    Text(stringResource(filterOption.labelRes))
                     IconButton(onClick = { updateShowFilterByDropDownMenu(!showFilterByDropDownMenu)}) {
                         if (showFilterByDropDownMenu) {
                             Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
@@ -83,21 +85,21 @@ fun FilterCard(
                     DropdownMenuItem(
                         text = { Text("Week") },
                         onClick = {
-                            updateFilterOption("Week")
+                            updateFilterOption(FilterOption.Week)
                             updateShowFilterByDropDownMenu(false)
                         },
                     )
                     DropdownMenuItem(
                         text = { Text("Month") },
                         onClick = {
-                            updateFilterOption("Month")
+                            updateFilterOption(FilterOption.Month)
                             updateShowFilterByDropDownMenu(false)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text("All time") },
                         onClick = {
-                            updateFilterOption("All time")
+                            updateFilterOption(FilterOption.AllTime)
                             updateShowFilterByDropDownMenu(false)
                         }
                     )

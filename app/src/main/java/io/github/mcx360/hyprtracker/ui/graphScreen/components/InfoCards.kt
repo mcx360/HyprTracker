@@ -7,58 +7,62 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import java.time.LocalDate
+import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 
 @Composable
 fun InfoCards(
     modifier: Modifier = Modifier,
-    systolicDataShown: String,
-    updateSystolicDataShown: (String) -> Unit,
-    filterOption: String,
+    filterOption: FilterOption,
     getSystolicAverage: (String?) -> (String),
     getSystolicMax: (String?) -> (String),
     getSystolicMin: (String?) -> (String),
-    diastolicDataShown: String,
     getDiastolicAverage: (String?) -> (String),
     getDiastolicMax: (String?) -> (String),
     getDiastolicMin: (String?) -> (String),
-    updateDiastolicDataShown: (String) -> Unit,
-    pulseDataShown: String,
     getPulseAverage: (String?) -> (String),
     getPulseMax: (String?) -> (String),
     getPulseMin: (String?) -> (String),
-    updatePulseDataShown: (String) -> Unit,
 ){
     Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
 
         val haptic = LocalHapticFeedback.current
+        var systolicDataShown by remember { mutableStateOf( MinMaxAvg.Average)}
+        var diastolicDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
+        var pulseDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
+
 
         //Systolic Info
         Card(modifier = modifier
             .weight(0.33f)
             .clickable(onClick = {
             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-            when (systolicDataShown) {
-                "Average" -> updateSystolicDataShown("Max")
-                "Max" -> updateSystolicDataShown("Min")
-                else -> updateSystolicDataShown("Average")
-            } })
+                systolicDataShown = when (systolicDataShown) {
+                    MinMaxAvg.Average -> MinMaxAvg.Max
+                    MinMaxAvg.Max -> MinMaxAvg.Min
+                    else -> MinMaxAvg.Average
+                }
+            })
         ) {
             Column(
                 modifier = modifier
@@ -73,7 +77,7 @@ fun InfoCards(
                     modifier = modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Systolic",
+                        text = stringResource(R.string.systolic),
                         textAlign = TextAlign.Start
                     )
                     Spacer(modifier.weight(1f))
@@ -86,20 +90,21 @@ fun InfoCards(
                 Row {
                     Text(
                         when (filterOption) {
-                            "All time" -> when (systolicDataShown) {
-                                "Average" -> getSystolicAverage(null)
-                                "Max" -> getSystolicMax(null)
+                            FilterOption.AllTime -> when (systolicDataShown) {
+                                MinMaxAvg.Average -> getSystolicAverage(null)
+                                MinMaxAvg.Max -> getSystolicMax(null)
                                 else -> getSystolicMin(null)
                             }
 
-                            "Month" -> when (systolicDataShown) {
-                                "Average" -> getSystolicAverage(LocalDate.now().minusMonths(1).toString())
-                                "Max" -> getSystolicMax(LocalDate.now().minusMonths(1).toString())
+                            FilterOption.Month -> when (systolicDataShown) {
+                                MinMaxAvg.Average -> getSystolicAverage(LocalDate.now().minusMonths(1).toString())
+                                MinMaxAvg.Max -> getSystolicMax(LocalDate.now().minusMonths(1).toString())
                                 else -> getSystolicMin(LocalDate.now().minusMonths(1).toString())
                             }
 
-                            else -> when (systolicDataShown) {"Average" -> getSystolicAverage(LocalDate.now().minusWeeks(1).toString())
-                                "Max" -> getSystolicMax(LocalDate.now().minusWeeks(1).toString())
+                            else -> when (systolicDataShown) {
+                                MinMaxAvg.Average -> getSystolicAverage(LocalDate.now().minusWeeks(1).toString())
+                                MinMaxAvg.Max -> getSystolicMax(LocalDate.now().minusWeeks(1).toString())
                                 else -> getSystolicMin(LocalDate.now().minusWeeks(1).toString())
                             }
                         },
@@ -107,7 +112,7 @@ fun InfoCards(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "mmHg",
+                        text = stringResource(R.string.mmHg),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
@@ -115,7 +120,7 @@ fun InfoCards(
                             .padding(horizontal = 8.dp)
                         )
                 }
-                Text(systolicDataShown)
+                Text(text = stringResource(systolicDataShown.labelRes))
             }
         }
 
@@ -126,10 +131,10 @@ fun InfoCards(
                 .padding(horizontal = 8.dp)
                 .clickable(onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    when (diastolicDataShown) {
-                        "Average" -> updateDiastolicDataShown("Max")
-                        "Max" -> updateDiastolicDataShown("Min")
-                        else -> updateDiastolicDataShown("Average")
+                    diastolicDataShown = when (diastolicDataShown) {
+                        MinMaxAvg.Average -> MinMaxAvg.Max
+                        MinMaxAvg.Max -> MinMaxAvg.Min
+                        else -> MinMaxAvg.Average
                     }
                 })
         ) {
@@ -144,7 +149,7 @@ fun InfoCards(
                     horizontalArrangement = Arrangement.Start,
                     modifier = modifier.fillMaxWidth()
                 ){
-                    Text("Diastolic")
+                    Text(text = stringResource(R.string.diastolic))
                     Spacer(modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.heart_3_),
@@ -154,19 +159,19 @@ fun InfoCards(
                 Row {
                     Text(
                         when (filterOption) {
-                            "All time" -> when (diastolicDataShown) {
-                                "Average" -> getDiastolicAverage(null)
-                                "Max" -> getDiastolicMax(null)
-                                else -> getDiastolicMin(null)
+                            FilterOption.AllTime -> when (diastolicDataShown) {
+                                MinMaxAvg.Average -> getDiastolicAverage(null)
+                                MinMaxAvg.Max -> getDiastolicMax(null)
+                                MinMaxAvg.Min -> getDiastolicMin(null)
                             }
-                            "Month" -> when (diastolicDataShown) {
-                                "Average" -> getDiastolicAverage(LocalDate.now().minusMonths(1).toString())
-                                "Max" -> getDiastolicMax(LocalDate.now().minusMonths(1).toString())
+                            FilterOption.Month -> when (diastolicDataShown) {
+                                MinMaxAvg.Average -> getDiastolicAverage(LocalDate.now().minusMonths(1).toString())
+                                MinMaxAvg.Max -> getDiastolicMax(LocalDate.now().minusMonths(1).toString())
                                 else -> getDiastolicMin(LocalDate.now().minusMonths(1).toString())
                             }
                             else -> when (diastolicDataShown) {
-                                "Average" -> getDiastolicAverage(LocalDate.now().minusWeeks(1).toString())
-                                "Max" -> getDiastolicMax(LocalDate.now().minusWeeks(1).toString())
+                                MinMaxAvg.Average -> getDiastolicAverage(LocalDate.now().minusWeeks(1).toString())
+                                MinMaxAvg.Max -> getDiastolicMax(LocalDate.now().minusWeeks(1).toString())
                                 else -> getDiastolicMin(LocalDate.now().minusWeeks(1).toString())
                             }
                         },
@@ -174,7 +179,7 @@ fun InfoCards(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "mmHg",
+                        text = stringResource(R.string.mmHg),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
@@ -183,7 +188,7 @@ fun InfoCards(
                     )
                 }
                 Text(
-                    text = diastolicDataShown,
+                    text = stringResource(diastolicDataShown.labelRes),
                     modifier = modifier.fillMaxWidth(),
                 )
             }
@@ -195,10 +200,10 @@ fun InfoCards(
                 .weight(0.33f)
                 .clickable(onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    when (pulseDataShown) {
-                        "Average" -> updatePulseDataShown("Max")
-                        "Max" -> updatePulseDataShown("Min")
-                        else -> updatePulseDataShown("Average")
+                    pulseDataShown = when (pulseDataShown) {
+                        MinMaxAvg.Average -> MinMaxAvg.Max
+                        MinMaxAvg.Max -> MinMaxAvg.Min
+                        else -> MinMaxAvg.Average
                     }
                 })
         ) {
@@ -213,7 +218,7 @@ fun InfoCards(
                     horizontalArrangement = Arrangement.Start,
                     modifier = modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Pulse")
+                    Text(text = stringResource(R.string.pulse))
                     Spacer(modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.activity_1_),
@@ -226,21 +231,21 @@ fun InfoCards(
                 ) {
                     Text(
                         when (filterOption) {
-                            "All time" -> when (pulseDataShown) {
-                                "Average" -> getPulseAverage(null)
-                                "Max" -> getPulseMax(null)
+                            FilterOption.AllTime -> when (pulseDataShown) {
+                                MinMaxAvg.Average -> getPulseAverage(null)
+                                MinMaxAvg.Max -> getPulseMax(null)
                                 else -> getPulseMin(null)
                             }
 
-                            "Month" -> when (pulseDataShown) {
-                                "Average" -> getPulseAverage(LocalDate.now().minusMonths(1).toString())
-                                "Max" -> getPulseMax(LocalDate.now().minusMonths(1).toString())
+                            FilterOption.Month -> when (pulseDataShown) {
+                                MinMaxAvg.Average -> getPulseAverage(LocalDate.now().minusMonths(1).toString())
+                                MinMaxAvg.Max -> getPulseMax(LocalDate.now().minusMonths(1).toString())
                                 else -> getPulseMin(LocalDate.now().minusMonths(1).toString())
                             }
 
                             else -> when (pulseDataShown) {
-                                "Average" -> getPulseAverage(LocalDate.now().minusWeeks(1).toString())
-                                "Max" -> getPulseMax(LocalDate.now().minusWeeks(1).toString())
+                                MinMaxAvg.Average -> getPulseAverage(LocalDate.now().minusWeeks(1).toString())
+                                MinMaxAvg.Max -> getPulseMax(LocalDate.now().minusWeeks(1).toString())
                                 else -> getPulseMin(LocalDate.now().minusWeeks(1).toString())
                             }
                         },
@@ -249,7 +254,7 @@ fun InfoCards(
                     )
 
                     Text(
-                        text = "bpm",
+                        text = stringResource(R.string.bpm),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
@@ -257,7 +262,7 @@ fun InfoCards(
                             .padding(horizontal = 8.dp)
                     )
                 }
-                Text(pulseDataShown)
+                Text(stringResource(pulseDataShown.labelRes))
             }
         }
     }

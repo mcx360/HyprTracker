@@ -21,6 +21,7 @@ import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPTrendsBreakdown
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
+import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,10 +41,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val showFilterByDropDownMenu = remember { mutableStateOf(false) }
-            val filterOption = remember { mutableStateOf("Week") }
-            val systolicDataShown = remember { mutableStateOf("Average") }
-            val diastolicDataShown = remember { mutableStateOf("Average") }
-            val pulseDataShown = remember { mutableStateOf("Average") }
+            val filterOption = remember { mutableStateOf(FilterOption.Week) }
 
             FilterCard(
                 showFilterByDropDownMenu =showFilterByDropDownMenu.value,
@@ -53,19 +51,13 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             )
 
             InfoCards(
-                systolicDataShown = systolicDataShown.value,
-                updateSystolicDataShown = {systolicDataShown.value = it},
                 filterOption = filterOption.value,
                 getSystolicAverage = { (it?.let{ hyprTrackerViewModel.getSystolicAverage(it) } ?: hyprTrackerViewModel.getSystolicAverage(null)).toString() },
                 getSystolicMax = { (it?.let { hyprTrackerViewModel.getSystolicMax(it) } ?: hyprTrackerViewModel.getSystolicMax(null)).toString() },
                 getSystolicMin = { (it?.let { hyprTrackerViewModel.getSystolicMin(it) } ?: hyprTrackerViewModel.getSystolicMin(null)).toString() },
-                diastolicDataShown = diastolicDataShown.value,
                 getDiastolicMax = { (it?.let { hyprTrackerViewModel.getDiastolicMax(it) } ?: hyprTrackerViewModel.getDiastolicMax(null)).toString() },
                 getDiastolicMin = { (it?.let { hyprTrackerViewModel.getDiastolicMin(it) } ?: hyprTrackerViewModel.getDiastolicMin(null)).toString() },
                 getDiastolicAverage = { (it?.let { hyprTrackerViewModel.getDiastolicAverage(it) } ?: hyprTrackerViewModel.getDiastolicAverage(null)).toString() },
-                updateDiastolicDataShown = {diastolicDataShown.value = it},
-                updatePulseDataShown = {pulseDataShown.value = it},
-                pulseDataShown = pulseDataShown.value,
                 getPulseMax = { (it?.let { hyprTrackerViewModel.getPulseMax(it) } ?: hyprTrackerViewModel.getPulseMax(null)).toString() },
                 getPulseMin = { (it?.let { hyprTrackerViewModel.getPulseMin(it) } ?: hyprTrackerViewModel.getPulseMin(null)).toString() },
                 getPulseAverage = { (it?.let { hyprTrackerViewModel.getPulseAverage(it) } ?: hyprTrackerViewModel.getPulseAverage(null)).toString() }
@@ -74,8 +66,8 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             BPBreakdownCard(
                 filterOption = filterOption.value,
                 breakdown = hyprTrackerViewModel.getBPStagesBreakdown(when (filterOption.value) {
-                    "All time" -> null
-                    "Month" -> LocalDate.now().minusMonths(1).toString()
+                    FilterOption.AllTime -> null
+                    FilterOption.Month -> LocalDate.now().minusMonths(1).toString()
                     else -> LocalDate.now().minusWeeks(1).toString()
                 })
             )

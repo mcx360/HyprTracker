@@ -157,7 +157,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 val filteredList = getFilteredList(cutoffDate)
                 return filteredList.sumOf { it.systolicValue.toInt() } / filteredList.size
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             return 0
         }
     }
@@ -170,7 +170,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).minOf { it.systolicValue.toInt() }
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             0
         }
     }

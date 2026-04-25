@@ -32,12 +32,13 @@ import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
 fun BPBreakdownCard(
     modifier: Modifier = Modifier,
-    filterOption: String,
+    filterOption: FilterOption,
     breakdown: List<Float>
 
 ){

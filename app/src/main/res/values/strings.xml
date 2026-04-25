@@ -108,5 +108,15 @@
     <!--Insights Screen Strings-->
     <string name="Empty_Graph_Screen_Title">No insights available</string>
     <string name="Empty_Graph_Screen_Text">Once you have logged blood pressure, insights will display the data visually for you</string>
+    <string name="mmHg">mmHg</string>
+    <string name="bpm">bpm</string>
+
+    <!--String in model-->
+    <string name="Minimum">Min</string>
+    <string name="Maximum">Max</string>
+    <string name="Average">Average</string>
+    <string name="All_Time">All time</string>
+    <string name="Month">Month</string>
+    <string name="Week">Week</string>
 
 </resources>
