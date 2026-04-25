@@ -149,10 +149,10 @@ fun HistoryTab(
                         Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null, modifier = Modifier.padding(horizontal = 4.dp))
                         Text(
                             when(hyprTrackerUIState.readings[index].date){
-                                LocalDate.now().toString() -> "Today @ "
-                                LocalDate.now().minusDays(1).toString() -> "Yesterday @ "
-                                LocalDate.now().minusDays(2).toString() -> "Two days ago @ "
-                                else -> hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date) + " @ "
+                                LocalDate.now().toString() -> stringResource(R.string.Today_at)
+                                LocalDate.now().minusDays(1).toString() -> stringResource(R.string.Yesterday_at)
+                                LocalDate.now().minusDays(2).toString() -> stringResource(R.string.Two_Days_Ago_At)
+                                else -> hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date) + stringResource(R.string.At_Time)
                             },
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
@@ -241,7 +241,7 @@ fun HistoryTab(
                                 text = stringResource(R.string.Notes_Value) + " ",
                                 fontWeight = FontWeight.Bold
                             )
-                            Text(""+if (hyprTrackerUIState.readings[index].notes == "") "N/A" else hyprTrackerUIState.readings[index].notes)
+                            Text(""+if (hyprTrackerUIState.readings[index].notes == "") stringResource(R.string.No_Notes) else hyprTrackerUIState.readings[index].notes)
                         }
 
                         //Bin Icon

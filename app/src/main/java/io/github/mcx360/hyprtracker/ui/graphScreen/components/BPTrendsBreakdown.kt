@@ -84,19 +84,19 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
             ) {
                 DotWithColour(Color.Blue)
                 Spacer(modifier.padding(start = 4.dp))
-                Text(text = "Systolic", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.systolic), style = MaterialTheme.typography.bodySmall)
 
                 Spacer(modifier.padding(4.dp))
 
                 DotWithColour(Color.Red)
                 Spacer(modifier.padding(start = 4.dp))
-                Text(text = "Diastolic", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.diastolic), style = MaterialTheme.typography.bodySmall)
 
                 Spacer(modifier.padding(4.dp))
 
                 DotWithColour(Color.Green)
                 Spacer(modifier.padding(start = 4.dp))
-                Text(text = "Pulse", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.pulse), style = MaterialTheme.typography.bodySmall)
             }
         }
     }

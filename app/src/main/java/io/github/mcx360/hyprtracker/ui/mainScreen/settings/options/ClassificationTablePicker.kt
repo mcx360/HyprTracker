@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,55 +22,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import io.github.mcx360.hyprtracker.ui.darkTheme
-import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 
 @Composable
-fun ThemePicker(
+fun ClassificationTablePicker(
     modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-    themeViewModel: ThemeViewModel
+    onDismissRequest: () -> Unit
 ) {
-    val currentTheme by themeViewModel.themeMode.collectAsState()
-
-    val defaultOption = when (currentTheme) {
-        ThemeMode.LIGHT -> "Light"
-        ThemeMode.DARK -> "Dark"
-        ThemeMode.SYSTEM -> "System default"
-    }
-
-    val radioOptions = listOf("Light", "Dark", "System default")
-
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(
-        when(defaultOption){
-            "Light" -> radioOptions[0]
-            "Dark" -> radioOptions[1]
-            else -> radioOptions[2]
-        }
-    ) }
+    val radioOptions = listOf("Internation society of hypertension")
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
-            Text(
-                text = "Select theme",
-                modifier = modifier.padding(8.dp),
-                style = MaterialTheme.typography.titleLarge
-            )
-
+            Text("Select classification table", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider()
-
             Column(modifier.selectableGroup()) {
                 radioOptions.forEach { text ->
                     Row(
                         Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .padding(horizontal = 16.dp)
                             .selectable(
                                 selected = (text == selectedOption),
                                 onClick = { onOptionSelected(text) },
                                 role = Role.RadioButton
-                            ),
+                            )
+                            .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
@@ -88,25 +62,15 @@ fun ThemePicker(
                 }
             }
             HorizontalDivider()
-
-            Row(
-                modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
+            Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(onClick = {onDismissRequest()}) {
                     Text("Cancel")
                 }
-                TextButton(onClick = {
-                    onDismissRequest()
-                    themeViewModel.setTheme(when (selectedOption) {
-                    "Dark" -> ThemeMode.DARK
-                    "Light" -> ThemeMode.LIGHT
-                    else -> ThemeMode.SYSTEM
-                    })
-                }) {
+                TextButton(onClick = {onDismissRequest()}) {
                     Text("Ok")
                 }
             }
+
         }
     }
 }

@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
@@ -70,29 +72,27 @@ fun InfographicLineTitle() {
     ) {
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
         Text(
-            text = "Stages",
+            text = stringResource(R.string.Stages),
             modifier = Modifier
                 .weight(2f)
                 .padding(4.dp),
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = "Systolic",
+            text = stringResource(R.string.systolic),
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodyMedium,
-            //fontStyle = FontStyle.Italic
         )
         Text(
-            text = "Diastolic",
+            text = stringResource(R.string.diastolic),
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodyMedium,
-            //fontStyle = FontStyle.Italic
         )
     }
 }

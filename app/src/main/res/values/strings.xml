@@ -19,8 +19,6 @@
     <string name="title_two_label">External</string>
     <string name="title_three_label">Settings</string>
 
-
-
     <!--Strings for tab rows names (subsections names) in logging screen-->
     <string name="log_tab">Log</string>
     <string name="History_tab">History</string>
@@ -36,6 +34,7 @@
     <string name="edit_BP_Log_Details">Edit</string>
     <string name="Confirm_Log_Button_snackBar_message">Log entry added!</string>
 
+
     <!--LoggingScreen Edit Section-->
     <string name="Edit_BP_Log_Title">Edit Blood pressure Log details</string>
     <string name="Custom_Log_Date_TextField">Enter Custom Log date</string>
@@ -50,6 +49,7 @@
 
 
     <!--Strings for the blood pressure stages info card in logging screen-->
+    <string name="Stages">Stages</string>
     <string name="BP_stages_title">Classification Of Hypertension</string>
     <string-array name="hypertension_subheading">
         <item>Stage</item>
@@ -100,6 +100,11 @@
     <string name="Confirm_Button_Text">Confirm</string>
     <string name="Cancel_Button_Text">Cancel</string>
     <string name="Delete_Log_entry_snackBar_message">Log entry removed</string>
+    <string name="Today_at">Today @ </string>
+    <string name="Yesterday_at">Yesterday @</string>
+    <string name="Two_Days_Ago_At">Two days ago @ </string>
+    <string name="At_Time"> \ @ </string>
+    <string name="No_Notes">N/A</string>
 
     <!--Medicine Screen Strings-->
     <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>

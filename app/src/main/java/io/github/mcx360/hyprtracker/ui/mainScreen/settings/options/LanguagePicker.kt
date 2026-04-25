@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components.settings.options
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun ClassificationTablePicker(
+fun LanguagePicker(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit
 ) {
-    val radioOptions = listOf("Internation society of hypertension")
+    val radioOptions = listOf("English(UK)")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
-            Text("Select classification table", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+            Text("Select Language", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider()
             Column(modifier.selectableGroup()) {
                 radioOptions.forEach { text ->
