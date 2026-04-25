@@ -59,7 +59,7 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
 
         CartesianChartHost(
             rememberCartesianChart(
-                rememberLineCartesianLayer(rangeProvider = CartesianLayerRangeProvider.fixed(minY = 30.0, maxY = 210.0)),
+                rememberLineCartesianLayer(rangeProvider = CartesianLayerRangeProvider.fixed(minY = 0.0, maxY = 210.0)),
                 startAxis = VerticalAxis.rememberStart(),
                 bottomAxis = HorizontalAxis.rememberBottom(
                     valueFormatter = CartesianValueFormatter { _, x, _ ->

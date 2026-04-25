@@ -38,6 +38,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ThemePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.information.Help
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
@@ -191,12 +192,16 @@ fun Settings(
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showHelpDialog.value = true})) {
                         Text("Help", fontWeight = FontWeight.Bold)
                         Text(
                             "FAQ help", style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+
+                    when{
+                        showHelpDialog.value -> Help(onDismissRequest = {showHelpDialog.value = false})
                     }
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))

@@ -72,7 +72,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                 })
             )
 
-            BPTrendsBreakdown(hyprTrackerViewModel = hyprTrackerViewModel)
+            //BPTrendsBreakdown(hyprTrackerViewModel = hyprTrackerViewModel)
         }
     }
 }
