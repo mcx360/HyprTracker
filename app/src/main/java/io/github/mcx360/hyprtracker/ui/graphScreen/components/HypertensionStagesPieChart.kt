@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,7 +48,7 @@ fun BPBreakdownCard(
         .padding(8.dp)
     ) {
         Text(
-            text = "BP Stages Breakdown",
+            text = stringResource(R.string.Pie_Chart_Label),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -75,16 +76,26 @@ fun BPBreakdownCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
-            Text(" Normal", style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(start = 4.dp))
+            Text(stringResource(R.string.Normal), style = MaterialTheme.typography.bodySmall)
+
             Spacer(modifier.padding(4.dp))
+
             DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
-            Text(" Normal High",  style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(start = 4.dp))
+            Text(stringResource(R.string.High_normal),  style = MaterialTheme.typography.bodySmall)
+
             Spacer(modifier.padding(4.dp))
+
             DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
-            Text(" Grade 1",  style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(start = 4.dp))
+            Text(stringResource(R.string.Grade1),  style = MaterialTheme.typography.bodySmall)
+
             Spacer(modifier.padding(4.dp))
+
             DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
-            Text(" Grade 2",  style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier.padding(start = 4.dp))
+            Text(stringResource(R.string.Grade2),  style = MaterialTheme.typography.bodySmall)
         }
     }
 }

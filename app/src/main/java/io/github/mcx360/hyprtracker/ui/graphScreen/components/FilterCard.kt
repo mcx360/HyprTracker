@@ -48,7 +48,7 @@ fun FilterCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Filter By",
+                text = stringResource(R.string.Filter_By),
                 style = MaterialTheme.typography.titleLarge
             )
             ExposedDropdownMenuBox(
@@ -83,21 +83,21 @@ fun FilterCard(
                     onDismissRequest = { updateShowFilterByDropDownMenu(false) },
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Week") },
+                        text = { Text(text = stringResource(R.string.Week)) },
                         onClick = {
                             updateFilterOption(FilterOption.Week)
                             updateShowFilterByDropDownMenu(false)
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text("Month") },
+                        text = { Text(text = stringResource(R.string.Month)) },
                         onClick = {
                             updateFilterOption(FilterOption.Month)
                             updateShowFilterByDropDownMenu(false)
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("All time") },
+                        text = { Text(text = stringResource(R.string.All_Time)) },
                         onClick = {
                             updateFilterOption(FilterOption.AllTime)
                             updateShowFilterByDropDownMenu(false)

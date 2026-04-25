@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,8 +28,8 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.utils.Days
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
@@ -40,7 +41,7 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
             .height(300.dp)
     ) {
         Text(
-            text = "BP Trends Breakdown",
+            text = stringResource(R.string.Line_Chart_Label),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -82,22 +83,20 @@ fun BPTrendsBreakdown(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprT
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DotWithColour(Color.Blue)
-                Text(
-                    text = " Systolic",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Spacer(modifier.padding(start = 4.dp))
+                Text(text = "Systolic", style = MaterialTheme.typography.bodySmall)
+
                 Spacer(modifier.padding(4.dp))
+
                 DotWithColour(Color.Red)
-                Text(
-                    text = " Diastolic",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Spacer(modifier.padding(start = 4.dp))
+                Text(text = "Diastolic", style = MaterialTheme.typography.bodySmall)
+
                 Spacer(modifier.padding(4.dp))
+
                 DotWithColour(Color.Green)
-                Text(
-                    text = " Pulse",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Spacer(modifier.padding(start = 4.dp))
+                Text(text = "Pulse", style = MaterialTheme.typography.bodySmall)
             }
         }
     }

@@ -110,6 +110,9 @@
     <string name="Empty_Graph_Screen_Text">Once you have logged blood pressure, insights will display the data visually for you</string>
     <string name="mmHg">mmHg</string>
     <string name="bpm">bpm</string>
+    <string name="Pie_Chart_Label">"BP Stages Breakdown"</string>
+    <string name="Line_Chart_Label">BP Trends Breakdown</string>
+    <string name="Filter_By">Filter By</string>
 
     <!--String in model-->
     <string name="Minimum">Min</string>
