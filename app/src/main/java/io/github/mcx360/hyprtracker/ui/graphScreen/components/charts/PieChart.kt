@@ -1,11 +1,15 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen.components.charts
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,12 +45,26 @@ fun BPBreakdownCard(
     modifier: Modifier = Modifier,
     filterOption: FilterOption,
     breakdown: List<Float>
-
 ){
     Card(modifier = modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {
+        val nonZeroValues = breakdown.filter { it > 0f }
+        val singleFullSlice = nonZeroValues.size == 1
+        val hasNoData = breakdown.all { it == 0f }
+
+        val chartColors = listOf(
+            colorResource(R.color.Hypertension_Normal_Stage_Colour),
+            colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
+            colorResource(R.color.Hypertension_Grade1_Colour),
+            colorResource(R.color.Hypertension_Grade2_Colour)
+        )
+
+        val nonZeroIndex = breakdown.indexOfFirst { it > 0f }
+
+        val singleSliceColor = if (nonZeroIndex != -1)  chartColors[nonZeroIndex]  else  MaterialTheme.colorScheme.primary
+
         Text(
             text = stringResource(R.string.Pie_Chart_Label),
             modifier = modifier
@@ -55,19 +73,52 @@ fun BPBreakdownCard(
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
-
         )
-        val modelProducer = remember { PieChartModelProducer() }
 
-        LaunchedEffect(filterOption) {
-            modelProducer.runTransaction {
-                pieSeries {
-                    series(*breakdown.toTypedArray())
+        if (singleFullSlice) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(240.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    drawCircle(color = singleSliceColor)
                 }
+                Text(
+                    text = "100%",
+                    color = Color.White
+                )
+            }
+        } else if (hasNoData){
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(240.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    drawCircle(color = Color.Gray)
+                }
+
+                Text(
+                    text = "No data",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
+        else {
+            val modelProducer = remember { PieChartModelProducer() }
+            LaunchedEffect(filterOption) {
+                modelProducer.runTransaction {
+                    pieSeries {
+                        series(*breakdown.toTypedArray())
+                    }
+                }
+            }
 
-        HypertensionStagesPieChart(modelProducer)
+            HypertensionStagesPieChart(modelProducer)
+        }
 
         Row(modifier = modifier
                 .fillMaxWidth()
