@@ -183,7 +183,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).maxOf { it.systolicValue.toInt() }
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             0
         }
     }
@@ -207,7 +207,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 val filteredList = getFilteredList(cutoffDate)
                 return filteredList.sumOf { it.diastolicValue.toInt() } / filteredList.size
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             return 0
         }
     }
@@ -220,7 +220,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).minOf { it.diastolicValue.toInt() }
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             0
         }
     }
@@ -233,7 +233,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             } else{
                 getFilteredList(cutoffDate).maxOf { it.diastolicValue.toInt() }
             }
-        }catch (_: ArithmeticException){
+        }catch (_: Exception){
             0
         }
     }
@@ -250,20 +250,33 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //gets pulse average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getPulseAverage(cutoffDate: String?) : Int{
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.average().takeIf { !it.isNaN() }?.toInt() ?: 0
+        try {
+            val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+            return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.average()
+                .takeIf { !it.isNaN() }?.toInt() ?: 0
+        }catch (_: Exception){
+            return 0
+        }
     }
 
     //gets pulse minimum value from now until the cutoffDate or all time minimum if no cutoffDate is provided
     fun getPulseMin(cutoffDate: String?) : Int{
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.min()
+        try {
+            val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+            return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.min()
+        }catch (_: Exception){
+            return 0
+        }
     }
 
     //gets pulse maximum value from now until the cutoffDate or all time maximum if no cutoffDate is provided
     fun getPulseMax(cutoffDate: String?) : Int{
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-        return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
+        try {
+            val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
+            return readings.mapNotNull { it.pulseValue?.toIntOrNull() }.max()
+        }catch (_: Exception){
+            return 0
+        }
     }
 
     /*
