@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components
+package io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu

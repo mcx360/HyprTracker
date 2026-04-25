@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import io.github.mcx360.hyprtracker.ui.utils.Days
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.SelectDaysForMedication
+import io.github.mcx360.hyprtracker.ui.model.Days
 import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,11 +136,13 @@ fun MedicationScheduleAndDosageCard(
                 }
 
                 if (showSelectedDaysPicker){
-                    SelectDaysForMedication(onDismiss = {
-                        changeShowSelectedDaysPickerStatus(false)
-                        if (!it.isNullOrEmpty()) {
-                            updateMedicationSchedule(it)
-                        } },
+                    SelectDaysForMedication(
+                        onDismiss = {
+                            changeShowSelectedDaysPickerStatus(false)
+                            if (!it.isNullOrEmpty()) {
+                                updateMedicationSchedule(it)
+                            }
+                        },
                         onDaySelected = { addSelectedDay(it) },
                         onDayRemoved = { removeSelectedDay(it) }
                     )

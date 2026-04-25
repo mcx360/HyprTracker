@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import io.github.mcx360.hyprtracker.ui.utils.Days
+import io.github.mcx360.hyprtracker.ui.model.Days
 
 //Dialog that lets users on which days of the week the medication is taken, e.g. only on Monday,Thursday and Sunday
 @Composable

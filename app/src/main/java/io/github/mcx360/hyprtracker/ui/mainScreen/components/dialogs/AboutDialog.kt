@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.components
+package io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement

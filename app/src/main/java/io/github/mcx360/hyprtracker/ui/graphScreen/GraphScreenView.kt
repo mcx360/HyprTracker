@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPTrendsBreakdown
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.charts.BPBreakdownCard
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.charts.BPTrendsBreakdown
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards

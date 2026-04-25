@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

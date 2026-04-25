@@ -32,11 +32,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ClassificationTablePicker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.DeleteBPDataConfirmation
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.DeleteMedicationsConfirmation
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.LanguagePicker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ClassificationTablePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteBPDataConfirmation
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteMedicationsConfirmation
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.LanguagePicker
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ThemePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch

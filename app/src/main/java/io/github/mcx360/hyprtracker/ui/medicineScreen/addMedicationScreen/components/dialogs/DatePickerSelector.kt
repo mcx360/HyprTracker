@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults

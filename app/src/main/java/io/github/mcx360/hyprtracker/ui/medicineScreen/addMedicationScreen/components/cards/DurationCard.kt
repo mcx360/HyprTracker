@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.DurationDatePicker
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.SelectSpecifiedNumberOfDaysDialog
 import java.time.LocalDate
 
 @Composable
@@ -106,14 +108,18 @@ fun DurationCard(
         if (showSelectSpecifiedNumberOfDaysDialog) {
             SelectSpecifiedNumberOfDaysDialog(
                 onDismissRequest = { updateShowSelectSpecifiedNumberOfDaysDialog(false) },
-                onNumOfDaysSelected = { if (it != "")  updateMedicationEndDateString(LocalDate.now().plusDays(it.toLong()).toString()) }
+                onNumOfDaysSelected = {
+                    if (it != "") updateMedicationEndDateString(
+                        LocalDate.now().plusDays(it.toLong()).toString()
+                    )
+                }
             )
         }
 
         if (showDurationDatePicker) {
             DurationDatePicker(
-                onDateSelected = {updateMedicationEndDateLong(it)},
-                onDismiss = {updateShowDurationDatePicker(false)})
+                onDateSelected = { updateMedicationEndDateLong(it) },
+                onDismiss = { updateShowDurationDatePicker(false) })
         }
     }
 }

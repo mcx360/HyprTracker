@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.utils
+package io.github.mcx360.hyprtracker.ui.model
 
 enum class Days{
     Monday,

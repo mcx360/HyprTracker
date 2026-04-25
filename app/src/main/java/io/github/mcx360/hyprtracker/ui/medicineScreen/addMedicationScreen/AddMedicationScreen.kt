@@ -12,13 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,21 +37,18 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.DurationCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.MedicationScheduleAndDosageCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.NotificationsCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.medicationInfoCard
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

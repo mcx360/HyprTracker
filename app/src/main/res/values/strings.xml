@@ -127,4 +127,7 @@
     <string name="Month">Month</string>
     <string name="Week">Week</string>
 
+    <!--Util Strings-->
+    <string name="Ok">Ok</string>
+
 </resources>

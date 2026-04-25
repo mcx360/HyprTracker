@@ -30,11 +30,11 @@ import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerBottomNavigationBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerTopAppBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerTopAppBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel

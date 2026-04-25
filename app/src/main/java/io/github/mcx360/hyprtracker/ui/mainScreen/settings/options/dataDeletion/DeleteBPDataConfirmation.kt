@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun DeleteMedicationsConfirmation(
+fun DeleteBPDataConfirmation(
     onDismissRequest: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
-    ) {
+
+) {
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
             Column(
@@ -28,12 +29,12 @@ fun DeleteMedicationsConfirmation(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Delete Medications data?",
+                    text = "Delete all BP data?",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Doing this will permanently delete all saved medications on your device. Make sure to have backups of any important data",
+                    text = "Doing this will permanently delete all logged BP readings on your device. Make sure to have backups of any important data",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = modifier.padding(horizontal = 16.dp)
