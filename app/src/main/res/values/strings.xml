@@ -33,6 +33,7 @@
     <string name="Confirm_BP_Log">Confirm</string>
     <string name="edit_BP_Log_Details">Edit</string>
     <string name="Confirm_Log_Button_snackBar_message">Log entry added!</string>
+    <string name="Note_placeholder">e.g. Sitting down</string>
 
 
     <!--LoggingScreen Edit Section-->
@@ -46,6 +47,7 @@
     <string name="ACCEPT_BP_LOG_EDIT_BUTTON">Accept</string>
     <string name="RESET_BP_LOG_EDIT_BUTTON">Reset</string>
     <string name="Rest_button_snackBar_message">Log entry reset</string>
+    <string name="Update_Button_snackbar_message">Log entry updated</string>
 
 
     <!--Strings for the blood pressure stages info card in logging screen-->

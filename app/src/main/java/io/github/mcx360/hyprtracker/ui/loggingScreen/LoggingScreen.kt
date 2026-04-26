@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -95,7 +97,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
         is24Hour = true
     )
     var showTimePicker by remember { mutableStateOf(false)
-}
+    }
     Column(
         modifier = Modifier,
         verticalArrangement = Arrangement.Center,
@@ -197,7 +199,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Done
                                 ),
-                                placeholder = {Text("e.g. Sitting down")}
+                                placeholder = {Text(stringResource(R.string.Note_placeholder))}
                             )
                         }
 
@@ -224,6 +226,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                                             Text(stringResource(R.string.Dismiss_TimePicker_Button))
                                         }
                                         Button(onClick = {
+
                                             hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
                                             showTimePicker = false
                                         }) {
@@ -271,30 +274,30 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                         }
                     }
 
-
                     Row(horizontalArrangement = Arrangement.Center) {
-
                         //Edit sheet Reset button
+                        val resetMessage = stringResource(R.string.Rest_button_snackBar_message)
                         OutlinedButton(modifier = Modifier.padding(8.dp), onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 hyprTrackerViewModel.resetBloodPressureLog()
                                 datePickerState.selectedDateMillis =
                                     hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
                                 if (!sheetState.isVisible) showBottomSheet = false
-                                scope.launch { snackBarHostState.showSnackbar("Log entry reset") }
+                                scope.launch { snackBarHostState.showSnackbar(resetMessage) }
                             } }
                         ) {
                             Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
                         }
 
                         //Edit sheet accept button
+                        val updateMessage = stringResource(R.string.Update_Button_snackbar_message)
                         Button(modifier = Modifier.padding(8.dp), onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) showBottomSheet = false
                             }
-                            scope.launch { snackBarHostState.showSnackbar("Log entry updated") } }
+                            scope.launch { snackBarHostState.showSnackbar(updateMessage) } }
                         ) {
-                            Text("Accept")
+                            Text(stringResource(R.string.ACCEPT_BP_LOG_EDIT_BUTTON))
                         }
                     }
                 }
