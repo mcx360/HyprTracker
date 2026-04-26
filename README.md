@@ -1,12 +1,33 @@
-# Hyprtracker
-HyprTrackerwill be an android app for tracking/monitoring/logging high blood pressure. It is built with kotlin and jetpack compose, utilising Google's material 3 deesign language
+# HyprTracker
 
-Some feature the app will include:
-+ Tracking blood pressure reading(systolic,diastolic) values
-+ Medicinal reminders for people who need it, including dosages, reminders and other useful information,
-+ Graph views to show your logged results which you can sort by day, week month etc
-+ Sharing medical data with profesionals by export ability (either as pdf or cvs files)
-+ Multiple user accounts for those who are tracking blood pressure not just for themselves
-+ Homescreen widget for convenience and ease of use
-+ Advanced accessibility settings
-+ and more!
+HyprTracker is a **free and open-source Android application** for recording, managing, and analyzing blood pressure readings. Designed with a clean **Material Design 3** interface and built entirely in **Kotlin**, the app provides a simple way to track cardiovascular health while keeping medication and historical data organized in one place.
+
+Whether you need to monitor daily readings, review long-term trends, or manage medications alongside your health data, HyprTracker aims to provide an intuitive and privacy-focused experience.
+
+## Key Features
+
+- Log systolic, diastolic, and optional pulse readings
+- Edit previous entries with custom notes, date, and time
+- Track medications with dosage and scheduling details
+- View trends with weekly, monthly, and all-time insights
+- Analyze averages, minimums, and maximums
+- Visualize hypertension stages with chart-based summaries
+- Import and export data in CSV format *(in active development)*
+- Submit bug reports and app feedback directly within the app
+- Customize preferences through a dedicated settings page
+
+HyprTracker is built to make blood pressure tracking more accessible, organized, and user-friendly.
+
+## Screenshots
+
+<p align="center">
+  <img src="Screenshots/Logging.png" alt="Logging" width="250"/>
+  <img src="Screenshots/History.png" alt="History" width="250"/>
+  <img src="Screenshots/Medicine.png" alt="Medicine" width="250"/>
+</p>
+
+<p align="center">
+  <img src="Screenshots/Insights.png" alt="Insights" width="250"/>
+  <img src="Screenshots/NavigationDrawer.png" alt="Navigation Drawer" width="250"/>
+  <img src="Screenshots/Settings.png" alt="Settings" width="250"/>
+</p>
