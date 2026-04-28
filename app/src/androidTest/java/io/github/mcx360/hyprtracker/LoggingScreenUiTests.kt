@@ -16,12 +16,13 @@ import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_SCREEN_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerScreen
 import io.github.mcx360.hyprtracker.ui.loggingScreen.PULSE_OUTLINEDTEXTFIELD_TAG
 import io.github.mcx360.hyprtracker.ui.loggingScreen.SYSTOLIC_OUTLINEDTEXTFIELD_TAG
-import io.github.mcx360.hyprtracker.ui.theme.HyprTrackerTheme
+import io.github.mcx360.hyprtracker.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class LoggingScreenUiTests() {
+class LoggingScreenUiTests {
+
 
     @get: Rule
     val composeTestRule = createComposeRule()
@@ -29,7 +30,7 @@ class LoggingScreenUiTests() {
     @Before
     fun setupLoggingScreen(){
         composeTestRule.setContent {
-            HyprTrackerTheme {
+            AppTheme {
                 HyprTrackerScreen()
             }
         }

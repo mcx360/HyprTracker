@@ -5,18 +5,17 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import io.github.mcx360.hyprtracker.ui.mainScreen.ABOUT_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.BACKUP_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.BIN_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerScreen
-import io.github.mcx360.hyprtracker.ui.mainScreen.MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.RATE_APP_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.REPORT_BUG_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG
-import io.github.mcx360.hyprtracker.ui.theme.HyprTrackerTheme
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.ABOUT_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.BACKUP_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.BIN_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.RATE_APP_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.REPORT_BUG_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.USERS_AND_SETTINGS_IN_NAVIGATIONDRAWER_TAG
+import io.github.mcx360.hyprtracker.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +28,7 @@ class MainScreenUiTests {
     @Before
     fun setupLoggingScreen(){
         composeTestRule.setContent {
-            HyprTrackerTheme {
+            AppTheme {
                 HyprTrackerScreen()
             }
         }
@@ -46,7 +45,6 @@ class MainScreenUiTests {
         composeTestRule.onNodeWithTag(NAVIGATIONDRAWER_TAG).performClick()
         composeTestRule.onNodeWithTag(EXPORT_LOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(SHARE_LOGS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
-        composeTestRule.onNodeWithTag(MY_DOCUMENTS_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(BIN_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(BACKUP_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()
         composeTestRule.onNodeWithTag(RATE_APP_IN_NAVIGATIONDRAWER_TAG).assertHasClickAction()

@@ -31,7 +31,7 @@ class HyprTrackerViewModelUiTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-    val viewModel = HyprTrackerViewModel()
+
 
     @Test
     fun TestSystolicValueUpdates(){

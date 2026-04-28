@@ -26,4 +26,6 @@ class ThemeManager(private val context: Context) {
             preferences[THEME_KEY] = themeMode.name
         }
     }
+
+
 }

@@ -1,6 +1,6 @@
 package io.github.mcx360.hyprtracker.Data.test
 
-import io.github.mcx360.hyprtracker.data.getHyperTensionStage
+import io.github.mcx360.hyprtracker.ui.getHyperTensionStage
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 

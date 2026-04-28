@@ -46,9 +46,9 @@ const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
 @Composable
 fun HyprTrackerScreen(
     modifier: Modifier = Modifier,
-    hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory) ,
+    hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory),
     medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory),
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory)
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
