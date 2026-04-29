@@ -1,8 +1,9 @@
 # HyprTracker
 
-HyprTracker is a **free and open-source Android application** for recording, managing, and analyzing blood pressure readings. Designed with a clean **Material Design 3** interface and built entirely in **Kotlin**, the app provides a simple way to track cardiovascular health while keeping medication and historical data organized in one place.
+HyprTracker is a free and open-source Android application for recording, managing, and analyzing blood pressure readings. Designed with a clean Material Design 3 interface and built entirely in Kotlin, the app provides a simple way to track cardiovascular health while keeping medication and historical data organized in one place with no distracting add and everything is kept offline.
 
-Whether you need to monitor daily readings, review long-term trends, or manage medications alongside your health data, HyprTracker aims to provide an intuitive and privacy-focused experience.
+Whether you need to track blood pressure daily, interpret you data with the insights tab, record your medicines, hyrptracker offers 
+ an intuitive and privacy-focused experience.
 
 ## Key Features
 
