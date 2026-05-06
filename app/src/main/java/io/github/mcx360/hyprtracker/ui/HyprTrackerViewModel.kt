@@ -135,7 +135,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     //Removes a reading from the database
     suspend fun removeReading(index: Int){
         val reading: HyprReading = _uiState.value.readings[index]
-        bloodPressureRepository.removeBloodPressureReading(reading.systolicValue, reading.diastolicValue, reading.pulseValue, reading.date, reading.time)
+        bloodPressureRepository.removeBloodPressureReading(reading.toRecordedBloodPressure())
     }
 
     //Helper function that filters readings from current date back up until the cutoff date
@@ -349,7 +349,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //Convert blood pressure from UI layer format to data layer format
     fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(
-        id = 0,
         dateAdded = date,
         timeAdded = time,
         systolicValue = systolicValue,

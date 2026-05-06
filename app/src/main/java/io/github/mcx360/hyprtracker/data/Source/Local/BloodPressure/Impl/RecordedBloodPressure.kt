@@ -4,13 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "RecordedBloodPressureReadings")
+@Entity(tableName = "RecordedBloodPressureReadings", primaryKeys = ["date_added", "time_added","systolic_value","diastolic_value"])
 data class RecordedBloodPressure(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val  dateAdded: String,
-    val timeAdded: String,
+    @ColumnInfo(name = "date_added") val  dateAdded: String,
+    @ColumnInfo(name = "time_added")val timeAdded: String,
     @ColumnInfo(name = "systolic_value") val systolicValue: String,
-    @ColumnInfo(name = "diastolic_Value") val diastolicValue: String,
+    @ColumnInfo(name = "diastolic_value") val diastolicValue: String,
     @ColumnInfo(name = "pulse_value") val pulseValue: String?,
     @ColumnInfo(name = "note_value") val noteValue: String?,
     @ColumnInfo(name = "hypertension_stage") val hypertensionStage: String

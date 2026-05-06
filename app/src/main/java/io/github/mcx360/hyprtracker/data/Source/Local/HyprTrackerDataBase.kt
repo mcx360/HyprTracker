@@ -9,7 +9,7 @@ import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.Recorde
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedicationDAO
 
-@Database(entities = [RecordedBloodPressure::class, RecordedMedication::class], version = 4, exportSchema = false)
+@Database(entities = [RecordedBloodPressure::class, RecordedMedication::class], version = 5, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun recordedBloodPressureDAO() : RecordedBloodPressureDAO
 
