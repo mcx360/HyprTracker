@@ -43,6 +43,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose:3.1.0")
     implementation("com.patrykandpatrick.vico:compose-m3:2.0.0")
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material.icons.extended.android)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.compose.foundation)
@@ -71,4 +72,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.androidx.room.compiler)
+
 }

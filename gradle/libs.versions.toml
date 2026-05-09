@@ -9,13 +9,15 @@ kotlinxCoroutinesTest = "1.11.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 kotlin = "2.3.21"
-composeBom = "2024.09.00"
-navigationCompose = "2.9.7"
+composeBom = "2026.05.00"
+materialIconsExtendedAndroid = "1.7.8"
+navigationCompose = "2.9.8"
 roomCompiler = "2.8.4"
-uiTextGoogleFonts = "1.10.6"
-foundation = "1.10.6"
+uiTextGoogleFonts = "1.11.1"
+foundation = "1.11.1"
 
 [libraries]
+androidx-compose-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
