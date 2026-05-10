@@ -39,9 +39,9 @@ android {
 }
 
 dependencies {
-    implementation("com.patrykandpatrick.vico:core:2.4.3")
-    implementation("com.patrykandpatrick.vico:compose:3.1.0")
-    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0")
+    implementation(libs.core)
+    implementation(libs.compose)
+    implementation(libs.compose.m3)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended.android)
     implementation(libs.androidx.datastore.preferences)

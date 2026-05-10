@@ -1,5 +1,7 @@
 [versions]
 agp = "9.2.1"
+compose = "3.1.0"
+core = "2.4.4"
 coreKtx = "1.18.0"
 datastore = "1.2.1"
 junit = "4.13.2"
@@ -24,6 +26,9 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
+compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "compose" }
+compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "compose" }
+core = { module = "com.patrykandpatrick.vico:core", version.ref = "core" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
