@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.charts.BPBreakdownCard
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.charts.BPTrendsBreakdown
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
@@ -26,8 +25,12 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTrackerViewModel){
+fun GraphScreen(
+    modifier: Modifier = Modifier,
+    hyprTrackerViewModel: HyprTrackerViewModel
+){
     val uiState by hyprTrackerViewModel.uiState.collectAsState()
+    val filterOption = remember { mutableStateOf(FilterOption.Week) }
 
     if (uiState.readings.isEmpty()) {
         EmptyInsightsScreen()
@@ -40,12 +43,7 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val showFilterByDropDownMenu = remember { mutableStateOf(false) }
-            val filterOption = remember { mutableStateOf(FilterOption.Week) }
-
             FilterCard(
-                showFilterByDropDownMenu =showFilterByDropDownMenu.value,
-                updateShowFilterByDropDownMenu = {showFilterByDropDownMenu.value = it},
                 filterOption = filterOption.value,
                 updateFilterOption = {filterOption.value = it}
             )
@@ -69,7 +67,8 @@ fun GraphScreen(modifier: Modifier = Modifier, hyprTrackerViewModel: HyprTracker
                     FilterOption.AllTime -> null
                     FilterOption.Month -> LocalDate.now().minusMonths(1).toString()
                     else -> LocalDate.now().minusWeeks(1).toString()
-                })
+                }),
+                hyprTrackerViewModel = hyprTrackerViewModel
             )
 
             //BPTrendsBreakdown(hyprTrackerViewModel = hyprTrackerViewModel)

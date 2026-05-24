@@ -119,12 +119,13 @@
     <string name="bpm">bpm</string>
     <string name="Pie_Chart_Label">"BP Stages Breakdown"</string>
     <string name="Line_Chart_Label">BP Trends Breakdown</string>
-    <string name="Filter_By">Filter By</string>
+    <string name="Filter_By">Filter</string>
 
     <!--String in model-->
     <string name="Minimum">Min</string>
     <string name="Maximum">Max</string>
     <string name="Average">Average</string>
+    <string name="Custom">Custom</string>
     <string name="All_Time">All time</string>
     <string name="Month">Month</string>
     <string name="Week">Week</string>

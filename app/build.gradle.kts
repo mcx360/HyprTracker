@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.compose.material3)
     implementation(libs.core)
     implementation(libs.compose)
     implementation(libs.compose.m3)

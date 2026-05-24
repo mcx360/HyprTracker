@@ -1,8 +1,10 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen.components.charts
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +41,7 @@ import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
@@ -44,7 +49,8 @@ import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 fun BPBreakdownCard(
     modifier: Modifier = Modifier,
     filterOption: FilterOption,
-    breakdown: List<Float>
+    breakdown: List<Float>,
+    hyprTrackerViewModel: HyprTrackerViewModel,
 ){
     Card(modifier = modifier
         .fillMaxWidth()
@@ -65,22 +71,27 @@ fun BPBreakdownCard(
 
         val singleSliceColor = if (nonZeroIndex != -1)  chartColors[nonZeroIndex]  else  MaterialTheme.colorScheme.primary
 
-        Text(
-            text = stringResource(R.string.Pie_Chart_Label),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
+        Column() {
+            Text(
+                text = stringResource(R.string.Pie_Chart_Label),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, start = 8.dp),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text("Based on ISH classification", style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = modifier.padding(start = 8.dp, bottom = 8.dp))
+        }
+
 
         if (singleFullSlice) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(240.dp),
-                contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
                     drawCircle(color = singleSliceColor)
@@ -116,7 +127,6 @@ fun BPBreakdownCard(
                     }
                 }
             }
-
             HypertensionStagesPieChart(modelProducer)
         }
 
@@ -126,27 +136,60 @@ fun BPBreakdownCard(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
-            Spacer(modifier.padding(start = 4.dp))
-            Text(stringResource(R.string.Normal), style = MaterialTheme.typography.bodySmall)
+            Box(modifier.border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp)).padding(4.dp)){
+                Row {
+                    DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
+                    Spacer(modifier.padding(start = 4.dp))
+                    Text(stringResource(R.string.Normal), style = MaterialTheme.typography.bodySmall)
+                }
+}
+            Spacer(modifier.padding(4.dp))
+
+            Box(modifier.border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp)).padding(4.dp)) {
+                Row {
+                    DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
+                    Spacer(modifier.padding(start = 4.dp))
+                    Text(
+                        stringResource(R.string.High_normal),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
 
             Spacer(modifier.padding(4.dp))
 
-            DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
-            Spacer(modifier.padding(start = 4.dp))
-            Text(stringResource(R.string.High_normal),  style = MaterialTheme.typography.bodySmall)
+            Box(modifier.border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp)).padding(4.dp)) {
+                Row {
+                    DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
+                    Spacer(modifier.padding(start = 4.dp))
+                    Text(stringResource(R.string.Grade1), style = MaterialTheme.typography.bodySmall)
+                }
+
+            }
 
             Spacer(modifier.padding(4.dp))
 
-            DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
-            Spacer(modifier.padding(start = 4.dp))
-            Text(stringResource(R.string.Grade1),  style = MaterialTheme.typography.bodySmall)
+            Box(modifier.border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp)).padding(4.dp)) {
+                Row {
+                    DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
+                    Spacer(modifier.padding(start = 4.dp))
+                    Text(stringResource(R.string.Grade2), style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+        HorizontalDivider(modifier = modifier.padding(8.dp), thickness = 2.dp)
 
-            Spacer(modifier.padding(4.dp))
-
-            DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
-            Spacer(modifier.padding(start = 4.dp))
-            Text(stringResource(R.string.Grade2),  style = MaterialTheme.typography.bodySmall)
+        Row(modifier.fillMaxWidth()) {
+            Text("Systolic Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp), fontWeight = FontWeight.Bold)
+        }
+        Row(modifier.fillMaxWidth()) {
+            Text("Diastolic Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
+        }
+        Row(modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+            Text("Pulse Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
         }
     }
 }
