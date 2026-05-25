@@ -31,6 +31,8 @@ fun GraphScreen(
 ){
     val uiState by hyprTrackerViewModel.uiState.collectAsState()
     val filterOption = remember { mutableStateOf(FilterOption.Week) }
+    val last = uiState.readings.last().date
+    val lastDate = hyprTrackerViewModel.convertStringToDate(last)
 
     if (uiState.readings.isEmpty()) {
         EmptyInsightsScreen()
@@ -45,7 +47,8 @@ fun GraphScreen(
         ) {
             FilterCard(
                 filterOption = filterOption.value,
-                updateFilterOption = {filterOption.value = it}
+                updateFilterOption = {filterOption.value = it},
+                lastDate = lastDate
             )
 
             InfoCards(

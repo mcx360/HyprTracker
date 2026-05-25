@@ -20,6 +20,7 @@ import java.util.Locale
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import java.time.format.DateTimeFormatter
 import java.util.Collections
 import kotlin.String
 import kotlin.time.ExperimentalTime
@@ -339,6 +340,12 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     fun convertMillisToDate(millis: Long?): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return if (millis == null) ""  else formatter.format(Date(millis))
+    }
+
+    fun convertStringToDate(dateString: String) : LocalDate{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val localDate = LocalDate.parse(dateString, formatter)
+        return localDate
     }
 
     //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY

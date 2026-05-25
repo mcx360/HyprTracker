@@ -53,7 +53,8 @@ import java.time.LocalDate
 fun FilterCard(
     modifier: Modifier = Modifier,
     filterOption : FilterOption,
-    updateFilterOption: (FilterOption) -> Unit
+    updateFilterOption: (FilterOption) -> Unit,
+    lastDate: LocalDate
 ){
         Row(
             modifier = modifier
@@ -72,8 +73,8 @@ fun FilterCard(
                 value = when(filterOption){
                     FilterOption.Week -> "${LocalDate.now().minusWeeks(1).dayOfMonth} ${LocalDate.now().minusWeeks(1).month.toString().substring(0,3).lowercase().replaceFirstChar {it.uppercase() }} ${LocalDate.now().minusWeeks(1).year}–${LocalDate.now().dayOfMonth} ${LocalDate.now().month.toString().substring(0,3).lowercase().replaceFirstChar { it.uppercase() }} ${LocalDate.now().year}"
                     FilterOption.Month -> "${LocalDate.now().minusMonths(1).dayOfMonth} ${LocalDate.now().minusMonths(1).month.toString().substring(0,3).lowercase().replaceFirstChar {it.uppercase() }} ${LocalDate.now().minusMonths(1).year}–${LocalDate.now().dayOfMonth} ${LocalDate.now().month.toString().substring(0,3).lowercase().replaceFirstChar { it.uppercase() }} ${LocalDate.now().year}"
-                    FilterOption.AllTime -> "All time"
-                    FilterOption.Custom -> "Custom"
+                    FilterOption.AllTime -> "${lastDate.dayOfMonth} ${lastDate.month.toString().substring(0,3).lowercase().replaceFirstChar { it.uppercase()}} ${lastDate.year}–${LocalDate.now().dayOfMonth} ${LocalDate.now().month.toString().substring(0, 3).lowercase().replaceFirstChar { it.uppercase() }} ${LocalDate.now().year}"
+                    FilterOption.Custom -> "Custom_date-custom_date"
                 },
                 readOnly = true,
                 onValueChange = {},
