@@ -12,7 +12,7 @@ interface RecordedBloodPressureDAO {
     @Query("SELECT * FROM RecordedBloodPressureReadings ORDER BY date_added DESC, time_added DESC")
     fun getAllBloodPressureReadings(): Flow<List<RecordedBloodPressure>>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBloodPressureReading(bloodPressureReading: RecordedBloodPressure)
 
     @Delete
