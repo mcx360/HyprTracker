@@ -49,6 +49,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.components.EmptyHistoryScreen
 import io.github.mcx360.hyprtracker.ui.utils.Dot
+import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -152,7 +153,7 @@ fun HistoryTab(
                                 LocalDate.now().toString() -> stringResource(R.string.Today_at)
                                 LocalDate.now().minusDays(1).toString() -> stringResource(R.string.Yesterday_at)
                                 LocalDate.now().minusDays(2).toString() -> stringResource(R.string.Two_Days_Ago_At)
-                                else -> hyprTrackerViewModel.formatToRegularDate(hyprTrackerUIState.readings[index].date) + stringResource(R.string.At_Time)
+                                else -> formatToRegularDate(hyprTrackerUIState.readings[index].date) + stringResource(R.string.At_Time)
                             },
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold

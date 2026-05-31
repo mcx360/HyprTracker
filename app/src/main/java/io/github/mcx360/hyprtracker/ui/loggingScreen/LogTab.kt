@@ -56,6 +56,7 @@ import io.github.mcx360.hyprtracker.ui.HyprReading
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.components.InfographicLine
 import io.github.mcx360.hyprtracker.ui.loggingScreen.components.InfographicLineTitle
+import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -177,7 +178,7 @@ fun LogTab(
                     painter = painterResource(R.drawable.ic_date),
                     contentDescription = null
                 )
-                Text(hyprTrackerViewModel.formatToRegularDate(hyprTackerUiState.date))
+                Text(formatToRegularDate(hyprTackerUiState.date))
                 Spacer(
                     modifier = Modifier
                         .width(32.dp)

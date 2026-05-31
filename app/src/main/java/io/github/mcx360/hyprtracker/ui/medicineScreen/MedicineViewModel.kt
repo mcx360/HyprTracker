@@ -147,12 +147,6 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
-    fun formatToRegularDate(date: String) : String{
-        val dateInfo = date.split('-')
-        return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
-    }
-
     data class Medicine(
         val name: String,
         val description: String,

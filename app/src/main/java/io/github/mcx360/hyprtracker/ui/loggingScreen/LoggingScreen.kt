@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -149,7 +150,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                         Column {
                             // Custom date picker text field
                             OutlinedTextField(
-                                value = hyprTrackerViewModel.formatToRegularDate(selectedDate),
+                                value = formatToRegularDate(selectedDate),
                                 onValueChange = {},
                                 label = { Text(stringResource(R.string.Custom_Log_Date_TextField))},
                                 readOnly = true,

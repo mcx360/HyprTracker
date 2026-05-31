@@ -348,11 +348,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         return localDate
     }
 
-    //format date from internal database format YYYY-MM-DD to regular format DD/MM/YYYY
-    fun formatToRegularDate(date: String) : String{
-        val dateInfo = date.split('-')
-        return "${dateInfo[2]}/${dateInfo[1]}/${dateInfo[0]}"
-    }
 
     //Convert blood pressure from UI layer format to data layer format
     fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(

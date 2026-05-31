@@ -44,6 +44,7 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.components.EmptyMedicineList
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 
 @Composable
@@ -201,10 +202,10 @@ fun MedicineScreen(
                         ) {
                             if (medication.endDate.isEmpty()) {
                                 Text("Started: ", fontWeight = FontWeight.Bold)
-                                Text("${medicineViewModel.formatToRegularDate(medication.startDate)} • Continuous")
+                                Text("${formatToRegularDate(medication.startDate)} • Continuous")
                             } else {
                                 Text("Duration: ", fontWeight = FontWeight.Bold)
-                                Text("${medicineViewModel.formatToRegularDate(medication.startDate)} ➩ ${medicineViewModel.formatToRegularDate(medication.endDate)}")
+                                Text("${formatToRegularDate(medication.startDate)} ➩ ${formatToRegularDate(medication.endDate)}")
                             }
                         }
 

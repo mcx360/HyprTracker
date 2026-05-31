@@ -29,3 +29,14 @@ fun Dot(
             .background(colour, shape = CircleShape)
     )
 }
+
+@Composable
+fun DotWithColour(
+    colour: Color
+) {
+    Box(
+        modifier = Modifier
+            .size(16.dp)
+            .background(colour, shape = CircleShape)
+    )
+}
