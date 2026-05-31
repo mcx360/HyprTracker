@@ -266,7 +266,6 @@ fun MedicineScreen(
                                 } else {
                                     Text("${medication.timesPerDay} times")
                                 }
-                                Text("${medication.timesPerDay} times")
                             }
                         }
 

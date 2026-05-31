@@ -14,10 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
 
 class MedicineViewModel(private val medicationRepository: MedicationRepository) : ViewModel() {
 
@@ -115,7 +112,7 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    suspend fun deleteAllRecordedMedications(){
+    fun deleteAllRecordedMedications(){
         viewModelScope.launch(Dispatchers.IO) {
             medicationRepository.removeAllMedications()
         }
@@ -174,7 +171,6 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     )
 
     fun Medicine.toRecordedMedication() : RecordedMedication = RecordedMedication(
-        //id = 0,
         name = name,
         description = description,
         schedule = schedule,
@@ -186,7 +182,6 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         startDate = startDate,
         endDate = endDate
     )
-
 
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {

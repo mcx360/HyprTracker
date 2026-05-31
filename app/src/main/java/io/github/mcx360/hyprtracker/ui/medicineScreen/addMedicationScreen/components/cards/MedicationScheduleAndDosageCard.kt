@@ -26,8 +26,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.SelectDaysForMedication
-import io.github.mcx360.hyprtracker.ui.model.Days
+//import io.github.mcx360.hyprtracker.ui.model.Days
 import io.github.mcx360.hyprtracker.ui.utils.InfoDialog
+import java.time.DayOfWeek
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +119,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 updateMedicationSchedule("Every single day")
                                 setIsMedicationScheduleFieldInErrorToFalse()
-                                for (day in Days.entries){
+                                for (day in DayOfWeek.entries){
                                     addSelectedDay(day.name)
                                 }
                                 changeScheduleDropDownMenuStatus(false)

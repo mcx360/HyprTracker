@@ -20,7 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import io.github.mcx360.hyprtracker.ui.model.Days
+import java.time.DayOfWeek
+
+//import io.github.mcx360.hyprtracker.ui.model.Days
 
 //Dialog that lets users on which days of the week the medication is taken, e.g. only on Monday,Thursday and Sunday
 @Composable
@@ -131,13 +133,13 @@ fun SelectDaysForMedication(
                     Button(onClick = {
                         if (mondayChecked || tuesdayChecked || wednesdayChecked || thursdayChecked || fridayChecked || saturdayChecked || sundayChecked){
                             listOf(
-                                mondayChecked to Days.Monday,
-                                tuesdayChecked to Days.Tuesday,
-                                wednesdayChecked to Days.Wednesday,
-                                thursdayChecked to Days.Thursday,
-                                fridayChecked to Days.Friday,
-                                saturdayChecked to Days.Saturday,
-                                sundayChecked to Days.Sunday
+                                mondayChecked to DayOfWeek.MONDAY,
+                                tuesdayChecked to DayOfWeek.TUESDAY,
+                                wednesdayChecked to DayOfWeek.WEDNESDAY,
+                                thursdayChecked to DayOfWeek.THURSDAY,
+                                fridayChecked to DayOfWeek.FRIDAY,
+                                saturdayChecked to DayOfWeek.SATURDAY,
+                                sundayChecked to DayOfWeek.SUNDAY
                             ).forEach { (isChecked, day) ->
                                 if (isChecked) { onDaySelected(day.name) }
                                 if (!isChecked) { onDayRemoved(day.name) }
