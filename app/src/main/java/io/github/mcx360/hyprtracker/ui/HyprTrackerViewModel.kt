@@ -186,16 +186,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
-    /*
-    fun getSystolicValues(cutoffDate: String?): List<Int> {
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-
-        return readings.mapNotNull {
-            runCatching { it.systolicValue.toInt() }.getOrNull()
-        }
-    }
-     */
-
     //gets diastolic average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getDiastolicAverage(cutoffDate: String?) : Int{
         try {
@@ -236,16 +226,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
-    /*
-    fun getDiastolicValues(cutoffDate: String?): List<Int> {
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-
-        return readings.mapNotNull {
-            runCatching { it.diastolicValue.toInt() }.getOrNull()
-        }
-    }
-     */
-
     //gets pulse average value from now until the cutoffDate or all time average if no cutoffDate is provided
     fun getPulseAverage(cutoffDate: String?) : Int{
         try {
@@ -276,16 +256,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
             return 0
         }
     }
-
-    /*
-    fun getPulseValues(cutoffDate: String?): List<Int> {
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-
-        return readings.mapNotNull {
-            runCatching { it.pulseValue?.toInt() }.getOrNull()
-        }
-    }
-     */
 
     //Get percentage values in a list for pie chart data representation
     fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
