@@ -47,6 +47,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.MedicationScheduleAndDosageCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.medicationInfoCard
+import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -211,7 +212,7 @@ fun AddMedicationScreen(
                     updateShowDurationDatePicker = { showDurationDatePicker = it },
                     updateShowSelectSpecifiedNumberOfDaysDialog = { showSelectSpecifiedNumberOfDaysDialog = it },
                     updateMedicationEndDateString = { medicineViewModel.updateMedicationEndDate(it) },
-                    updateMedicationEndDateLong = { medicineViewModel.updateMedicationEndDate(medicineViewModel.convertMillisToDate(it)) }
+                    updateMedicationEndDateLong = { medicineViewModel.updateMedicationEndDate(convertMillisToDate(it)) }
                 )
 
                 Row(

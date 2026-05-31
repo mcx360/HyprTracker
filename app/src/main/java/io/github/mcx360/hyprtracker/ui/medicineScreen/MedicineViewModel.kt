@@ -187,14 +187,6 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         endDate = endDate
     )
 
-    fun convertMillisToDate(millis: Long?): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return if (millis == null){
-            ""
-        } else{
-            formatter.format(Date(millis))
-        }
-    }
 
     companion object {
         val Factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {

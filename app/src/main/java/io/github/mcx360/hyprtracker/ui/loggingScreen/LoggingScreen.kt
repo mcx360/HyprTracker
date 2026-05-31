@@ -52,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.utils.convertDateToMillis
+import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -90,7 +92,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
-    val selectedDate = datePickerState.selectedDateMillis?.let { hyprTrackerViewModel.convertMillisToDate(it) } ?: hyprTackerUiState.date
+    val selectedDate = datePickerState.selectedDateMillis?.let { convertMillisToDate(it) } ?: hyprTackerUiState.date
     val currentTime = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
@@ -282,7 +284,7 @@ fun LoggingScreenTabs(hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostSt
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 hyprTrackerViewModel.resetBloodPressureLog()
                                 datePickerState.selectedDateMillis =
-                                    hyprTrackerViewModel.convertDateToMillis(hyprTackerUiState.date)
+                                    convertDateToMillis(hyprTackerUiState.date)
                                 if (!sheetState.isVisible) showBottomSheet = false
                                 scope.launch { snackBarHostState.showSnackbar(resetMessage) }
                             } }

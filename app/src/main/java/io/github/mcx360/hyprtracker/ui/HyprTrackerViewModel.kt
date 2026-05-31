@@ -12,11 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.Date
-import java.util.Locale
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
@@ -322,25 +319,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         return daysOfWeek
     }
 
-    //Convert date string in format YYYY-MM-DD to millis
-    fun convertDateToMillis(dateString: String?): Long? {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return if (dateString.isNullOrEmpty()) {
-            null
-        } else {
-            try {
-                formatter.parse(dateString)?.time
-            } catch (_: Exception) {
-                null
-            }
-        }
-    }
-
-    //Convert time in millis to string in format YYYY-MM-DD
-    fun convertMillisToDate(millis: Long?): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return if (millis == null) ""  else formatter.format(Date(millis))
-    }
 
     fun convertStringToDate(dateString: String) : LocalDate{
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
