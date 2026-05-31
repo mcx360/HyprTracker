@@ -262,7 +262,9 @@ fun MedicineScreen(
                             } else{
                                 Text("Taken on selected days • ")
                                 if (medication.timesPerDay == 1){
-                                    Text("${medication.timesPerDay} time")
+                                    Text("Once")
+                                } else {
+                                    Text("${medication.timesPerDay} times")
                                 }
                                 Text("${medication.timesPerDay} times")
                             }
