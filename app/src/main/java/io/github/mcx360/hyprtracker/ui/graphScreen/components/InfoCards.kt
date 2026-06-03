@@ -31,7 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsUIState
 import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import java.time.LocalDate
 import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 

@@ -17,6 +17,7 @@ import java.time.LocalTime
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.ui.model.HyprReading
 import java.time.format.DateTimeFormatter
 import java.util.Collections
 import kotlin.String
@@ -136,56 +137,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         bloodPressureRepository.removeBloodPressureReading(reading.toRecordedBloodPressure())
     }
 
-    //Helper function that filters readings from current date back up until the cutoff date
-    fun getFilteredList(cutoffDate: String): List<HyprReading> {
-        val cutoff = LocalDate.parse(cutoffDate)
-
-        return _uiState.value.readings.filter {
-            val readingDate = LocalDate.parse(it.date)
-            !readingDate.isBefore(cutoff)
-        }
-    }
-
-    //Get percentage values in a list for pie chart data representation
-    fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
-        val counts = mutableListOf(0, 0, 0, 0)
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-
-        readings.forEach {
-            when (it.stage) {
-                "Normal" -> counts[0]++
-                "High Normal" -> counts[1]++
-                "Grade 1 Hypertension" -> counts[2]++
-                "Grade 2 Hypertension" -> counts[3]++
-            }
-        }
-
-        val total = readings.size.toFloat()
-
-        return if (total > 0) {
-            counts.map { (it / total) * 100f }
-        } else {
-            listOf(0f, 0f, 0f, 0f)
-        }
-    }
-
-    //helper method for pie chart
-    @OptIn(ExperimentalTime::class)
-    fun getWeekDaysFromToday() : List<String>{
-        val daysOfWeek = listOf("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
-        val today = LocalDate.now().dayOfWeek.value-1
-        Collections.rotate(daysOfWeek, -today)
-        return daysOfWeek
-    }
-
-
-    fun convertStringToDate(dateString: String) : LocalDate{
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val localDate = LocalDate.parse(dateString, formatter)
-        return localDate
-    }
-
-
     //Convert blood pressure from UI layer format to data layer format
     fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(
         dateAdded = date,
@@ -225,37 +176,13 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     }
 }
 
-data class HyprReading(
-    val systolicValue: String,
-    val diastolicValue: String,
-    val pulseValue: String?,
-    val date: String,
-    val time: String,
-    val notes: String?,
-    val stage: String = getHyperTensionStage(systolicValue, diastolicValue)
+data class HyprTrackerUIState(
+    val systolicValue: String = "",
+    val diastolicValue: String = "",
+    val pulseValue: String = "",
+    val date: String = LocalDate.now().toString(),
+    val time: String = LocalTime.now().withNano(0).toString(),
+    val notes: String = "",
+    var readings: List<HyprReading> = listOf(),
+    val systolicAverage: String = ""
 )
-
-fun getHyperTensionStage(
-    systolicValue: String,
-    diastolicValue: String
-): String {
-    try {
-        val diastolicValue = diastolicValue.toInt()
-        val systolicValue = systolicValue.toInt()
-
-        return if (systolicValue <= 0 || diastolicValue <= 0) {
-            "error"
-        } else if (systolicValue >= 160 || diastolicValue >= 100) {
-            "Grade 2 Hypertension"
-        } else if (systolicValue >= 140 || diastolicValue >= 90) {
-            "Grade 1 Hypertension"
-        } else if (systolicValue >= 130 || diastolicValue >= 85) {
-            "High Normal"
-        } else {
-            "Normal"
-        }
-
-    } catch (_: NumberFormatException) {
-        return "error"
-    }
-}

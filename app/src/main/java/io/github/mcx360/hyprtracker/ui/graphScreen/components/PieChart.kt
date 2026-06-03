@@ -42,13 +42,11 @@ import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 
 @Composable
 fun BPBreakdownCard(
     modifier: Modifier = Modifier,
-    filterOption: FilterOption,
     breakdown: List<Float>,
 ){
     Card(modifier = modifier
@@ -119,7 +117,7 @@ fun BPBreakdownCard(
         }
         else {
             val modelProducer = remember { PieChartModelProducer() }
-            LaunchedEffect(filterOption) {
+            LaunchedEffect(breakdown) {
                 modelProducer.runTransaction {
                     pieSeries {
                         series(*breakdown.toTypedArray())

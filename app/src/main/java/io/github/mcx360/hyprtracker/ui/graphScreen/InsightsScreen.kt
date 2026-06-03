@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
@@ -48,16 +49,16 @@ fun GraphScreen(
 
             /*
             BPBreakdownCard(
-                filterOption = filterOption.value,
                 breakdown = hyprTrackerViewModel.getBPStagesBreakdown(when (filterOption.value) {
                     FilterOption.AllTime -> null
                     FilterOption.Month -> LocalDate.now().minusMonths(1).toString()
                     else -> LocalDate.now().minusWeeks(1).toString()
-                }),
-                hyprTrackerViewModel = hyprTrackerViewModel
+                })
             )
 
              */
+
+
         }
 
     }else{
