@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen.components.charts
+package io.github.mcx360.hyprtracker.ui.graphScreen.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
@@ -50,7 +50,6 @@ fun BPBreakdownCard(
     modifier: Modifier = Modifier,
     filterOption: FilterOption,
     breakdown: List<Float>,
-    hyprTrackerViewModel: HyprTrackerViewModel,
 ){
     Card(modifier = modifier
         .fillMaxWidth()

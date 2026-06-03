@@ -11,4 +11,5 @@ data class HyprTrackerUIState(
     val time: String = LocalTime.now().withNano(0).toString(),
     val notes: String = "",
     var readings: List<HyprReading> = listOf(),
+    val systolicAverage: String = ""
 )

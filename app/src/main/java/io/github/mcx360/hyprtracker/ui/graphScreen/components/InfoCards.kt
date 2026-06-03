@@ -12,12 +12,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -25,7 +27,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsUIState
+import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.model.FilterOption
 import java.time.LocalDate
 import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
@@ -33,34 +38,25 @@ import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 @Composable
 fun InfoCards(
     modifier: Modifier = Modifier,
-    filterOption: FilterOption,
-    getSystolicAverage: (String?) -> (String),
-    getSystolicMax: (String?) -> (String),
-    getSystolicMin: (String?) -> (String),
-    getDiastolicAverage: (String?) -> (String),
-    getDiastolicMax: (String?) -> (String),
-    getDiastolicMin: (String?) -> (String),
-    getPulseAverage: (String?) -> (String),
-    getPulseMax: (String?) -> (String),
-    getPulseMin: (String?) -> (String),
+    viewModel: InsightsViewModel
 ){
     Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
 
         val haptic = LocalHapticFeedback.current
+        val insightsUIState by viewModel.uiState.collectAsStateWithLifecycle()
         var systolicDataShown by remember { mutableStateOf( MinMaxAvg.Average)}
         var diastolicDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
         var pulseDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
-
 
         //Systolic Info
         Card(modifier = modifier
             .weight(0.33f)
             .clickable(onClick = {
-            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 systolicDataShown = when (systolicDataShown) {
                     MinMaxAvg.Average -> MinMaxAvg.Max
                     MinMaxAvg.Max -> MinMaxAvg.Min
-                    else -> MinMaxAvg.Average
+                    MinMaxAvg.Min -> MinMaxAvg.Average
                 }
             })
         ) {
@@ -87,27 +83,13 @@ fun InfoCards(
                     )
                 }
 
+
                 Row {
-                    Text(
-                        when (filterOption) {
-                            FilterOption.AllTime -> when (systolicDataShown) {
-                                MinMaxAvg.Average -> getSystolicAverage(null)
-                                MinMaxAvg.Max -> getSystolicMax(null)
-                                else -> getSystolicMin(null)
-                            }
-
-                            FilterOption.Month -> when (systolicDataShown) {
-                                MinMaxAvg.Average -> getSystolicAverage(LocalDate.now().minusMonths(1).toString())
-                                MinMaxAvg.Max -> getSystolicMax(LocalDate.now().minusMonths(1).toString())
-                                else -> getSystolicMin(LocalDate.now().minusMonths(1).toString())
-                            }
-
-                            else -> when (systolicDataShown) {
-                                MinMaxAvg.Average -> getSystolicAverage(LocalDate.now().minusWeeks(1).toString())
-                                MinMaxAvg.Max -> getSystolicMax(LocalDate.now().minusWeeks(1).toString())
-                                else -> getSystolicMin(LocalDate.now().minusWeeks(1).toString())
-                            }
-                        },
+                    Text(text = when(systolicDataShown){
+                        MinMaxAvg.Min -> insightsUIState.systolicMin
+                        MinMaxAvg.Average -> insightsUIState.systolicAverage
+                        MinMaxAvg.Max -> insightsUIState.systolicMax
+                    },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -156,25 +138,14 @@ fun InfoCards(
                         contentDescription = null,
                     )
                 }
+
+
                 Row {
-                    Text(
-                        when (filterOption) {
-                            FilterOption.AllTime -> when (diastolicDataShown) {
-                                MinMaxAvg.Average -> getDiastolicAverage(null)
-                                MinMaxAvg.Max -> getDiastolicMax(null)
-                                MinMaxAvg.Min -> getDiastolicMin(null)
-                            }
-                            FilterOption.Month -> when (diastolicDataShown) {
-                                MinMaxAvg.Average -> getDiastolicAverage(LocalDate.now().minusMonths(1).toString())
-                                MinMaxAvg.Max -> getDiastolicMax(LocalDate.now().minusMonths(1).toString())
-                                else -> getDiastolicMin(LocalDate.now().minusMonths(1).toString())
-                            }
-                            else -> when (diastolicDataShown) {
-                                MinMaxAvg.Average -> getDiastolicAverage(LocalDate.now().minusWeeks(1).toString())
-                                MinMaxAvg.Max -> getDiastolicMax(LocalDate.now().minusWeeks(1).toString())
-                                else -> getDiastolicMin(LocalDate.now().minusWeeks(1).toString())
-                            }
-                        },
+                    Text(text = when(diastolicDataShown){
+                        MinMaxAvg.Min -> insightsUIState.diastolicMin
+                        MinMaxAvg.Average -> insightsUIState.diastolicAverage
+                        MinMaxAvg.Max -> insightsUIState.diastolicMax
+                    },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -229,26 +200,12 @@ fun InfoCards(
                     modifier = modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        when (filterOption) {
-                            FilterOption.AllTime -> when (pulseDataShown) {
-                                MinMaxAvg.Average -> getPulseAverage(null)
-                                MinMaxAvg.Max -> getPulseMax(null)
-                                else -> getPulseMin(null)
-                            }
 
-                            FilterOption.Month -> when (pulseDataShown) {
-                                MinMaxAvg.Average -> getPulseAverage(LocalDate.now().minusMonths(1).toString())
-                                MinMaxAvg.Max -> getPulseMax(LocalDate.now().minusMonths(1).toString())
-                                else -> getPulseMin(LocalDate.now().minusMonths(1).toString())
-                            }
-
-                            else -> when (pulseDataShown) {
-                                MinMaxAvg.Average -> getPulseAverage(LocalDate.now().minusWeeks(1).toString())
-                                MinMaxAvg.Max -> getPulseMax(LocalDate.now().minusWeeks(1).toString())
-                                else -> getPulseMin(LocalDate.now().minusWeeks(1).toString())
-                            }
-                        },
+                    Text(text =  when(pulseDataShown){
+                        MinMaxAvg.Min -> insightsUIState.pulseMin
+                        MinMaxAvg.Average -> insightsUIState.pulseAverage
+                        MinMaxAvg.Max -> insightsUIState.pulseMax
+                    },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )

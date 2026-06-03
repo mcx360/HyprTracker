@@ -4,8 +4,7 @@ import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.Recorde
 import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl.RecordedBloodPressureDAO
 import kotlinx.coroutines.flow.Flow
 
-class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) :
-    BloodPressureRepository {
+class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) : BloodPressureRepository {
 
     override suspend fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
 
@@ -15,4 +14,25 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
 
     override suspend fun removeAllBloodPressureReadings() = bloodPressureDAO.deleteAllBloodPressureReadings()
 
+    override suspend fun getSystolicAverage(startDate: String?, endDate: String?): Int = bloodPressureDAO.getSystolicAverage(startDate,endDate)?.toInt() ?: 0
+
+    override suspend fun getSystolicMax(startDate: String?, endDate: String?): Int = bloodPressureDAO.getSystolicMax(startDate,endDate)?.toInt() ?: 0
+
+    override suspend fun getSystolicMin(startDate: String?, endDate: String?): Int = bloodPressureDAO.getSystolicMin(startDate,endDate)?.toInt() ?: 0
+
+    override suspend fun getDiastolicAverage(startDate: String?, endDate: String?): Int = bloodPressureDAO.getDiastolicAverage(startDate, endDate)?.toInt() ?: 0
+
+    override suspend fun getDiastolicMax(startDate: String?, endDate: String?): Int = bloodPressureDAO.getDiastolicMax(startDate, endDate)?.toInt() ?: 0
+
+    override suspend fun getDiastolicMin(startDate: String?, endDate: String?): Int = bloodPressureDAO.getDiastolicMin(startDate, endDate)?.toInt() ?: 0
+
+    override suspend fun getPulseAverage(startDate: String?, endDate: String?): Int = bloodPressureDAO.getPulseAverage(startDate,endDate)?.toInt() ?: 0
+
+    override suspend fun getPulseMax(startDate: String?, endDate: String?): Int = bloodPressureDAO.getPulseMax(startDate, endDate)?.toInt() ?: 0
+
+    override suspend fun getPulseMin(startDate: String?, endDate: String?): Int = bloodPressureDAO.getPulseMin(startDate, endDate)?.toInt() ?: 0
+
+    override suspend fun getOldestDate(): String? = bloodPressureDAO.getOldestDate()
+
+    override suspend fun hasRecords(): Boolean = bloodPressureDAO.hasRecords()
 }

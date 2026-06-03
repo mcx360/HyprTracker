@@ -12,4 +12,28 @@ interface BloodPressureRepository {
     suspend fun addBloodPressureReading(reading: RecordedBloodPressure)
 
     suspend fun removeAllBloodPressureReadings()
+
+    suspend fun getSystolicAverage(startDate: String?, endDate: String?) : Int
+
+    suspend fun getSystolicMax(startDate: String?, endDate: String?) : Int
+
+    suspend fun getSystolicMin(startDate: String?, endDate: String?) : Int
+
+    suspend fun getDiastolicAverage(startDate: String?, endDate: String?) : Int
+
+    suspend fun getDiastolicMax(startDate: String?, endDate: String?) : Int
+
+    suspend fun getDiastolicMin(startDate: String?, endDate: String?) : Int
+
+    suspend fun getPulseAverage(startDate: String?, endDate: String?) : Int
+
+    suspend fun getPulseMax(startDate: String?, endDate: String?) : Int
+
+    suspend fun getPulseMin(startDate: String?, endDate: String?) : Int
+
+    suspend fun getOldestDate() : String?
+
+    suspend fun hasRecords(): Boolean
+
+
 }
