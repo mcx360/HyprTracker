@@ -31,6 +31,7 @@ class InsightsViewModel(private val bloodPressureRepository: BloodPressureReposi
         viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
+                    bpStages = bloodPressureRepository.getStages(startDate, endDate),
                     systolicAverage = bloodPressureRepository.getSystolicAverage(startDate, endDate).toString(),
                     systolicMax = bloodPressureRepository.getSystolicMax(startDate, endDate).toString(),
                     systolicMin = bloodPressureRepository.getSystolicMin(startDate, endDate).toString(),
@@ -72,41 +73,6 @@ class InsightsViewModel(private val bloodPressureRepository: BloodPressureReposi
     }
 
 
-    /*
-    //Helper function that filters readings from current date back up until the cutoff date
-    fun getFilteredList(cutoffDate: String): List<HyprReading> {
-        val cutoff = LocalDate.parse(cutoffDate)
-
-        return _uiState.value.readings.filter {
-            val readingDate = LocalDate.parse(it.date)
-            !readingDate.isBefore(cutoff)
-        }
-    }
-
-    //Get percentage values in a list for pie chart data representation
-    fun getBPStagesBreakdown(cutoffDate: String?): List<Float> {
-        val counts = mutableListOf(0, 0, 0, 0)
-        val readings = cutoffDate?.let { getFilteredList(it) } ?: _uiState.value.readings
-
-        readings.forEach {
-            when (it.stage) {
-                "Normal" -> counts[0]++
-                "High Normal" -> counts[1]++
-                "Grade 1 Hypertension" -> counts[2]++
-                "Grade 2 Hypertension" -> counts[3]++
-            }
-        }
-
-        val total = readings.size.toFloat()
-
-        return if (total > 0) {
-            counts.map { (it / total) * 100f }
-        } else {
-            listOf(0f, 0f, 0f, 0f)
-        }
-    }
-
-     */
 }
 
 data class InsightsUIState(
@@ -121,5 +87,6 @@ data class InsightsUIState(
     val diastolicMin: String = "",
     val pulseAverage: String = "",
     val pulseMax: String = "",
-    val pulseMin: String = ""
+    val pulseMin: String = "",
+    val bpStages: List<Float> = listOf(0f,0f,0f,0f)
 )

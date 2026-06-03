@@ -131,4 +131,12 @@ interface RecordedBloodPressureDAO {
     @Query("SELECT EXISTS (SELECT 1 FROM recordedbloodpressurereadings)")
     suspend fun hasRecords() : Boolean
 
+    @Query("""
+        SELECT hypertension_stage
+        FROM recordedbloodpressurereadings
+        WHERE (:startDate IS NULL OR date_added >= :startDate)
+          AND (:endDate IS NULL OR date_added <= :endDate)
+""")
+    suspend fun getStages(startDate: String?, endDate: String?) : List<String>
+
 }

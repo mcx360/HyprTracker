@@ -35,4 +35,19 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
     override suspend fun getOldestDate(): String? = bloodPressureDAO.getOldestDate()
 
     override suspend fun hasRecords(): Boolean = bloodPressureDAO.hasRecords()
+
+    override suspend fun getStages(startDate: String?, endDate: String?): List<Float> {
+        val counts = mutableListOf(0f, 0f, 0f, 0f)
+        var total = 0
+        bloodPressureDAO.getStages(startDate, endDate).forEach {
+            when(it){
+                "Normal" -> counts[0]++
+                "High Normal" -> counts[1]++
+                "Grade 1 Hypertension" -> counts[2]++
+                "Grade 2 Hypertension" -> counts[3]++
+            }
+            total++
+        }
+        return counts.map { (it / total) * 100f }
+    }
 }
