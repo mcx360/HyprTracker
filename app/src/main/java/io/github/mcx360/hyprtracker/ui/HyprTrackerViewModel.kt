@@ -190,9 +190,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     fun HyprReading.toRecordedBloodPressure() : RecordedBloodPressure = RecordedBloodPressure(
         dateAdded = date,
         timeAdded = time,
-        systolicValue = systolicValue,
-        diastolicValue = diastolicValue,
-        pulseValue = pulseValue,
+        systolicValue = systolicValue.toInt(),
+        diastolicValue = diastolicValue.toInt(),
+        pulseValue = pulseValue?.toInt(),
         noteValue = notes,
         hypertensionStage = stage
         )
@@ -201,9 +201,9 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     fun RecordedBloodPressure.toHyprReading() : HyprReading = HyprReading(
         date = dateAdded,
         time = timeAdded,
-        systolicValue = systolicValue,
-        diastolicValue = diastolicValue,
-        pulseValue = pulseValue,
+        systolicValue = systolicValue.toString(),
+        diastolicValue = diastolicValue.toString(),
+        pulseValue = pulseValue.toString(),
         notes = noteValue,
         stage = hypertensionStage
     )
