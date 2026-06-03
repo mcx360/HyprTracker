@@ -41,12 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel.Medicine
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.DurationCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.MedicationScheduleAndDosageCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.medicationInfoCard
+import io.github.mcx360.hyprtracker.ui.model.Medicine
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.CoroutineScope

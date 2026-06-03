@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
 import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
+import io.github.mcx360.hyprtracker.ui.model.Medicine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -144,19 +145,6 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    data class Medicine(
-        val name: String,
-        val description: String,
-        val schedule: String,
-        val scheduledDays: Set<String>,
-        val timesPerDay: Int,
-        val dosePerIntake: String,
-        val notificationsEnabled: Boolean,
-        val scheduledNotificationsTime: List<String>,
-        val startDate: String,
-        val endDate: String
-    )
-
     fun RecordedMedication.toMedicine() : Medicine = Medicine(
         name = name,
         description = description,
@@ -198,3 +186,18 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 }
+
+data class MedicineState(
+    val medicationName: String = "",
+    val medicationDescription: String = "",
+    val medicationSchedule: String = "",
+    val medicationTimesPerDay: Int = 0,
+    val medicationIntake: Int = 0,
+    val medicationDosage: String = "",
+    val medicationSelectedDays: Set<String> = setOf(),
+    val medicationReminderTimes: List<String> = listOf("","","","","","",""),
+    val medicationEndDate: String = "",
+    var medicineList: List<Medicine> = listOf(),
+    val medicationNotifications: Boolean = false,
+    val date: String = LocalDate.now().toString()
+)
