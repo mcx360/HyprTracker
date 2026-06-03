@@ -12,12 +12,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.EmptyInsightsScreen
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
 import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
+import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
+import io.github.mcx360.hyprtracker.R
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +28,7 @@ fun GraphScreen(
     modifier: Modifier = Modifier,
     insightsViewModel: InsightsViewModel
 ) {
+    insightsViewModel.checkRecordsAreAvailable()
     val uiState by insightsViewModel.uiState.collectAsState()
 
     if (uiState.hasRecords) {
@@ -53,6 +57,10 @@ fun GraphScreen(
             )
         }
     }else{
-        EmptyInsightsScreen()
+        EmptyScreen(
+            painter = painterResource(R.drawable.undraw_key_insights),
+            heading = stringResource(R.string.Empty_Graph_Screen_Title),
+            subHeading = stringResource(R.string.Empty_Graph_Screen_Text)
+        )
     }
 }

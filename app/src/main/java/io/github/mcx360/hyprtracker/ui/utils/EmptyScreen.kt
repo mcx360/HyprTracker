@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.components
+package io.github.mcx360.hyprtracker.ui.utils
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -11,15 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.github.mcx360.hyprtracker.R
 
 @Composable
-fun EmptyMedicineList(modifier: Modifier = Modifier) {
+fun EmptyScreen(
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    heading: String,
+    subHeading: String
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -28,21 +31,22 @@ fun EmptyMedicineList(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.empty_medicine_screen_image),
+            painter = painter,
             contentDescription = null,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp)
         )
         Text(
-            text = stringResource(R.string.Empty_Medicine_Screen_Title),
+            text = heading,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
-            modifier = modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp)
         )
         Text(
-            text = stringResource(R.string.Empty_Medicine_Screen_Text),
+            text = subHeading,
             textAlign = TextAlign.Center,
-            modifier = modifier.padding(all = 16.dp)
+            modifier = Modifier.padding(16.dp)
         )
     }
 }

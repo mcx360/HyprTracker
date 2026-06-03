@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
-import io.github.mcx360.hyprtracker.ui.medicineScreen.components.EmptyMedicineList
 import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 
@@ -292,7 +292,11 @@ fun MedicineScreen(
         }
     }
     else {
-        EmptyMedicineList()
+        EmptyScreen(
+            painter = painterResource(R.drawable.empty_medicine_screen_image),
+            heading = stringResource(R.string.Empty_Medicine_Screen_Title),
+            subHeading = stringResource(R.string.Empty_Medicine_Screen_Text)
+        )
         when{
             openAddMedicationScreen.value -> AddMedicationScreen(
                 modifier = modifier,
