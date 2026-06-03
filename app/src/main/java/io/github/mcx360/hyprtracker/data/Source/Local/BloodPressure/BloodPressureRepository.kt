@@ -35,7 +35,6 @@ interface BloodPressureRepository {
 
     suspend fun hasRecords(): Boolean
 
-
     suspend fun getStages(startDate: String?, endDate: String?): List<Float>
 
 }

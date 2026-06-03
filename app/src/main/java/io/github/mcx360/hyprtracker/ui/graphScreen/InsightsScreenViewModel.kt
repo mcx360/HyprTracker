@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import kotlin.collections.forEach
 
 class InsightsViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -71,8 +70,6 @@ class InsightsViewModel(private val bloodPressureRepository: BloodPressureReposi
             }
         }
     }
-
-
 }
 
 data class InsightsUIState(

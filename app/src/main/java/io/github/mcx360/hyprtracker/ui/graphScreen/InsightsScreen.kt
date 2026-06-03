@@ -23,7 +23,7 @@ import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
 @Composable
 fun GraphScreen(
     modifier: Modifier = Modifier,
-    insightsViewModel: InsightsViewModel = viewModel(factory = InsightsViewModel.Factory)
+    insightsViewModel: InsightsViewModel
 ) {
     val uiState by insightsViewModel.uiState.collectAsState()
 
@@ -45,7 +45,12 @@ fun GraphScreen(
 
             InfoCards(viewModel = insightsViewModel)
 
-            BPBreakdownCard(breakdown = uiState.bpStages)
+            BPBreakdownCard(
+                breakdown = uiState.bpStages,
+                systolicRange = uiState.systolicMax+"–"+uiState.systolicMin,
+                diastolicRange = uiState.diastolicMax+"–"+uiState.diastolicMin,
+                pulseRange = uiState.pulseMax+"–"+uiState.pulseMin
+            )
         }
     }else{
         EmptyInsightsScreen()

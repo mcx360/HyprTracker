@@ -48,6 +48,9 @@ import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
 fun BPBreakdownCard(
     modifier: Modifier = Modifier,
     breakdown: List<Float>,
+    systolicRange: String,
+    diastolicRange: String,
+    pulseRange: String
 ){
     Card(modifier = modifier
         .fillMaxWidth()
@@ -178,15 +181,15 @@ fun BPBreakdownCard(
 
         Row(modifier.fillMaxWidth()) {
             Text("Systolic Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp), fontWeight = FontWeight.Bold)
+            Text(systolicRange, textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp), fontWeight = FontWeight.Bold)
         }
         Row(modifier.fillMaxWidth()) {
             Text("Diastolic Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
+            Text(diastolicRange, textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
         }
         Row(modifier.fillMaxWidth().padding(bottom = 8.dp)) {
             Text("Pulse Range:", modifier = modifier.padding(4.dp), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Start,color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text("68–79", textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
+            Text(pulseRange, textAlign = TextAlign.End, modifier = modifier.fillMaxWidth().padding(end = 8.dp),fontWeight = FontWeight.Bold)
         }
     }
 }

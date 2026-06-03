@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar
@@ -48,7 +49,8 @@ fun HyprTrackerScreen(
     modifier: Modifier = Modifier,
     hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory),
     medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory),
-    themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory)
+    themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory),
+    insightsViewModel: InsightsViewModel = viewModel(factory = InsightsViewModel.Factory)
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -114,7 +116,8 @@ fun HyprTrackerScreen(
                             hyprTrackerViewModel,
                             snackBarHostState,
                             openAddMedicationScreen,
-                            medicineViewModel
+                            medicineViewModel,
+                            insightsViewModel
                         )
                     }
                     when {
