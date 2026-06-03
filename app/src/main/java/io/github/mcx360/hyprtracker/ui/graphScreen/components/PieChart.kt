@@ -71,7 +71,7 @@ fun BPBreakdownCard(
 
         val singleSliceColor = if (nonZeroIndex != -1)  chartColors[nonZeroIndex]  else  MaterialTheme.colorScheme.primary
 
-        Column() {
+        Column {
             Text(
                 text = stringResource(R.string.Pie_Chart_Label),
                 modifier = modifier

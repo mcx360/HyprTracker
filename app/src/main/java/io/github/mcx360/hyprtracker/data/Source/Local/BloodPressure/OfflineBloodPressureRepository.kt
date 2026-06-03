@@ -39,6 +39,7 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
     override suspend fun getStages(startDate: String?, endDate: String?): List<Float> {
         val counts = mutableListOf(0f, 0f, 0f, 0f)
         var total = 0
+        var index= 0
         bloodPressureDAO.getStages(startDate, endDate).forEach {
             when(it){
                 "Normal" -> counts[0]++
@@ -48,6 +49,7 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
             }
             total++
         }
-        return counts.map { (it / total) * 100f }
+        counts.forEach { if (counts[index] != 0f) counts[index] = it/total * 100; index++}
+        return counts
     }
 }
