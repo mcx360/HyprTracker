@@ -111,7 +111,7 @@ fun InfoCards(
                 .weight(0.33f)
                 .padding(horizontal = 8.dp)
                 .clickable(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     diastolicDataShown = when (diastolicDataShown) {
                         MinMaxAvg.Average -> MinMaxAvg.Max
                         MinMaxAvg.Max -> MinMaxAvg.Min
@@ -169,7 +169,7 @@ fun InfoCards(
             modifier = modifier
                 .weight(0.33f)
                 .clickable(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     pulseDataShown = when (pulseDataShown) {
                         MinMaxAvg.Average -> MinMaxAvg.Max
                         MinMaxAvg.Max -> MinMaxAvg.Min
