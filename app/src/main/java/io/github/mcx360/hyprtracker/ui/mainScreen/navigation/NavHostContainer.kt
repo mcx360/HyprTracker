@@ -3,15 +3,14 @@ package io.github.mcx360.hyprtracker.ui.mainScreen.navigation
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.mcx360.hyprtracker.ui.graphScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.loggingScreen.LoggingScreen
+import io.github.mcx360.hyprtracker.ui.historyScreen.HistoryTab
+import io.github.mcx360.hyprtracker.ui.loggingScreen.LoggingScreenContainer
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 
@@ -22,7 +21,10 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
         startDestination = Destinations.Logging.name,
     ){
         composable(route = Destinations.Logging.name){
-            LoggingScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
+            LoggingScreenContainer(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
+        }
+        composable(route = Destinations.History.name){
+            HistoryTab(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
         }
         composable(route = Destinations.Medicines.name){
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)

@@ -4,6 +4,7 @@ enum class Destinations {
 
     //Main screen routes
     Logging,
+    History,
     Medicines,
     Insight,
 

@@ -40,6 +40,18 @@ fun HyprTrackerBottomNavigationBar(
         )
 
         NavigationBarItem(
+            selected = currentRoute == Destinations.History.name,
+            onClick = { navController.navigate(Destinations.History.name) },
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24),
+                    contentDescription = null)
+            },
+            label = { Text(text = "History") },
+            alwaysShowLabel = true,
+        )
+
+        NavigationBarItem(
             selected = currentRoute == Destinations.Medicines.name,
             onClick = { navController.navigate(Destinations.Medicines.name) },
             icon = {
@@ -50,6 +62,7 @@ fun HyprTrackerBottomNavigationBar(
             label = { Text(text = stringResource(R.string.medicine_screen_label)) },
             alwaysShowLabel = true
         )
+
         NavigationBarItem(
             selected = currentRoute == Destinations.Insight.name,
             onClick = { navController.navigate(Destinations.Insight.name) },
@@ -61,5 +74,6 @@ fun HyprTrackerBottomNavigationBar(
             label = { Text(text = stringResource(R.string.graph_screen_label)) },
             alwaysShowLabel = true,
         )
+
     }
 }

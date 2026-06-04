@@ -1,9 +1,6 @@
-package io.github.mcx360.hyprtracker.ui.loggingScreen
+package io.github.mcx360.hyprtracker.ui.historyScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,32 +37,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.loggingScreen.components.EmptyHistoryScreen
+import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_TAB_ITEM
 import io.github.mcx360.hyprtracker.ui.utils.Dot
+import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import kotlin.math.roundToInt
 
 @Composable
 fun HistoryTab(
     hyprTrackerViewModel: HyprTrackerViewModel,
     snackBarHostState: SnackbarHostState,
-    updateTab: (Int) -> Unit
 ) {
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
-    val offset = remember { mutableFloatStateOf(0f) }
 
     if (hyprTrackerUIState.readings.isEmpty()){
-        EmptyHistoryScreen {updateTab(0)}
+        EmptyScreen(
+            painter = painterResource(R.drawable.undraw_add_notes_9xls),
+            heading = stringResource(R.string.Empty_BP_Log_History_Tab_Title),
+            subHeading = stringResource(R.string.Empty_BP_Log_History_Tab_Text)
+            )
     } else {
 
         when{
@@ -122,16 +118,7 @@ fun HistoryTab(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .offset{ IntOffset(offset.floatValue.roundToInt(), 0)}
                 .fillMaxSize()
-                .draggable(
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta -> offset.floatValue += delta.coerceIn(0f, 300f) },
-                    onDragStopped = {
-                        if (offset.floatValue > 50) updateTab(0)
-                        offset.floatValue = 0f
-                    }
-                )
         ) {
 
             //each individual entry in history
