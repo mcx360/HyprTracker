@@ -251,6 +251,8 @@ fun Settings(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
                 }
             }
         }

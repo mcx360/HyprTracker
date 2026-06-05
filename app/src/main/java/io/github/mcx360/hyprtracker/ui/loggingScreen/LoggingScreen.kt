@@ -90,6 +90,7 @@ fun LoggingScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 16.dp),
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Row(modifier = Modifier) {
@@ -256,8 +257,8 @@ fun LoggingScreen(
         ) {
             Column(
                 modifier = Modifier
-                    //.padding(4.dp)
-                    .background(color = MaterialTheme.colorScheme.surfaceContainerHigh),
+                    .background(color = MaterialTheme.colorScheme.surfaceContainerHigh)
+                    .padding(bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -267,7 +268,8 @@ fun LoggingScreen(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 16.dp),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
@@ -359,23 +361,24 @@ fun InfographicLineTitle() {
             modifier = Modifier
                 .weight(2f)
                 .padding(4.dp),
-            style = MaterialTheme.typography.titleMedium
+            //fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge
         )
         Text(
             text = stringResource(R.string.systolic),
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.bodyMedium,
+            //fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge,
         )
         Text(
             text = stringResource(R.string.diastolic),
             modifier = Modifier
                 .weight(1f)
                 .padding(4.dp),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.bodyMedium,
+           //fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge,
         )
     }
 }
