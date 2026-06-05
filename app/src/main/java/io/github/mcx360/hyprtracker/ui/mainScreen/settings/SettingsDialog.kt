@@ -32,6 +32,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ClassificationTablePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteBPDataConfirmation
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteMedicationsConfirmation
@@ -63,6 +65,9 @@ fun Settings(
         val showDeleteBPDataDialog = remember { mutableStateOf(false) }
         val showDeleteMedicationDialog = remember { mutableStateOf(false) }
         val showHelpDialog = remember { mutableStateOf(false) }
+        val showBugReportDialog = remember { mutableStateOf(false) }
+        val showRateAppDialog = remember { mutableStateOf(false) }
+        val showAboutDialog = remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
         Card(
@@ -180,14 +185,42 @@ fun Settings(
                         }
                     }
 
-                    Text("About", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp), color = MaterialTheme.colorScheme.secondary)
+                    Text("External", style = MaterialTheme.typography.headlineMedium,color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(top = 16.dp))
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
+                        Text("Report Bug", fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "Report bugs found while using HyprTracker",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    when{
+                        showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false})
+                    }
+
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
                     Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
-                        Text(text = "Version", fontWeight = FontWeight.Bold)
+                        Text("Rate app", fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "Rate your experience of using HyprTracker",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+
+                    Text("About", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp), color = MaterialTheme.colorScheme.secondary)
+
+                    Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showAboutDialog.value = true})) {
+                        Text(text = "About", fontWeight = FontWeight.Bold)
                         Text(
                             text = "Version 0.5.0", style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+
+                    when{
+                        showAboutDialog.value -> AboutDialog(onDismissRequest = {showAboutDialog.value = false})
                     }
 
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
@@ -217,6 +250,7 @@ fun Settings(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
                 }
             }
         }

@@ -58,7 +58,7 @@ fun HyprTrackerDrawerContent(
         val importer = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri -> }
-    )
+        )
 
         ModalDrawerSheet{
             //Title card

@@ -68,27 +68,14 @@ fun HyprTrackerScreen(
             .background(color = MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
     ) {
-        ModalNavigationDrawer(
-            modifier = modifier.testTag(NAVIGATIONDRAWER_TAG),
-            drawerContent = {
-                HyprTrackerDrawerContent(
-                    scope = scope,
-                    drawerState = drawerState,
-                    updateOpenBugReportDialogToTrue = { openBugReportDialog.value = true },
-                    updateOpenAboutDialogToTrue = { openAboutDialog.value = true },
-                    snackbarHostState = snackBarHostState,
-                    updateOpenSettingsDialogToTrue = { openSettingsDialog.value = true },
-                )
-            },
-            drawerState = drawerState
-        ) {
             Scaffold(
                 modifier = modifier,
                 topBar = {
                     HyprTrackerTopAppBar(
                         drawerState = drawerState,
                         scope = scope,
-                        title = currentRoute
+                        title = currentRoute,
+                        updateOpenSettings = {openSettingsDialog.value = true}
                     )
                 },
                 bottomBar = {
@@ -162,4 +149,4 @@ fun HyprTrackerScreen(
             }
         }
     }
-}
+

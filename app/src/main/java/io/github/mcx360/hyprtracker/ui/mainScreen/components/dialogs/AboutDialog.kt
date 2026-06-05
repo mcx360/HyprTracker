@@ -29,7 +29,7 @@ import io.github.mcx360.hyprtracker.R
 @Composable
 fun AboutDialog(
     onDismissRequest: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(

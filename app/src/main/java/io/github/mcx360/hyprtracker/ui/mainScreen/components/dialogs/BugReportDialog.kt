@@ -26,7 +26,7 @@ import io.github.mcx360.hyprtracker.R
 @Composable
 fun BugReportDialog(
     onDismissRequest: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ){
     Dialog(onDismissRequest = {}){
         Card(
