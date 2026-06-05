@@ -1,6 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.loggingScreen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -69,185 +71,193 @@ fun LoggingScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .background(color = MaterialTheme.colorScheme.surface)
     ) {
         // Log blood pressure card
-        OutlinedCard(
-            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-            colors =  CardDefaults.cardColors(),
+        Card(
+            //elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+            //colors =  CardDefaults.cardColors(),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
-            //Log blood pressure title
-            Text(
-                text = stringResource(R.string.Log_BP),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp),
-                style = MaterialTheme.typography.titleLarge,
-            )
-
-            Row(modifier = Modifier) {
-                //systolic value text field
-                OutlinedTextField(
-                    singleLine = true,
-                    value = hyprTackerUiState.systolicValue,
-                    onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3)  hyprTrackerViewModel.updateSystolicValue(it)  },
-                    label = { Text(text = stringResource(R.string.systolic)) },
-                    shape = RoundedCornerShape(16.dp),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ),
+            Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                //Log blood pressure title
+                Text(
+                    text = stringResource(R.string.Log_BP),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .testTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 16.dp),
+                    style = MaterialTheme.typography.titleLarge,
                 )
 
-                //diastolic value text field
-                OutlinedTextField(
-                    singleLine = true,
-                    value = hyprTackerUiState.diastolicValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3) {
-                            hyprTrackerViewModel.updateDiastolicValue(it)
-                        }
-                    },
-                    label = { Text(text = stringResource(R.string.diastolic)) },
-                    shape = RoundedCornerShape(16.dp),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .testTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG)
-                )
+                Row(modifier = Modifier) {
+                    //systolic value text field
+                    OutlinedTextField(
+                        singleLine = true,
+                        value = hyprTackerUiState.systolicValue,
+                        onValueChange = {
+                            if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) hyprTrackerViewModel.updateSystolicValue(
+                                it
+                            )
+                        },
+                        label = { Text(text = stringResource(R.string.systolic)) },
+                        shape = RoundedCornerShape(16.dp),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(8.dp)
+                            .testTag(SYSTOLIC_OUTLINEDTEXTFIELD_TAG)
+                    )
 
-                //Pulse value text field
-                OutlinedTextField(
-                    singleLine = true,
-                    value = hyprTackerUiState.pulseValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3) {
-                            hyprTrackerViewModel.updatePulseValue(it)
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    label = { Text(text = stringResource(R.string.pulse)) },
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .testTag(PULSE_OUTLINEDTEXTFIELD_TAG)
-
-                )
-            }
-
-            //Log blood pressure time and date info
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_date),
-                    contentDescription = null
-                )
-                Text(formatToRegularDate(hyprTackerUiState.date))
-                Spacer(
-                    modifier = Modifier
-                        .width(32.dp)
-                )
-                Icon(
-                    painter = painterResource(R.drawable.ic_analogue_clock),
-                    contentDescription = null
-                )
-                Text(hyprTackerUiState.time.substring(0,5))
-            }
-
-            Row(modifier = Modifier) {
-                //Confirm button
-                Button(
-                    onClick = {
-                        if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
-                            scope.launch {
-                                hyprTrackerViewModel.addReading(
-                                    HyprReading(
-                                        systolicValue = hyprTackerUiState.systolicValue,
-                                        diastolicValue = hyprTackerUiState.diastolicValue,
-                                        pulseValue = hyprTackerUiState.pulseValue,
-                                        time = hyprTackerUiState.time,
-                                        date = hyprTackerUiState.date,
-                                        notes = hyprTackerUiState.notes
-                                    )
-                                )
+                    //diastolic value text field
+                    OutlinedTextField(
+                        singleLine = true,
+                        value = hyprTackerUiState.diastolicValue,
+                        onValueChange = {
+                            if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3) {
+                                hyprTrackerViewModel.updateDiastolicValue(it)
                             }
-                            hyprTrackerViewModel.resetBloodPressureLog()
-                            scope.launch {
-                                snackBarHostState.showSnackbar(
-                                    message = "Log entry added!",
-                                    duration = SnackbarDuration.Short
-                                )
+                        },
+                        label = { Text(text = stringResource(R.string.diastolic)) },
+                        shape = RoundedCornerShape(16.dp),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(8.dp)
+                            .testTag(DIASTOLIC_OUTLINEDTEXTFIELD_TAG)
+                    )
+
+                    //Pulse value text field
+                    OutlinedTextField(
+                        singleLine = true,
+                        value = hyprTackerUiState.pulseValue,
+                        onValueChange = {
+                            if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3) {
+                                hyprTrackerViewModel.updatePulseValue(it)
                             }
-                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                        }
-                        else{
-                            haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                            scope.launch {
-                                snackBarHostState.showSnackbar(
-                                    message = "Add systolic and diastolic values before logging",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(2f)
-                        .padding(8.dp)
-                        .testTag(CONFIRM_BUTTON_TAG)
-                ) {
-                    Icon(painter = painterResource(R.drawable.ic_check), contentDescription = null)
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Text(text = stringResource(R.string.Confirm_BP_Log))
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        label = { Text(text = stringResource(R.string.pulse)) },
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(8.dp)
+                            .testTag(PULSE_OUTLINEDTEXTFIELD_TAG)
+
+                    )
                 }
 
-                //Edit button
-                FilledTonalIconButton(
-                    onClick = { updateShowBottomSheet(true) },
+                //Log blood pressure time and date info
+                Row(
                     modifier = Modifier
-                        .weight(0.5f)
-                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_document),
+                        painter = painterResource(R.drawable.ic_date),
                         contentDescription = null
                     )
+                    Text(formatToRegularDate(hyprTackerUiState.date))
+                    Spacer(
+                        modifier = Modifier
+                            .width(32.dp)
+                    )
+                    Icon(
+                        painter = painterResource(R.drawable.ic_analogue_clock),
+                        contentDescription = null
+                    )
+                    Text(hyprTackerUiState.time.substring(0, 5))
+                }
+
+                Row(modifier = Modifier) {
+                    //Confirm button
+                    Button(
+                        onClick = {
+                            if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
+                                scope.launch {
+                                    hyprTrackerViewModel.addReading(
+                                        HyprReading(
+                                            systolicValue = hyprTackerUiState.systolicValue,
+                                            diastolicValue = hyprTackerUiState.diastolicValue,
+                                            pulseValue = hyprTackerUiState.pulseValue,
+                                            time = hyprTackerUiState.time,
+                                            date = hyprTackerUiState.date,
+                                            notes = hyprTackerUiState.notes
+                                        )
+                                    )
+                                }
+                                hyprTrackerViewModel.resetBloodPressureLog()
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Log entry added!",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                            } else {
+                                haptic.performHapticFeedback(HapticFeedbackType.Reject)
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Add systolic and diastolic values before logging",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .weight(2f)
+                            .padding(8.dp)
+                            .testTag(CONFIRM_BUTTON_TAG)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_check),
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(text = stringResource(R.string.Confirm_BP_Log))
+                    }
+
+                    //Edit button
+                    FilledTonalIconButton(
+                        onClick = { updateShowBottomSheet(true) },
+                        modifier = Modifier
+                            .weight(0.5f)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_document),
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         }
 
         //Hypertension classification chart card
-        OutlinedCard(
-            colors =  CardDefaults.cardColors(),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            border = BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant
-            ),
+        Card(
+            //colors =  CardDefaults.cardColors(),
+            //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            //border = BorderStroke( 1.dp, MaterialTheme.colorScheme.outlineVariant),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier
+                    //.padding(4.dp)
+                    .background(color = MaterialTheme.colorScheme.surfaceContainerHigh),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

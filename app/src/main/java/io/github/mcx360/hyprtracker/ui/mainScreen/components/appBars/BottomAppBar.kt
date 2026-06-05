@@ -25,7 +25,8 @@ fun HyprTrackerBottomNavigationBar(
     modifier: Modifier
 ){
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.onPrimary,
+        containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         modifier = modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
@@ -52,8 +53,8 @@ fun HyprTrackerBottomNavigationBar(
         )
 
         NavigationBarItem(
-            selected = currentRoute == Destinations.Medicines.name,
-            onClick = { navController.navigate(Destinations.Medicines.name) },
+            selected = currentRoute == Destinations.Medicine.name,
+            onClick = { navController.navigate(Destinations.Medicine.name) },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
@@ -64,8 +65,8 @@ fun HyprTrackerBottomNavigationBar(
         )
 
         NavigationBarItem(
-            selected = currentRoute == Destinations.Insight.name,
-            onClick = { navController.navigate(Destinations.Insight.name) },
+            selected = currentRoute == Destinations.Insights.name,
+            onClick = { navController.navigate(Destinations.Insights.name) },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight),

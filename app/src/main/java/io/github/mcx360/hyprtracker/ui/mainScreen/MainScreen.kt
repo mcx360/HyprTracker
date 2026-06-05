@@ -65,7 +65,7 @@ fun HyprTrackerScreen(
 
     Box(
         modifier = modifier
-            .background(color = MaterialTheme.colorScheme.primaryContainer)
+            .background(color = MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
     ) {
         ModalNavigationDrawer(
@@ -99,7 +99,7 @@ fun HyprTrackerScreen(
                     )
                 },
                 floatingActionButton = {
-                    if (currentRoute == Destinations.Medicines.name && !openAddMedicationScreen.value) {
+                    if (currentRoute == Destinations.Medicine.name && !openAddMedicationScreen.value) {
                         FloatingActionButton(onClick = {
                             openAddMedicationScreen.value = !openAddMedicationScreen.value
                         }) {

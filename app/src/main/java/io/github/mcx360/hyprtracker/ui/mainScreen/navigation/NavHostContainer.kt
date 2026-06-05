@@ -26,10 +26,10 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
         composable(route = Destinations.History.name){
             HistoryTab(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
         }
-        composable(route = Destinations.Medicines.name){
+        composable(route = Destinations.Medicine.name){
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)
         }
-        composable(route = Destinations.Insight.name){
+        composable(route = Destinations.Insights.name){
             GraphScreen(insightsViewModel = insightsViewModel)
         }
     }

@@ -79,6 +79,7 @@ fun MedicineScreen(
                 .fillMaxWidth()
                 .fillMaxSize()
                 .padding()
+                .background(color = MaterialTheme.colorScheme.surface)
         ){
             items(uiState.value.medicineList.size){ index ->
                 val medication = uiState.value.medicineList[index]
@@ -132,7 +133,7 @@ fun MedicineScreen(
                         }
                     }
 
-                    Column {
+                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

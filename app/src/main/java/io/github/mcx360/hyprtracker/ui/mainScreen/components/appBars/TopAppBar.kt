@@ -31,8 +31,8 @@ fun HyprTrackerTopAppBar(
     CenterAlignedTopAppBar(
         modifier = modifier.testTag(TOPAPPBAR_TAG),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
         ),
         title = { if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title) },
         navigationIcon = {

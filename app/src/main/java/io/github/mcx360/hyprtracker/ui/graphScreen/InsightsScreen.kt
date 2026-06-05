@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,7 +23,6 @@ import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.R
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GraphScreen(
@@ -35,6 +36,7 @@ fun GraphScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.surface)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
