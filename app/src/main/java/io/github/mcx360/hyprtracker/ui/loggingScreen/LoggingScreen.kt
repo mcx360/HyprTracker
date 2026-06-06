@@ -81,7 +81,7 @@ fun LoggingScreen(
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
-            Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+            Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh).padding(bottom = 8.dp)) {
                 //Log blood pressure title
                 Text(
                     text = stringResource(R.string.Log_BP),
