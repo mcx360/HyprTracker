@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -84,7 +86,7 @@ fun MedicineScreen(
             items(uiState.value.medicineList.size){ index ->
                 val medication = uiState.value.medicineList[index]
                 //individual medication card
-                Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colorScheme.secondary)) {
 
                     val showExtrasMenu = remember { mutableStateOf(false) }
 

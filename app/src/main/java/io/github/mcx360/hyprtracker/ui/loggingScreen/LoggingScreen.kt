@@ -74,9 +74,10 @@ fun LoggingScreen(
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         // Log blood pressure card
-        Card(
+        OutlinedCard(
             //elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
             //colors =  CardDefaults.cardColors(),
+            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
@@ -247,7 +248,8 @@ fun LoggingScreen(
         }
 
         //Hypertension classification chart card
-        Card(
+        OutlinedCard(
+            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             //colors =  CardDefaults.cardColors(),
             //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             //border = BorderStroke( 1.dp, MaterialTheme.colorScheme.outlineVariant),

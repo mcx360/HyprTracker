@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -49,7 +51,7 @@ fun InfoCards(
         var pulseDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
 
         //Systolic Info
-        Card(modifier = modifier
+        OutlinedCard(modifier = modifier
             .weight(0.33f)
             .clickable(onClick = {
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -58,7 +60,8 @@ fun InfoCards(
                     MinMaxAvg.Max -> MinMaxAvg.Min
                     MinMaxAvg.Min -> MinMaxAvg.Average
                 }
-            })
+            }),
+            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)
         ) {
             Column(
                 modifier = modifier
@@ -108,7 +111,8 @@ fun InfoCards(
         }
 
         //Diastolic Info
-        Card(
+        OutlinedCard(
+            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             modifier = modifier
                 .weight(0.33f)
                 .padding(horizontal = 8.dp)
@@ -168,7 +172,8 @@ fun InfoCards(
         }
 
         //Pulse info
-        Card(
+        OutlinedCard(
+            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             modifier = modifier
                 .weight(0.33f)
                 .clickable(onClick = {

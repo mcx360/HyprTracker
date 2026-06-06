@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.graphScreen.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,7 +56,9 @@ fun BPBreakdownCard(
     diastolicRange: String,
     pulseRange: String
 ){
-    Card(modifier = modifier
+    OutlinedCard(
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
+        modifier = modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {

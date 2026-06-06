@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.historyScreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -124,7 +128,7 @@ fun HistoryTab(
 
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
-                Card(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp), border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colorScheme.secondary)) {
                     Column(modifier = Modifier
                         .background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
 
