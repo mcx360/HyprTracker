@@ -75,7 +75,8 @@ fun HyprTrackerScreen(
                         drawerState = drawerState,
                         scope = scope,
                         title = currentRoute,
-                        updateOpenSettings = {openSettingsDialog.value = true}
+                        updateOpenSettings = {openSettingsDialog.value = true},
+                        insightsViewModel = insightsViewModel
                     )
                 },
                 bottomBar = {

@@ -33,6 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -51,6 +54,7 @@ fun FilterCard(
 ){
     var selectedIndex by remember { mutableIntStateOf(0) }
 
+    /*
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -73,6 +77,10 @@ fun FilterCard(
             trailingIcon = {IconButton(onClick = {}){Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)} }
         )
     }
+
+     */
+
+    Text("Filter by", modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, bottom = 4.dp), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Start)
 
     Row(
         modifier.fillMaxWidth(),

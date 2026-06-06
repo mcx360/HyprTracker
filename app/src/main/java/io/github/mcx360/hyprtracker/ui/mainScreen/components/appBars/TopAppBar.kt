@@ -3,6 +3,7 @@ package io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -24,8 +25,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
+import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
+import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -38,7 +42,8 @@ fun HyprTrackerTopAppBar(
     drawerState: DrawerState,
     title: String?,
     modifier: Modifier = Modifier,
-    updateOpenSettings: () -> Unit
+    updateOpenSettings: () -> Unit,
+    insightsViewModel: InsightsViewModel
 ){
     val importer = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -47,6 +52,7 @@ fun HyprTrackerTopAppBar(
 
     val context = LocalContext.current
 
+    val uiState = insightsViewModel.uiState.collectAsStateWithLifecycle()
 
     val exporter = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("text/csv"),
@@ -59,7 +65,9 @@ fun HyprTrackerTopAppBar(
              containerColor = MaterialTheme.colorScheme.surface,
              titleContentColor = MaterialTheme.colorScheme.onSurface,
          ),
-         title = { if (title == null) Text(stringResource(R.string.app_name)) else Text(text = title) },
+         title = { Column{
+             if (title == null) Text(stringResource(R.string.app_name)) else if (title== Destinations.Insights.name) Column{Text(text = title); Text(text = "${formatToDayMonthYear(uiState.value.startDate)}–${formatToDayMonthYear(uiState.value.endDate)}", style = MaterialTheme.typography.bodyMedium,color = MaterialTheme.colorScheme.onSurfaceVariant,)}else  Text(text = title)
+         } },
         actions = {
             when (title) {
                 stringResource(R.string.logging_screen_label) -> {
