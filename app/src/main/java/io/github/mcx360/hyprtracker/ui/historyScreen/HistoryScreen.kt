@@ -128,7 +128,7 @@ fun HistoryTab(
 
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
-                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp), border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colorScheme.secondary)) {
+                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
                     Column(modifier = Modifier
                         .background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
 

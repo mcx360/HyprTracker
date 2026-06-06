@@ -86,7 +86,7 @@ fun MedicineScreen(
             items(uiState.value.medicineList.size){ index ->
                 val medication = uiState.value.medicineList[index]
                 //individual medication card
-                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colorScheme.secondary)) {
+                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
 
                     val showExtrasMenu = remember { mutableStateOf(false) }
 

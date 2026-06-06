@@ -57,7 +57,6 @@ fun BPBreakdownCard(
     pulseRange: String
 ){
     OutlinedCard(
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
         modifier = modifier
         .fillMaxWidth()
         .padding(8.dp)

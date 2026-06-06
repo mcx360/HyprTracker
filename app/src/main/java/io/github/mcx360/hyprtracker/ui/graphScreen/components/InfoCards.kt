@@ -61,7 +61,6 @@ fun InfoCards(
                     MinMaxAvg.Min -> MinMaxAvg.Average
                 }
             }),
-            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)
         ) {
             Column(
                 modifier = modifier
@@ -112,7 +111,6 @@ fun InfoCards(
 
         //Diastolic Info
         OutlinedCard(
-            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             modifier = modifier
                 .weight(0.33f)
                 .padding(horizontal = 8.dp)
@@ -173,7 +171,6 @@ fun InfoCards(
 
         //Pulse info
         OutlinedCard(
-            border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
             modifier = modifier
                 .weight(0.33f)
                 .clickable(onClick = {
