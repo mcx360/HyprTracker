@@ -72,11 +72,11 @@ fun HyprTrackerScreen(
                 modifier = modifier,
                 topBar = {
                     HyprTrackerTopAppBar(
-                        drawerState = drawerState,
-                        scope = scope,
                         title = currentRoute,
                         updateOpenSettings = {openSettingsDialog.value = true},
-                        insightsViewModel = insightsViewModel
+                        insightsViewModel = insightsViewModel,
+                        medicineViewModel = medicineViewModel,
+                        hyprTrackerViewModel = hyprTrackerViewModel
                     )
                 },
                 bottomBar = {
