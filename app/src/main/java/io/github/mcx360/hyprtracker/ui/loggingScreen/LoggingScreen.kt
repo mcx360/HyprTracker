@@ -234,13 +234,17 @@ fun LoggingScreen(
                     FilledTonalIconButton(
                         onClick = { updateShowBottomSheet(true) },
                         modifier = Modifier
-                            .weight(0.5f)
+                            .weight(1f)
                             .padding(8.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_document),
-                            contentDescription = null
-                        )
+                        Row() {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_document),
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.padding(4.dp))
+                            Text("Edit")
+                        }
                     }
                 }
             }
