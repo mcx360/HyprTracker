@@ -104,7 +104,7 @@
     <string name="Delete_Log_entry_snackBar_message">Log entry removed</string>
     <string name="Today_at">Today @ </string>
     <string name="Yesterday_at">Yesterday @</string>
-    <string name="Two_Days_Ago_At">Two days ago @ </string>
+    <string name="Two_Days_Ago_At">Two days ago @</string>
     <string name="At_Time"> \ @ </string>
     <string name="No_Notes">N/A</string>
 

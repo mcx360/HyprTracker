@@ -48,6 +48,7 @@ import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_TAB_ITEM
 import io.github.mcx360.hyprtracker.ui.utils.Dot
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
+import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -146,6 +147,7 @@ fun HistoryTab(
                                 contentDescription = null,
                                 modifier = Modifier.padding(horizontal = 4.dp)
                             )
+
                             Text(
                                 when (hyprTrackerUIState.readings[index].date) {
                                     LocalDate.now().toString() -> stringResource(R.string.Today_at)
@@ -155,20 +157,20 @@ fun HistoryTab(
                                     LocalDate.now().minusDays(2)
                                         .toString() -> stringResource(R.string.Two_Days_Ago_At)
 
-                                    else -> formatToRegularDate(hyprTrackerUIState.readings[index].date) + stringResource(
-                                        R.string.At_Time
-                                    )
+                                    else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)+ stringResource(R.string.At_Time)
                                 },
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
+                            /*
                             Icon(
                                 painter = painterResource(R.drawable.ic_analogue_clock),
                                 contentDescription = null,
                                 modifier = Modifier.padding(horizontal = 4.dp)
                             )
+                             */
                             Text(
-                                text = hyprTrackerUIState.readings[index].time.substring(0, 5),
+                                text = " "+hyprTrackerUIState.readings[index].time.substring(0, 5),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -185,7 +187,7 @@ fun HistoryTab(
                                     text = stringResource(R.string.Systolic_Value),
                                     style = MaterialTheme.typography.headlineSmall,
                                 )
-                                Text(hyprTrackerUIState.readings[index].systolicValue)
+                                Text(hyprTrackerUIState.readings[index].systolicValue, style = MaterialTheme.typography.headlineSmall)
                                 Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
                             }
 
@@ -196,7 +198,7 @@ fun HistoryTab(
                                     style = MaterialTheme.typography.headlineSmall,
                                     //color = MaterialTheme.colorScheme.secondary
                                 )
-                                Text(hyprTrackerUIState.readings[index].diastolicValue)
+                                Text(hyprTrackerUIState.readings[index].diastolicValue,  style = MaterialTheme.typography.headlineSmall)
                                 Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
                             }
 
@@ -209,7 +211,8 @@ fun HistoryTab(
                                 )
                                 if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let {
                                     Text(
-                                        it
+                                        text = it,
+                                        style = MaterialTheme.typography.headlineSmall,
                                     )
                                 }
                                 Text(text = "bpm", style = MaterialTheme.typography.bodyMedium)
