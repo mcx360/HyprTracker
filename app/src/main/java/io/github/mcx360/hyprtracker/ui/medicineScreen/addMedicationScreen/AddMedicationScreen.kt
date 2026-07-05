@@ -16,10 +16,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -110,11 +113,12 @@ fun AddMedicationScreen(
                         medicineViewModel.resetAddMedication()
                         medicineViewModel.fetchMedications()
                     }
-                }) {
+                }
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.outline_arrow_back_24),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
 
@@ -122,9 +126,9 @@ fun AddMedicationScreen(
                     text = "Add Medication",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = modifier
-                        .padding(horizontal = 16.dp)
+                        //.padding(horizontal = 16.dp)
                 )
             }
 

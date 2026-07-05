@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -101,7 +102,7 @@ fun MedicationScheduleAndDosageCard(
                             }
                         },
                         maxLines = 1,
-                        modifier = modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
+                        modifier = modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true),
                         supportingText = {
                             if (isMedicationScheduleFieldInError){
                                 Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error)
