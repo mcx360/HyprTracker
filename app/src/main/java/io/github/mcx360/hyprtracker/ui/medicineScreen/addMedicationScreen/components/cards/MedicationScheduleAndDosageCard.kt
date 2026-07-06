@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -103,14 +104,9 @@ fun MedicationScheduleAndDosageCard(
                         },
                         maxLines = 1,
                         modifier = modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true),
-                        supportingText = {
-                            if (isMedicationScheduleFieldInError){
-                                Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error)
-                            } else{
-                                Text("*required")
-                            }
-                        }
+                        //supportingText = {if (isMedicationScheduleFieldInError){ Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error) } else{ Text("*required") } }
                     )
+
 
                     //Medication schedule menu
                     ExposedDropdownMenu(
@@ -160,10 +156,11 @@ fun MedicationScheduleAndDosageCard(
                         onDismissRequest = {changeShowScheduleInfoDialogStatus(false)},
                         info = "Schedule defines how often you take this medication (e.g. every day or on specific days).",
                         title = "Schedule"
-
                     )
                 }
             }
+
+            if (isMedicationScheduleFieldInError){ Text(text ="medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(start = 12.dp, top = 4.dp), style = MaterialTheme.typography.bodySmall) } else{ Text(text = "*required", modifier = Modifier.padding(start = 12.dp, top = 4.dp), style = MaterialTheme.typography.bodySmall,color = MaterialTheme.colorScheme.onSurfaceVariant) }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -200,7 +197,6 @@ fun MedicationScheduleAndDosageCard(
                             type = MenuAnchorType.PrimaryNotEditable,
                             enabled = true
                         ),
-                        supportingText = { if (isMedicationTimesPerDayFieldInError) Text("Enter amount of time per day!") else Text("*required") }
                     )
 
                     //times per day menu
@@ -282,6 +278,9 @@ fun MedicationScheduleAndDosageCard(
                     )
                 }
             }
+
+            if (isMedicationTimesPerDayFieldInError){ Text(text = "medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(start = 12.dp, top = 4.dp), style = MaterialTheme.typography.bodySmall) } else{ Text(text = "*required", modifier = Modifier.padding(start = 12.dp, top = 4.dp), style = MaterialTheme.typography.bodySmall,color = MaterialTheme.colorScheme.onSurfaceVariant) }
+
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 //Dose per intake
