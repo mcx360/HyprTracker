@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
@@ -95,16 +97,14 @@ fun MedicationScheduleAndDosageCard(
                         label = { Text("Schedule*") },
                         placeholder = { Text("e.g. Every day") },
                         trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    changeScheduleDropDownMenuStatus(true)
-                                }) {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            }
+                                if (showScheduleDropDownMenu){
+                                    Icon(Icons.Default.ArrowDropUp, null)
+                                } else{
+                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                                }
                         },
                         maxLines = 1,
                         modifier = modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true),
-                        //supportingText = {if (isMedicationScheduleFieldInError){ Text("medication scheduled intake is needed ", color = MaterialTheme.colorScheme.error) } else{ Text("*required") } }
                     )
 
 
@@ -187,9 +187,9 @@ fun MedicationScheduleAndDosageCard(
                         label = { Text("Times per day*") },
                         placeholder = {Text("e.g. Once daily")},
                         trailingIcon = {
-                            IconButton(
-                                onClick = { changeShowTimesPerDayDropDownMenuStatus(true) }
-                            ) {
+                            if (showTimesPerDayDropDownMenu){
+                                Icon(Icons.Default.ArrowDropUp, null)
+                            }else{
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                             }
                         },
@@ -285,13 +285,14 @@ fun MedicationScheduleAndDosageCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 //Dose per intake
                 OutlinedTextField(
+                    singleLine = true,
                     isError = isMedicationDosePerIntakeInError,
                     onValueChange = {
                         updateMedicationDose(it)
                         if (medicationDosage.isNotEmpty()) setIsMedicationDosePerIntakeInErrorToFalse()
                     },
                     value = medicationDosage,
-                    label = { Text("Dose per Intake") },
+                    label = { Text("Dose per Intake*") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
