@@ -137,16 +137,12 @@ fun HistoryTab(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp)
+                                .padding(top = 8.dp, start = 16.dp)
                                 .testTag(HISTORY_TAB_ITEM),
-                            horizontalArrangement = Arrangement.Center,
+                            horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_date),
-                                contentDescription = null,
-                                modifier = Modifier.padding(horizontal = 4.dp)
-                            )
+
 
                             Text(
                                 when (hyprTrackerUIState.readings[index].date) {
@@ -157,22 +153,15 @@ fun HistoryTab(
                                     LocalDate.now().minusDays(2)
                                         .toString() -> stringResource(R.string.Two_Days_Ago_At)
 
-                                    else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)+ stringResource(R.string.At_Time)
+                                    else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)
                                 },
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                style = MaterialTheme.typography.titleLarge,
                             )
-                            /*
-                            Icon(
-                                painter = painterResource(R.drawable.ic_analogue_clock),
-                                contentDescription = null,
-                                modifier = Modifier.padding(horizontal = 4.dp)
-                            )
-                             */
+
                             Text(
                                 text = " "+hyprTrackerUIState.readings[index].time.substring(0, 5),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
 
@@ -185,37 +174,37 @@ fun HistoryTab(
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
                                     text = stringResource(R.string.Systolic_Value),
-                                    style = MaterialTheme.typography.headlineSmall,
+                                    style = MaterialTheme.typography.labelLarge,
                                 )
-                                Text(hyprTrackerUIState.readings[index].systolicValue, style = MaterialTheme.typography.headlineSmall)
-                                Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
+                                Text(hyprTrackerUIState.readings[index].systolicValue, style = MaterialTheme.typography.displaySmall)
+                                Text(text = "mmHg", style = MaterialTheme.typography.labelMedium)
                             }
 
                             //Diastolic value
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
                                     text = stringResource(R.string.Diastolic_Value),
-                                    style = MaterialTheme.typography.headlineSmall,
+                                    style = MaterialTheme.typography.labelLarge,
                                     //color = MaterialTheme.colorScheme.secondary
                                 )
-                                Text(hyprTrackerUIState.readings[index].diastolicValue,  style = MaterialTheme.typography.headlineSmall)
-                                Text(text = "mmHg", style = MaterialTheme.typography.bodyMedium)
+                                Text(hyprTrackerUIState.readings[index].diastolicValue,  style = MaterialTheme.typography.displaySmall)
+                                Text(text = "mmHg", style = MaterialTheme.typography.labelMedium)
                             }
 
                             //Pulse value
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
                                     text = stringResource(R.string.Pulse_Value),
-                                    style = MaterialTheme.typography.headlineSmall,
+                                    style = MaterialTheme.typography.labelLarge,
                                     //color = MaterialTheme.colorScheme.secondary
                                 )
                                 if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let {
                                     Text(
                                         text = it,
-                                        style = MaterialTheme.typography.headlineSmall,
+                                        style = MaterialTheme.typography.displaySmall,
                                     )
                                 }
-                                Text(text = "bpm", style = MaterialTheme.typography.bodyMedium)
+                                Text(text = "bpm", style = MaterialTheme.typography.labelMedium)
                             }
 
                             //Category value
@@ -227,7 +216,7 @@ fun HistoryTab(
                                 Text(
                                     stringResource(R.string.Hypertension_Stage_Category),
                                     modifier = Modifier.padding(start = 24.dp),
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = MaterialTheme.typography.labelLarge,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -245,40 +234,42 @@ fun HistoryTab(
                                 }
                             }
                         }
-
-                        Row(modifier = Modifier.padding(16.dp)) {
-                            //Notes value
-                            Row {
-                                Text(
-                                    text = stringResource(R.string.Notes_Value) + " ",
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    "" + if (hyprTrackerUIState.readings[index].notes == "") stringResource(
-                                        R.string.No_Notes
-                                    ) else hyprTrackerUIState.readings[index].notes
-                                )
-                            }
-
-                            //Bin Icon
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                FilledTonalIconButton(
-                                    onClick = {
-                                        showDeleteConfirmationDialog.value = true
-                                        listIndexToBeDeleted.intValue = index
-                                    }
-                                ) {
-                                    Icon(
-                                        Icons.Filled.Delete,
-                                        contentDescription = null
+                            Row(modifier = Modifier.padding(16.dp)) {
+                                //Notes value
+                                Row {
+                                    Text(
+                                        text = stringResource(R.string.Notes_Value) + " ",
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        "" + if (hyprTrackerUIState.readings[index].notes == "") stringResource(
+                                            R.string.No_Notes
+                                        ) else hyprTrackerUIState.readings[index].notes
                                     )
                                 }
+
+                                //Bin Icon
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    FilledTonalIconButton(
+                                        onClick = {
+                                            showDeleteConfirmationDialog.value = true
+                                            listIndexToBeDeleted.intValue = index
+                                        }
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.Delete,
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
                             }
-                        }
+
                     }
+
+
                 }
             }
         }
