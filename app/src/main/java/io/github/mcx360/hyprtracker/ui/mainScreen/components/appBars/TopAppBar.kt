@@ -119,7 +119,7 @@ fun HyprTrackerTopAppBar(
                                 Icon(painter = painterResource(R.drawable.baseline_share_24), null)
                             }
                             IconButton(onClick = { exporter.launch("logs.csv") }) {
-                                Icon(painter = painterResource(R.drawable.outline_file_export_24), null)
+                                Icon(Icons.Filled.MoreVert, null)
                             }
                         }
 

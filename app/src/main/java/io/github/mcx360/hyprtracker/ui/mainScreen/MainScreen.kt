@@ -93,6 +93,10 @@ fun HyprTrackerScreen(
                         }) {
                             Icon(Icons.Filled.Add, contentDescription = null)
                         }
+                    }else if (currentRoute == Destinations.History.name){
+                        FloatingActionButton(onClick = {}) {
+                            Icon(Icons.Filled.Add, contentDescription = null)
+                        }
                     }
                 },
                 snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
