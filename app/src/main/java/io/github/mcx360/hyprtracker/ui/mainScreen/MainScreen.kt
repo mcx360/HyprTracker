@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -62,6 +63,7 @@ fun HyprTrackerScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val openAddMedicationScreen = remember { mutableStateOf(false) }
     val openSettingsDialog = remember { mutableStateOf(false) }
+    val openAddBPlog = remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -94,8 +96,10 @@ fun HyprTrackerScreen(
                             Icon(Icons.Filled.Add, contentDescription = null)
                         }
                     }else if (currentRoute == Destinations.History.name){
-                        FloatingActionButton(onClick = {}) {
-                            Icon(Icons.Filled.Add, contentDescription = null)
+                        FloatingActionButton(onClick = {
+                            openAddBPlog.value = true
+                        }) {
+                            Icon(Icons.Filled.Edit, contentDescription = null)
                         }
                     }
                 },
@@ -109,7 +113,8 @@ fun HyprTrackerScreen(
                             snackBarHostState,
                             openAddMedicationScreen,
                             medicineViewModel,
-                            insightsViewModel
+                            insightsViewModel,
+                            openAddBPlog
                         )
                     }
                     when {

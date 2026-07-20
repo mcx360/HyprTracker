@@ -152,7 +152,8 @@ fun MedicineScreen(
                                     )
                                     Icon(
                                         painter = painterResource(R.drawable.ic_medicine),
-                                        contentDescription = null
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.secondary
                                     )
                                 }
 

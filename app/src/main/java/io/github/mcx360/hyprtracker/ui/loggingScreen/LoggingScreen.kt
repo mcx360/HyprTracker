@@ -250,62 +250,7 @@ fun LoggingScreen(
             }
         }
 
-        //Hypertension classification chart card
-        OutlinedCard(
-            //colors =  CardDefaults.cardColors(),
-            //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            //border = BorderStroke( 1.dp, MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .padding(bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    stringResource(R.string.BP_stages_title),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-                InfographicLineTitle()
-                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-                InfographicLine(
-                    colorResource(R.color.Hypertension_Normal_Stage_Colour),
-                    stringArrayResource(R.array.hypertension_stage_normal)
-                )
-                InfographicLine(
-                    colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
-                    stringArrayResource(R.array.hypertension_stage_high_normal)
-                )
-                InfographicLine(
-                    colorResource(R.color.Hypertension_Grade1_Colour),
-                    stringArrayResource(R.array.hypertension_stage_Grade1)
-                )
-                InfographicLine(
-                    colorResource(R.color.Hypertension_Grade2_Colour),
-                    stringArrayResource(R.array.hypertension_stage_Grade2)
-                )
-                HorizontalDivider(modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-                Text(
-                    text = "Source: International Society of Hypertension",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
+
     }
 }
 

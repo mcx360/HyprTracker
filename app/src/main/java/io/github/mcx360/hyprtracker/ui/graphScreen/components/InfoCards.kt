@@ -83,6 +83,7 @@ fun InfoCards(
                     Icon(
                         painter = painterResource(R.drawable.heart_3_),
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
                     )
                 }
 
@@ -140,6 +141,8 @@ fun InfoCards(
                     Icon(
                         painter = painterResource(R.drawable.heart_3_),
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+
                     )
                 }
 
@@ -199,6 +202,8 @@ fun InfoCards(
                     Icon(
                         painter = painterResource(R.drawable.activity_1_),
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+
                     )
                 }
                 Row(

@@ -29,6 +29,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_TAB_ITEM
@@ -57,16 +59,26 @@ import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import androidx.compose.ui.graphics.RectangleShape
 
 @Composable
 fun HistoryTab(
     hyprTrackerViewModel: HyprTrackerViewModel,
     snackBarHostState: SnackbarHostState,
+    openAddBPlog: MutableState<Boolean>
 ) {
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+
+    when{
+        openAddBPlog.value -> {
+            LogBPResult(
+                onDismissRequest = {openAddBPlog.value = false}
+            )
+        }
+    }
 
     if (hyprTrackerUIState.readings.isEmpty()){
         EmptyScreen(
@@ -148,7 +160,6 @@ fun HistoryTab(
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-
 
                             Text(
                                 when (hyprTrackerUIState.readings[index].date) {
