@@ -42,6 +42,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.Theme
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.information.Help
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
 
 @Composable
@@ -74,24 +75,10 @@ fun Settings(
             modifier = Modifier.fillMaxSize(),
             shape = RectangleShape
         ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .systemBarsPadding(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onDismissRequest) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-
-                    Text(
-                        text = "Settings",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                TitleBarWithBackButton(
+                    title = "Settings",
+                    onBackArrowClicked = {onDismissRequest() }
+                )
 
                 Column(
                     modifier = Modifier
@@ -257,4 +244,3 @@ fun Settings(
             }
         }
     }
-}

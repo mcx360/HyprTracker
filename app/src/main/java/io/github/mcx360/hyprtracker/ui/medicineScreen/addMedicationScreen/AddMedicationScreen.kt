@@ -50,6 +50,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.NotificationsCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.medicationInfoCard
 import io.github.mcx360.hyprtracker.ui.model.Medicine
+import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.CoroutineScope
@@ -99,38 +100,16 @@ fun AddMedicationScreen(
             shape = RectangleShape,
         ) {
             //Add Medication title
-            Row(modifier = modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .systemBarsPadding()
-                .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                IconButton(onClick = {
+            TitleBarWithBackButton(
+                title = "Add Medication",
+                onBackArrowClicked = {
                     openAddMedicationScreen.value = !openAddMedicationScreen.value
                     scope.launch {
                         medicineViewModel.resetAddMedication()
                         medicineViewModel.fetchMedications()
                     }
                 }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.outline_arrow_back_24),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-
-                Text(
-                    text = "Add Medication",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = modifier
-                        //.padding(horizontal = 16.dp)
-                )
-            }
+            )
 
             Column(
                 modifier = modifier
