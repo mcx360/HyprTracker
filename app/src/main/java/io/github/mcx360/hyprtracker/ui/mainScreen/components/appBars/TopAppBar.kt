@@ -3,6 +3,7 @@ package io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -26,6 +29,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.LogScreenMenu
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.smallMenu
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
@@ -38,6 +43,7 @@ fun HyprTrackerTopAppBar(
     modifier: Modifier = Modifier,
     title: String?,
     updateOpenSettings: () -> Unit,
+    updateOpenMenu: () -> Unit,
     insightsViewModel: InsightsViewModel,
     medicineViewModel: MedicineViewModel,
     hyprTrackerViewModel: HyprTrackerViewModel
@@ -48,27 +54,68 @@ fun HyprTrackerTopAppBar(
     val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(), onResult = {uri -> })
     val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
     val context = LocalContext.current
-
+    val openMenu = remember { mutableStateOf(false) }
     when (title) {
         null -> {
             CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name)) })
         }
-        Destinations.Logs.name if bloodPressureState.value.readings.isEmpty() -> {
+        Destinations.Logs.name -> {
             TopAppBar(title = { Text("Logs") }, actions = {
-                IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }
-                IconButton(onClick = { updateOpenSettings() }) {
-                    Icon(painter = painterResource(R.drawable.outline_settings_24), null)
+                Box() {
+                    IconButton(onClick = {
+                        openMenu.value = !openMenu.value
+                    }) { Icon(Icons.Filled.MoreVert, null) }
+                    when{
+                        openMenu.value -> {
+                            LogScreenMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                        }
+
+                    }
                 }
-                IconButton(onClick = { importer.launch("text/csv") }) {
-                    Icon(painter = painterResource(R.drawable.outline_file_open_24), null)
-                }
+                /*
+                    IconButton(onClick = {
+                        updateOpenMenu()
+                    }) { Icon(Icons.Filled.MoreVert, null) }
+                    IconButton(onClick = { updateOpenSettings() }) {
+                        Icon(painter = painterResource(R.drawable.outline_settings_24), null)
+                    }
+                    IconButton(onClick = { importer.launch("text/csv") }) {
+                        Icon(painter = painterResource(R.drawable.outline_file_open_24), null)
+                    }
+
+
+                 */
             })
         }
         Destinations.Medicine.name -> {
-            TopAppBar(title = { Text(stringResource(R.string.medicine_screen_label)) }, actions = {IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }})
+            TopAppBar(title = { Text(stringResource(R.string.medicine_screen_label)) }, actions = {
+                Box() {
+                    IconButton(onClick = {
+                        openMenu.value = !openMenu.value
+                    }) { Icon(Icons.Filled.MoreVert, null) }
+                    when{
+                        openMenu.value -> {
+                            smallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                        }
+
+                    }
+                }
+            })
         }
         Destinations.Insights.name if !insightsState.value.hasRecords -> {
-            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label)) }, actions = {IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }})
+            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label)) }, actions = {
+                Box() {
+                    IconButton(onClick = {
+                        openMenu.value = !openMenu.value
+                    }) { Icon(Icons.Filled.MoreVert, null) }
+                    when{
+                        openMenu.value -> {
+                            smallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                        }
+
+                    }
+                }
+            })
         }
         else -> {
             TopAppBar(

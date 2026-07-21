@@ -34,6 +34,7 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerTopAppBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.LogScreenMenu
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
@@ -61,6 +62,7 @@ fun HyprTrackerScreen(
     val openAddMedicationScreen = remember { mutableStateOf(false) }
     val openSettingsDialog = remember { mutableStateOf(false) }
     val openAddBPlog = remember { mutableStateOf(false) }
+    val showMenu = remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -75,7 +77,8 @@ fun HyprTrackerScreen(
                         updateOpenSettings = {openSettingsDialog.value = true},
                         insightsViewModel = insightsViewModel,
                         medicineViewModel = medicineViewModel,
-                        hyprTrackerViewModel = hyprTrackerViewModel
+                        hyprTrackerViewModel = hyprTrackerViewModel,
+                        updateOpenMenu = {showMenu.value = !showMenu.value}
                     )
                 },
                 bottomBar = {
@@ -149,6 +152,16 @@ fun HyprTrackerScreen(
                                 hyprTrackerViewModel = hyprTrackerViewModel,
                                 medicineViewModel = medicineViewModel,
                                 themeViewModel = themeViewModel
+                            )
+                        }
+                    }
+
+                    when {
+                        showMenu.value -> {
+                            LogScreenMenu(
+                                expanded = showMenu.value,
+                                onDismissRequest = {showMenu.value = false},
+                                updateOpenSettings = {openSettingsDialog.value = !openSettingsDialog.value}
                             )
                         }
                     }
