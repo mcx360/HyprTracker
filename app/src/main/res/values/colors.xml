@@ -12,4 +12,9 @@
     <color name="Hypertension_High_Normal_Stage_Colour">#FFF9A825</color>
     <color name="Hypertension_Grade1_Colour">#FFF57C00</color>
     <color name="Hypertension_Grade2_Colour">#FFD32F2F</color>
+
+    <color name="Hypertension_Normal_Stage_Background">#E8F5E9</color>
+    <color name="Hypertension_High_Normal_Stage_Background">#FFF8E1</color>
+    <color name="Hypertension_Grade1_Background">#FFF3E0</color>
+    <color name="Hypertension_Grade2_Background">#FFEBEE</color>
 </resources>

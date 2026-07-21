@@ -82,12 +82,7 @@ fun LogBPResult(
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     val currentTime = Calendar.getInstance()
-    val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
-        is24Hour = true
-    )
-
+    val timePickerState = rememberTimePickerState(initialHour = currentTime.get(Calendar.HOUR_OF_DAY), initialMinute = currentTime.get(Calendar.MINUTE), is24Hour = true)
 
     Dialog(
         onDismissRequest = {onDismissRequest()},
@@ -135,6 +130,7 @@ fun LogBPResult(
 
                             //systolic value text field
                             OutlinedTextField(
+                                textStyle = MaterialTheme.typography.displayMedium,
                                 singleLine = true,
                                 value = hyprTackerUiState.systolicValue,
                                 onValueChange = {
@@ -158,6 +154,7 @@ fun LogBPResult(
 
                         //diastolic value text field
                         OutlinedTextField(
+                            textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
                             onValueChange = {
@@ -179,6 +176,7 @@ fun LogBPResult(
 
                         //Pulse value text field
                         OutlinedTextField(
+                            textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
                             onValueChange = {

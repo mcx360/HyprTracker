@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -40,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -59,6 +64,7 @@ import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun HistoryTab(
@@ -156,7 +162,7 @@ fun HistoryTab(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp, start = 16.dp),
+                                .padding(top = 8.dp, start = 16.dp, end = 16.dp),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -181,6 +187,18 @@ fun HistoryTab(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
 
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Surface(
+                                color = when (hyprTrackerUIState.readings[index].stage) {
+                                    "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Background)
+                                    "High Normal" -> colorResource(R.color.Hypertension_High_Normal_Stage_Background)
+                                    "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Background)
+                                    "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Background)
+                                    else -> Color.Gray
+                                },
+                                shape = RoundedCornerShape(25)
+                            ){
                             Text(
                                 when (hyprTrackerUIState.readings[index].stage) {
                                     "Normal" -> stringResource(R.string.Normal)
@@ -195,7 +213,7 @@ fun HistoryTab(
                                     "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Colour)
                                     "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Colour)
                                     else -> Color.Gray
-                                }, modifier = Modifier.fillMaxWidth().padding(end = 16.dp), textAlign = TextAlign.End)
+                                }, modifier = Modifier.padding(start = 8.dp, end = 8.dp), textAlign = TextAlign.End)}
                         }
 
                         HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp),)
