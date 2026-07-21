@@ -296,17 +296,18 @@ fun LogBPResult(
                     Text("Notes are optional, they can include things such as mood, what arm you used, whether you exercised that day etc.", modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp))
                 }
 
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     val resetMessage = stringResource(R.string.Rest_button_snackBar_message)
-                    OutlinedButton(modifier = Modifier.padding(8.dp), onClick = {
+                    OutlinedButton(modifier = Modifier.padding(8.dp).weight(1f), onClick = {
                         scope.launch {onDismissRequest()}.invokeOnCompletion {
                             hyprTrackerViewModel.resetBloodPressureLog()
                             datePickerState.selectedDateMillis =
                                 convertDateToMillis(hyprTackerUiState.date)
+                            haptic.performHapticFeedback(HapticFeedbackType.Reject)
                             scope.launch { snackBarHostState.showSnackbar(resetMessage) }
                         } }
                     ) {
-                        Text(stringResource(R.string.RESET_BP_LOG_EDIT_BUTTON))
+                        Text("Cancel")
                     }
                     Button(onClick = { if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
                         scope.launch {
@@ -322,6 +323,8 @@ fun LogBPResult(
                             )
                         }
                         hyprTrackerViewModel.resetBloodPressureLog()
+                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        onDismissRequest()
                         scope.launch {
                             snackBarHostState.showSnackbar(
                                 message = "Log entry added!",
@@ -337,7 +340,7 @@ fun LogBPResult(
                                 duration = SnackbarDuration.Short
                             )
                         }
-                    }}, modifier = Modifier.weight(1f).padding(16.dp)) {Text("Save") }
+                    }}, modifier = Modifier.weight(1f).padding(16.dp)) {Text("Add Log") }
 
                 }
             }
