@@ -10,7 +10,6 @@ import io.github.mcx360.hyprtracker.ui.graphScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.historyScreen.HistoryTab
-import io.github.mcx360.hyprtracker.ui.loggingScreen.LoggingScreenContainer
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 
@@ -18,12 +17,9 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, openAddMedicationScreen: MutableState<Boolean>, medicineViewModel: MedicineViewModel, insightsViewModel: InsightsViewModel, openAddBPlog: MutableState<Boolean>) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.Logging.name,
+        startDestination = Destinations.Logs.name,
     ){
-        composable(route = Destinations.Logging.name){
-            LoggingScreenContainer(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState)
-        }
-        composable(route = Destinations.History.name){
+        composable(route = Destinations.Logs.name){
             HistoryTab(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBPlog = openAddBPlog)
         }
         composable(route = Destinations.Medicine.name){

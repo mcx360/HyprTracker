@@ -52,7 +52,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_TAB_ITEM
 import io.github.mcx360.hyprtracker.ui.utils.Dot
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
@@ -75,7 +74,9 @@ fun HistoryTab(
     when{
         openAddBPlog.value -> {
             LogBPResult(
-                onDismissRequest = {openAddBPlog.value = false}
+                onDismissRequest = {openAddBPlog.value = false},
+                hyprTrackerViewModel = hyprTrackerViewModel,
+                snackBarHostState = snackBarHostState
             )
         }
     }
@@ -155,8 +156,7 @@ fun HistoryTab(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp, start = 16.dp)
-                                .testTag(HISTORY_TAB_ITEM),
+                                .padding(top = 8.dp, start = 16.dp),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {

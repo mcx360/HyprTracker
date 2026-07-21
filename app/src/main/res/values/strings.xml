@@ -97,7 +97,7 @@
     <string name="Pulse_Value">Pulse</string>
     <string name="Notes_Value">Notes:</string>
     <string name="Empty_BP_Log_History_Tab_Title">No Log History</string>
-    <string name="Empty_BP_Log_History_Tab_Text">Once you log your blood pressure the results will appear here.</string>
+    <string name="Empty_BP_Log_History_Tab_Text">Press the pencil to start recording your blood pressure results.</string>
     <string name="Delete_Confirmation_Dialog_Text">Are you sure you want to permanently delete this log entry?</string>
     <string name="Confirm_Button_Text">Confirm</string>
     <string name="Cancel_Button_Text">Cancel</string>

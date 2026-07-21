@@ -53,26 +53,16 @@ fun HyprTrackerTopAppBar(
         null -> {
             CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name)) })
         }
-        Destinations.Logging.name -> {
-            TopAppBar(
-                modifier = modifier.testTag(TOPAPPBAR_TAG).padding(end = 8.dp),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                title = {Text(Destinations.Logging.name)},
-                actions = {
-                    IconButton(onClick = { updateOpenSettings() }) {
-                        Icon(painter = painterResource(R.drawable.outline_settings_24), null)
-                    }
-                    IconButton(onClick = { importer.launch("text/csv") }) {
-                        Icon(painter = painterResource(R.drawable.outline_file_open_24), null)
-                    }
+        Destinations.Logs.name if bloodPressureState.value.readings.isEmpty() -> {
+            TopAppBar(title = { Text("Logs") }, actions = {
+                IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }
+                IconButton(onClick = { updateOpenSettings() }) {
+                    Icon(painter = painterResource(R.drawable.outline_settings_24), null)
                 }
-            )
-        }
-        Destinations.History.name if bloodPressureState.value.readings.isEmpty() -> {
-            TopAppBar(title = { Text(stringResource(R.string.History_tab)) }, actions = {IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }})
+                IconButton(onClick = { importer.launch("text/csv") }) {
+                    Icon(painter = painterResource(R.drawable.outline_file_open_24), null)
+                }
+            })
         }
         Destinations.Medicine.name -> {
             TopAppBar(title = { Text(stringResource(R.string.medicine_screen_label)) }, actions = {IconButton(onClick = {}) {Icon(Icons.Filled.MoreVert,null) }})

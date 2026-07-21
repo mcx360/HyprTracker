@@ -12,7 +12,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -24,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -35,7 +33,6 @@ import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.HyprTrackerDrawerContent
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerTopAppBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
@@ -95,7 +92,7 @@ fun HyprTrackerScreen(
                         }) {
                             Icon(Icons.Filled.Add, contentDescription = null)
                         }
-                    }else if (currentRoute == Destinations.History.name){
+                    }else if (currentRoute == Destinations.Logs.name){
                         FloatingActionButton(onClick = {
                             openAddBPlog.value = true
                         }) {

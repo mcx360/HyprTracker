@@ -30,25 +30,14 @@ fun HyprTrackerBottomNavigationBar(
         modifier = modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
-            selected = currentRoute == Destinations.Logging.name,
-            onClick = { navController.navigate(Destinations.Logging.name) },
-            icon = { Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_log_blood_pressure),
-                contentDescription = stringResource(R.string.logging_screen_label))
-            },
-            label = { Text(text = stringResource(R.string.logging_screen_label)) },
-            alwaysShowLabel = true
-        )
-
-        NavigationBarItem(
-            selected = currentRoute == Destinations.History.name,
-            onClick = { navController.navigate(Destinations.History.name) },
+            selected = currentRoute == Destinations.Logs.name,
+            onClick = { navController.navigate(Destinations.Logs.name) },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24),
                     contentDescription = null)
             },
-            label = { Text(text = "History") },
+            label = { Text(text = "Logs") },
             alwaysShowLabel = true,
         )
 
