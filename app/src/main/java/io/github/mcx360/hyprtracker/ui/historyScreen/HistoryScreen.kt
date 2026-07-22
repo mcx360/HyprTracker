@@ -152,6 +152,7 @@ fun HistoryTab(
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
 
+
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
                 OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
@@ -257,35 +258,6 @@ fun HistoryTab(
                                 }
                                 Text(text = "bpm", style = MaterialTheme.typography.labelMedium,color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-
-                            //Category value
-                            /*
-                            Column(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .fillMaxWidth(), horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    stringResource(R.string.Hypertension_Stage_Category),
-                                    modifier = Modifier.padding(start = 24.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Dot(hyprTrackerUIState.readings[index].stage)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        when (hyprTrackerUIState.readings[index].stage) {
-                                            "Normal" -> stringResource(R.string.Normal)
-                                            "High Normal" -> stringResource(R.string.High_normal)
-                                            "Grade 1 Hypertension" -> stringResource(R.string.Grade1)
-                                            "Grade 2 Hypertension" -> stringResource(R.string.Grade2)
-                                            else -> stringResource(R.string.Error)
-                                        }
-                                    )
-                                }
-                            }
-                            */
                         }
 
 
@@ -320,8 +292,6 @@ fun HistoryTab(
 
                         }
                     }
-
-
                 }
             }
         }
