@@ -17,7 +17,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, openAddMedicationScreen: MutableState<Boolean>, medicineViewModel: MedicineViewModel, insightsViewModel: InsightsViewModel, openAddBPlog: MutableState<Boolean>) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.Logs.name,
+        startDestination = Destinations.Logs.name
     ){
         composable(route = Destinations.Logs.name){
             HistoryTab(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBPlog = openAddBPlog)

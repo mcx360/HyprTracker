@@ -53,9 +53,9 @@ fun GraphScreen(
 
             BPBreakdownCard(
                 breakdown = uiState.bpStages,
-                systolicRange = uiState.systolicMax+"–"+uiState.systolicMin,
-                diastolicRange = uiState.diastolicMax+"–"+uiState.diastolicMin,
-                pulseRange = uiState.pulseMax+"–"+uiState.pulseMin
+                systolicRange = uiState.systolicMin+"–"+uiState.systolicMax,
+                diastolicRange = uiState.diastolicMin+"–"+uiState.diastolicMax,
+                pulseRange = uiState.pulseMin+"–"+uiState.pulseMax
             )
         }
     }else{
