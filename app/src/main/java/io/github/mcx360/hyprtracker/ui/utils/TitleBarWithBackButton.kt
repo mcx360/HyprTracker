@@ -37,7 +37,7 @@ fun TitleBarWithBackButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Box(modifier = Modifier.clip(CircleShape).size(40.dp).background(MaterialTheme.colorScheme.onPrimaryContainer)) {
+        Box(modifier = Modifier.clip(CircleShape).size(32.dp).background(MaterialTheme.colorScheme.onPrimaryContainer)) {
             IconButton(
                 onClick = {
                     onBackArrowClicked()

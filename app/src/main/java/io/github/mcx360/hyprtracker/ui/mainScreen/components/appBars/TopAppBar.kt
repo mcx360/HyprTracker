@@ -57,10 +57,10 @@ fun HyprTrackerTopAppBar(
     val openMenu = remember { mutableStateOf(false) }
     when (title) {
         null -> {
-            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name)) })
+            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge) })
         }
         Destinations.Logs.name -> {
-            TopAppBar(title = { Text("Logs") }, actions = {
+            TopAppBar(title = { Text("Logs",  style = MaterialTheme.typography.titleLarge) }, actions = {
                 Box() {
                     IconButton(onClick = {
                         openMenu.value = !openMenu.value
@@ -88,7 +88,7 @@ fun HyprTrackerTopAppBar(
             })
         }
         Destinations.Medicine.name -> {
-            TopAppBar(title = { Text(stringResource(R.string.medicine_screen_label)) }, actions = {
+            TopAppBar(title = { Text(stringResource(R.string.medicine_screen_label),  style = MaterialTheme.typography.titleLarge) }, actions = {
                 Box() {
                     IconButton(onClick = {
                         openMenu.value = !openMenu.value
@@ -103,7 +103,7 @@ fun HyprTrackerTopAppBar(
             })
         }
         Destinations.Insights.name if !insightsState.value.hasRecords -> {
-            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label)) }, actions = {
+            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label),  style = MaterialTheme.typography.titleLarge) }, actions = {
                 Box() {
                     IconButton(onClick = {
                         openMenu.value = !openMenu.value

@@ -148,36 +148,48 @@ fun BPBreakdownCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
-                    modifier.border(
+                    modifier
+                        /*
+                        .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(5.dp)
-                    ).padding(4.dp)
+                    )
+
+                         */
+                        .background(colorResource(R.color.Hypertension_Normal_Stage_Background)).padding(4.dp)
                 ) {
                     Row {
                         DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             stringResource(R.string.Normal),
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colorResource(R.color.Hypertension_Normal_Stage_Colour))
                     }
                 }
                 Spacer(modifier.padding(4.dp))
 
                 Box(
-                    modifier.border(
+                    modifier
+                        /*.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(5.dp)
-                    ).padding(4.dp)
+
+
+                    )
+                    */
+                        .background(colorResource(R.color.Hypertension_High_Normal_Stage_Background))
+                    .padding(4.dp)
                 ) {
                     Row {
                         DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             stringResource(R.string.High_normal),
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
                         )
                     }
                 }
@@ -185,18 +197,16 @@ fun BPBreakdownCard(
                 Spacer(modifier.padding(4.dp))
 
                 Box(
-                    modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(5.dp)
-                    ).padding(4.dp)
+                    modifier
+                        .background(colorResource(R.color.Hypertension_Grade1_Background)).padding(4.dp)
                 ) {
                     Row {
                         DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             stringResource(R.string.Grade1),
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colorResource(R.color.Hypertension_Grade1_Colour)
                         )
                     }
 
@@ -205,29 +215,25 @@ fun BPBreakdownCard(
                 Spacer(modifier.padding(4.dp))
 
                 Box(
-                    modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(5.dp)
-                    ).padding(4.dp)
+                    modifier.background(colorResource(R.color.Hypertension_Grade2_Background)).padding(4.dp)
                 ) {
                     Row {
                         DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             stringResource(R.string.Grade2),
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colorResource(R.color.Hypertension_Grade2_Colour)
                         )
                     }
                 }
             }
             HorizontalDivider(modifier = modifier.padding(8.dp), thickness = 2.dp)
 
-            Row(modifier.fillMaxWidth()) {
+            Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp)) {
                 Text(
                     "Systolic Range:",
                     modifier = modifier.padding(4.dp),
-                    style = MaterialTheme.typography.labelLarge,
                     textAlign = TextAlign.Start,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -235,14 +241,13 @@ fun BPBreakdownCard(
                     systolicRange,
                     textAlign = TextAlign.End,
                     modifier = modifier.fillMaxWidth().padding(end = 8.dp),
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+                    )
             }
-            Row(modifier.fillMaxWidth()) {
+            Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp)) {
                 Text(
                     "Diastolic Range:",
                     modifier = modifier.padding(4.dp),
-                    style = MaterialTheme.typography.labelLarge,
                     textAlign = TextAlign.Start,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -250,14 +255,14 @@ fun BPBreakdownCard(
                     diastolicRange,
                     textAlign = TextAlign.End,
                     modifier = modifier.fillMaxWidth().padding(end = 8.dp),
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+
+                    )
             }
-            Row(modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+            Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp, bottom = 8.dp)) {
                 Text(
                     "Pulse Range:",
                     modifier = modifier.padding(4.dp),
-                    style = MaterialTheme.typography.labelLarge,
                     textAlign = TextAlign.Start,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -265,10 +270,18 @@ fun BPBreakdownCard(
                     pulseRange,
                     textAlign = TextAlign.End,
                     modifier = modifier.fillMaxWidth().padding(end = 8.dp),
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+                    )
             }
         }
+    }
+
+    OutlinedCard(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+
     }
 }
 

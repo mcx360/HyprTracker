@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -42,6 +43,12 @@ fun InfoCards(
     modifier: Modifier = Modifier,
     viewModel: InsightsViewModel
 ){
+    Row(modifier = Modifier.fillMaxWidth().padding(start =16.dp,top =16.dp, end = 16.dp)) {
+        Text("Your key blood pressure metrics", textAlign = TextAlign.Start, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.weight(1f))
+        Text("change >>", textAlign = TextAlign.End, color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.labelLarge)
+    }
+
     Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
 
         val haptic = LocalHapticFeedback.current
@@ -77,7 +84,8 @@ fun InfoCards(
                 ) {
                     Text(
                         text = stringResource(R.string.systolic),
-                        textAlign = TextAlign.Start
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier.weight(1f))
                     Icon(
@@ -94,8 +102,8 @@ fun InfoCards(
                         MinMaxAvg.Average -> insightsUIState.systolicAverage
                         MinMaxAvg.Max -> insightsUIState.systolicMax
                     },
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = stringResource(R.string.mmHg),
@@ -136,7 +144,7 @@ fun InfoCards(
                     horizontalArrangement = Arrangement.Start,
                     modifier = modifier.fillMaxWidth()
                 ){
-                    Text(text = stringResource(R.string.diastolic))
+                    Text(text = stringResource(R.string.diastolic), style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.heart_3_),
@@ -153,8 +161,8 @@ fun InfoCards(
                         MinMaxAvg.Average -> insightsUIState.diastolicAverage
                         MinMaxAvg.Max -> insightsUIState.diastolicMax
                     },
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = stringResource(R.string.mmHg),
@@ -197,7 +205,7 @@ fun InfoCards(
                     horizontalArrangement = Arrangement.Start,
                     modifier = modifier.fillMaxWidth()
                 ) {
-                    Text(text = stringResource(R.string.pulse))
+                    Text(text = stringResource(R.string.pulse), style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.activity_1_),
@@ -216,8 +224,8 @@ fun InfoCards(
                         MinMaxAvg.Average -> insightsUIState.pulseAverage
                         MinMaxAvg.Max -> insightsUIState.pulseMax
                     },
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
                     )
 
                     Text(
