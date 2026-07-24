@@ -30,10 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import java.time.LocalDate
 
@@ -46,7 +48,7 @@ fun FilterCard(
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Text(
-        text = "Filter by",
+        text = stringResource(R.string.filter_header),
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Start,
         modifier = Modifier
@@ -59,7 +61,7 @@ fun FilterCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        val options = listOf("Week", "Month", "All","Custom")
+        val options = listOf(stringResource(R.string.Week), stringResource(R.string.Month), stringResource(R.string.All),stringResource(R.string.Custom))
         val showCustomDateRangePicker = remember { mutableStateOf(false) }
 
         SingleChoiceSegmentedButtonRow {
@@ -134,7 +136,7 @@ fun RangePicker(
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
-                    Text("Save")
+                    Text(text = stringResource(R.string.Save))
                 }
             }
             DateRangePicker(state = state, modifier = modifier.weight(1f), showModeToggle = false)
