@@ -16,7 +16,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -31,17 +30,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
-import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,38 +42,17 @@ import java.time.LocalDate
 fun FilterCard(
     modifier: Modifier = Modifier,
     setFilterDates: (String?, String?) -> Unit,
-    startDate: String,
-    endDate: String,
 ){
     var selectedIndex by remember { mutableIntStateOf(0) }
 
-    /*
-    Row(
-        modifier = modifier
+    Text(
+        text = "Filter by",
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Start,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(R.string.Filter_By),
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.weight(0.2f)
-        )
-
-        OutlinedTextField(
-            value = "${formatToDayMonthYear(startDate)}–${formatToDayMonthYear(endDate)}",
-            readOnly = true,
-            onValueChange = {},
-            label = {Text("Date")},
-            modifier = modifier.fillMaxWidth().padding(start = 8.dp).weight(0.8f),
-            trailingIcon = {IconButton(onClick = {}){Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null)} }
-        )
-    }
-
-     */
-
-    Text("Filter by", modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, bottom = 4.dp), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Start)
+            .padding(top = 16.dp, start = 16.dp, bottom = 4.dp),
+    )
 
     Row(
         modifier.fillMaxWidth(),
@@ -93,7 +65,7 @@ fun FilterCard(
         SingleChoiceSegmentedButtonRow {
             options.forEachIndexed { index, label ->
                 SegmentedButton(
-                    shape = SegmentedButtonDefaults.itemShape(
+                        shape = SegmentedButtonDefaults.itemShape(
                         index = index,
                         count = options.size
                     ),
@@ -102,7 +74,8 @@ fun FilterCard(
                             showCustomDateRangePicker.value = true
                         } else{
                             selectedIndex = index
-                        } },
+                        }
+                    },
                     selected = index == selectedIndex,
                     label = { Text(label) }
                 )
@@ -133,16 +106,17 @@ fun RangePicker(
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
-        )){
-
+        )
+    ){
         val state = rememberDateRangePickerState()
+
         Column(
             modifier
                 .fillMaxSize()
                 .systemBarsPadding(),
             verticalArrangement = Arrangement.Top
         ) {
-            Row(modifier = modifier
+            Row(modifier = Modifier
                 .fillMaxWidth()
                 .background(DatePickerDefaults.colors().containerColor)
                 .padding(start = 12.dp, end = 12.dp),
