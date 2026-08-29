@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen
+package io.github.mcx360.hyprtracker.ui.insightsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen.components
+package io.github.mcx360.hyprtracker.ui.insightsScreen.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.LogScreenMenu
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.smallMenu
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations

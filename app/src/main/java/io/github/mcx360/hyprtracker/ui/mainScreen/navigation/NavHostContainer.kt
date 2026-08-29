@@ -6,10 +6,10 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import io.github.mcx360.hyprtracker.ui.graphScreen.GraphScreen
+import io.github.mcx360.hyprtracker.ui.insightsScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.historyScreen.HistoryTab
+import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.logsScreen.HistoryTab
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 

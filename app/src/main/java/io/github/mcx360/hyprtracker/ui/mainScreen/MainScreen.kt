@@ -29,7 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar

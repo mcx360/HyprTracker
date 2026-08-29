@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.historyScreen
+package io.github.mcx360.hyprtracker.ui.logsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

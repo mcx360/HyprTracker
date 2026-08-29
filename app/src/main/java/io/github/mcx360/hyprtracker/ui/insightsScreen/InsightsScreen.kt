@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen
+package io.github.mcx360.hyprtracker.ui.insightsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.BPBreakdownCard
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.FilterCard
-import io.github.mcx360.hyprtracker.ui.graphScreen.components.InfoCards
+import io.github.mcx360.hyprtracker.ui.insightsScreen.components.BPBreakdownCard
+import io.github.mcx360.hyprtracker.ui.insightsScreen.components.FilterCard
+import io.github.mcx360.hyprtracker.ui.insightsScreen.components.InfoCards
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.R
 
@@ -44,9 +44,7 @@ fun GraphScreen(
         ) {
 
             FilterCard(
-                setFilterDates = { startDate, endDate -> insightsViewModel.setTimePeriod(startDate, endDate) },
-                startDate = uiState.startDate,
-                endDate = uiState.endDate
+                setFilterDates = { startDate, endDate -> insightsViewModel.setTimePeriod(startDate, endDate) }
             )
 
             InfoCards(viewModel = insightsViewModel)

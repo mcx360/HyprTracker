@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen.components
+package io.github.mcx360.hyprtracker.ui.insightsScreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.graphScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 
 @Composable

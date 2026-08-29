@@ -2,7 +2,6 @@ package io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 @Entity(primaryKeys = ["medication_name", "medication_description", "medication_schedule"])
 data class RecordedMedication(

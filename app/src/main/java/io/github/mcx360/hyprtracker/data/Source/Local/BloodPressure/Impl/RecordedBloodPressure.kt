@@ -2,7 +2,6 @@ package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 @Entity(tableName = "RecordedBloodPressureReadings", primaryKeys = ["date_added", "time_added","systolic_value","diastolic_value"])
 data class RecordedBloodPressure(

@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.graphScreen.components
+package io.github.mcx360.hyprtracker.ui.insightsScreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +48,7 @@ fun FilterCard(
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Text(
-        text = stringResource(R.string.filter_header),
+        text = "filter",
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Start,
         modifier = Modifier
@@ -61,7 +61,7 @@ fun FilterCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        val options = listOf(stringResource(R.string.Week), stringResource(R.string.Month), stringResource(R.string.All),stringResource(R.string.Custom))
+        val options = listOf(stringResource(R.string.Week), stringResource(R.string.Month), "All",stringResource(R.string.Custom))
         val showCustomDateRangePicker = remember { mutableStateOf(false) }
 
         SingleChoiceSegmentedButtonRow {
@@ -136,7 +136,7 @@ fun RangePicker(
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
-                    Text(text = stringResource(R.string.Save))
+                    Text(text = "Save")
                 }
             }
             DateRangePicker(state = state, modifier = modifier.weight(1f), showModeToggle = false)
