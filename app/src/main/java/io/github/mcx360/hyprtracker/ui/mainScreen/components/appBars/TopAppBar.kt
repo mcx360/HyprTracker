@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -60,8 +61,15 @@ fun HyprTrackerTopAppBar(
             CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge) })
         }
         Destinations.Logs.name -> {
-            TopAppBar(title = { Text("Logs",  style = MaterialTheme.typography.titleLarge) }, actions = {
-                Box() {
+            TopAppBar(title = {
+                Column{
+                    Text("Logs",  style = MaterialTheme.typography.titleLarge)
+                    Text("23 Aug 2026–30 Aug 2026", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } }, actions = {
+                Row() {
+                    IconButton(onClick = {}) {
+                        Icon(painter = painterResource(R.drawable.outline_filter_list_24),null)
+                    }
                     IconButton(onClick = {
                         openMenu.value = !openMenu.value
                     }) { Icon(Icons.Filled.MoreVert, null) }
@@ -71,6 +79,7 @@ fun HyprTrackerTopAppBar(
                         }
 
                     }
+
                 }
                 /*
                     IconButton(onClick = {

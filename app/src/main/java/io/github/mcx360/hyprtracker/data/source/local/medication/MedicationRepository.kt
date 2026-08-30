@@ -1,6 +1,6 @@
-package io.github.mcx360.hyprtracker.data.Source.Local.Medication
+package io.github.mcx360.hyprtracker.data.source.local.medication
 
-import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
+import io.github.mcx360.hyprtracker.data.source.local.medication.impl.RecordedMedication
 import kotlinx.coroutines.flow.Flow
 
 interface MedicationRepository {

@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.Impl
+package io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl
 
 import androidx.room.Dao
 import androidx.room.Delete

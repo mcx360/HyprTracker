@@ -1,11 +1,11 @@
 package io.github.mcx360.hyprtracker.data
 
 import android.content.Context
-import io.github.mcx360.hyprtracker.data.Source.Local.AppDataBase
-import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.BloodPressureRepository
-import io.github.mcx360.hyprtracker.data.Source.Local.BloodPressure.OfflineBloodPressureRepository
-import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
-import io.github.mcx360.hyprtracker.data.Source.Local.Medication.OfflineMedicationRepository
+import io.github.mcx360.hyprtracker.data.source.local.AppDataBase
+import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.BloodPressureRepository
+import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.OfflineBloodPressureRepository
+import io.github.mcx360.hyprtracker.data.source.local.medication.MedicationRepository
+import io.github.mcx360.hyprtracker.data.source.local.medication.OfflineMedicationRepository
 
 interface  AppContainer {
     val bloodPressureRepository: BloodPressureRepository

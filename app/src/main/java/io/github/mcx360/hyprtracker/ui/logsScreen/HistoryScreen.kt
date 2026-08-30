@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -184,24 +187,29 @@ fun HistoryTab(
                                 shape = RoundedCornerShape(25)
                             ){
                             Text(
-                                when (hyprTrackerUIState.readings[index].stage) {
+                                text = when (hyprTrackerUIState.readings[index].stage) {
                                     "Normal" -> stringResource(R.string.Normal)
                                     "High Normal" -> stringResource(R.string.High_normal)
                                     "Grade 1 Hypertension" -> stringResource(R.string.Grade1)
                                     "Grade 2 Hypertension" -> stringResource(R.string.Grade2)
                                     else -> stringResource(R.string.Error)
-                                }
-                            , style =MaterialTheme.typography.titleLarge, color = when(hyprTrackerUIState.readings[index].stage){
+                                },
+                                style =MaterialTheme.typography.titleMedium,
+                                color = when(hyprTrackerUIState.readings[index].stage){
                                     "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
                                     "High Normal" -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
                                     "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Colour)
                                     "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Colour)
                                     else -> Color.Gray
-                                }, modifier = Modifier.padding(start = 8.dp, end = 8.dp), textAlign = TextAlign.End)}
+                                },
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                textAlign = TextAlign.End,
+                                fontFamily = FontFamily.Monospace
+                            )
+                            }
                         }
 
                         HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp),)
-
 
                         Row(modifier = Modifier.fillMaxWidth()) {
 
@@ -242,6 +250,7 @@ fun HistoryTab(
                                 Text(text = "bpm", style = MaterialTheme.typography.labelMedium,color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
+
 
 
                             Row(modifier = Modifier.padding(start = 16.dp, end = 8.dp).fillMaxWidth(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {

@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
-import java.nio.file.WatchEvent
 
 @Composable
 fun TitleBarWithBackButton(
@@ -37,7 +36,9 @@ fun TitleBarWithBackButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Box(modifier = Modifier.clip(CircleShape).size(32.dp).background(MaterialTheme.colorScheme.onPrimaryContainer)) {
+        Box(
+            modifier = Modifier.clip(CircleShape).size(32.dp).background(MaterialTheme.colorScheme.primaryContainer)
+        ) {
             IconButton(
                 onClick = {
                     onBackArrowClicked()
@@ -46,7 +47,7 @@ fun TitleBarWithBackButton(
                 Icon(
                     painter = painterResource(R.drawable.outline_arrow_back_24),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primaryContainer,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
         }

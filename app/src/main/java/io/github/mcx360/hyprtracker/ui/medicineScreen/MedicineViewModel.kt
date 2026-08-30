@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
-import io.github.mcx360.hyprtracker.data.Source.Local.Medication.Impl.RecordedMedication
-import io.github.mcx360.hyprtracker.data.Source.Local.Medication.MedicationRepository
+import io.github.mcx360.hyprtracker.data.source.local.medication.impl.RecordedMedication
+import io.github.mcx360.hyprtracker.data.source.local.medication.MedicationRepository
 import io.github.mcx360.hyprtracker.ui.model.Medicine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
