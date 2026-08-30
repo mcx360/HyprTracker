@@ -4,9 +4,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -24,6 +26,16 @@ fun HyprTrackerBottomNavigationBar(
     currentRoute: String?,
     modifier: Modifier
 ){
+    val colours = NavigationBarItemColors(
+        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        selectedTextColor = MaterialTheme.colorScheme.onSurface,
+        selectedIndicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+        disabledIconColor = MaterialTheme.colorScheme.error,
+        disabledTextColor = MaterialTheme.colorScheme.error
+    )
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -39,6 +51,7 @@ fun HyprTrackerBottomNavigationBar(
             },
             label = { Text(text = "Logs") },
             alwaysShowLabel = true,
+            colors = colours
         )
 
         NavigationBarItem(
@@ -50,7 +63,8 @@ fun HyprTrackerBottomNavigationBar(
                     contentDescription = stringResource(R.string.medicine_screen_label))
             },
             label = { Text(text = stringResource(R.string.medicine_screen_label)) },
-            alwaysShowLabel = true
+            alwaysShowLabel = true,
+            colors = colours
         )
 
         NavigationBarItem(
@@ -63,6 +77,7 @@ fun HyprTrackerBottomNavigationBar(
             },
             label = { Text(text = stringResource(R.string.graph_screen_label)) },
             alwaysShowLabel = true,
+            colors = colours
         )
 
     }
