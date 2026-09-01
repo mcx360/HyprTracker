@@ -186,29 +186,23 @@ fun HistoryTab(
 
                             Surface(
                                 color = when (hyprTrackerUIState.readings[index].stage) {
-                                    "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Background)
-                                    "High Normal" -> colorResource(R.color.Hypertension_High_Normal_Stage_Background)
-                                    "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Background)
-                                    "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Background)
-                                    else -> Color.Gray
+                                    stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Background)
+                                    stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Background)
+                                    stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Background)
+                                    stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Background)
+                                    else -> MaterialTheme.colorScheme.error
                                 },
                                 shape = RoundedCornerShape(25)
                             ) {
                                 Text(
-                                    text = when (hyprTrackerUIState.readings[index].stage) {
-                                        "Normal" -> stringResource(R.string.Normal)
-                                        "High Normal" -> stringResource(R.string.High_normal)
-                                        "Grade 1 Hypertension" -> stringResource(R.string.Grade1)
-                                        "Grade 2 Hypertension" -> stringResource(R.string.Grade2)
-                                        else -> stringResource(R.string.Error)
-                                    },
+                                    text = hyprTrackerUIState.readings[index].stage,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = when (hyprTrackerUIState.readings[index].stage) {
-                                        "Normal" -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
-                                        "High Normal" -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
-                                        "Grade 1 Hypertension" -> colorResource(R.color.Hypertension_Grade1_Colour)
-                                        "Grade 2 Hypertension" -> colorResource(R.color.Hypertension_Grade2_Colour)
-                                        else -> Color.Gray
+                                        stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
+                                        stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
+                                        stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Colour)
+                                        stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Colour)
+                                        else -> MaterialTheme.colorScheme.onError
                                     },
                                     modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                                     textAlign = TextAlign.End,
