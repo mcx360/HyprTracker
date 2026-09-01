@@ -222,9 +222,9 @@ fun HistoryTab(
                         Row(modifier = Modifier.fillMaxWidth()) {
 
                             //Systolic value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
+                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
-                                    text = stringResource(R.string.Systolic_Value),
+                                    text = stringResource(R.string.systolic),
                                     style = MaterialTheme.typography.labelLarge,
                                 )
                                 Text(
@@ -239,9 +239,9 @@ fun HistoryTab(
                             }
 
                             //Diastolic value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
+                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
-                                    text = stringResource(R.string.Diastolic_Value),
+                                    text = stringResource(R.string.diastolic),
                                     style = MaterialTheme.typography.labelLarge,
                                     //color = MaterialTheme.colorScheme.secondary
                                 )
@@ -257,7 +257,7 @@ fun HistoryTab(
                             }
 
                             //Pulse value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
+                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     text = stringResource(R.string.Pulse_Value),
                                     style = MaterialTheme.typography.labelLarge,
