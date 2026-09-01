@@ -13,13 +13,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -34,13 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
@@ -50,20 +47,21 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun HistoryTab(
+fun LogsScreen(
     hyprTrackerViewModel: HyprTrackerViewModel,
     snackBarHostState: SnackbarHostState,
-    openAddBPlog: MutableState<Boolean>
+    openAddBloodPressureLog: MutableState<Boolean>
 ) {
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val resource = LocalResources.current
 
     when {
-        openAddBPlog.value -> {
+        openAddBloodPressureLog.value -> {
             LogBPResult(
-                onDismissRequest = { openAddBPlog.value = false },
+                onDismissRequest = { openAddBloodPressureLog.value = false },
                 hyprTrackerViewModel = hyprTrackerViewModel,
                 snackBarHostState = snackBarHostState
             )
@@ -83,18 +81,17 @@ fun HistoryTab(
             showDeleteConfirmationDialog.value -> {
                 DeletionDialog(
                     onDismissRequest = {showDeleteConfirmationDialog.value = false},
+                    deletionText = stringResource(R.string.Delete_Confirmation_Dialog_Text),
                     onDeleteRequest = {
                         showDeleteConfirmationDialog.value = false
                         scope.launch {
                             hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
-                            snackBarHostState.showSnackbar("Log entry removed")
+                            snackBarHostState.showSnackbar(resource.getString(R.string.Remove_Button_snackbar_message))
                         }
-                    },
-                    deletionText = stringResource(R.string.Delete_Confirmation_Dialog_Text)
+                    }
                 )
             }
         }
-
 
         //History list in lazy column
         LazyColumn(
@@ -106,44 +103,34 @@ fun HistoryTab(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
-
-
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
                 OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
-                    Column(
-                        modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.surfaceContainerHigh)
-                    ) {
+                    Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
 
                         //Row with date and time
                         Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
                         ) {
 
                             Text(
-                                when (hyprTrackerUIState.readings[index].date) {
+                                text = when (
+                                    hyprTrackerUIState.readings[index].date) {
                                     LocalDate.now().toString() -> stringResource(R.string.Today_at)
-                                    LocalDate.now().minusDays(1)
-                                        .toString() -> stringResource(R.string.Yesterday_at)
-
-                                    LocalDate.now().minusDays(2)
-                                        .toString() -> stringResource(R.string.Two_Days_Ago_At)
-
+                                    LocalDate.now().minusDays(1).toString() -> stringResource(R.string.Yesterday_at)
+                                    LocalDate.now().minusDays(2).toString() -> stringResource(R.string.Two_Days_Ago_At)
                                     else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)
                                 },
                                 style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(end = 6.dp)
                             )
 
                             Text(
-                                text = " " + hyprTrackerUIState.readings[index].time.substring(
-                                    0,
-                                    5
-                                ),
+                                text = hyprTrackerUIState.readings[index].time.substring(0, 5),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -177,52 +164,60 @@ fun HistoryTab(
                             }
                         }
 
-                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp),)
+                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
 
                         Row(modifier = Modifier.fillMaxWidth()) {
 
                             //Systolic value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
                                 Text(
                                     text = stringResource(R.string.systolic),
                                     style = MaterialTheme.typography.labelLarge,
                                 )
                                 Text(
-                                    hyprTrackerUIState.readings[index].systolicValue,
+                                    text = hyprTrackerUIState.readings[index].systolicValue,
                                     style = MaterialTheme.typography.displaySmall
                                 )
                                 Text(
-                                    text = "mmHg",
+                                    text = stringResource(R.string.mmHg),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
 
                             //Diastolic value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
                                 Text(
                                     text = stringResource(R.string.diastolic),
                                     style = MaterialTheme.typography.labelLarge,
-                                    //color = MaterialTheme.colorScheme.secondary
                                 )
                                 Text(
-                                    hyprTrackerUIState.readings[index].diastolicValue,
+                                    text = hyprTrackerUIState.readings[index].diastolicValue,
                                     style = MaterialTheme.typography.displaySmall
                                 )
                                 Text(
-                                    text = "mmHg",
+                                    text = stringResource(R.string.mmHg),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
 
                             //Pulse value
-                            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
                                 Text(
                                     text = stringResource(R.string.Pulse_Value),
                                     style = MaterialTheme.typography.labelLarge,
-                                    //color = MaterialTheme.colorScheme.secondary
-                                )
+                                    )
+
                                 if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let {
                                     Text(
                                         text = it,
@@ -230,7 +225,7 @@ fun HistoryTab(
                                     )
                                 }
                                 Text(
-                                    text = "bpm",
+                                    text = stringResource(R.string.bpm),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -238,19 +233,23 @@ fun HistoryTab(
                         }
 
                         Row(
-                            modifier = Modifier.padding(start = 16.dp, end = 8.dp).fillMaxWidth(),
+                            modifier = Modifier
+                                .padding(start = 16.dp, end = 8.dp)
+                                .fillMaxWidth(),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             //Notes value
                             Text(
-                                text = if (hyprTrackerUIState.readings[index].notes != "") ""+hyprTrackerUIState.readings[index].notes else "No notes recorded.",
+                                text = if (hyprTrackerUIState.readings[index].notes != "") ""+hyprTrackerUIState.readings[index].notes else stringResource(R.string.No_Notes),
                                 textAlign = TextAlign.Start,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontFamily = FontFamily.SansSerif
                             )
+
                             Spacer(modifier = Modifier.weight(1f))
+
                             FilledTonalIconButton(
                                 onClick = {
                                     showDeleteConfirmationDialog.value = true
@@ -259,11 +258,10 @@ fun HistoryTab(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             ) {
                                 Icon(
-                                    Icons.Filled.MoreHoriz,
+                                    imageVector = Icons.Filled.MoreHoriz,
                                     contentDescription = null,
                                 )
                             }
-
                         }
                     }
                 }

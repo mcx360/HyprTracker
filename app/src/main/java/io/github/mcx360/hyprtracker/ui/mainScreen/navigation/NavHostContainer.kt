@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import io.github.mcx360.hyprtracker.ui.insightsScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.logsScreen.HistoryTab
+import io.github.mcx360.hyprtracker.ui.logsScreen.LogsScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 
@@ -20,7 +20,7 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
         startDestination = Destinations.Logs.name
     ){
         composable(route = Destinations.Logs.name){
-            HistoryTab(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBPlog = openAddBPlog)
+            LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBloodPressureLog = openAddBPlog)
         }
         composable(route = Destinations.Medicine.name){
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)

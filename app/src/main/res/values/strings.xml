@@ -48,6 +48,7 @@
     <string name="RESET_BP_LOG_EDIT_BUTTON">Reset</string>
     <string name="Rest_button_snackBar_message">Log entry reset</string>
     <string name="Update_Button_snackbar_message">Log entry updated</string>
+    <string name="Remove_Button_snackbar_message">Log entry removed</string>
 
 
     <!--Strings for the blood pressure stages info card in logging screen-->
@@ -105,7 +106,7 @@
     <string name="Today_at">Today</string>
     <string name="Yesterday_at">Yesterday</string>
     <string name="Two_Days_Ago_At">Two days ago</string>
-    <string name="No_Notes">N/A</string>
+    <string name="No_Notes">No notes recorded.</string>
 
     <!--Medicine Screen Strings-->
     <string name="Empty_Medicine_Screen_Title">Empty Medicine List</string>
