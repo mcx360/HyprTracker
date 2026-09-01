@@ -32,12 +32,15 @@ fun EmptyScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp).weight(0.6f),
-            alignment = Alignment.BottomCenter
-        )
+        Column(modifier = Modifier.weight(0.6f)) {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp).fillMaxSize(),
+                alignment = Alignment.BottomCenter
+            )
+        }
+
         Column(modifier = Modifier.weight(0.4f).fillMaxWidth(), verticalArrangement =Arrangement.Top, horizontalAlignment =Alignment.CenterHorizontally) {
             Text(
                 text = heading,
