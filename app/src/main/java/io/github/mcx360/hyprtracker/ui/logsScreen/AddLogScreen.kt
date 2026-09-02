@@ -15,6 +15,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -30,6 +32,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
@@ -112,6 +115,12 @@ fun LogBPResult(
             ){
                 Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
                     Row(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)) {
+                        Icon(
+                            painter = painterResource(R.drawable.outline_blood_pressure_24),
+                            contentDescription = null,
+                            tint =MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
                         Text(
                             text ="Blood Pressure",
                             color = MaterialTheme.colorScheme.secondary,
@@ -120,17 +129,12 @@ fun LogBPResult(
                         )
                         Spacer(modifier = Modifier.weight(1f))
 
-                        Icon(
-                            painter = painterResource(R.drawable.outline_blood_pressure_24),
-                            contentDescription = null,
-                            tint =MaterialTheme.colorScheme.secondary
-                        )
                     }
                     Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
 
                             //systolic value text field
-                            OutlinedTextField(
-                                textStyle = MaterialTheme.typography.displayMedium,
+                            TextField(
+                                //textStyle = MaterialTheme.typography.displayMedium,
                                 singleLine = true,
                                 value = hyprTackerUiState.systolicValue,
                                 onValueChange = {
@@ -153,8 +157,8 @@ fun LogBPResult(
 
 
                         //diastolic value text field
-                        OutlinedTextField(
-                            textStyle = MaterialTheme.typography.displayMedium,
+                        TextField(
+                            //textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
                             onValueChange = {
@@ -175,8 +179,8 @@ fun LogBPResult(
                         )
 
                         //Pulse value text field
-                        OutlinedTextField(
-                            textStyle = MaterialTheme.typography.displayMedium,
+                        TextField(
+                            //textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
                             onValueChange = {
@@ -198,32 +202,27 @@ fun LogBPResult(
                     }
 
                     Row() {
-                        Text("make sure to measure on the same arm for consistent results.", modifier = Modifier.padding(start = 16.dp, bottom = 8.dp, top = 8.dp))
+                        Text("make sure to measure on the same arm for consistent results.", modifier = Modifier.padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end =16.dp), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
 
                 Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
                     Row(modifier = Modifier.padding(top = 8.dp, end = 16.dp, start = 16.dp)) {
-                        Text("Date and time", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
-                        Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             painter = painterResource(R.drawable.ic_date),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(end = 8.dp)
                         )
+                        Text("Date and time", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                     Row(modifier = Modifier.padding(8.dp)) {
-                        OutlinedTextField(
+                        TextField(
                             value = formatToRegularDate(selectedDate),
                             onValueChange = {},
                             //label = { Text(stringResource(R.string.Custom_Log_Date_TextField))},
                             readOnly = true,
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_date),
-                                    contentDescription = null
-                                )
-                            },
                             trailingIcon = {
                                 IconButton(onClick = {showDatePicker = true}) {
                                     Icon(
@@ -236,6 +235,8 @@ fun LogBPResult(
                                 .fillMaxWidth()
                         )
                     }
+                    Text("Press the edit button to change date and time if desired", style = MaterialTheme.typography.bodyMedium,modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp))
+                    /*
                     Row(modifier = Modifier.padding(8.dp)) {
                         OutlinedTextField(
                             value = hyprTackerUiState.time.substring(0,5),
@@ -263,17 +264,20 @@ fun LogBPResult(
                         )
                     }
                     Text("Press the edit button to change date and time. By default current date and time is used.", modifier = Modifier.padding(start = 16.dp, bottom = 8.dp))
+                     */
                 }
 
                 Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
                     Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
-                        Text("Notes", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             painter = painterResource(R.drawable.ic_notes),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(end = 8.dp)
+
                         )
+                        Text("Notes", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                     OutlinedTextField(
                         value = hyprTackerUiState.notes,
@@ -291,11 +295,38 @@ fun LogBPResult(
                         placeholder = {Text(stringResource(R.string.Note_placeholder))}
                     )
                     Text("0/100", modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp), textAlign = TextAlign.End)
-                    Text("Notes are optional, they can include things such as mood, what arm you used, whether you exercised that day etc.", modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp))
+                    Text("Notes are optional, they can include things such as mood, what arm you used, whether you exercised that day etc.", modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp), style = MaterialTheme.typography.bodyMedium)
+                }
+
+                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
+                    Row(modifier = Modifier.background(
+                        MaterialTheme.colorScheme.secondaryContainer)) {
+                        Icon(
+                            imageVector = Icons.Filled.Lightbulb,
+                            contentDescription = null,
+                            tint =MaterialTheme.colorScheme.secondary
+                        )
+                        Text(
+                            text ="Tips",
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+
+                    }
+                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer).fillMaxWidth()) {
+                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+
+
+                    }
                 }
 
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                     val resetMessage = stringResource(R.string.Rest_button_snackBar_message)
+                    /*
                     OutlinedButton(modifier = Modifier.padding(8.dp).weight(1f), onClick = {
                         scope.launch {onDismissRequest()}.invokeOnCompletion {
                             hyprTrackerViewModel.resetBloodPressureLog()
@@ -307,6 +338,8 @@ fun LogBPResult(
                     ) {
                         Text("Cancel")
                     }
+
+                     */
                     Button(onClick = { if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
                         scope.launch {
                             hyprTrackerViewModel.addReading(
@@ -342,6 +375,8 @@ fun LogBPResult(
 
                 }
             }
+
+
             //Edit sheet custom date picker
             if (showDatePicker) {
                 Popup(
