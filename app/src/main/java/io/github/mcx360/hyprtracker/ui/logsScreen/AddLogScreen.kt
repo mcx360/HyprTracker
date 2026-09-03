@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -26,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -42,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -64,7 +61,6 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.model.HyprReading
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
-import io.github.mcx360.hyprtracker.ui.utils.convertDateToMillis
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
@@ -82,8 +78,8 @@ fun LogBPResult(
     val haptic = LocalHapticFeedback.current
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let { convertMillisToDate(it) } ?: hyprTackerUiState.date
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
+    val showDatePicker = remember { mutableStateOf(false) }
+    val showTimePicker = remember { mutableStateOf(false) }
     val currentTime = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(initialHour = currentTime.get(Calendar.HOUR_OF_DAY), initialMinute = currentTime.get(Calendar.MINUTE), is24Hour = true)
 
@@ -95,25 +91,35 @@ fun LogBPResult(
         )
     ) {
         Card(
-            modifier = Modifier.fillMaxSize().padding(bottom = 8.dp),
+            shape = RectangleShape,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 8.dp),
             colors = CardColors(
                 contentColor = MaterialTheme.colorScheme.surfaceContainer,
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 disabledContentColor = MaterialTheme.colorScheme.surfaceContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer
-            ),
-            shape = RectangleShape,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer)
         ){
-            TitleBarWithBackButton(title = "Log Blood Pressure") {onDismissRequest() }
+            TitleBarWithBackButton(
+                title = "Log Blood Pressure"
+            ) {
+                onDismissRequest()
+            }
+
             Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 8.dp)
+                ) {
                     Row(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)) {
                         Icon(
                             painter = painterResource(R.drawable.outline_blood_pressure_24),
@@ -122,51 +128,54 @@ fun LogBPResult(
                             modifier = Modifier.padding(end = 8.dp)
                         )
                         Text(
-                            text ="Blood Pressure",
+                            text = "Blood Pressure",
                             color = MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
-
                     }
+
                     Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
 
-                            //systolic value text field
-                            TextField(
-                                //textStyle = MaterialTheme.typography.displayMedium,
-                                singleLine = true,
-                                value = hyprTackerUiState.systolicValue,
-                                onValueChange = {
-                                    if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) hyprTrackerViewModel.updateSystolicValue(
-                                        it
-                                    )
-                                },
-                                label = { Text(text = stringResource(R.string.systolic), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
-                                shape = RoundedCornerShape(16.dp),
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number,
-                                    imeAction = ImeAction.Next
-                                ),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(end = 4.dp),
-                                supportingText = {Text("mmhg", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
-                            )
-
-
+                        //systolic value text field
+                        TextField(
+                            singleLine = true,
+                            value = hyprTackerUiState.systolicValue,
+                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) hyprTrackerViewModel.updateSystolicValue(it) },
+                            label = {
+                                Text(
+                                text = stringResource(R.string.systolic),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center)
+                            },
+                            shape = RoundedCornerShape(16.dp),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 4.dp),
+                            supportingText = {
+                                Text(
+                                    text = "mmHg",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    textAlign = TextAlign.Center) }
+                        )
 
                         //diastolic value text field
                         TextField(
-                            //textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
-                            onValueChange = {
-                                if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3) {
-                                    hyprTrackerViewModel.updateDiastolicValue(it)
-                                }
+                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3)  hyprTrackerViewModel.updateDiastolicValue(it) },
+                            label = {
+                                Text(
+                                text = stringResource(R.string.diastolic),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center)
                             },
-                            label = { Text(text = stringResource(R.string.diastolic), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
                             shape = RoundedCornerShape(16.dp),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
@@ -175,85 +184,77 @@ fun LogBPResult(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(start = 4.dp, end = 4.dp),
-                            supportingText = {Text("mmhg", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
+                            supportingText = {Text(
+                                text = "mmHg",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center) }
                         )
 
                         //Pulse value text field
                         TextField(
-                            //textStyle = MaterialTheme.typography.displayMedium,
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
-                            onValueChange = {
-                                if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3) {
-                                    hyprTrackerViewModel.updatePulseValue(it)
-                                }
-                            },
+                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3)  hyprTrackerViewModel.updatePulseValue(it) },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Done
                             ),
-                            label = { Text(text = stringResource(R.string.pulse), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                            label = { Text(
+                                text = stringResource(R.string.pulse),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center) },
                             shape = RoundedCornerShape(16.dp),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(start = 4.dp),
-                            supportingText = {Text("bpm", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
+                            supportingText = {
+                                Text(
+                                text = "bpm",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center)
+                            }
                         )
                     }
 
-                    Row() {
-                        Text("make sure to measure on the same arm for consistent results.", modifier = Modifier.padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end =16.dp), style = MaterialTheme.typography.bodyMedium)
+                    Row {
+                        Text(
+                            text = "make sure to measure on the same arm for consistent results.",
+                            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end =16.dp),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
 
-                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 8.dp)
+                ) {
                     Row(modifier = Modifier.padding(top = 8.dp, end = 16.dp, start = 16.dp)) {
+
                         Icon(
                             painter = painterResource(R.drawable.ic_date),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.padding(end = 8.dp)
                         )
-                        Text("Date and time", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
+                        Text(
+                            text = "Date and time",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
                         Spacer(modifier = Modifier.weight(1f))
                     }
+
                     Row(modifier = Modifier.padding(8.dp)) {
                         TextField(
-                            value = formatToRegularDate(selectedDate),
+                            value = formatToRegularDate(selectedDate)+ " "+hyprTackerUiState.time,
                             onValueChange = {},
-                            //label = { Text(stringResource(R.string.Custom_Log_Date_TextField))},
                             readOnly = true,
                             trailingIcon = {
-                                IconButton(onClick = {showDatePicker = true}) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Edit,
-                                        contentDescription = null
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                    Text("Press the edit button to change date and time if desired", style = MaterialTheme.typography.bodyMedium,modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp))
-                    /*
-                    Row(modifier = Modifier.padding(8.dp)) {
-                        OutlinedTextField(
-                            value = hyprTackerUiState.time.substring(0,5),
-                            onValueChange = {},
-                            //label = {Text(stringResource(R.string.Custom_Log_Time_TextField))},
-                            readOnly = true,
-                            leadingIcon = {
-                                IconButton(
-                                    onClick = {},
-                                ){
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_analogue_clock),
-                                        contentDescription = null)
-                                }
-                            },
-                            trailingIcon = {
-                                IconButton(onClick = {showTimePicker = true}) {
+                                IconButton(onClick = {showDatePicker.value = true}) {
                                     Icon(
                                         imageVector = Icons.Filled.Edit,
                                         contentDescription = null
@@ -263,11 +264,17 @@ fun LogBPResult(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-                    Text("Press the edit button to change date and time. By default current date and time is used.", modifier = Modifier.padding(start = 16.dp, bottom = 8.dp))
-                     */
+                    Text(
+                        text = "Press the edit button to change date and time if desired",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp))
                 }
 
-                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 8.dp)
+                ) {
                     Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
                         Icon(
                             painter = painterResource(R.drawable.ic_notes),
@@ -276,7 +283,11 @@ fun LogBPResult(
                             modifier = Modifier.padding(end = 8.dp)
 
                         )
-                        Text("Notes", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "Notes",
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontWeight = FontWeight.Bold
+                        )
                         Spacer(modifier = Modifier.weight(1f))
                     }
                     OutlinedTextField(
@@ -285,29 +296,42 @@ fun LogBPResult(
                         label = {Text(stringResource(R.string.Custom_Log_Note_TextField))},
                         minLines = 3,
                         maxLines = 3,
-                        trailingIcon = {
-
-                        },
-                        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        placeholder = {Text(stringResource(R.string.Note_placeholder))}
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        placeholder = {Text(text = stringResource(R.string.Note_placeholder))}
                     )
-                    Text("0/100", modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp), textAlign = TextAlign.End)
-                    Text("Notes are optional, they can include things such as mood, what arm you used, whether you exercised that day etc.", modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp), style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "0/100",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        textAlign = TextAlign.End
+                    )
+                    Text(
+                        text = "Notes are optional, they can include things such as mood, what arm you used, whether you exercised that day etc.",
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom =8.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
-                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
-                    Row(modifier = Modifier.background(
-                        MaterialTheme.colorScheme.secondaryContainer)) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 8.dp)
+                ) {
+                    Row(modifier = Modifier
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .padding(start = 16.dp, top = 8.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Lightbulb,
                             contentDescription = null,
                             tint =MaterialTheme.colorScheme.secondary
                         )
                         Text(
-                            text ="Tips",
+                            text = "Tips",
                             color = MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
@@ -315,72 +339,73 @@ fun LogBPResult(
                         Spacer(modifier = Modifier.weight(1f))
 
                     }
-                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer).fillMaxWidth()) {
-                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        Text(text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
-
-
+                    Column(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfjdfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfjdfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
+                        )
                     }
                 }
 
-                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    val resetMessage = stringResource(R.string.Rest_button_snackBar_message)
-                    /*
-                    OutlinedButton(modifier = Modifier.padding(8.dp).weight(1f), onClick = {
-                        scope.launch {onDismissRequest()}.invokeOnCompletion {
-                            hyprTrackerViewModel.resetBloodPressureLog()
-                            datePickerState.selectedDateMillis =
-                                convertDateToMillis(hyprTackerUiState.date)
-                            haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                            scope.launch { snackBarHostState.showSnackbar(resetMessage) }
-                        } }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp),
+                        onClick = {
+                            if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
+                                scope.launch {
+                                    hyprTrackerViewModel.addReading(
+                                        HyprReading(
+                                            systolicValue = hyprTackerUiState.systolicValue,
+                                            diastolicValue = hyprTackerUiState.diastolicValue,
+                                            pulseValue = hyprTackerUiState.pulseValue,
+                                            time = hyprTackerUiState.time,
+                                            date = hyprTackerUiState.date,
+                                            notes = hyprTackerUiState.notes
+                                        )
+                                    )
+                                }
+                                hyprTrackerViewModel.resetBloodPressureLog()
+                                haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                                onDismissRequest()
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Log entry added!",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                            } else {
+                                haptic.performHapticFeedback(HapticFeedbackType.Reject)
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Add systolic and diastolic values before logging",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                        },
                     ) {
-                        Text("Cancel")
+                        Text(text = "Add Log")
                     }
-
-                     */
-                    Button(onClick = { if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
-                        scope.launch {
-                            hyprTrackerViewModel.addReading(
-                                HyprReading(
-                                    systolicValue = hyprTackerUiState.systolicValue,
-                                    diastolicValue = hyprTackerUiState.diastolicValue,
-                                    pulseValue = hyprTackerUiState.pulseValue,
-                                    time = hyprTackerUiState.time,
-                                    date = hyprTackerUiState.date,
-                                    notes = hyprTackerUiState.notes
-                                )
-                            )
-                        }
-                        hyprTrackerViewModel.resetBloodPressureLog()
-                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                        onDismissRequest()
-                        scope.launch {
-                            snackBarHostState.showSnackbar(
-                                message = "Log entry added!",
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                    } else {
-                        haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                        scope.launch {
-                            snackBarHostState.showSnackbar(
-                                message = "Add systolic and diastolic values before logging",
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                    }}, modifier = Modifier.weight(1f).padding(16.dp)) {Text("Add Log") }
-
                 }
             }
 
-
             //Edit sheet custom date picker
-            if (showDatePicker) {
+            if (showDatePicker.value) {
                 Popup(
-                    onDismissRequest = {showDatePicker = false},
+                    onDismissRequest = {showDatePicker.value = false},
                     alignment = Alignment.TopStart
                 ) {
                     Box(
@@ -400,22 +425,23 @@ fun LogBPResult(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            TextButton(onClick = {
-                                showDatePicker = false
-                                hyprTrackerViewModel.updateDateValue(selectedDate)
-                            },
-                                modifier = Modifier.padding(8.dp)
+                            TextButton(
+                                modifier = Modifier.padding(8.dp),
+                                onClick = {
+                                showDatePicker.value = false
+                                hyprTrackerViewModel.updateDateValue(selectedDate) },
                             ) {
-                                Text(stringResource(R.string.DateSelection_Ok_Button))
+                                Text(text = stringResource(R.string.DateSelection_Ok_Button))
                             }
                         }
                     }
                 }
             }
+
             //Edit sheet custom time picker
-            if (showTimePicker){
+            if (showTimePicker.value){
                 Popup(
-                    onDismissRequest = {showTimePicker = false },
+                    onDismissRequest = {showTimePicker.value = false },
                     alignment = Alignment.TopStart
                 ) {
                     Box(
@@ -431,19 +457,21 @@ fun LogBPResult(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             TimePicker(state = timePickerState)
-                            Button(onClick = {showTimePicker = false}) {
-                                Text(stringResource(R.string.Dismiss_TimePicker_Button))
+                            Button(onClick = {showTimePicker.value = false}) {
+                                Text(text = stringResource(R.string.Dismiss_TimePicker_Button))
                             }
-                            Button(onClick = {
-
-                                hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
-                                showTimePicker = false
-                            }) {
+                            Button(
+                                onClick = {
+                                    hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
+                                    showTimePicker.value = false
+                                }
+                            ) {
                                 Text(stringResource(R.string.Confirm_TimePicker_Button))
                             }
                         }
                     }
                 }
             }
-        } }
+        }
+    }
 }
