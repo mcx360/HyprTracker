@@ -3,16 +3,22 @@ package io.github.mcx360.hyprtracker.ui.logsScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -106,161 +112,206 @@ fun LogsScreen(
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
                 OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
-                    Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
-
-                        //Row with date and time
-                        Row(
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically,
+                    Row {
+                        Column(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                        ) {
-
-                            Text(
-                                text = when (
-                                    hyprTrackerUIState.readings[index].date) {
-                                    LocalDate.now().toString() -> stringResource(R.string.Today_at)
-                                    LocalDate.now().minusDays(1).toString() -> stringResource(R.string.Yesterday_at)
-                                    LocalDate.now().minusDays(2).toString() -> stringResource(R.string.Two_Days_Ago_At)
-                                    else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)
-                                },
-                                style = MaterialTheme.typography.titleLarge,
-                                modifier = Modifier.padding(end = 6.dp)
-                            )
-
-                            Text(
-                                text = hyprTrackerUIState.readings[index].time.substring(0, 5),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            Surface(
-                                color = when (hyprTrackerUIState.readings[index].stage) {
-                                    stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Background)
-                                    stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Background)
-                                    stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Background)
-                                    stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Background)
-                                    else -> MaterialTheme.colorScheme.error
-                                },
-                                shape = RoundedCornerShape(25)
-                            ) {
-                                Text(
-                                    text = hyprTrackerUIState.readings[index].stage,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = when (hyprTrackerUIState.readings[index].stage) {
+                                .width(8.dp)
+                                .height(196.dp) //TEMPORARY
+                                .background(color =
+                                    when(hyprTrackerUIState.readings[index].stage){
                                         stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
                                         stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
                                         stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Colour)
                                         stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Colour)
-                                        else -> MaterialTheme.colorScheme.onError
-                                    },
-                                    modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                                    textAlign = TextAlign.End,
-                                    fontFamily = FontFamily.Monospace
-                                )
-                            }
+                                        else -> MaterialTheme.colorScheme.error
+                                    })
+                        ) {
+
                         }
+                        Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
 
-                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
-
-                        Row(modifier = Modifier.fillMaxWidth()) {
-
-                            //Systolic value
-                            Column(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            //Row with date and time
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp, start = 16.dp, end = 16.dp),
                             ) {
-                                Text(
-                                    text = stringResource(R.string.systolic),
-                                    style = MaterialTheme.typography.labelLarge,
-                                )
-                                Text(
-                                    text = hyprTrackerUIState.readings[index].systolicValue,
-                                    style = MaterialTheme.typography.displaySmall
-                                )
-                                Text(
-                                    text = stringResource(R.string.mmHg),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
 
-                            //Diastolic value
-                            Column(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
                                 Text(
-                                    text = stringResource(R.string.diastolic),
-                                    style = MaterialTheme.typography.labelLarge,
-                                )
-                                Text(
-                                    text = hyprTrackerUIState.readings[index].diastolicValue,
-                                    style = MaterialTheme.typography.displaySmall
-                                )
-                                Text(
-                                    text = stringResource(R.string.mmHg),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
+                                    text = when (
+                                        hyprTrackerUIState.readings[index].date) {
+                                        LocalDate.now()
+                                            .toString() -> stringResource(R.string.Today_at)
 
-                            //Pulse value
-                            Column(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.Pulse_Value),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    )
+                                        LocalDate.now().minusDays(1)
+                                            .toString() -> stringResource(R.string.Yesterday_at)
 
-                                if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let {
+                                        LocalDate.now().minusDays(2)
+                                            .toString() -> stringResource(R.string.Two_Days_Ago_At)
+
+                                        else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)
+                                    },
+                                    style = MaterialTheme.typography.titleLarge,
+                                    modifier = Modifier.padding(end = 6.dp)
+                                )
+
+                                Text(
+                                    text = hyprTrackerUIState.readings[index].time.substring(0, 5),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Surface(
+                                    color = when (hyprTrackerUIState.readings[index].stage) {
+                                        stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Background)
+                                        stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Background)
+                                        stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Background)
+                                        stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Background)
+                                        else -> MaterialTheme.colorScheme.error
+                                    },
+                                    shape = RoundedCornerShape(25)
+                                ) {
                                     Text(
-                                        text = it,
-                                        style = MaterialTheme.typography.displaySmall,
+                                        text = hyprTrackerUIState.readings[index].stage,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = when (hyprTrackerUIState.readings[index].stage) {
+                                            stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
+                                            stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
+                                            stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Colour)
+                                            stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Colour)
+                                            else -> MaterialTheme.colorScheme.onError
+                                        },
+                                        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                        textAlign = TextAlign.End,
+                                        fontFamily = FontFamily.Monospace
                                     )
                                 }
-                                Text(
-                                    text = stringResource(R.string.bpm),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
                             }
-                        }
 
-                        Row(
-                            modifier = Modifier
-                                .padding(start = 16.dp, end = 8.dp)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            //Notes value
-                            Text(
-                                text = if (hyprTrackerUIState.readings[index].notes != "") ""+hyprTrackerUIState.readings[index].notes else stringResource(R.string.No_Notes),
-                                textAlign = TextAlign.Start,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontFamily = FontFamily.SansSerif
+                            HorizontalDivider(
+                                modifier = Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp
+                                )
                             )
 
-                            Spacer(modifier = Modifier.weight(1f))
+                            Row(modifier = Modifier.fillMaxWidth()) {
 
-                            FilledTonalIconButton(
-                                onClick = {
-                                    showDeleteConfirmationDialog.value = true
-                                    listIndexToBeDeleted.intValue = index
-                                },
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                //Systolic value
+                                Column(
+                                    modifier = Modifier.padding(
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                        top = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.systolic),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+                                    Text(
+                                        text = hyprTrackerUIState.readings[index].systolicValue,
+                                        style = MaterialTheme.typography.displaySmall
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.mmHg),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                //Diastolic value
+                                Column(
+                                    modifier = Modifier.padding(
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                        top = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.diastolic),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+                                    Text(
+                                        text = hyprTrackerUIState.readings[index].diastolicValue,
+                                        style = MaterialTheme.typography.displaySmall
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.mmHg),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                //Pulse value
+                                Column(
+                                    modifier = Modifier.padding(
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                        top = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.Pulse_Value),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+
+                                    if (hyprTrackerUIState.readings[index].pulseValue == "") Text("-") else hyprTrackerUIState.readings[index].pulseValue?.let {
+                                        Text(
+                                            text = it,
+                                            style = MaterialTheme.typography.displaySmall,
+                                        )
+                                    }
+                                    Text(
+                                        text = stringResource(R.string.bpm),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(start = 16.dp, end = 8.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.MoreHoriz,
-                                    contentDescription = null,
+                                //Notes value
+                                Text(
+                                    text = if (hyprTrackerUIState.readings[index].notes != "") "" + hyprTrackerUIState.readings[index].notes else stringResource(
+                                        R.string.No_Notes
+                                    ),
+                                    textAlign = TextAlign.Start,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontFamily = FontFamily.SansSerif
                                 )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                FilledTonalIconButton(
+                                    onClick = {
+                                        showDeleteConfirmationDialog.value = true
+                                        listIndexToBeDeleted.intValue = index
+                                    },
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.MoreHoriz,
+                                        contentDescription = null,
+                                    )
+                                }
                             }
                         }
                     }
