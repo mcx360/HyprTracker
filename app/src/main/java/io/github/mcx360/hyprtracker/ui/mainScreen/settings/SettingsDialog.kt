@@ -35,13 +35,12 @@ import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ClassificationTablePicker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteBPDataConfirmation
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.dataDeletion.DeleteMedicationsConfirmation
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers.ThemePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.information.Help
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
 
@@ -145,9 +144,12 @@ fun Settings(
                     }
                     when{
                         showDeleteBPDataDialog.value -> {
-                            DeleteBPDataConfirmation(
+                            DeletionDialog(
                                 onDismissRequest = {showDeleteBPDataDialog.value = false},
-                                onDelete = {scope.launch { hyprTrackerViewModel.deleteAllBPRecords() } }
+                                onDeleteRequest = {
+                                    scope.launch { hyprTrackerViewModel.deleteAllBPRecords() }
+                                    showDeleteBPDataDialog.value = false },
+                                deletionText = "Doing this will permanently delete all logged BP readings on your device. Make sure to have backups of any important data"
                             )
                         }
                     }
@@ -157,7 +159,7 @@ fun Settings(
                     Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showDeleteMedicationDialog.value = true})) {
                         Text("Delete medications?", fontWeight = FontWeight.Bold)
                         Text(
-                            "Permanently delete all medication data",
+                            text = "Permanently delete all medication data",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -165,9 +167,12 @@ fun Settings(
 
                     when{
                         showDeleteMedicationDialog.value -> {
-                            DeleteMedicationsConfirmation(
+                            DeletionDialog(
                                 onDismissRequest = {showDeleteMedicationDialog.value = false},
-                                onDelete = {scope.launch {medicineViewModel.deleteAllRecordedMedications()}}
+                                onDeleteRequest = {
+                                    scope.launch { medicineViewModel.deleteAllRecordedMedications()}
+                                    showDeleteMedicationDialog.value = false },
+                                deletionText = "Doing this will permanently delete all saved medications on your device. Make sure to have backups of any important data"
                             )
                         }
                     }
