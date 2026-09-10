@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -137,7 +138,7 @@ fun MedicineScreen(
                                 Box {
                                 IconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
                                     Icon(
-                                        Icons.Filled.MoreVert,
+                                        Icons.Filled.MoreHoriz,
                                         contentDescription = null
                                     )
                                 }

@@ -48,6 +48,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -85,10 +86,7 @@ fun LogBPResult(
 
     Dialog(
         onDismissRequest = {onDismissRequest()},
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
     ) {
         Card(
             shape = RectangleShape,
@@ -101,9 +99,7 @@ fun LogBPResult(
                 disabledContentColor = MaterialTheme.colorScheme.surfaceContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer)
         ){
-            TitleBarWithBackButton(
-                title = "Log Blood Pressure"
-            ) {
+            TitleBarWithBackButton(title = stringResource(R.string.Log_BP)) {
                 onDismissRequest()
             }
 
@@ -124,11 +120,11 @@ fun LogBPResult(
                         Icon(
                             painter = painterResource(R.drawable.outline_blood_pressure_24),
                             contentDescription = null,
-                            tint =MaterialTheme.colorScheme.secondary,
+                            tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.padding(end = 8.dp)
                         )
                         Text(
-                            text = "Blood Pressure",
+                            text = stringResource(R.string.BP),
                             color = MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
@@ -140,6 +136,7 @@ fun LogBPResult(
 
                         //systolic value text field
                         TextField(
+                            textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.systolicValue,
                             onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) hyprTrackerViewModel.updateSystolicValue(it) },
@@ -159,7 +156,7 @@ fun LogBPResult(
                                 .padding(end = 4.dp),
                             supportingText = {
                                 Text(
-                                    text = "mmHg",
+                                    text = stringResource(R.string.mmHg),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.fillMaxWidth(),
                                     textAlign = TextAlign.Center) }
@@ -167,6 +164,7 @@ fun LogBPResult(
 
                         //diastolic value text field
                         TextField(
+                            textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
                             onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3)  hyprTrackerViewModel.updateDiastolicValue(it) },
@@ -185,7 +183,7 @@ fun LogBPResult(
                                 .weight(1f)
                                 .padding(start = 4.dp, end = 4.dp),
                             supportingText = {Text(
-                                text = "mmHg",
+                                text = stringResource(R.string.mmHg),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center) }
@@ -193,6 +191,7 @@ fun LogBPResult(
 
                         //Pulse value text field
                         TextField(
+                            textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
                             onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3)  hyprTrackerViewModel.updatePulseValue(it) },
@@ -210,7 +209,7 @@ fun LogBPResult(
                                 .padding(start = 4.dp),
                             supportingText = {
                                 Text(
-                                text = "bpm",
+                                text = stringResource(R.string.bpm),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center)

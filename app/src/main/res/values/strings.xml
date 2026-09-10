@@ -4,6 +4,7 @@
     <string name="logging_screen_label">Logging</string>
     <string name="medicine_screen_label">Medicine</string>
     <string name="graph_screen_label">Insights</string>
+    <string name="BP">Blood Pressure</string>
 
     <!--Strings for the modal navigation drawer-->
     <string name="export_label">Export logs</string>

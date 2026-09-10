@@ -3,11 +3,9 @@ package io.github.mcx360.hyprtracker.ui.logsScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,8 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -142,15 +138,9 @@ fun LogsScreen(
                                 Text(
                                     text = when (
                                         hyprTrackerUIState.readings[index].date) {
-                                        LocalDate.now()
-                                            .toString() -> stringResource(R.string.Today_at)
-
-                                        LocalDate.now().minusDays(1)
-                                            .toString() -> stringResource(R.string.Yesterday_at)
-
-                                        LocalDate.now().minusDays(2)
-                                            .toString() -> stringResource(R.string.Two_Days_Ago_At)
-
+                                        LocalDate.now().toString() -> stringResource(R.string.Today_at)
+                                        LocalDate.now().minusDays(1).toString() -> stringResource(R.string.Yesterday_at)
+                                        LocalDate.now().minusDays(2).toString() -> stringResource(R.string.Two_Days_Ago_At)
                                         else -> formatToDayMonthYear(hyprTrackerUIState.readings[index].date)
                                     },
                                     style = MaterialTheme.typography.titleLarge,
