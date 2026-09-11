@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -107,23 +108,18 @@ fun LogsScreen(
         ) {
             //each individual entry in history
             items(hyprTrackerUIState.readings.size) { index ->
-                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+                OutlinedCard(
+                    modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),
+                    colors = when(hyprTrackerUIState.readings[index].stage){
+                        stringResource(R.string.Normal) -> CardColors(colorResource(R.color.Hypertension_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.High_normal) -> CardColors(colorResource(R.color.Hypertension_High_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.Grade1) -> CardColors(colorResource(R.color.Hypertension_Grade1_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.Grade2) -> CardColors(colorResource(R.color.Hypertension_Grade2_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        else -> CardColors(Color.DarkGray, MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                    }
+                ) {
                     Row {
-                        Column(
-                            modifier = Modifier
-                                .width(8.dp)
-                                .height(196.dp) //TEMPORARY
-                                .background(color =
-                                    when(hyprTrackerUIState.readings[index].stage){
-                                        stringResource(R.string.Normal) -> colorResource(R.color.Hypertension_Normal_Stage_Colour)
-                                        stringResource(R.string.High_normal) -> colorResource(R.color.Hypertension_High_Normal_Stage_Colour)
-                                        stringResource(R.string.Grade1) -> colorResource(R.color.Hypertension_Grade1_Colour)
-                                        stringResource(R.string.Grade2) -> colorResource(R.color.Hypertension_Grade2_Colour)
-                                        else -> MaterialTheme.colorScheme.error
-                                    })
-                        ) {
-
-                        }
+                        Column(modifier = Modifier.width(8.dp)) {}
                         Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {
 
                             //Row with date and time
@@ -190,7 +186,6 @@ fun LogsScreen(
                             )
 
                             Row(modifier = Modifier.fillMaxWidth()) {
-
                                 //Systolic value
                                 Column(
                                     modifier = Modifier.padding(
@@ -279,9 +274,7 @@ fun LogsScreen(
                             ) {
                                 //Notes value
                                 Text(
-                                    text = if (hyprTrackerUIState.readings[index].notes != "") "" + hyprTrackerUIState.readings[index].notes else stringResource(
-                                        R.string.No_Notes
-                                    ),
+                                    text = if (hyprTrackerUIState.readings[index].notes != "") "" + hyprTrackerUIState.readings[index].notes else stringResource(R.string.No_Notes),
                                     textAlign = TextAlign.Start,
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
