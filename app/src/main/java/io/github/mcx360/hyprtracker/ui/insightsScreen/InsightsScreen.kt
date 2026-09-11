@@ -43,9 +43,7 @@ fun GraphScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            FilterCard(
-                setFilterDates = { startDate, endDate -> insightsViewModel.setTimePeriod(startDate, endDate) }
-            )
+            FilterCard(setFilterDates = { startDate, endDate -> insightsViewModel.setTimePeriod(startDate, endDate) })
 
             InfoCards(viewModel = insightsViewModel)
 

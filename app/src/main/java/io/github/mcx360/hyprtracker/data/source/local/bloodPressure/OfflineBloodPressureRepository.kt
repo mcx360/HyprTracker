@@ -42,10 +42,10 @@ class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBlood
         var index= 0
         bloodPressureDAO.getStages(startDate, endDate).forEach {
             when(it){
-                "Normal" -> counts[0]++
-                "High Normal" -> counts[1]++
-                "Grade 1 Hypertension" -> counts[2]++
-                "Grade 2 Hypertension" -> counts[3]++
+                "Normal BP" -> counts[0]++  //hard coded temporarily
+                "High Normal BP" -> counts[1]++
+                "Grade 1" -> counts[2]++
+                "Grade 2" -> counts[3]++
             }
             total++
         }

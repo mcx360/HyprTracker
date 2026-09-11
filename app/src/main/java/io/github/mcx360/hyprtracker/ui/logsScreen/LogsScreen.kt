@@ -111,10 +111,10 @@ fun LogsScreen(
                 OutlinedCard(
                     modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),
                     colors = when(hyprTrackerUIState.readings[index].stage){
-                        stringResource(R.string.Normal) -> CardColors(colorResource(R.color.Hypertension_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
-                        stringResource(R.string.High_normal) -> CardColors(colorResource(R.color.Hypertension_High_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
-                        stringResource(R.string.Grade1) -> CardColors(colorResource(R.color.Hypertension_Grade1_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
-                        stringResource(R.string.Grade2) -> CardColors(colorResource(R.color.Hypertension_Grade2_Colour), MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.Normal) -> CardColors(colorResource(R.color.Hypertension_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.High_normal) -> CardColors(colorResource(R.color.Hypertension_High_Normal_Stage_Colour), MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.Grade1) -> CardColors(colorResource(R.color.Hypertension_Grade1_Colour), MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
+                        stringResource(R.string.Grade2) -> CardColors(colorResource(R.color.Hypertension_Grade2_Colour), MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
                         else -> CardColors(Color.DarkGray, MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
                     }
                 ) {
