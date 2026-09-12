@@ -121,6 +121,8 @@
     <string name="Pie_Chart_Label">"BP Stages Breakdown"</string>
     <string name="Line_Chart_Label">BP Trends Breakdown</string>
     <string name="Filter_By">Filter</string>
+    <string name="All">All</string>
+    <string name="Save">Save</string>
 
     <!--String in model-->
     <string name="Minimum">Min</string>

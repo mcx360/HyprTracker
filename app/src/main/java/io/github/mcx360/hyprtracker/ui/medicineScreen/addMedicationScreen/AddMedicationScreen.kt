@@ -1,28 +1,19 @@
 package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -38,12 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.DurationCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.MedicationScheduleAndDosageCard
@@ -82,7 +70,6 @@ fun AddMedicationScreen(
     var isMedicationTimesPerDayFieldInError by remember { mutableStateOf(false) }
     var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
 
-
     Dialog(onDismissRequest = {},
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
@@ -91,12 +78,7 @@ fun AddMedicationScreen(
     ) {
         Card(
             modifier = modifier.fillMaxSize(),
-            colors = CardColors(
-                contentColor = MaterialTheme.colorScheme.surfaceContainer,
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                disabledContentColor = MaterialTheme.colorScheme.surfaceContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer
-            ),
+            colors = CardColors(contentColor = MaterialTheme.colorScheme.surfaceContainer, containerColor = MaterialTheme.colorScheme.surfaceContainer, disabledContentColor = MaterialTheme.colorScheme.surfaceContainer, disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer),
             shape = RectangleShape,
         ) {
             //Add Medication title
@@ -203,25 +185,6 @@ fun AddMedicationScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                            openAddMedicationScreen.value = !openAddMedicationScreen.value
-                            scope.launch {
-                                medicineViewModel.resetAddMedication()
-                                medicineViewModel.fetchMedications()
-                                snackBarHostState.showSnackbar(
-                                    "Canceled adding medication",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(16.dp)
-                    ) {
-                        Text("Cancel")
-                    }
                     Button(
                         onClick = {
                             when {uiState.value.medicationName.isEmpty() -> isMedicationNameFieldInError = true }
@@ -232,7 +195,6 @@ fun AddMedicationScreen(
 
                             if (isMedicationNameFieldInError || isMedicationDescriptionFieldInError || isMedicationScheduleFieldInError || isMedicationTimesPerDayFieldInError || isMedicationDosePerIntakeInError) {
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                                scope.launch { snackBarHostState.showSnackbar("Invalid data inputted!") }
                             } else {
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                                 openAddMedicationScreen.value = !openAddMedicationScreen.value

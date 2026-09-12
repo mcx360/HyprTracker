@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -32,10 +33,9 @@ import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
 
 @Composable
-fun InfoCards(
-    modifier: Modifier = Modifier,
-    viewModel: InsightsViewModel
-){
+fun InfoCards(viewModel: InsightsViewModel){
+    val insightsUIState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(start =16.dp,top =16.dp, end = 16.dp)
@@ -45,205 +45,109 @@ fun InfoCards(
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Bold
         )
+
         Spacer(modifier = Modifier.weight(1f))
+
         Text(
-            text ="change >>",
+            text = "change >>",
             textAlign = TextAlign.End,
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.labelLarge
         )
     }
 
-    Row(modifier = modifier
+    Row(modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {
+        info(
+            modifier = Modifier.weight(0.33f),
+            title = stringResource(R.string.systolic),
+            min = insightsUIState.systolicMin,
+            avg = insightsUIState.systolicAverage,
+            max = insightsUIState.systolicMax
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        info(
+            modifier = Modifier.weight(0.33f),
+            title = stringResource(R.string.diastolic),
+            min = insightsUIState.diastolicMin,
+            avg = insightsUIState.diastolicAverage,
+            max = insightsUIState.diastolicMax
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        info(
+            modifier = Modifier.weight(0.33f),
+            title = stringResource(R.string.pulse),
+            min = insightsUIState.pulseMin,
+            avg = insightsUIState.pulseAverage,
+            max = insightsUIState.pulseMax
+        )
+    }
+}
 
-        val haptic = LocalHapticFeedback.current
-        val insightsUIState by viewModel.uiState.collectAsStateWithLifecycle()
-        var systolicDataShown by remember { mutableStateOf( MinMaxAvg.Average)}
-        var diastolicDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
-        var pulseDataShown by remember { mutableStateOf(MinMaxAvg.Average) }
+@Composable
+fun info(
+    modifier: Modifier,
+    title: String,
+    min: String,
+    max: String,
+    avg: String
+){
+    val haptic = LocalHapticFeedback.current
+    var dataShown by remember { mutableStateOf( MinMaxAvg.Average)}
 
-        //Systolic Info
-        OutlinedCard(modifier = modifier
-            .weight(0.33f)
-            .clickable(onClick = {
+    OutlinedCard(modifier = modifier.clickable(onClick = {
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                systolicDataShown = when (systolicDataShown) {
-                    MinMaxAvg.Average -> MinMaxAvg.Max
-                    MinMaxAvg.Max -> MinMaxAvg.Min
-                    MinMaxAvg.Min -> MinMaxAvg.Average
-                }
-            }),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.systolic),
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(R.drawable.heart_3_),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-
-                Row {
-                    Text(text = when(systolicDataShown){
-                        MinMaxAvg.Min -> insightsUIState.systolicMin
-                        MinMaxAvg.Average -> insightsUIState.systolicAverage
-                        MinMaxAvg.Max -> insightsUIState.systolicMax
-                    },
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = stringResource(R.string.mmHg),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.Bottom)
-                            .padding(horizontal = 8.dp)
-                        )
-                }
-                Text(text = stringResource(systolicDataShown.labelRes))
+            dataShown = when (dataShown) {
+                MinMaxAvg.Average -> MinMaxAvg.Max
+                MinMaxAvg.Max -> MinMaxAvg.Min
+                MinMaxAvg.Min -> MinMaxAvg.Average
             }
-        }
-
-        //Diastolic Info
-        OutlinedCard(
-            modifier = modifier
-                .weight(0.33f)
-                .padding(horizontal = 8.dp)
-                .clickable(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    diastolicDataShown = when (diastolicDataShown) {
-                        MinMaxAvg.Average -> MinMaxAvg.Max
-                        MinMaxAvg.Max -> MinMaxAvg.Min
-                        else -> MinMaxAvg.Average
-                    }
-                })
+        })
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.fillMaxWidth()
-                ){
-                    Text(text = stringResource(R.string.diastolic), style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(R.drawable.heart_3_),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-
-                Row {
-                    Text(text = when(diastolicDataShown){
-                        MinMaxAvg.Min -> insightsUIState.diastolicMin
-                        MinMaxAvg.Average -> insightsUIState.diastolicAverage
-                        MinMaxAvg.Max -> insightsUIState.diastolicMax
-                    },
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = stringResource(R.string.mmHg),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.Bottom)
-                            .padding(horizontal = 8.dp)
-                    )
-                }
+            Row {
                 Text(
-                    text = stringResource(diastolicDataShown.labelRes),
-                    modifier = modifier.fillMaxWidth(),
+                    text = title,
+                    textAlign = TextAlign.Start,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = modifier.weight(1f))
+                Icon(
+                    painter = painterResource(R.drawable.heart_3_),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
                 )
             }
-        }
 
-        //Pulse info
-        OutlinedCard(
-            modifier = modifier
-                .weight(0.33f)
-                .clickable(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    pulseDataShown = when (pulseDataShown) {
-                        MinMaxAvg.Average -> MinMaxAvg.Max
-                        MinMaxAvg.Max -> MinMaxAvg.Min
-                        else -> MinMaxAvg.Average
-                    }
-                })
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.pulse),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(R.drawable.activity_1_),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-                Row(
-                    modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text =  when(pulseDataShown){
-                        MinMaxAvg.Min -> insightsUIState.pulseMin
-                        MinMaxAvg.Average -> insightsUIState.pulseAverage
-                        MinMaxAvg.Max -> insightsUIState.pulseMax
+            Row {
+                Text(
+                    text = when(dataShown){
+                        MinMaxAvg.Min -> min
+                        MinMaxAvg.Average -> avg
+                        MinMaxAvg.Max -> max
                     },
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-                    Text(
-                        text = stringResource(R.string.bpm),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.Bottom)
-                            .padding(horizontal = 8.dp)
-                    )
-                }
-                Text(stringResource(pulseDataShown.labelRes))
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = stringResource(R.string.mmHg),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .padding(horizontal = 8.dp)
+                )
             }
+            Text(text = stringResource(dataShown.labelRes))
         }
     }
 }

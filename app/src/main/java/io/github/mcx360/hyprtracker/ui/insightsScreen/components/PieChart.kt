@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -58,29 +61,34 @@ fun BPBreakdownCard(
         val nonZeroValues = breakdown.filter { it > 0f }
         val singleFullSlice = nonZeroValues.size == 1
         val hasNoData = breakdown.all { it == 0f }
-
         val chartColors = listOf(
             colorResource(R.color.Hypertension_Normal_Stage_Colour),
             colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
             colorResource(R.color.Hypertension_Grade1_Colour),
             colorResource(R.color.Hypertension_Grade2_Colour)
         )
-
         val nonZeroIndex = breakdown.indexOfFirst { it > 0f }
-
         val singleSliceColor = if (nonZeroIndex != -1) chartColors[nonZeroIndex] else MaterialTheme.colorScheme.primary
 
         Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
-            Column {
-                Text(
-                    text = stringResource(R.string.Pie_Chart_Label),
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, start = 8.dp),
-                    textAlign = TextAlign.Start,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(R.string.Pie_Chart_Label),
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 8.dp),
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Icon(
+                        imageVector = Icons.Filled.PieChart,
+                        contentDescription = null,
+                        //tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
                 Text(
                     text = "Based on ISH classification",
                     style = MaterialTheme.typography.bodyLarge,
@@ -256,8 +264,8 @@ fun HypertensionStagesPieChart(
         columnCartesianLayerColors = listOf(),
         lineColor = Color.Black,
         textColor = Color.White,
-        pieChartColors = listOf(colorResource(
-            R.color.Hypertension_Normal_Stage_Colour),
+        pieChartColors = listOf(
+            colorResource(R.color.Hypertension_Normal_Stage_Colour),
             colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
             colorResource(R.color.Hypertension_Grade1_Colour),
             colorResource(R.color.Hypertension_Grade2_Colour)

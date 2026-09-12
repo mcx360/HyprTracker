@@ -31,9 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -44,27 +41,30 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterCard(
-    modifier: Modifier = Modifier,
-    setFilterDates: (String?, String?) -> Unit,
-){
-    var selectedIndex by remember { mutableIntStateOf(0) }
+fun Filter(setFilterDates: (String?, String?) -> Unit, ){
 
-    Text(
-        text = stringResource(R.string.Filter_By),
-        style = MaterialTheme.typography.bodyLarge,
-        textAlign = TextAlign.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp, start = 16.dp, bottom = 4.dp),
-    )
+    var selectedIndex by remember { mutableIntStateOf(2) }
 
+    //Row with filter title
     Row(
-        modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        val options = listOf(stringResource(R.string.Week), stringResource(R.string.Month), "All",stringResource(R.string.Custom))
+        Text(
+            text = stringResource(R.string.Filter_By),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, bottom = 4.dp),
+        )
+    }
+
+    //Row with segmented button choices
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        val options = listOf(stringResource(R.string.Week), stringResource(R.string.Month), stringResource(R.string.All),stringResource(R.string.Custom))
         val showCustomDateRangePicker = remember { mutableStateOf(false) }
 
         SingleChoiceSegmentedButtonRow {
@@ -74,15 +74,9 @@ fun FilterCard(
                         index = index,
                         count = options.size
                     ),
-                    onClick = {
-                        if (index ==3){
-                            showCustomDateRangePicker.value = true
-                        } else{
-                            selectedIndex = index
-                        }
-                    },
+                    onClick = { if (index == 3) showCustomDateRangePicker.value = true else selectedIndex = index  },
                     selected = index == selectedIndex,
-                    label = { Text(label) }
+                    label = { Text(text = label) }
                 )
             }
         }
@@ -108,23 +102,21 @@ fun RangePicker(
 ){
     Dialog(
         onDismissRequest = {onDismissRequest()},
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
     ){
         val state = rememberDateRangePickerState()
 
         Column(
-            modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding(),
             verticalArrangement = Arrangement.Top
         ) {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .background(DatePickerDefaults.colors().containerColor)
-                .padding(start = 12.dp, end = 12.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(DatePickerDefaults.colors().containerColor)
+                    .padding(start = 12.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -139,7 +131,7 @@ fun RangePicker(
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
-                    Text(text = "Save")
+                    Text(text = stringResource(R.string.Save))
                 }
             }
             DateRangePicker(state = state, modifier = modifier.weight(1f), showModeToggle = false)
