@@ -30,3 +30,10 @@ fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: Hyp
         }
     }
 }
+
+enum class Destinations {
+    //Main screen routes
+    Logs,
+    Medicine,
+    Insights,
+}

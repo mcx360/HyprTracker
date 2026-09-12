@@ -30,10 +30,10 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.AboutDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.dialogs.BugReportDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerBottomNavigationBar
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.appBars.HyprTrackerTopAppBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.BottomNavBar
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.TopAppBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.LogScreenMenu
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
@@ -70,7 +70,7 @@ fun HyprTrackerScreen(
             Scaffold(
                 modifier = modifier,
                 topBar = {
-                    HyprTrackerTopAppBar(
+                    TopAppBar(
                         title = currentRoute,
                         updateOpenSettings = {openSettingsDialog.value = true},
                         insightsViewModel = insightsViewModel,
@@ -80,7 +80,7 @@ fun HyprTrackerScreen(
                     )
                 },
                 bottomBar = {
-                    HyprTrackerBottomNavigationBar(
+                    BottomNavBar(
                         currentRoute = currentRoute,
                         navController = navController,
                     )
