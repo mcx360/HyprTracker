@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.insightsScreen.components
+package io.github.mcx360.hyprtracker.ui.insightsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -20,71 +20,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.ProvideVicoTheme
+import com.patrykandpatrick.vico.compose.common.VicoTheme
+import com.patrykandpatrick.vico.compose.common.component.TextComponent
+import com.patrykandpatrick.vico.compose.common.vicoTheme
+import com.patrykandpatrick.vico.compose.pie.PieChart
+import com.patrykandpatrick.vico.compose.pie.PieChartHost
+import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
+import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
+import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.model.MinMaxAvg
-
-@Composable
-fun InfoCards(viewModel: InsightsViewModel){
-    val insightsUIState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(start =16.dp,top =16.dp, end = 16.dp)
-    ) {
-        Text(
-            text = "Your key blood pressure metrics",
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = "change >>",
-            textAlign = TextAlign.End,
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-    ) {
-        info(
-            modifier = Modifier.weight(0.33f),
-            title = stringResource(R.string.systolic),
-            min = insightsUIState.systolicMin,
-            avg = insightsUIState.systolicAverage,
-            max = insightsUIState.systolicMax
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        info(
-            modifier = Modifier.weight(0.33f),
-            title = stringResource(R.string.diastolic),
-            min = insightsUIState.diastolicMin,
-            avg = insightsUIState.diastolicAverage,
-            max = insightsUIState.diastolicMax
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        info(
-            modifier = Modifier.weight(0.33f),
-            title = stringResource(R.string.pulse),
-            min = insightsUIState.pulseMin,
-            avg = insightsUIState.pulseAverage,
-            max = insightsUIState.pulseMax
-        )
-    }
-}
 
 @Composable
 fun info(
@@ -98,13 +55,13 @@ fun info(
     var dataShown by remember { mutableStateOf( MinMaxAvg.Average)}
 
     OutlinedCard(modifier = modifier.clickable(onClick = {
-            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-            dataShown = when (dataShown) {
-                MinMaxAvg.Average -> MinMaxAvg.Max
-                MinMaxAvg.Max -> MinMaxAvg.Min
-                MinMaxAvg.Min -> MinMaxAvg.Average
-            }
-        })
+        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        dataShown = when (dataShown) {
+            MinMaxAvg.Average -> MinMaxAvg.Max
+            MinMaxAvg.Max -> MinMaxAvg.Min
+            MinMaxAvg.Min -> MinMaxAvg.Average
+        }
+    })
     ) {
         Column(
             modifier = Modifier
@@ -149,5 +106,47 @@ fun info(
             }
             Text(text = stringResource(dataShown.labelRes))
         }
+    }
+}
+
+@Composable
+fun HypertensionStagesPieChart(
+    modelProducer: PieChartModelProducer,
+    modifier: Modifier = Modifier,
+) {
+    val theme = VicoTheme(
+        candlestickCartesianLayerColors =
+            VicoTheme.CandlestickCartesianLayerColors(
+                MaterialTheme.colorScheme.outlineVariant,
+                MaterialTheme.colorScheme.outlineVariant,
+                MaterialTheme.colorScheme.outlineVariant),
+        columnCartesianLayerColors = listOf(),
+        lineColor = Color.Black,
+        textColor = Color.White,
+        pieChartColors = listOf(
+            colorResource(R.color.Hypertension_Normal_Stage_Colour),
+            colorResource(R.color.Hypertension_High_Normal_Stage_Colour),
+            colorResource(R.color.Hypertension_Grade1_Colour),
+            colorResource(R.color.Hypertension_Grade2_Colour)
+        )
+    )
+    ProvideVicoTheme(theme) {
+        PieChartHost(
+            chart =
+                rememberPieChart(
+                    sliceProvider =
+                        PieChart.SliceProvider.series(
+                            vicoTheme.pieChartColors.mapIndexed { index, color ->
+                                PieChart.Slice(
+                                    fill = Fill(color),
+                                    label = PieChart.SliceLabel.Inside(TextComponent(TextStyle(if (index == 2) Color.Black else Color.White))),
+                                )
+                            }
+                        ),
+                    valueFormatter = PieValueFormatter { _, value, _ -> "${value.toInt()}%" },
+                ),
+            modelProducer = modelProducer,
+            modifier = modifier.height(240.dp),
+        )
     }
 }
