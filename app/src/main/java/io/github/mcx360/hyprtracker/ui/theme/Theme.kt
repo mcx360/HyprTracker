@@ -17,6 +17,8 @@ data class ExtendedColorScheme(
     val customColor1: ColorFamily,
 )
 
+enum class ThemeMode { LIGHT, DARK, SYSTEM }
+
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
