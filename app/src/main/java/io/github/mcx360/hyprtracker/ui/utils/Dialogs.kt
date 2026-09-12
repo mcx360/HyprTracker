@@ -7,13 +7,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 
 @Composable
@@ -93,6 +100,47 @@ fun InfoDialog(
                     Text(stringResource(R.string.Ok))
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun RangePicker(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onDatesGiven: (Long, Long) -> Unit,
+    onFinish: () -> Unit
+){
+    Dialog(
+        onDismissRequest = {onDismissRequest()},
+        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
+    ){
+        val state = rememberDateRangePickerState()
+
+        Column(verticalArrangement = Arrangement.Top) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(DatePickerDefaults.colors().containerColor)
+                    .padding(start = 12.dp, end = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(onClick = {onDismissRequest()}) {
+                    Icon(Icons.Filled.Close, contentDescription = null)
+                }
+                TextButton(
+                    onClick = {
+                        onDatesGiven(state.selectedStartDateMillis ?: 0, state.selectedEndDateMillis ?: 0)
+                        onFinish()
+                        onDismissRequest()
+                    },
+                    enabled = state.selectedEndDateMillis != null
+                ) {
+                    Text(text = stringResource(R.string.Save))
+                }
+            }
+            DateRangePicker(state = state, modifier = modifier.weight(1f), showModeToggle = false)
         }
     }
 }
