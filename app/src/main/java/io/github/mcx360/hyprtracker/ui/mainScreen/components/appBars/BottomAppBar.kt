@@ -7,24 +7,17 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavHostController
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 
-const val BOTTOMNAVBAR_TAG = "bottomNavBar"
-
-
 @Composable
 fun HyprTrackerBottomNavigationBar(
     navController: NavHostController,
     currentRoute: String?,
-    modifier: Modifier
 ){
     val colours = NavigationBarItemColors(
         selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -39,7 +32,6 @@ fun HyprTrackerBottomNavigationBar(
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         contentColor = MaterialTheme.colorScheme.onSurface,
-        modifier = modifier.testTag(BOTTOMNAVBAR_TAG)
     ) {
         NavigationBarItem(
             selected = currentRoute == Destinations.Logs.name,
@@ -79,6 +71,5 @@ fun HyprTrackerBottomNavigationBar(
             alwaysShowLabel = true,
             colors = colours
         )
-
     }
 }

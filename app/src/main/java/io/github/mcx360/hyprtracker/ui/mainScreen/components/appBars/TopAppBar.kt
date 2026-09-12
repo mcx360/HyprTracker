@@ -81,19 +81,6 @@ fun HyprTrackerTopAppBar(
                     }
 
                 }
-                /*
-                    IconButton(onClick = {
-                        updateOpenMenu()
-                    }) { Icon(Icons.Filled.MoreVert, null) }
-                    IconButton(onClick = { updateOpenSettings() }) {
-                        Icon(painter = painterResource(R.drawable.outline_settings_24), null)
-                    }
-                    IconButton(onClick = { importer.launch("text/csv") }) {
-                        Icon(painter = painterResource(R.drawable.outline_file_open_24), null)
-                    }
-
-
-                 */
             })
         }
         Destinations.Medicine.name -> {
@@ -113,7 +100,7 @@ fun HyprTrackerTopAppBar(
         }
         Destinations.Insights.name if !insightsState.value.hasRecords -> {
             TopAppBar(title = { Text(stringResource(R.string.graph_screen_label),  style = MaterialTheme.typography.titleLarge) }, actions = {
-                Box() {
+                Box {
                     IconButton(onClick = {
                         openMenu.value = !openMenu.value
                     }) { Icon(Icons.Filled.MoreVert, null) }

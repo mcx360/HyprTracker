@@ -83,7 +83,6 @@ fun HyprTrackerScreen(
                     HyprTrackerBottomNavigationBar(
                         currentRoute = currentRoute,
                         navController = navController,
-                        modifier = Modifier
                     )
                 },
                 floatingActionButton = {
