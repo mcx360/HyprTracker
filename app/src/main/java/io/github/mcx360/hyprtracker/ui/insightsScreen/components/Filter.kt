@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.utils.RangePicker
+import io.github.mcx360.hyprtracker.ui.utils.RangePickerDialog
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import java.time.LocalDate
 
@@ -75,7 +75,7 @@ fun Filter(setFilterDates: (String?, String?) -> Unit){
         }
 
         when{
-            showCustomDateRangePicker.value -> RangePicker(onDismissRequest = {showCustomDateRangePicker.value = false}, onDatesGiven = {start, end ->setFilterDates(convertMillisToDate(start), convertMillisToDate(end))}, onFinish = {selectedIndex = 3})
+            showCustomDateRangePicker.value -> RangePickerDialog(onDismissRequest = {showCustomDateRangePicker.value = false}, onDatesGiven = { start, end ->setFilterDates(convertMillisToDate(start), convertMillisToDate(end))}, onFinish = {selectedIndex = 3})
         }
     }
 }

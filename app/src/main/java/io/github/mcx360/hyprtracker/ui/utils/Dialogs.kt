@@ -105,7 +105,7 @@ fun InfoDialog(
 }
 
 @Composable
-fun RangePicker(
+fun RangePickerDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onDatesGiven: (Long, Long) -> Unit,
