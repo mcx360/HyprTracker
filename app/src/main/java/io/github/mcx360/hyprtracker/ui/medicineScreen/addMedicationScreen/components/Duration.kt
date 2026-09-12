@@ -1,26 +1,44 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.DurationDatePicker
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.dialogs.SelectSpecifiedNumberOfDaysDialog
+import androidx.compose.ui.window.Dialog
+import androidx.core.text.isDigitsOnly
 import java.time.LocalDate
 
 @Composable
@@ -120,6 +138,104 @@ fun DurationCard(
             DurationDatePicker(
                 onDateSelected = { updateMedicationEndDateLong(it) },
                 onDismiss = { updateShowDurationDatePicker(false) })
+        }
+    }
+}
+
+//dialog that lets users pick the end date for their medication e.g. only till 05/05/2026
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DurationDatePicker(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                onDateSelected(datePickerState.selectedDateMillis)
+                onDismiss()
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {onDismiss()}) {
+                Text("Cancel")
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState,
+            dateFormatter = DatePickerDefaults.dateFormatter(),
+            showModeToggle = false,
+        )
+    }
+}
+
+@Composable
+fun SelectSpecifiedNumberOfDaysDialog(
+    onDismissRequest: () -> Unit,
+    onNumOfDaysSelected: (String) -> Unit
+){
+    var days by remember { mutableStateOf("") }
+    Dialog(onDismissRequest = {onDismissRequest()}) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Enter the amount of days that the medicine will be taken for",
+                    textAlign = TextAlign.Center
+                )
+                Row(horizontalArrangement = Arrangement.Center) {
+                    OutlinedTextField(
+                        onValueChange = {if (it.isDigitsOnly()) days = it},
+                        value = days,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        label = {Text("Days")},
+                        modifier = Modifier.width(96.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            onDismissRequest()
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Cancel")
+                    }
+
+                    Button(
+                        onClick = {
+                            onDismissRequest()
+                            onNumOfDaysSelected(days)
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Confirm")
+                    }
+                }
+            }
         }
     }
 }

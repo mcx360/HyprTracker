@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards
+package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

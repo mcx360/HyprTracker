@@ -40,8 +40,6 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewMode
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import kotlinx.coroutines.launch
 
-const val NAVIGATIONDRAWER_TAG = "navigationDrawer"
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HyprTrackerScreen(
@@ -169,4 +167,3 @@ fun HyprTrackerScreen(
             }
         }
     }
-

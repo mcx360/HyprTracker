@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.DurationCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.MedicationScheduleAndDosageCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.NotificationsCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.cards.medicationInfoCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import io.github.mcx360.hyprtracker.ui.model.Medicine
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
@@ -109,14 +109,18 @@ fun AddMedicationScreen(
                     isMedicationDescriptionFieldInError = isMedicationDescriptionFieldInError,
                     updateMedicationName = {
                         medicineViewModel.updateMedicationName(it)
-                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
+                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError =
+                            false
                     },
                     updateMedicationDescription = {
                         medicineViewModel.updateMedicationDescription(it)
-                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
+                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError =
+                            false
                     },
                     setMedicationNameErrorStatusFalse = { isMedicationNameFieldInError = false },
-                    setMedicationDescriptionErrorStatusFalse = { isMedicationDescriptionFieldInError = false }
+                    setMedicationDescriptionErrorStatusFalse = {
+                        isMedicationDescriptionFieldInError = false
+                    }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
@@ -146,9 +150,15 @@ fun AddMedicationScreen(
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
                     medicationDosage = uiState.value.medicationDosage,
-                    setIsMedicationScheduleFieldInErrorToFalse = { isMedicationScheduleFieldInError = false },
-                    setIsMedicationDosePerIntakeInErrorToFalse = { isMedicationDosePerIntakeInError = false },
-                    setIsMedicationTimesPerDayFieldInErrorToFalse = { isMedicationTimesPerDayFieldInError = false }
+                    setIsMedicationScheduleFieldInErrorToFalse = {
+                        isMedicationScheduleFieldInError = false
+                    },
+                    setIsMedicationDosePerIntakeInErrorToFalse = {
+                        isMedicationDosePerIntakeInError = false
+                    },
+                    setIsMedicationTimesPerDayFieldInErrorToFalse = {
+                        isMedicationTimesPerDayFieldInError = false
+                    }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
@@ -157,8 +167,17 @@ fun AddMedicationScreen(
                 NotificationsCard(
                     checked = checked,
                     updateCheckedStatus = { checked = it },
-                    updateMedicationNotificationStatus = { medicineViewModel.updateMedicationNotificationStatus(it) },
-                    updateMedicationReminderTime = { value, reminder -> medicineViewModel.updateMedicationReminderTime(value, reminder) },
+                    updateMedicationNotificationStatus = {
+                        medicineViewModel.updateMedicationNotificationStatus(
+                            it
+                        )
+                    },
+                    updateMedicationReminderTime = { value, reminder ->
+                        medicineViewModel.updateMedicationReminderTime(
+                            value,
+                            reminder
+                        )
+                    },
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationSelectedDays = uiState.value.medicationSelectedDays,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
@@ -169,15 +188,21 @@ fun AddMedicationScreen(
 
                 //Duration Card
                 DurationCard(
-                    formatToRegularDate = {formatToRegularDate(it) },
+                    formatToRegularDate = { formatToRegularDate(it) },
                     startDate = uiState.value.date,
                     endDate = uiState.value.medicationEndDate,
                     showSelectSpecifiedNumberOfDaysDialog = showSelectSpecifiedNumberOfDaysDialog,
                     showDurationDatePicker = showDurationDatePicker,
                     updateShowDurationDatePicker = { showDurationDatePicker = it },
-                    updateShowSelectSpecifiedNumberOfDaysDialog = { showSelectSpecifiedNumberOfDaysDialog = it },
+                    updateShowSelectSpecifiedNumberOfDaysDialog = {
+                        showSelectSpecifiedNumberOfDaysDialog = it
+                    },
                     updateMedicationEndDateString = { medicineViewModel.updateMedicationEndDate(it) },
-                    updateMedicationEndDateLong = { medicineViewModel.updateMedicationEndDate(convertMillisToDate(it)) }
+                    updateMedicationEndDateLong = {
+                        medicineViewModel.updateMedicationEndDate(
+                            convertMillisToDate(it)
+                        )
+                    }
                 )
 
                 Row(
