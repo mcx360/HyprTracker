@@ -43,7 +43,7 @@ import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import io.github.mcx360.hyprtracker.ui.utils.Dot
 
 @Composable
 fun BPBreakdownCard(
@@ -148,7 +148,7 @@ fun BPBreakdownCard(
             ) {
                 Box(modifier.background(colorResource(R.color.Hypertension_Normal_Stage_Background)).padding(4.dp)) {
                     Row {
-                        DotWithColour(colorResource(R.color.Hypertension_Normal_Stage_Colour))
+                        Dot(colorResource(R.color.Hypertension_Normal_Stage_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             text = stringResource(R.string.Normal),
@@ -164,7 +164,7 @@ fun BPBreakdownCard(
                         .padding(4.dp)
                 ) {
                     Row {
-                        DotWithColour(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
+                        Dot(colorResource(R.color.Hypertension_High_Normal_Stage_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             text = stringResource(R.string.High_normal),
@@ -178,7 +178,7 @@ fun BPBreakdownCard(
 
                 Box(modifier =modifier.background(colorResource(R.color.Hypertension_Grade1_Background)).padding(4.dp)) {
                     Row {
-                        DotWithColour(colorResource(R.color.Hypertension_Grade1_Colour))
+                        Dot(colorResource(R.color.Hypertension_Grade1_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             text = stringResource(R.string.Grade1),
@@ -192,7 +192,7 @@ fun BPBreakdownCard(
 
                 Box(modifier = modifier.background(colorResource(R.color.Hypertension_Grade2_Background)).padding(4.dp)) {
                     Row {
-                        DotWithColour(colorResource(R.color.Hypertension_Grade2_Colour))
+                        Dot(colorResource(R.color.Hypertension_Grade2_Colour))
                         Spacer(modifier.padding(start = 4.dp))
                         Text(
                             stringResource(R.string.Grade2),

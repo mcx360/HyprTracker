@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -39,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.AddMedicationScreen
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
-import io.github.mcx360.hyprtracker.ui.utils.DotWithColour
+import io.github.mcx360.hyprtracker.ui.utils.Dot
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
@@ -219,7 +218,7 @@ fun MedicineScreen(
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            DotWithColour(MaterialTheme.colorScheme.secondary)
+                            Dot(MaterialTheme.colorScheme.secondary)
                             Spacer(modifier = modifier.padding(4.dp))
 
                             if (medication.schedule == "Every single day"){
