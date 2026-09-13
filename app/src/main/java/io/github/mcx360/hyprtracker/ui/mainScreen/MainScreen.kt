@@ -74,9 +74,9 @@ fun HyprTrackerScreen(
                         title = currentRoute,
                         updateOpenSettings = {openSettingsDialog.value = true},
                         insightsViewModel = insightsViewModel,
-                        medicineViewModel = medicineViewModel,
-                        hyprTrackerViewModel = hyprTrackerViewModel,
-                        updateOpenMenu = {showMenu.value = !showMenu.value}
+                        //medicineViewModel = medicineViewModel,
+                        //hyprTrackerViewModel = hyprTrackerViewModel,
+                        //updateOpenMenu = {showMenu.value = !showMenu.value}
                     )
                 },
                 bottomBar = {
