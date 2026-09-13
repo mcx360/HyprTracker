@@ -118,13 +118,12 @@ fun GraphScreen(
                 }
             }
 
-            //InfoCards(viewModel = insightsViewModel)
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start =16.dp,top =16.dp, end = 16.dp)
             ) {
                 Text(
-                    text = "Your key blood pressure metrics",
+                    text = "Key metrics",
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Bold
                 )
