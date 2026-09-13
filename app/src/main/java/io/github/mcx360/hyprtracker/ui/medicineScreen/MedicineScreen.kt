@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -135,7 +136,7 @@ fun MedicineScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Box {
-                                IconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
+                                FilledTonalIconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
                                     Icon(
                                         Icons.Filled.MoreHoriz,
                                         contentDescription = null

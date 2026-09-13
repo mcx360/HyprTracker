@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AreaChart
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -78,6 +79,7 @@ fun GraphScreen(
             ) {
                 Text(
                     text = stringResource(R.string.Filter_By),
+                    //fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp, bottom = 4.dp),
@@ -191,17 +193,18 @@ fun GraphScreen(
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Text(
                                 text = stringResource(R.string.Pie_Chart_Label),
-                                modifier = modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp, start = 8.dp),
+                                modifier = modifier.padding(top = 8.dp, start = 8.dp),
                                 textAlign = TextAlign.Start,
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
+                            Spacer(modifier = Modifier.weight(1f))
 
                             Icon(
-                                imageVector = Icons.Filled.PieChart,
+                                imageVector = Icons.Filled.AreaChart,
                                 contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.align(Alignment.CenterVertically).padding(end = 8.dp)
                             )
                         }
                         Text(
@@ -324,7 +327,7 @@ fun GraphScreen(
                             text = "Systolic Range:",
                             modifier = modifier.padding(4.dp),
                             textAlign = TextAlign.Start,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            //color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = systolicRange,
@@ -338,7 +341,7 @@ fun GraphScreen(
                             text = "Diastolic Range:",
                             modifier = modifier.padding(4.dp),
                             textAlign = TextAlign.Start,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            //color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             diastolicRange,
@@ -352,7 +355,7 @@ fun GraphScreen(
                             text = "Pulse Range:",
                             modifier = modifier.padding(4.dp),
                             textAlign = TextAlign.Start,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            //color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = pulseRange,
