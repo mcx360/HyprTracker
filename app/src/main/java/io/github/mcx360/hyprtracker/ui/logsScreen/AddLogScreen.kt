@@ -344,7 +344,7 @@ fun LogBPResult(
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = "dfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfjdfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfjdfsfdsfdsgfgfgdgfgdsgfgfjhgjhgfj",
+                            text = "Take your blood pressure measurements seated in a chair with your feet on the ground and your arm supported.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
