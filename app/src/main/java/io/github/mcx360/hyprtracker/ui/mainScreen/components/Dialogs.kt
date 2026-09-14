@@ -144,13 +144,10 @@ fun BugReportDialog(
                     )
                 }
                 Row(
-                    modifier = Modifier
-                        .padding(8.dp),
+                    modifier = Modifier.padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("If you found a bug please report using github or email. Please describe the bug in detail and the steps needed to reproduce the bug. Please also mention your android version and device model, thank you.")
                     }
                 }
@@ -165,7 +162,7 @@ fun BugReportDialog(
 
                     TextButton(onClick = { uriHandler.openUri("https://github.com/mcx360/HyprTracker/issues/new") }) {
                         Icon(painter = painterResource(R.drawable.outline_code_blocks_24), contentDescription = null)
-                        Text("Github")
+                        Text(text = "Github")
                     }
 
                     Text(

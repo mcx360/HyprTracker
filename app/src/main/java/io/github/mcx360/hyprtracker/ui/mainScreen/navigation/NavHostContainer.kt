@@ -14,13 +14,21 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 
 @Composable
-fun NavHostContainer(navController: NavHostController, hyprTrackerViewModel: HyprTrackerViewModel, snackBarHostState: SnackbarHostState, openAddMedicationScreen: MutableState<Boolean>, medicineViewModel: MedicineViewModel, insightsViewModel: InsightsViewModel, openAddBPlog: MutableState<Boolean>) {
+fun NavHostContainer(
+    navController: NavHostController,
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    snackBarHostState: SnackbarHostState,
+    openAddMedicationScreen: MutableState<Boolean>,
+    medicineViewModel: MedicineViewModel,
+    insightsViewModel: InsightsViewModel,
+    openAddBPLog: MutableState<Boolean>
+) {
     NavHost(
         navController = navController,
         startDestination = Destinations.Logs.name
     ){
         composable(route = Destinations.Logs.name){
-            LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBloodPressureLog = openAddBPlog)
+            LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBloodPressureLog = openAddBPLog)
         }
         composable(route = Destinations.Medicine.name){
             MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)

@@ -11,7 +11,10 @@ import io.github.mcx360.hyprtracker.R
 
 
 @Composable
-fun LogScreenMenu(expanded: Boolean, onDismissRequest: () -> Unit, updateOpenSettings: () -> Unit){
+fun LogScreenMenu(
+    expanded: Boolean, onDismissRequest: () -> Unit,
+    updateOpenSettings: () -> Unit
+){
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = {onDismissRequest()}
@@ -39,7 +42,11 @@ fun LogScreenMenu(expanded: Boolean, onDismissRequest: () -> Unit, updateOpenSet
 }
 
 @Composable
-fun smallMenu(expanded: Boolean, onDismissRequest: () -> Unit, updateOpenSettings: () -> Unit){
+fun smallMenu(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    updateOpenSettings: () -> Unit
+){
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = {onDismissRequest()}
