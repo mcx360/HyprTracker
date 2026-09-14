@@ -29,9 +29,10 @@ import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.ClassificationTablePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.LanguagePicker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.ThemePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Help
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
@@ -88,12 +89,17 @@ fun Settings(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    when{
-                        showThemeDialog.value -> ThemePicker(
-                            themeViewModel = themeViewModel,
-                            onDismissRequest = { showThemeDialog.value = false }
-                        )
-                    }
+                }
+                when{
+                    showThemeDialog.value -> Picker(
+                        title = "Select theme",
+                        mapOf(
+                            "Dark" to {themeViewModel.setTheme(ThemeMode.DARK)},
+                            "Light" to {themeViewModel.setTheme(ThemeMode.LIGHT)},
+                            "System Default" to {themeViewModel.setTheme(ThemeMode.SYSTEM)}
+                        ),
+                        onDismissRequest = {showThemeDialog.value = false}
+                    )
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
