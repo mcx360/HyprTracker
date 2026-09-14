@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.information
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
 
 import android.R
 import androidx.compose.foundation.background
@@ -33,29 +33,10 @@ fun Help(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Help", style = MaterialTheme.typography.headlineMedium)
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-                ) {
-                Text("Can I import and export my data?", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.secondary)
-                Text("Yes you can import/export data using the navigation drawers import/export functionality in csv format. Currently only csv is supported.")
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text("Does the app have autobackup?", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.secondary)
-                Text("No, hyprTracker does not have android autobackup enabled as it is an offline only app however you can easily backup you data with the export functionality.")
+                Text(
+                    text = "Help",
+                    style = MaterialTheme.typography.headlineMedium
+                )
             }
 
             Column(
@@ -65,8 +46,41 @@ fun Help(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("How is my data handled?", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.secondary)
-                Text("The data you input to the app is only on your device and never leaves it unless you explicitly export it.")
+                Text(
+                    text = "Can I import and export my data?",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+                Text(text = "Yes you can import/export data using the navigation drawers import/export functionality in csv format. Currently only csv is supported.")
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Does the app have autobackup?",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+                Text(text ="No, hyprTracker does not have android autobackup enabled as it is an offline only app however you can easily backup you data with the export functionality.")
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "How is my data handled?",
+                    style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.secondary
+                )
+                Text(text = "The data you input to the app is only on your device and never leaves it unless you explicitly export it.")
             }
 
             Row(

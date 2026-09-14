@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,29 +24,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun LanguagePicker(
+fun ClassificationTablePicker(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit
 ) {
-    val radioOptions = listOf("English(UK)")
+    val radioOptions = listOf("Internation society of hypertension")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
-            Text("Select Language", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "Select classification table",
+                modifier = modifier.padding(8.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
             HorizontalDivider()
             Column(modifier.selectableGroup()) {
                 radioOptions.forEach { text ->
                     Row(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
+                            .padding(horizontal = 16.dp)
                             .selectable(
                                 selected = (text == selectedOption),
                                 onClick = { onOptionSelected(text) },
                                 role = Role.RadioButton
-                            )
-                            .padding(horizontal = 16.dp),
+                            ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
@@ -62,15 +66,13 @@ fun LanguagePicker(
                 }
             }
             HorizontalDivider()
-            Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = {onDismissRequest()}) {
-                    Text("Cancel")
-                }
-                TextButton(onClick = {onDismissRequest()}) {
-                    Text("Ok")
-                }
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(onClick = {onDismissRequest()}) { Text(text = "Cancel") }
+                TextButton(onClick = {onDismissRequest()}) { Text(text = "Ok") }
             }
-
         }
     }
 }

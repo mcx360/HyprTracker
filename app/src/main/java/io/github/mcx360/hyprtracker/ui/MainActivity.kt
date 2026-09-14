@@ -9,7 +9,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerScreen
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.theme.AppTheme
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 

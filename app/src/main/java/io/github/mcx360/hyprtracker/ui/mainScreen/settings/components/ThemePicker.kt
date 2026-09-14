@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.pickers
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.options.ThemeViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 
 @Composable
@@ -87,6 +87,7 @@ fun ThemePicker(
                     }
                 }
             }
+
             HorizontalDivider()
 
             Row(
@@ -94,17 +95,19 @@ fun ThemePicker(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(onClick = {onDismissRequest()}) {
-                    Text("Cancel")
+                    Text(text = "Cancel")
                 }
                 TextButton(onClick = {
                     onDismissRequest()
-                    themeViewModel.setTheme(when (selectedOption) {
-                    "Dark" -> ThemeMode.DARK
-                    "Light" -> ThemeMode.LIGHT
-                    else -> ThemeMode.SYSTEM
-                    })
+                    themeViewModel.setTheme(
+                        when (selectedOption) {
+                            "Dark" -> ThemeMode.DARK
+                            "Light" -> ThemeMode.LIGHT
+                            else -> ThemeMode.SYSTEM
+                        }
+                    )
                 }) {
-                    Text("Ok")
+                    Text(text = "Ok")
                 }
             }
         }

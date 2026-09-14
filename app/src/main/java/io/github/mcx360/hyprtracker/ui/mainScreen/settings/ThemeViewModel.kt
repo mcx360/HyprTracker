@@ -1,10 +1,9 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.options
+package io.github.mcx360.hyprtracker.ui.mainScreen.settings
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.github.mcx360.hyprtracker.data.source.local.theme.ThemeManager
@@ -36,7 +35,7 @@ class ThemeViewModel(application: Application) : AndroidViewModel(application) {
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                val application = checkNotNull(extras[APPLICATION_KEY])
+                val application = checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return ThemeViewModel(application) as T
             }
         }
