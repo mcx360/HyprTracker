@@ -83,11 +83,6 @@ fun Picker(
                 TextButton(onClick = { onDismissRequest() }) {
                     Text(text = stringResource(R.string.Cancel_Button_Text))
                 }
-                /*
-                TextButton(onClick = { onDismissRequest() }) {
-                    Text(text = stringResource(R.string.Ok))
-                }
-                 */
             }
         }
     }
