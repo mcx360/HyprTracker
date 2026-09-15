@@ -32,6 +32,112 @@ import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar(
+    modifier: Modifier = Modifier,
+    title: String?,
+    updateOpenSettings: () -> Unit,
+    insightsViewModel: InsightsViewModel,
+){
+    val insightsState = insightsViewModel.uiState.collectAsStateWithLifecycle()
+    val openMenu = remember { mutableStateOf(false) }
+    when (title) {
+        null -> {
+            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge) })
+        }
+        Destinations.Logs.name -> {
+            TopAppBar(
+                title = {
+                    Column{
+                        Text(
+                            text = "Logs",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {}) {
+                        Icon(painter = painterResource(R.drawable.outline_filter_list_24),null)
+                    }
+                    IconButton(onClick = { openMenu.value = !openMenu.value }) {
+                        Icon(Icons.Filled.MoreVert, null)
+                    }
+                    when{
+                        openMenu.value -> {
+                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})                        }
+                    }
+                }
+            )
+        }
+        Destinations.Medicine.name -> {
+            TopAppBar(
+                title = {
+                    Text(
+                        text =  stringResource(R.string.medicine_screen_label),
+                        style = MaterialTheme.typography.titleLarge)
+                },
+                actions = {
+                    Box {
+                        IconButton(onClick = { openMenu.value = !openMenu.value }) {
+                            Icon(Icons.Filled.MoreVert, null)
+                        }
+                        when{
+                            openMenu.value -> {
+                                SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                            } }
+                    }
+                }
+            )
+        }
+        Destinations.Insights.name if !insightsState.value.hasRecords -> {
+            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label),  style = MaterialTheme.typography.titleLarge) }, actions = {
+                Box {
+                    IconButton(onClick = {
+                        openMenu.value = !openMenu.value
+                    }) { Icon(Icons.Filled.MoreVert, null) }
+                    when{
+                        openMenu.value -> {
+                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                        }
+
+                    }
+                }
+            })
+        }
+
+        else -> { TopAppBar(
+            modifier = modifier.padding(end = 8.dp),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
+            ),
+            title = {
+                Column {
+                    if (title == Destinations.Insights.name) Column {
+                        Text(text = title)
+                        Text(
+                            text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else title?.let { Text(text = it) }
+                }
+            },
+            actions = {
+                when (title) {
+                    Destinations.Insights.name -> {
+                        IconButton(onClick = {}) {
+                            Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
+                        }
+                    }
+                }
+            }
+        )
+        }
+    }
+}
+
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
@@ -89,118 +195,5 @@ fun BottomNavBar(
             alwaysShowLabel = true,
             colors = colours
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBar(
-    modifier: Modifier = Modifier,
-    title: String?,
-    updateOpenSettings: () -> Unit,
-    insightsViewModel: InsightsViewModel,
-){
-    val insightsState = insightsViewModel.uiState.collectAsStateWithLifecycle()
-    //val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(), onResult = {uri -> })
-    //val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
-    val openMenu = remember { mutableStateOf(false) }
-    when (title) {
-        null -> {
-            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge) })
-        }
-        Destinations.Logs.name -> {
-            TopAppBar(
-                title = {
-                    Column{
-                        Text(
-                            text = "Logs",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = "23 Aug 2026–30 Aug 2026",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(painter = painterResource(R.drawable.outline_filter_list_24),null)
-                    }
-                    IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                        Icon(Icons.Filled.MoreVert, null)
-                    }
-                    when{
-                        openMenu.value -> {
-                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})                        }
-                    }
-                }
-            )
-        }
-        Destinations.Medicine.name -> {
-            TopAppBar(
-                title = {
-                    Text(
-                        text =  stringResource(R.string.medicine_screen_label),
-                        style = MaterialTheme.typography.titleLarge)
-                },
-                actions = {
-                    Box {
-                        IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
-                    when{
-                        openMenu.value -> {
-                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
-                        } }
-                    }
-                }
-            )
-        }
-        Destinations.Insights.name if !insightsState.value.hasRecords -> {
-            TopAppBar(title = { Text(stringResource(R.string.graph_screen_label),  style = MaterialTheme.typography.titleLarge) }, actions = {
-                Box {
-                    IconButton(onClick = {
-                        openMenu.value = !openMenu.value
-                    }) { Icon(Icons.Filled.MoreVert, null) }
-                    when{
-                        openMenu.value -> {
-                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
-                        }
-
-                    }
-                }
-            })
-        }
-
-        else -> { TopAppBar(
-            modifier = modifier.padding(end = 8.dp),
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-            ),
-            title = {
-                Column {
-                    if (title == Destinations.Insights.name) Column {
-                        Text(text = title)
-                        Text(
-                            text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        } else title?.let { Text(text = it) }
-                }
-            },
-            actions = {
-                when (title) {
-                    Destinations.Insights.name -> {
-                        IconButton(onClick = {}) {
-                            Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
-                        }
-                    }
-                }
-            }
-        )
-        }
     }
 }
