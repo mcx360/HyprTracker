@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.ui.model.HyprReading
-import kotlin.String
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 

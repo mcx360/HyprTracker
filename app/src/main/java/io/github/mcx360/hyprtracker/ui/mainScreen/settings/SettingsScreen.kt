@@ -13,6 +13,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,8 +29,6 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.ClassificationTablePicker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.LanguagePicker
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Help
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
@@ -49,6 +49,7 @@ fun Settings(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
     ) {
+        val currentTheme by themeViewModel.themeMode.collectAsState()
         val showThemeDialog = remember { mutableStateOf(false) }
         val showLanguageDialog = remember { mutableStateOf(false) }
         val showClassificationTableDialog = remember { mutableStateOf(false) }
@@ -93,12 +94,17 @@ fun Settings(
                 when{
                     showThemeDialog.value -> Picker(
                         title = "Select theme",
-                        mapOf(
+                        options = mapOf(
                             "Dark" to {themeViewModel.setTheme(ThemeMode.DARK)},
                             "Light" to {themeViewModel.setTheme(ThemeMode.LIGHT)},
                             "System Default" to {themeViewModel.setTheme(ThemeMode.SYSTEM)}
                         ),
-                        onDismissRequest = {showThemeDialog.value = false}
+                        onDismissRequest = {showThemeDialog.value = false},
+                        default = when (currentTheme) {
+                            ThemeMode.LIGHT -> "Light"
+                            ThemeMode.DARK -> "Dark"
+                            ThemeMode.SYSTEM -> "System default"
+                        }
                     )
                 }
 
@@ -116,7 +122,8 @@ fun Settings(
                     )
                 }
                 when{
-                    showLanguageDialog.value -> LanguagePicker(onDismissRequest = { showLanguageDialog.value = false })
+                    showLanguageDialog.value -> Picker(title = "Select Language", options = mapOf("English(UK)" to {}), onDismissRequest = {showLanguageDialog.value = false}, default = "English(UK)")
+                        //LanguagePicker(onDismissRequest = { showLanguageDialog.value = false })
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
@@ -133,7 +140,7 @@ fun Settings(
                     )
                 }
                 when{
-                    showClassificationTableDialog.value -> ClassificationTablePicker(onDismissRequest = {showClassificationTableDialog.value = false})
+                    showClassificationTableDialog.value -> Picker(onDismissRequest = {showClassificationTableDialog.value = false}, title = "Select classification table", options = mapOf("International society of hypertension" to {}), default = "International society of hypertension")
                 }
 
                 Text(

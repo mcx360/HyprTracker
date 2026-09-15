@@ -13,6 +13,17 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+      <SelectionState runConfigName="MainActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-09-15T12:37:40.133272649Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/mkornam/.android/avd/Medium_Phone.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
