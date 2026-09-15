@@ -45,10 +45,7 @@ fun Settings(
     medicineViewModel: MedicineViewModel,
     themeViewModel: ThemeViewModel
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
-    ) {
+    Dialog(onDismissRequest = onDismissRequest, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         val currentTheme by themeViewModel.themeMode.collectAsState()
         val showThemeDialog = remember { mutableStateOf(false) }
         val showLanguageDialog = remember { mutableStateOf(false) }
@@ -80,13 +77,20 @@ fun Settings(
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showThemeDialog.value = true})) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable(onClick = {showThemeDialog.value = true})
+                ) {
                     Text(
                         text = "Theme",
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "System Default",
+                        text = when(currentTheme){
+                            ThemeMode.LIGHT -> "Light"
+                            ThemeMode.DARK -> "Dark"
+                            ThemeMode.SYSTEM -> "System Default"
+                        },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -103,7 +107,7 @@ fun Settings(
                         default = when (currentTheme) {
                             ThemeMode.LIGHT -> "Light"
                             ThemeMode.DARK -> "Dark"
-                            ThemeMode.SYSTEM -> "System default"
+                            ThemeMode.SYSTEM -> "System Default"
                         }
                     )
                 }
@@ -122,8 +126,12 @@ fun Settings(
                     )
                 }
                 when{
-                    showLanguageDialog.value -> Picker(title = "Select Language", options = mapOf("English(UK)" to {}), onDismissRequest = {showLanguageDialog.value = false}, default = "English(UK)")
-                        //LanguagePicker(onDismissRequest = { showLanguageDialog.value = false })
+                    showLanguageDialog.value -> Picker(
+                        title = "Select Language",
+                        options = mapOf("English(UK)" to {}),
+                        onDismissRequest = {showLanguageDialog.value = false},
+                        default = "English(UK)"
+                    )
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
@@ -140,7 +148,8 @@ fun Settings(
                     )
                 }
                 when{
-                    showClassificationTableDialog.value -> Picker(onDismissRequest = {showClassificationTableDialog.value = false}, title = "Select classification table", options = mapOf("International society of hypertension" to {}), default = "International society of hypertension")
+                    showClassificationTableDialog.value -> Picker(
+                        onDismissRequest = {showClassificationTableDialog.value = false}, title = "Select classification table", options = mapOf("International society of hypertension" to {}), default = "International society of hypertension")
                 }
 
                 Text(

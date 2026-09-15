@@ -15,6 +15,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +31,7 @@ fun Picker(
     options: Map<String, () -> Unit>,
     onDismissRequest: () -> Unit
 ) {
-    var selectedOption = default
+    var selectedOption = remember {default}
 
     Dialog(onDismissRequest = {onDismissRequest()}) {
         Card {
@@ -52,17 +53,22 @@ fun Picker(
                             .height(56.dp)
                             .padding(horizontal = 16.dp)
                             .selectable(
-                                selected = label == selectedOption,
+                                selected = selectedOption == label,
                                 onClick = {
                                     action()
                                     selectedOption = label
+                                    onDismissRequest()
                                 },
                                 role = Role.RadioButton
                             ),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(selected = false, onClick ={action()})
+                        RadioButton(selected = selectedOption == label, onClick ={
+                            action()
+                            selectedOption = label
+                            onDismissRequest()
+                        })
                         Text(label)
                     }
                 }
@@ -77,9 +83,11 @@ fun Picker(
                 TextButton(onClick = { onDismissRequest() }) {
                     Text(text = stringResource(R.string.Cancel_Button_Text))
                 }
+                /*
                 TextButton(onClick = { onDismissRequest() }) {
                     Text(text = stringResource(R.string.Ok))
                 }
+                 */
             }
         }
     }
