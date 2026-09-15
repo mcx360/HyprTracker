@@ -31,7 +31,6 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Help
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
@@ -54,7 +53,6 @@ fun Settings(
         val showClassificationTableDialog = remember { mutableStateOf(false) }
         val showDeleteBPDataDialog = remember { mutableStateOf(false) }
         val showDeleteMedicationDialog = remember { mutableStateOf(false) }
-        val showHelpDialog = remember { mutableStateOf(false) }
         val showBugReportDialog = remember { mutableStateOf(false) }
         val showAboutDialog = remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
