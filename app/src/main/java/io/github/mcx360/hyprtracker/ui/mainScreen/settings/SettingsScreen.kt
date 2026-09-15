@@ -1,5 +1,7 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.settings
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +58,8 @@ fun Settings(
         val showBugReportDialog = remember { mutableStateOf(false) }
         val showAboutDialog = remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(), onResult = { uri -> })
+        val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
 
         Card(
             modifier = Modifier.fillMaxSize(),
@@ -218,7 +222,7 @@ fun Settings(
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {exporter.launch("logs.csv")})) {
                     Text(
                         text = "Database export",
                         fontWeight = FontWeight.Bold
@@ -232,7 +236,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
+                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {importer.launch("text/csv)")})) {
                     Text(
                         text = "Database import",
                         fontWeight = FontWeight.Bold
@@ -267,26 +271,6 @@ fun Settings(
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                /*
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showHelpDialog.value = true})) {
-                    Text(
-                        text = "Help",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "FAQ help",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                when{
-                    showHelpDialog.value -> Help(onDismissRequest = {showHelpDialog.value = false})
-                }
-                 */
-
-                //Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
                 Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
                     Text(

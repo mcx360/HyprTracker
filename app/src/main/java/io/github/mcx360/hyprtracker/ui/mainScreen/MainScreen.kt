@@ -70,8 +70,8 @@ fun HyprTrackerScreen(
                 )
             },
             floatingActionButton = {
-                if (currentRoute == Destinations.Medicine.name && !openAddMedicationScreen.value) {
-                    FloatingActionButton(onClick = { openAddMedicationScreen.value = !openAddMedicationScreen.value }) {
+                if (currentRoute == Destinations.Medicine.name) {
+                    FloatingActionButton(onClick = { openAddMedicationScreen.value = true}) {
                             Icon(Icons.Filled.Add, contentDescription = null)
                     }
                 }else if (currentRoute == Destinations.Logs.name){
