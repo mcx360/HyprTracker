@@ -132,10 +132,8 @@ fun TopAppBar(
                     }
                     when{
                         openMenu.value -> {
-                            LogScreenMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
-                        }
+                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})                        }
                     }
-
                 }
             )
         }
@@ -153,7 +151,7 @@ fun TopAppBar(
                         }
                     when{
                         openMenu.value -> {
-                            smallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
                         } }
                     }
                 }
@@ -167,7 +165,7 @@ fun TopAppBar(
                     }) { Icon(Icons.Filled.MoreVert, null) }
                     when{
                         openMenu.value -> {
-                            smallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                            SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
                         }
 
                     }

@@ -9,40 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import io.github.mcx360.hyprtracker.R
 
-
 @Composable
-fun LogScreenMenu(
-    expanded: Boolean, onDismissRequest: () -> Unit,
-    updateOpenSettings: () -> Unit
-){
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = {onDismissRequest()}
-    ) {
-        DropdownMenuItem(
-            text = { Text(text = "Settings") },
-            leadingIcon = {Icon(painterResource(R.drawable.outline_settings_24), contentDescription =null)},
-            onClick = {
-                updateOpenSettings()
-                onDismissRequest()
-            }
-        )
-        HorizontalDivider()
-        DropdownMenuItem(
-            text = { Text(text = "Imports logs") },
-            leadingIcon = {Icon(painter = painterResource(R.drawable.outline_file_open_24), contentDescription = null)},
-            onClick = {onDismissRequest()}
-        )
-        DropdownMenuItem(
-            text = { Text(text = "Export logs") },
-            leadingIcon = {Icon(painter = painterResource(R.drawable.outline_file_export_24), contentDescription = null)},
-            onClick = {onDismissRequest()}
-        )
-    }
-}
-
-@Composable
-fun smallMenu(
+fun SmallMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     updateOpenSettings: () -> Unit

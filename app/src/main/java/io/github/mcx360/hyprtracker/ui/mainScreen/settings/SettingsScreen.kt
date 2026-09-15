@@ -210,44 +210,45 @@ fun Settings(
                     }
                 }
 
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
                 Text(
-                    text = "External",
+                    text = "Backup & restore",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.padding(top = 16.dp)
+                    color = MaterialTheme.colorScheme.secondary
                 )
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
+
+                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
                     Text(
-                        text = "Report Bug",
+                        text = "Database export",
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Report bugs found while using HyprTracker",
+                        text = "Export all your logs in csv format",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,)
-                }
-                when{
-                    showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false})
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
                 Column(modifier = modifier.fillMaxWidth().clickable(onClick = {})) {
                     Text(
-                        text = "Rate app",
+                        text = "Database import",
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Rate your experience of using HyprTracker",
+                        text = "Import a csv file containing your logs",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
                 Text(
                     text = "About",
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(top = 16.dp),
                     color = MaterialTheme.colorScheme.secondary
                 )
 
@@ -267,6 +268,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
+                /*
                 Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showHelpDialog.value = true})) {
                     Text(
                         text = "Help",
@@ -281,6 +283,24 @@ fun Settings(
 
                 when{
                     showHelpDialog.value -> Help(onDismissRequest = {showHelpDialog.value = false})
+                }
+                 */
+
+                //Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
+                    Text(
+                        text = "Report Bug",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Report bugs found while using HyprTracker",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,)
+                }
+
+                when{
+                    showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false})
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
