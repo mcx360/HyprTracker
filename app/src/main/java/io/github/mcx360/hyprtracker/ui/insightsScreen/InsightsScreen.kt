@@ -26,6 +26,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -122,7 +123,8 @@ fun GraphScreen(
 
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(start =16.dp,top =16.dp, end = 16.dp)
+                .padding(start =16.dp, end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "Key metrics",
@@ -130,12 +132,14 @@ fun GraphScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "change >>",
-                    textAlign = TextAlign.End,
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.labelLarge
-                )
+                TextButton(onClick = {}) {
+                    Text(
+                        text = "change >>",
+                        textAlign = TextAlign.End,
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
             }
 
             Row(modifier = Modifier
