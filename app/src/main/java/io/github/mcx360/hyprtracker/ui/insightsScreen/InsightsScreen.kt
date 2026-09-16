@@ -80,7 +80,6 @@ fun GraphScreen(
             ) {
                 Text(
                     text = stringResource(R.string.Filter_By),
-                    //fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp, bottom = 4.dp),
@@ -324,7 +323,7 @@ fun GraphScreen(
                             }
                         }
                     }
-                    HorizontalDivider(modifier = modifier.padding(8.dp), thickness = 2.dp)
+                    HorizontalDivider(modifier = modifier.padding(8.dp), thickness = 2.dp )
 
                     Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp)) {
                         Text(

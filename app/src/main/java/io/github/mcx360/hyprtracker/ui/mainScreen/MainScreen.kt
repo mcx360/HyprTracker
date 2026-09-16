@@ -60,7 +60,8 @@ fun HyprTrackerScreen(
                 TopAppBar(
                     title = currentRoute,
                     updateOpenSettings = {openSettingsDialog.value = true},
-                    insightsViewModel = insightsViewModel
+                    insightsViewModel = insightsViewModel,
+                    hyprTrackerViewModel = hyprTrackerViewModel
                 )
             },
             bottomBar = {
