@@ -29,8 +29,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.AboutDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.components.BugReportDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.AboutDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.BugReportDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
