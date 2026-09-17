@@ -2,7 +2,6 @@ package io.github.mcx360.hyprtracker.ui.logsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,13 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,9 +27,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDialog
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -42,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -56,11 +52,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.Popup
-import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.model.HyprReading
+import io.github.mcx360.hyprtracker.ui.utils.DurationDatePicker
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
@@ -117,14 +112,8 @@ fun LogBPResult(
                         .padding(top = 8.dp, bottom = 8.dp)
                 ) {
                     Row(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)) {
-                        Icon(
-                            painter = painterResource(R.drawable.outline_blood_pressure_24),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
                         Text(
-                            text = stringResource(R.string.BP),
+                            text = "Enter Blood Pressure",
                             color = MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
@@ -135,7 +124,7 @@ fun LogBPResult(
                     Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
 
                         //systolic value text field
-                        TextField(
+                        OutlinedTextField(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.systolicValue,
@@ -163,7 +152,7 @@ fun LogBPResult(
                         )
 
                         //diastolic value text field
-                        TextField(
+                        OutlinedTextField(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
@@ -190,7 +179,7 @@ fun LogBPResult(
                         )
 
                         //Pulse value text field
-                        TextField(
+                        OutlinedTextField(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
@@ -232,13 +221,6 @@ fun LogBPResult(
                         .padding(top = 8.dp, bottom = 8.dp)
                 ) {
                     Row(modifier = Modifier.padding(top = 8.dp, end = 16.dp, start = 16.dp)) {
-
-                        Icon(
-                            painter = painterResource(R.drawable.ic_date),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
                         Text(
                             text = "Date and time",
                             fontWeight = FontWeight.Bold,
@@ -248,10 +230,19 @@ fun LogBPResult(
                     }
 
                     Row(modifier = Modifier.padding(8.dp)) {
-                        TextField(
-                            value = formatToRegularDate(selectedDate)+ " "+hyprTackerUiState.time,
+                        OutlinedTextField(
+                            //shape = RoundedCornerShape(16.dp),
+                            value = formatToRegularDate(selectedDate)+ " "+hyprTackerUiState.time.substring(0,5),
                             onValueChange = {},
                             readOnly = true,
+                            leadingIcon = {
+                                IconButton(onClick = {}) {
+                                    Icon(
+                                        imageVector = Icons.Filled.DateRange,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
                             trailingIcon = {
                                 IconButton(onClick = {showDatePicker.value = true}) {
                                     Icon(
@@ -401,74 +392,33 @@ fun LogBPResult(
                 }
             }
 
-            //Edit sheet custom date picker
             if (showDatePicker.value) {
-                Popup(
-                    onDismissRequest = {showDatePicker.value = false},
-                    alignment = Alignment.TopStart
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(elevation = 4.dp)
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(16.dp)
-                    ){
-                        DatePicker(
-                            dateFormatter = DatePickerDefaults.dateFormatter(),
-                            state = datePickerState,
-                            showModeToggle = false
-                        )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            TextButton(
-                                modifier = Modifier.padding(8.dp),
-                                onClick = {
-                                showDatePicker.value = false
-                                hyprTrackerViewModel.updateDateValue(selectedDate) },
-                            ) {
-                                Text(text = stringResource(R.string.DateSelection_Ok_Button))
-                            }
-                        }
-                    }
-                }
+                DurationDatePicker(
+                    onDateSelected = {
+                        hyprTrackerViewModel.updateDateValue(convertMillisToDate(it))
+                        showTimePicker.value = true
+                                     },
+                    onDismiss = {showDatePicker.value = false}
+                )
             }
 
             //Edit sheet custom time picker
             if (showTimePicker.value){
-                Popup(
+                TimePickerDialog(
                     onDismissRequest = {showTimePicker.value = false },
-                    alignment = Alignment.TopStart
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(elevation = 4.dp)
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(16.dp)
-                    ){
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
+                                showTimePicker.value = false
+                            }
                         ) {
-                            TimePicker(state = timePickerState)
-                            Button(onClick = {showTimePicker.value = false}) {
-                                Text(text = stringResource(R.string.Dismiss_TimePicker_Button))
-                            }
-                            Button(
-                                onClick = {
-                                    hyprTrackerViewModel.updateTimeValue(String.format("%02d:%02d", timePickerState.hour, timePickerState.minute))
-                                    showTimePicker.value = false
-                                }
-                            ) {
-                                Text(stringResource(R.string.Confirm_TimePicker_Button))
-                            }
+                            Text(stringResource(R.string.Confirm_TimePicker_Button))
                         }
-                    }
+                        },
+                    title = {Text("Enter date")},
+                ){
+                    TimePicker(state = timePickerState)
                 }
             }
         }

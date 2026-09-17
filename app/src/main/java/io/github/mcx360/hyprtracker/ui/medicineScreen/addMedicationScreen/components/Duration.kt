@@ -13,17 +13,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.text.isDigitsOnly
+import io.github.mcx360.hyprtracker.ui.utils.DurationDatePicker
 import java.time.LocalDate
 
 @Composable
@@ -139,39 +134,6 @@ fun DurationCard(
                 onDateSelected = { updateMedicationEndDateLong(it) },
                 onDismiss = { updateShowDurationDatePicker(false) })
         }
-    }
-}
-
-//dialog that lets users pick the end date for their medication e.g. only till 05/05/2026
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DurationDatePicker(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = {onDismiss()}) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(
-            state = datePickerState,
-            dateFormatter = DatePickerDefaults.dateFormatter(),
-            showModeToggle = false,
-        )
     }
 }
 
