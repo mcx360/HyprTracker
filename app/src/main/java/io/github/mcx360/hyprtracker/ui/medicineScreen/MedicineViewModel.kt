@@ -77,8 +77,10 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
     }
 
     fun updateMedicationDescription(description: String){
-        _uiState.update { currentState ->
-            currentState.copy(medicationDescription = description)
+        if (description.length <100) {
+            _uiState.update { currentState ->
+                currentState.copy(medicationDescription = description)
+            }
         }
     }
 

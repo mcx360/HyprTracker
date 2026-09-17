@@ -106,7 +106,7 @@ fun MedicineScreen(
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            Column(horizontalAlignment = Alignment.Start) {
+                            Column(horizontalAlignment = Alignment.Start, modifier = Modifier.weight(0.8f)) {
                                 //Medication name and icon
                                 Row {
                                     Text(
@@ -132,7 +132,7 @@ fun MedicineScreen(
                             //extras menu
                             Column(
                                 horizontalAlignment = Alignment.End,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth().weight(0.2f)
                             ) {
                                 Box {
                                 FilledTonalIconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
