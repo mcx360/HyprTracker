@@ -139,7 +139,7 @@ fun LogBPResult(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.systolicValue,
-                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.systolicValue.length <= 3) hyprTrackerViewModel.updateSystolicValue(it) },
+                            onValueChange = {hyprTrackerViewModel.updateSystolicValue(it)},
                             label = {
                                 Text(
                                 text = stringResource(R.string.systolic),
@@ -167,7 +167,7 @@ fun LogBPResult(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.diastolicValue,
-                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.diastolicValue.length <= 3)  hyprTrackerViewModel.updateDiastolicValue(it) },
+                            onValueChange = {hyprTrackerViewModel.updateDiastolicValue(it)},
                             label = {
                                 Text(
                                 text = stringResource(R.string.diastolic),
@@ -194,7 +194,7 @@ fun LogBPResult(
                             textStyle = TextStyle(textAlign = TextAlign.Center),
                             singleLine = true,
                             value = hyprTackerUiState.pulseValue,
-                            onValueChange = { if (it.isDigitsOnly() && hyprTackerUiState.pulseValue.length <= 3)  hyprTrackerViewModel.updatePulseValue(it) },
+                            onValueChange = {hyprTrackerViewModel.updatePulseValue(it)},
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Done

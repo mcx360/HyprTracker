@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -74,7 +75,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //Updates systolic value in log tab
     fun updateSystolicValue(inputtedValue: String){
-        if (inputtedValue.length<4) {
+        if (inputtedValue.isDigitsOnly() && inputtedValue.length<4) {
             _uiState.update { currentState ->
                 currentState.copy(systolicValue = inputtedValue)
             }
@@ -83,7 +84,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //updates diastolic value in log tab
     fun updateDiastolicValue(inputtedValue: String){
-        if (inputtedValue.length<4) {
+        if (inputtedValue.isDigitsOnly() && inputtedValue.length<4) {
             _uiState.update { currentState ->
                 currentState.copy(diastolicValue = inputtedValue)
             }
@@ -92,7 +93,7 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //updates pulse value in log tab
     fun updatePulseValue(inputtedValue: String){
-        if (inputtedValue.length<4) {
+        if (inputtedValue.isDigitsOnly() && inputtedValue.length<4) {
             _uiState.update { currentState ->
                 currentState.copy(pulseValue = inputtedValue)
             }
@@ -101,8 +102,10 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //updates notes value in log tab
     fun updateNotesValue(inputtedValue: String){
-        _uiState.update { currentState ->
-            currentState.copy(notes = inputtedValue)
+        if (inputtedValue.length < 101){
+            _uiState.update { currentState ->
+                currentState.copy(notes = inputtedValue)
+            }
         }
     }
 
