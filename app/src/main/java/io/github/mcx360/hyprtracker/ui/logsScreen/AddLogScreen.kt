@@ -402,7 +402,6 @@ fun LogBPResult(
                 )
             }
 
-            //Edit sheet custom time picker
             if (showTimePicker.value){
                 TimePickerDialog(
                     onDismissRequest = {showTimePicker.value = false },

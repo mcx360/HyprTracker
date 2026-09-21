@@ -2,6 +2,7 @@ package io.github.mcx360.hyprtracker.ui.logsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,8 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.mainScreen.components.SmallMenu
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.EmptyScreen
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
@@ -55,6 +60,7 @@ fun LogsScreen(
     snackBarHostState: SnackbarHostState,
     openAddBloodPressureLog: MutableState<Boolean>
 ) {
+    val showMenu = remember { mutableStateOf(false) }
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
@@ -283,17 +289,32 @@ fun LogsScreen(
 
                                 Spacer(modifier = Modifier.weight(1f))
 
-                                FilledTonalIconButton(
-                                    onClick = {
-                                        showDeleteConfirmationDialog.value = true
-                                        listIndexToBeDeleted.intValue = index
-                                    },
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.MoreHoriz,
-                                        contentDescription = null,
-                                    )
+                                Box {
+                                    FilledTonalIconButton(
+                                        onClick = {
+                                            //showDeleteConfirmationDialog.value = true
+                                            showMenu.value = true
+                                            listIndexToBeDeleted.intValue = index
+                                        },
+                                        modifier = Modifier.padding(bottom = 8.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.MoreHoriz,
+                                            contentDescription = null,
+                                        )
+                                    }
+                                    when{
+                                        showMenu.value -> DropdownMenu(expanded = showMenu.value, onDismissRequest = {showMenu.value = false}) {
+                                                DropdownMenuItem(
+                                                    text = { Text("Delete") },
+                                                    onClick = {
+                                                        showDeleteConfirmationDialog.value = true
+                                                        showMenu.value = false
+                                                    },
+                                                    leadingIcon = { Icon(Icons.Default.Delete, contentDescription = null) },
+                                                )
+                                        }
+                                    }
                                 }
                             }
                         }

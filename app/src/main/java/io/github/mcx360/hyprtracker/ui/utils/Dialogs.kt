@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -110,7 +111,6 @@ fun InfoDialog(
 
 @Composable
 fun RangePickerDialog(
-    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onDatesGiven: (Long, Long) -> Unit,
     onFinish: () -> Unit
@@ -126,6 +126,7 @@ fun RangePickerDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(DatePickerDefaults.colors().containerColor)
+                    .statusBarsPadding()
                     .padding(start = 12.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -144,7 +145,7 @@ fun RangePickerDialog(
                     Text(text = stringResource(R.string.Save))
                 }
             }
-            DateRangePicker(state = state, modifier = modifier.weight(1f), showModeToggle = false)
+            DateRangePicker(state = state, modifier = Modifier.weight(1f), showModeToggle = false)
         }
     }
 }
