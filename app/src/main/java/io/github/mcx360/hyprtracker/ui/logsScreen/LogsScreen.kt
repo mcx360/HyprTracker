@@ -60,7 +60,6 @@ fun LogsScreen(
     snackBarHostState: SnackbarHostState,
     openAddBloodPressureLog: MutableState<Boolean>
 ) {
-    val showMenu = remember { mutableStateOf(false) }
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
@@ -72,7 +71,8 @@ fun LogsScreen(
             LogBPResult(
                 onDismissRequest = { openAddBloodPressureLog.value = false },
                 hyprTrackerViewModel = hyprTrackerViewModel,
-                snackBarHostState = snackBarHostState
+                snackBarHostState = snackBarHostState,
+                scope = scope
             )
         }
     }
@@ -124,6 +124,7 @@ fun LogsScreen(
                         else -> CardColors(Color.DarkGray, MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.onError, MaterialTheme.colorScheme.error)
                     }
                 ) {
+                    val showMenu = remember { mutableStateOf(false) }
                     Row {
                         Column(modifier = Modifier.width(8.dp)) {}
                         Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh)) {

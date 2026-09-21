@@ -59,6 +59,7 @@ import io.github.mcx360.hyprtracker.ui.utils.DurationDatePicker
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
 import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -67,9 +68,10 @@ import java.util.Calendar
 fun LogBPResult(
     hyprTrackerViewModel: HyprTrackerViewModel,
     onDismissRequest: () -> Unit,
-    snackBarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState,
+    scope: CoroutineScope
 ){
-    val scope = rememberCoroutineScope()
+    //val scope = rememberCoroutineScope()
     val hyprTackerUiState by hyprTrackerViewModel.uiState.collectAsState()
     val haptic = LocalHapticFeedback.current
     val datePickerState = rememberDatePickerState()
@@ -365,25 +367,13 @@ fun LogBPResult(
                                             notes = hyprTackerUiState.notes
                                         )
                                     )
+                                    snackBarHostState.showSnackbar("Log entry added!")
                                 }
                                 hyprTrackerViewModel.resetBloodPressureLog()
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                                 onDismissRequest()
-                                scope.launch {
-                                    snackBarHostState.showSnackbar(
-                                        message = "Log entry added!",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                                haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                             } else {
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                                scope.launch {
-                                    snackBarHostState.showSnackbar(
-                                        message = "Add systolic and diastolic values before logging",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
                             }
                         },
                     ) {
