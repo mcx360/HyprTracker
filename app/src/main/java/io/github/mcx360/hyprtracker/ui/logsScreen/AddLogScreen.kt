@@ -97,8 +97,6 @@ fun LogBPResult(
                             )
                             Spacer(modifier = Modifier.padding(start = 4.dp))
                             Text(formatToRegularDate(selectedDate))
-                            //Spacer(modifier = Modifier.padding(start = 4.dp))
-                            //Text(hyprTackerUiState.time.substring(0, 5), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
 
                     }
@@ -137,33 +135,6 @@ fun LogBPResult(
 
                     }
                 }
-
-                /*
-                OutlinedTextField(
-                    value = formatToRegularDate(selectedDate) + " " + hyprTackerUiState.time.substring(0, 5),
-                    onValueChange = {},
-                    shape = RoundedCornerShape(16.dp),
-                    readOnly = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                imageVector = Icons.Filled.DateRange,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        IconButton(onClick = { showDatePicker.value = true }) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                )
-
-                 */
 
                 /*
             OutlinedTextField(
