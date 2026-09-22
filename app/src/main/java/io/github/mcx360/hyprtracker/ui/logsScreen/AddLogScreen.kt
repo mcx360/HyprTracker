@@ -1,8 +1,11 @@
 package io.github.mcx360.hyprtracker.ui.logsScreen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,9 +19,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -35,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -70,18 +76,68 @@ fun LogBPResult(
     val timePickerState = rememberTimePickerState(initialHour = currentTime.get(Calendar.HOUR_OF_DAY), initialMinute = currentTime.get(Calendar.MINUTE), is24Hour = true)
 
     Dialog(onDismissRequest = {}) {
-        Card(colors = CardColors(contentColor = MaterialTheme.colorScheme.surfaceContainer, containerColor = MaterialTheme.colorScheme.primaryContainer, disabledContentColor = MaterialTheme.colorScheme.surfaceContainer, disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer)) {
+        Card() {
             Column(modifier = Modifier.padding(16.dp)) {
 
             Text(
-                text = "Enter Measurement",
+                text = "Enter your Measurement",
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
+                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDatePicker.value = true }).padding(top = 16.dp)){
+                    Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_date),
+                                null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                            Spacer(modifier = Modifier.padding(start = 4.dp))
+                            Text(formatToRegularDate(selectedDate))
+                            //Spacer(modifier = Modifier.padding(start = 4.dp))
+                            //Text(hyprTackerUiState.time.substring(0, 5), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
 
-            Row {
+                    }
+                }
+
+                Spacer(modifier= Modifier.padding(2.dp))
+
+                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDatePicker.value = true })){
+                    Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_analogue_clock),
+                                null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                            Text(hyprTackerUiState.time.substring(0, 5))
+                        }
+
+                    }
+                }
+
+                Spacer(modifier= Modifier.padding(2.dp))
+
+
+                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {}).padding(bottom = 8.dp)){
+                    Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_notes),
+                                null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                            Spacer(modifier = Modifier.padding(start = 4.dp))
+                            Text("Add note (optional)")
+                        }
+
+                    }
+                }
+
+                /*
                 OutlinedTextField(
                     value = formatToRegularDate(selectedDate) + " " + hyprTackerUiState.time.substring(0, 5),
                     onValueChange = {},
@@ -105,21 +161,23 @@ fun LogBPResult(
                         }
                     }
                 )
-            }
 
+                 */
+
+                /*
             OutlinedTextField(
                 value = hyprTackerUiState.notes,
                 shape = RoundedCornerShape(16.dp),
                 onValueChange = { hyprTrackerViewModel.updateNotesValue(it) },
                 label = { Text(stringResource(R.string.Custom_Log_Note_TextField)) },
-                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 placeholder = { Text(text = stringResource(R.string.Note_placeholder)) }
             )
+                 */
 
-            Row {
+            Row(modifier = Modifier.padding(bottom = 8.dp)) {
                 //systolic value text field
                 OutlinedTextField(
                     textStyle = TextStyle(textAlign = TextAlign.Center),
@@ -192,7 +250,7 @@ fun LogBPResult(
                     ),
                     label = {
                         Text(
-                            text = "PUL",
+                            text = "Pulse",
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -216,13 +274,15 @@ fun LogBPResult(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Button(onClick = { onDismissRequest() }) {
+                OutlinedButton(onClick = { onDismissRequest() }) {
                     Icon(imageVector = Icons.Filled.Close, null)
+                    Spacer(modifier = Modifier.padding(start = 4.dp))
                     Text("Cancel")
                 }
                 Spacer(modifier = Modifier.weight(1f))
 
-                Button(
+                FilledTonalButton(
+                    enabled = hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "",
                     onClick = {
                         if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
                             scope.launch {
@@ -247,6 +307,7 @@ fun LogBPResult(
                     }
                 ) {
                     Icon(imageVector = Icons.Filled.Save, null)
+                    Spacer(modifier = Modifier.padding(start = 4.dp))
                     Text(text = "Save")
                 }
             }
