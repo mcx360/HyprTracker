@@ -38,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -86,7 +87,7 @@ fun LogBPResult(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDatePicker.value = true }).padding(top = 16.dp)){
+                Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp).clickable(onClick = {showDatePicker.value = true }), shape = RoundedCornerShape(16,16,0,0)){
                     Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Icon(
@@ -103,9 +104,9 @@ fun LogBPResult(
                     }
                 }
 
-                Spacer(modifier= Modifier.padding(2.dp))
+                Spacer(modifier= Modifier.padding(1.dp))
 
-                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDatePicker.value = true })){
+                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {showTimePicker.value = true }), shape = RectangleShape){
                     Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Icon(
@@ -119,10 +120,10 @@ fun LogBPResult(
                     }
                 }
 
-                Spacer(modifier= Modifier.padding(2.dp))
+                Spacer(modifier= Modifier.padding(1.dp))
 
 
-                Card(modifier = Modifier.fillMaxWidth().clickable(onClick = {}).padding(bottom = 8.dp)){
+                Card(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp).clickable(onClick = {}), shape = RoundedCornerShape(0,0,16,16)){
                     Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(8.dp)) {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Icon(
@@ -316,7 +317,6 @@ fun LogBPResult(
                 DurationDatePicker(
                     onDateSelected = {
                         hyprTrackerViewModel.updateDateValue(convertMillisToDate(it))
-                        showTimePicker.value = true
                     },
                     onDismiss = { showDatePicker.value = false }
                 )
