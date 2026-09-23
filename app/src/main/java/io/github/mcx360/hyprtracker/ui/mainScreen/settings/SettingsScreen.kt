@@ -1,15 +1,19 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.settings
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,6 +42,7 @@ import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
+import java.io.InputStream
 
 @Composable
 fun Settings(
@@ -54,9 +60,18 @@ fun Settings(
         val showDeleteBPDataDialog = remember { mutableStateOf(false) }
         val showDeleteMedicationDialog = remember { mutableStateOf(false) }
         val showBugReportDialog = remember { mutableStateOf(false) }
-        val showAboutDialog = remember { mutableStateOf(false) }
+        val showAboutDialog = remember { mutableStateOf(false) }  
         val scope = rememberCoroutineScope()
-        val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(), onResult = { uri -> })
+        val context = LocalContext.current
+        val showWarning = remember { mutableStateOf(false) }
+
+        val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri ->
+            if (fileUri != null){
+                showWarning.value = true
+                val inputStream: InputStream? = context.contentResolver.openInputStream(fileUri)
+                Log.e("file", inputStream?.bufferedReader()?.readText() ?: "nothing")
+            }
+        }
         val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
 
         Card(
@@ -234,7 +249,9 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {importer.launch("text/csv)")})) {
+                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {
+                    importer.launch("text/*")
+                })) {
                     Text(
                         text = "Database import",
                         fontWeight = FontWeight.Bold
@@ -244,6 +261,22 @@ fun Settings(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    when{
+                        showWarning.value ->
+                            Dialog(onDismissRequest = {showWarning.value = false}) {
+                                Card() {
+                                    Text("This will override all your current logs. Is that okay?")
+                                    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                                        Button(onClick = {onDismissRequest()}) {
+                                            Text("Cancel")
+                                        }
+                                        Button(onClick = {}) {
+                                            Text("Ok")
+                                        }
+                                    }
+                                }
+                            }
+                    }
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))

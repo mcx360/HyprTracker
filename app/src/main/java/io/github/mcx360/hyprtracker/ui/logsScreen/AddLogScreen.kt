@@ -5,23 +5,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -78,7 +72,7 @@ fun LogBPResult(
 
     Dialog(onDismissRequest = {}) {
         Card() {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer).padding(16.dp)) {
 
             Text(
                 text = "Enter your Measurement",
@@ -93,9 +87,11 @@ fun LogBPResult(
                             Icon(
                                 painter = painterResource(R.drawable.ic_date),
                                 null,
-                                tint = MaterialTheme.colorScheme.secondary
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(end = 8.dp)
                             )
-                            Spacer(modifier = Modifier.padding(start = 4.dp))
+                            Text("Date")
+                            Spacer(modifier = Modifier.weight(1f))
                             Text(formatToRegularDate(selectedDate))
                         }
 
@@ -110,8 +106,11 @@ fun LogBPResult(
                             Icon(
                                 painter = painterResource(R.drawable.ic_analogue_clock),
                                 null,
-                                tint = MaterialTheme.colorScheme.secondary
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(end = 8.dp)
                             )
+                            Text("Time")
+                            Spacer(modifier = Modifier.weight(1f))
                             Text(hyprTackerUiState.time.substring(0, 5))
                         }
 
@@ -127,7 +126,9 @@ fun LogBPResult(
                             Icon(
                                 painter = painterResource(R.drawable.ic_notes),
                                 null,
-                                tint = MaterialTheme.colorScheme.secondary
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(end = 8.dp)
+
                             )
                             Spacer(modifier = Modifier.padding(start = 4.dp))
                             Text("Add note (optional)")
@@ -253,10 +254,10 @@ fun LogBPResult(
                 }
                 Spacer(modifier = Modifier.weight(1f))
 
-                FilledTonalButton(
-                    enabled = hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "",
+                Button(
+                    enabled = hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "" && hyprTackerUiState.pulseValue != "",
                     onClick = {
-                        if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "") {
+                        if (hyprTackerUiState.systolicValue != "" && hyprTackerUiState.diastolicValue != "" && hyprTackerUiState.pulseValue != "") {
                             scope.launch {
                                 hyprTrackerViewModel.addReading(
                                     HyprReading(
