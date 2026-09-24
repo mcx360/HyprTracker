@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -25,7 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +40,6 @@ import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
-import java.io.InputStream
 
 @Composable
 fun Settings(
@@ -64,287 +61,178 @@ fun Settings(
         val context = LocalContext.current
         val showWarning = remember { mutableStateOf(false) }
         val uri = remember { mutableStateOf(Uri.EMPTY) }
+        val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri -> if (fileUri != null){ showWarning.value = true; uri.value = fileUri } }
+        val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
 
-        val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri ->
-            if (fileUri != null){
-                showWarning.value = true
-                uri.value = fileUri
+        Card(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            TitleBarWithBackButton(title = "Settings", onBackArrowClicked = { onDismissRequest() })
+
+            //General Settings
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Title(title = "General")
+            Option(
+                title = "Theme",
+                subtitle = when(currentTheme){
+                    ThemeMode.LIGHT -> "Light"
+                    ThemeMode.DARK -> "Dark"
+                    ThemeMode.SYSTEM -> "System Default" },
+                onClick = {showThemeDialog.value = true}
+            )
+            when{
+                showThemeDialog.value -> Picker(
+                    title = "Select theme",
+                    options = mapOf(
+                        "Dark" to {themeViewModel.setTheme(ThemeMode.DARK)},
+                        "Light" to {themeViewModel.setTheme(ThemeMode.LIGHT)},
+                        "System Default" to {themeViewModel.setTheme(ThemeMode.SYSTEM)}
+                    ),
+                    onDismissRequest = {showThemeDialog.value = false},
+                    default = when (currentTheme) {
+                        ThemeMode.LIGHT -> "Light"
+                        ThemeMode.DARK -> "Dark"
+                        ThemeMode.SYSTEM -> "System Default"
+                    }
+                )
             }
-        }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Option(title = "Language", subtitle = "English (UK)") { showLanguageDialog.value = true }
+            when{
+                showLanguageDialog.value -> Picker(
+                    title = "Select Language",
+                    options = mapOf("English(UK)" to {}),
+                    onDismissRequest = {showLanguageDialog.value = false},
+                    default = "English(UK)"
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Option(title = "Classification table", subtitle = "International society of hypertension"){showClassificationTableDialog.value = true}
+            when{
+                showClassificationTableDialog.value -> Picker(
+                    onDismissRequest = {showClassificationTableDialog.value = false},
+                    title = "Select classification table",
+                    options = mapOf("International society of hypertension" to {}),
+                    default = "International society of hypertension"
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        when{
-            showWarning.value ->
-                Dialog(onDismissRequest = {showWarning.value = false}) {
-                    Card() {
-                        Column( modifier = Modifier.padding(16.dp)){
-                            Text("This will override all your current logs. Is that okay?")
-                            Row(
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                TextButton(onClick = { onDismissRequest() }) {
-                                    Text("Cancel")
-                                }
-                                TextButton(onClick = {
-                                    scope.launch {
-                                        hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
-                                        onDismissRequest()
-                                    }
-                                }) {
-                                    Text("Ok")
+            //Data Settings
+            Title(title = "Data")
+            Option(title = "Delete BP data", subtitle = "Permanently delete all bp data") { showDeleteBPDataDialog.value = true }
+            when{
+                showDeleteBPDataDialog.value -> {
+                    DeletionDialog(
+                        onDismissRequest = {showDeleteBPDataDialog.value = false},
+                        onDeleteRequest = {
+                            scope.launch { hyprTrackerViewModel.deleteAllBPRecords() }
+                            showDeleteBPDataDialog.value = false },
+                        deletionText = "Doing this will permanently delete all logged BP readings on your device. Make sure to have backups of any important data"
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Option(title = "Delete medications?", subtitle = "Permanently delete all medication data") { showDeleteMedicationDialog.value = true }
+            when{
+                showDeleteMedicationDialog.value -> {
+                    DeletionDialog(
+                        onDismissRequest = {showDeleteMedicationDialog.value = false},
+                        onDeleteRequest = {
+                            scope.launch { medicineViewModel.deleteAllRecordedMedications()}
+                            showDeleteMedicationDialog.value = false },
+                        deletionText = "Doing this will permanently delete all saved medications on your device. Make sure to have backups of any important data"
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+            //Backup & restore settings
+            Title("Backup & restore")
+            Option(title = "Database export", subtitle = "Export all your logs in csv format") { exporter.launch("logs.csv") }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Option(title = "Database Import", subtitle = "Import a csv file containing your logs") { importer.launch("text/*") }
+            when{
+                showWarning.value ->
+                    Dialog(onDismissRequest = {showWarning.value = false}) {
+                        Card() {
+                            Column( modifier = Modifier.padding(16.dp)){
+                                Text(text = "This will override all your current logs. Is that okay?")
+                                Row(
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    TextButton(onClick = { onDismissRequest() }) { Text("Cancel") }
+                                        TextButton(
+                                            onClick = {
+                                                scope.launch {
+                                                hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
+                                                onDismissRequest()
+                                                }
+                                            }
+                                        ) {
+                                            Text("Ok")
+                                        }
                                 }
                             }
                         }
                     }
                 }
-        }
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
+            //About section
+            Title("About")
+            Option(title = "About", subtitle = "Version 0.5.0") { showAboutDialog.value = true }
+            when{showAboutDialog.value -> AboutDialog(onDismissRequest = {showAboutDialog.value = false}) }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Option(title = "Report Bug", subtitle = "Report bugs found while using HyprTracker") { showBugReportDialog.value = true }
+            when{showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false}) }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        Card(
-            modifier = Modifier.fillMaxSize(),
-            shape = RectangleShape
-        ) {
-            TitleBarWithBackButton(
-                title = "Settings",
-                onBackArrowClicked = {onDismissRequest() }
+            //Info section
+            Icon(
+                painter = painterResource(R.drawable.ic_about),
+                contentDescription = null,
+                modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
             )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "General",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable(onClick = {showThemeDialog.value = true})
-                ) {
-                    Text(
-                        text = "Theme",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = when(currentTheme){
-                            ThemeMode.LIGHT -> "Light"
-                            ThemeMode.DARK -> "Dark"
-                            ThemeMode.SYSTEM -> "System Default"
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when{
-                    showThemeDialog.value -> Picker(
-                        title = "Select theme",
-                        options = mapOf(
-                            "Dark" to {themeViewModel.setTheme(ThemeMode.DARK)},
-                            "Light" to {themeViewModel.setTheme(ThemeMode.LIGHT)},
-                            "System Default" to {themeViewModel.setTheme(ThemeMode.SYSTEM)}
-                        ),
-                        onDismissRequest = {showThemeDialog.value = false},
-                        default = when (currentTheme) {
-                            ThemeMode.LIGHT -> "Light"
-                            ThemeMode.DARK -> "Dark"
-                            ThemeMode.SYSTEM -> "System Default"
-                        }
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showLanguageDialog.value = true})) {
-                    Text(
-                        text = "Language",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "English (UK)",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when{
-                    showLanguageDialog.value -> Picker(
-                        title = "Select Language",
-                        options = mapOf("English(UK)" to {}),
-                        onDismissRequest = {showLanguageDialog.value = false},
-                        default = "English(UK)"
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showClassificationTableDialog.value = true})) {
-                    Text(
-                        text =  "Classification table",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Internation society of hypertension",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when{
-                    showClassificationTableDialog.value -> Picker(
-                        onDismissRequest = {showClassificationTableDialog.value = false}, title = "Select classification table", options = mapOf("International society of hypertension" to {}), default = "International society of hypertension")
-                }
-
-                Text(
-                    text = "Data",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(top = 16.dp),
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDeleteBPDataDialog.value = true})) {
-                    Text(
-                        text = "Delete BP data",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Permanently delete all bp data",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when{
-                    showDeleteBPDataDialog.value -> {
-                        DeletionDialog(
-                            onDismissRequest = {showDeleteBPDataDialog.value = false},
-                            onDeleteRequest = {
-                                scope.launch { hyprTrackerViewModel.deleteAllBPRecords() }
-                                showDeleteBPDataDialog.value = false
-                            },
-                            deletionText = "Doing this will permanently delete all logged BP readings on your device. Make sure to have backups of any important data"
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDeleteMedicationDialog.value = true})) {
-                    Text(
-                        text = "Delete medications?",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Permanently delete all medication data",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                when{
-                    showDeleteMedicationDialog.value -> {
-                        DeletionDialog(
-                            onDismissRequest = {showDeleteMedicationDialog.value = false},
-                            onDeleteRequest = {
-                                scope.launch { medicineViewModel.deleteAllRecordedMedications()}
-                                showDeleteMedicationDialog.value = false
-                            },
-                            deletionText = "Doing this will permanently delete all saved medications on your device. Make sure to have backups of any important data"
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Text(
-                    text = "Backup & restore",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {exporter.launch("logs.csv")})) {
-                    Text(
-                        text = "Database export",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Export all your logs in csv format",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {
-                    importer.launch("text/*")
-                })) {
-                    Text(
-                        text = "Database import",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Import a csv file containing your logs",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Text(
-                    text = "About",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showAboutDialog.value = true})) {
-                    Text(
-                        text = "About",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Version 0.5.0", style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when{
-                    showAboutDialog.value -> AboutDialog(onDismissRequest = {showAboutDialog.value = false})
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
-                    Text(
-                        text = "Report Bug",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Report bugs found while using HyprTracker",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,)
-                }
-
-                when{
-                    showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false})
-                }
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-                Icon(
-                    painter = painterResource(R.drawable.ic_about),
-                    contentDescription = null,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                Text(
-                    text = "HyprTracker is a mobile application designed to help users conveniently record and track their blood pressure readings. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional regarding any medical concerns or before making decisions about your health.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            }
+            Text(
+                text = "HyprTracker is a mobile application designed to help users conveniently record and track their blood pressure readings. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional regarding any medical concerns or before making decisions about your health.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 16.dp, start = 16.dp)
+            )
         }
+    }
+}
+
+@Composable
+fun Title(title: String){
+    Text(
+        text = title,
+        style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.secondary,
+        modifier = Modifier.padding(start = 16.dp)
+    )
+}
+
+@Composable
+fun Option(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp)
+            .clickable(onClick = {onClick()})
+    ) {
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
