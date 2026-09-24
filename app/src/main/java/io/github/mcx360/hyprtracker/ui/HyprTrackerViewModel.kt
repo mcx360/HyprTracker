@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.ui.model.HyprReading
+import java.io.InputStream
 
 class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRepository) : ViewModel() {
 
@@ -56,6 +57,10 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
     //delete all blood pressure readings in database
     suspend fun deleteAllBPRecords(){
         bloodPressureRepository.removeAllBloodPressureReadings()
+    }
+
+    suspend fun importLogs(stream: InputStream?){
+        if (stream != null) bloodPressureRepository.importBloodPressureLogs(stream)
     }
 
     //Resets uiState and enables automatic updating of date and time values

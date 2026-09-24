@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -67,11 +68,15 @@ fun Settings(
 
         val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri ->
             if (fileUri != null){
-                showWarning.value = true
+                //showWarning.value = true
                 val inputStream: InputStream? = context.contentResolver.openInputStream(fileUri)
-                Log.e("file", inputStream?.bufferedReader()?.readText() ?: "nothing")
+                scope.launch {
+                    hyprTrackerViewModel.importLogs(inputStream)
+                }
             }
         }
+
+
         val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
 
         Card(
@@ -261,22 +266,6 @@ fun Settings(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    when{
-                        showWarning.value ->
-                            Dialog(onDismissRequest = {showWarning.value = false}) {
-                                Card() {
-                                    Text("This will override all your current logs. Is that okay?")
-                                    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                                        Button(onClick = {onDismissRequest()}) {
-                                            Text("Cancel")
-                                        }
-                                        Button(onClick = {}) {
-                                            Text("Ok")
-                                        }
-                                    }
-                                }
-                            }
-                    }
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))

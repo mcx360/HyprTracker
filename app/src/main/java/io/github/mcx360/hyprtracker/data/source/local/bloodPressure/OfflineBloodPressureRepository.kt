@@ -2,13 +2,37 @@ package io.github.mcx360.hyprtracker.data.source.local.bloodPressure
 
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressureDAO
+import io.github.mcx360.hyprtracker.ui.model.getHyperTensionStage
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 
 class OfflineBloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO) : BloodPressureRepository {
 
     override suspend fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
 
     override suspend fun addBloodPressureReading(reading: RecordedBloodPressure) = bloodPressureDAO.insertBloodPressureReading(reading)
+
+    override suspend fun importBloodPressureLogs(stream: InputStream) {
+        removeAllBloodPressureReadings()
+        val logs: MutableList<RecordedBloodPressure> = mutableListOf()
+
+        stream.bufferedReader().forEachLine {
+           val record = it.split(",")
+            val bpRecord = RecordedBloodPressure(
+                dateAdded = record[0],
+                timeAdded = record[1],
+                systolicValue = record[2].toInt(),
+                diastolicValue = record[3].toInt(),
+                pulseValue = record[4].toInt(),
+                noteValue = record[5],
+                hypertensionStage = getHyperTensionStage(record[2], record[3])
+            )
+            logs.add(bpRecord)
+        }
+        logs.forEach {
+            addBloodPressureReading(it)
+        }
+    }
 
     override suspend fun removeBloodPressureReading(reading: RecordedBloodPressure) = bloodPressureDAO.deleteBloodPressureReading(reading)
 

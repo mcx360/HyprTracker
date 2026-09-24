@@ -2,6 +2,7 @@ package io.github.mcx360.hyprtracker.data.source.local.bloodPressure
 
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 
 interface BloodPressureRepository {
 
@@ -10,6 +11,8 @@ interface BloodPressureRepository {
     suspend fun  removeBloodPressureReading(reading: RecordedBloodPressure)
 
     suspend fun addBloodPressureReading(reading: RecordedBloodPressure)
+
+    suspend fun importBloodPressureLogs(stream: InputStream)
 
     suspend fun removeAllBloodPressureReadings()
 
