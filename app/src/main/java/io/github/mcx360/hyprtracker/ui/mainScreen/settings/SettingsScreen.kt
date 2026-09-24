@@ -1,6 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.settings
 
-import android.util.Log
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +47,6 @@ import java.io.InputStream
 @Composable
 fun Settings(
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
     hyprTrackerViewModel: HyprTrackerViewModel,
     medicineViewModel: MedicineViewModel,
     themeViewModel: ThemeViewModel
@@ -65,17 +63,41 @@ fun Settings(
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         val showWarning = remember { mutableStateOf(false) }
+        val uri = remember { mutableStateOf(Uri.EMPTY) }
 
         val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri ->
             if (fileUri != null){
-                //showWarning.value = true
-                val inputStream: InputStream? = context.contentResolver.openInputStream(fileUri)
-                scope.launch {
-                    hyprTrackerViewModel.importLogs(inputStream)
-                }
+                showWarning.value = true
+                uri.value = fileUri
             }
         }
 
+        when{
+            showWarning.value ->
+                Dialog(onDismissRequest = {showWarning.value = false}) {
+                    Card() {
+                        Column( modifier = Modifier.padding(16.dp)){
+                            Text("This will override all your current logs. Is that okay?")
+                            Row(
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                TextButton(onClick = { onDismissRequest() }) {
+                                    Text("Cancel")
+                                }
+                                TextButton(onClick = {
+                                    scope.launch {
+                                        hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
+                                        onDismissRequest()
+                                    }
+                                }) {
+                                    Text("Ok")
+                                }
+                            }
+                        }
+                    }
+                }
+        }
 
         val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
 
@@ -136,7 +158,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showLanguageDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showLanguageDialog.value = true})) {
                     Text(
                         text = "Language",
                         fontWeight = FontWeight.Bold
@@ -158,7 +180,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showClassificationTableDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showClassificationTableDialog.value = true})) {
                     Text(
                         text =  "Classification table",
                         fontWeight = FontWeight.Bold
@@ -181,7 +203,7 @@ fun Settings(
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showDeleteBPDataDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDeleteBPDataDialog.value = true})) {
                     Text(
                         text = "Delete BP data",
                         fontWeight = FontWeight.Bold
@@ -207,7 +229,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showDeleteMedicationDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showDeleteMedicationDialog.value = true})) {
                     Text(
                         text = "Delete medications?",
                         fontWeight = FontWeight.Bold
@@ -240,7 +262,7 @@ fun Settings(
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {exporter.launch("logs.csv")})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {exporter.launch("logs.csv")})) {
                     Text(
                         text = "Database export",
                         fontWeight = FontWeight.Bold
@@ -254,7 +276,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {
                     importer.launch("text/*")
                 })) {
                     Text(
@@ -276,7 +298,7 @@ fun Settings(
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showAboutDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showAboutDialog.value = true})) {
                     Text(
                         text = "About",
                         fontWeight = FontWeight.Bold
@@ -292,7 +314,7 @@ fun Settings(
 
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                Column(modifier = modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
+                Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {showBugReportDialog.value = true})) {
                     Text(
                         text = "Report Bug",
                         fontWeight = FontWeight.Bold
