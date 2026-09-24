@@ -3,12 +3,7 @@ package io.github.mcx360.hyprtracker.ui.mainScreen.settings
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,7 +11,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -34,12 +27,16 @@ import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.AboutDialog
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.BugReportDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.ImportLogsDataDialog
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Option
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
+import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Title
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun Settings(
@@ -62,7 +59,10 @@ fun Settings(
         val showWarning = remember { mutableStateOf(false) }
         val uri = remember { mutableStateOf(Uri.EMPTY) }
         val importer = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){ fileUri -> if (fileUri != null){ showWarning.value = true; uri.value = fileUri } }
-        val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = { uri -> })
+        val result = hyprTrackerViewModel.uiState.collectAsState().value.readings.toString().toByteArray()
+        val exporter = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("text/csv"), onResult = {
+            uri -> if (uri != null) context.contentResolver.openOutputStream(uri)?.write(result)
+        })
 
         Card(modifier = Modifier.verticalScroll(rememberScrollState())) {
             TitleBarWithBackButton(title = "Settings", onBackArrowClicked = { onDismissRequest() })
@@ -151,32 +151,14 @@ fun Settings(
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
             Option(title = "Database Import", subtitle = "Import a csv file containing your logs") { importer.launch("text/*") }
             when{
-                showWarning.value ->
-                    Dialog(onDismissRequest = {showWarning.value = false}) {
-                        Card() {
-                            Column( modifier = Modifier.padding(16.dp)){
-                                Text(text = "This will override all your current logs. Is that okay?")
-                                Row(
-                                    horizontalArrangement = Arrangement.End,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    TextButton(onClick = { onDismissRequest() }) { Text("Cancel") }
-                                        TextButton(
-                                            onClick = {
-                                                scope.launch {
-                                                hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
-                                                onDismissRequest()
-                                                }
-                                            }
-                                        ) {
-                                            Text("Ok")
-                                        }
-                                }
-                            }
-                        }
+                showWarning.value -> ImportLogsDataDialog(onDismissRequest = { showWarning.value = false}){
+                    scope.launch {
+                        hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
+                        showWarning.value = false
                     }
                 }
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
             //About section
             Title("About")
@@ -200,39 +182,5 @@ fun Settings(
                 modifier = Modifier.padding(bottom = 16.dp, start = 16.dp)
             )
         }
-    }
-}
-
-@Composable
-fun Title(title: String){
-    Text(
-        text = title,
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.secondary,
-        modifier = Modifier.padding(start = 16.dp)
-    )
-}
-
-@Composable
-fun Option(
-    title: String,
-    subtitle: String,
-    onClick: () -> Unit,
-){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp)
-            .clickable(onClick = {onClick()})
-    ) {
-        Text(
-            text = title,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }

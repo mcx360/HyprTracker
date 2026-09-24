@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun AboutDialog(
@@ -183,6 +184,31 @@ fun BugReportDialog(
                     modifier = Modifier.align(Alignment.End)
                 ) {
                     Text("Ok")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ImportLogsDataDialog(
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit
+){
+    Dialog(onDismissRequest) {
+        Card() {
+            Column( modifier = Modifier.padding(16.dp)){
+                Text(text = "This will override all your current logs. Is that okay?")
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(onClick = { onDismissRequest() }) { Text("Cancel") }
+                    TextButton(
+                        onClick = { onConfirm() }
+                    ) {
+                        Text("Ok")
+                    }
                 }
             }
         }

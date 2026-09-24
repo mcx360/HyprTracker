@@ -1,5 +1,6 @@
 package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
@@ -85,5 +87,39 @@ fun Picker(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Title(title: String){
+    Text(
+        text = title,
+        style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.secondary,
+        modifier = Modifier.padding(start = 16.dp)
+    )
+}
+
+@Composable
+fun Option(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp)
+            .clickable(onClick = {onClick()})
+    ) {
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
