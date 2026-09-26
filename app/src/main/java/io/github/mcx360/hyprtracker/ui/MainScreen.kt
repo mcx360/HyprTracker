@@ -51,7 +51,6 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.settingsScreen.Settings
 import io.github.mcx360.hyprtracker.ui.settingsScreen.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
-import androidx.compose.runtime.collectAsState
 
 enum class Destinations {
     //Main screen routes
@@ -63,7 +62,7 @@ enum class Destinations {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    title: String?,
+    title: String,
     updateOpenSettings: () -> Unit,
     insightsViewModel: InsightsViewModel,
     hyprTrackerViewModel: HyprTrackerViewModel
@@ -186,8 +185,6 @@ fun TopAppBar(
                 }
             )
         }
-
-        else -> {}
     }
 }
 
@@ -288,7 +285,6 @@ fun HyprTrackerApp(
     themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory),
     insightsViewModel: InsightsViewModel = viewModel(factory = InsightsViewModel.Factory)
 ) {
-    val uiState by hyprTrackerViewModel.uiState.collectAsState()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -306,7 +302,7 @@ fun HyprTrackerApp(
             modifier = Modifier.Companion,
             topBar = {
                 TopAppBar(
-                    title = currentRoute,
+                    title = currentRoute?:Destinations.Logs.name,
                     updateOpenSettings = { openSettingsDialog.value = true },
                     insightsViewModel = insightsViewModel,
                     hyprTrackerViewModel = hyprTrackerViewModel
