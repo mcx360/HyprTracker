@@ -2,7 +2,7 @@ package io.github.mcx360.hyprtracker.data.source.local.bloodPressure
 
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressureDAO
-import io.github.mcx360.hyprtracker.ui.model.getHyperTensionStage
+import io.github.mcx360.hyprtracker.ui.utils.getHyperTensionStage
 import kotlinx.coroutines.flow.Flow
 import java.io.InputStream
 
