@@ -1,7 +1,7 @@
 <resources>
     <!--Core app strings including app name and names of 3 main sections of the app accessible through the bottom navigation bar-->
     <string name="app_name">HyprTracker</string>
-    <string name="logging_screen_label">Logging</string>
+    <string name="logging_screen_label">Logs</string>
     <string name="medicine_screen_label">Medicine</string>
     <string name="graph_screen_label">Insights</string>
     <string name="BP">Blood Pressure</string>

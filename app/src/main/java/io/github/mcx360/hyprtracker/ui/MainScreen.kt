@@ -1,11 +1,10 @@
 package io.github.mcx360.hyprtracker.ui
 
-import androidx.compose.foundation.background
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -52,139 +51,76 @@ import io.github.mcx360.hyprtracker.ui.settingsScreen.Settings
 import io.github.mcx360.hyprtracker.ui.settingsScreen.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 
-enum class Destinations {
+enum class Destinations(@StringRes val title: Int) {
     //Main screen routes
-    Logs,
-    Medicine,
-    Insights,
+    Logs(R.string.logging_screen_label),
+    Medicine(R.string.medicine_screen_label),
+    Insights(R.string.graph_screen_label),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(
+fun AppTopAppBar(
     title: String,
-    updateOpenSettings: () -> Unit,
     insightsViewModel: InsightsViewModel,
-    hyprTrackerViewModel: HyprTrackerViewModel
+    hyprTrackerViewModel: HyprTrackerViewModel,
+    medicineViewModel: MedicineViewModel,
+    themeViewModel: ThemeViewModel
 ){
     val insightsState = insightsViewModel.uiState.collectAsStateWithLifecycle()
     val logsState = hyprTrackerViewModel.uiState.collectAsStateWithLifecycle()
     val openMenu = remember { mutableStateOf(false) }
-    when (title) {
-        Destinations.Logs.name -> {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = "Logs",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        if (logsState.value.readings.isNotEmpty()) {
-                            Text(
-                                text = "${formatToDayMonthYear(insightsState.value.startDate)}–${
-                                    formatToDayMonthYear(
-                                        insightsState.value.endDate
-                                    )
-                                }",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (logsState.value.readings.isNotEmpty()) {
-                        IconButton(onClick = {}) {
-                            Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
-                        }
-                    }
-                    IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                        Icon(Icons.Filled.MoreVert, null)
-                    }
-                    when {
-                        openMenu.value -> {
-                            SmallMenu(
-                                expanded = openMenu.value,
-                                onDismissRequest = { openMenu.value = false },
-                                updateOpenSettings = { updateOpenSettings() })
-                        }
-                    }
-                }
-            )
-        }
-
-        Destinations.Medicine.name -> {
-            TopAppBar(
-                title = {
+    val openSettings = remember {mutableStateOf(false)}
+    TopAppBar(
+        title = {
+            Column {
+                Text(text = title, style = MaterialTheme.typography.titleLarge)
+                if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty() || title == Destinations.Insights.name && insightsState.value.hasRecords){
                     Text(
-                        text = stringResource(R.string.medicine_screen_label),
-                        style = MaterialTheme.typography.titleLarge
+                        text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                },
-                actions = {
-                    Box {
-                        IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
-                        when {
-                            openMenu.value -> {
-                                SmallMenu(
-                                    expanded = openMenu.value,
-                                    onDismissRequest = { openMenu.value = false },
-                                    updateOpenSettings = { updateOpenSettings() })
-                            }
-                        }
-                    }
                 }
-            )
-        }
-
-        Destinations.Insights.name-> {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = stringResource(R.string.graph_screen_label),
-                            style = MaterialTheme.typography.titleLarge
+            } },
+        actions = {
+            if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty()) {
+                IconButton(onClick = {}) {
+                    Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
+                }
+            } else if (title == Destinations.Insights.name && insightsState.value.hasRecords){
+                IconButton(onClick = {}) {
+                    Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
+                }
+            }
+            IconButton(onClick = { openMenu.value = !openMenu.value }) {
+                Icon(Icons.Filled.MoreVert, null)
+            }
+            when {
+                openMenu.value -> {
+                    DropdownMenu(
+                        expanded = openMenu.value,
+                        onDismissRequest = {openMenu.value = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(text = "Settings") },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.outline_settings_24),
+                                    contentDescription = null
+                                ) },
+                            onClick = {
+                                openSettings.value = true
+                                openMenu.value = false
+                            }
                         )
-                        if (insightsState.value.hasRecords) {
-                            Text(
-                                text = "${formatToDayMonthYear(insightsState.value.startDate)}–${
-                                    formatToDayMonthYear(
-                                        insightsState.value.endDate
-                                    )
-                                }",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (insightsState.value.hasRecords) {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                painter = painterResource(R.drawable.outline_filter_list_24),
-                                null
-                            )
-                        }
-                    }
-                    Box {
-                        IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
-                        when {
-                            openMenu.value -> {
-                                SmallMenu(
-                                    expanded = openMenu.value,
-                                    onDismissRequest = { openMenu.value = false },
-                                    updateOpenSettings = { updateOpenSettings() })
-                            }
-                        }
                     }
                 }
-            )
+            }
         }
+    )
+    when{
+        openSettings.value -> Settings(onDismissRequest = {openSettings.value = false}, hyprTrackerViewModel = hyprTrackerViewModel, medicineViewModel = medicineViewModel, themeViewModel = themeViewModel)
     }
 }
 
@@ -251,33 +187,7 @@ fun BottomNavBar(
     }
 }
 
-@Composable
-fun SmallMenu(
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    updateOpenSettings: () -> Unit
-){
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { onDismissRequest() }
-    ) {
-        DropdownMenuItem(
-            text = { Text(text = "Settings") },
-            leadingIcon = {
-                Icon(
-                    painterResource(R.drawable.outline_settings_24),
-                    contentDescription = null
-                )
-            },
-            onClick = {
-                updateOpenSettings()
-                onDismissRequest()
-            }
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HyprTrackerApp(
     hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory),
@@ -290,77 +200,59 @@ fun HyprTrackerApp(
     val currentRoute = navBackStackEntry?.destination?.route
     val snackBarHostState = remember { SnackbarHostState() }
     val openAddMedicationScreen = remember { mutableStateOf(false) }
-    val openSettingsDialog = remember { mutableStateOf(false) }
     val openAddBPLog = remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surface)
-            .statusBarsPadding()
-    ) {
-        Scaffold(
-            modifier = Modifier.Companion,
-            topBar = {
-                TopAppBar(
-                    title = currentRoute?:Destinations.Logs.name,
-                    updateOpenSettings = { openSettingsDialog.value = true },
-                    insightsViewModel = insightsViewModel,
-                    hyprTrackerViewModel = hyprTrackerViewModel
-                )
-            },
-            bottomBar = {
-                BottomNavBar(
-                    currentRoute = currentRoute,
+    Scaffold(
+        topBar = {
+            AppTopAppBar(
+                title = currentRoute ?: Destinations.Logs.name,
+                insightsViewModel = insightsViewModel,
+                hyprTrackerViewModel = hyprTrackerViewModel,
+                themeViewModel = themeViewModel,
+                medicineViewModel = medicineViewModel
+            )
+        },
+        bottomBar = {
+            BottomNavBar(
+                currentRoute = currentRoute,
+                navController = navController,
+            )
+        },
+        floatingActionButton = {
+            if (currentRoute == Destinations.Medicine.name) {
+                FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                }
+            } else if (currentRoute == Destinations.Logs.name) {
+                FloatingActionButton(onClick = { openAddBPLog.value = true }) {
+                    Icon(Icons.Filled.Edit, contentDescription = null)
+                }
+            }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+    ) { innerpadding ->
+        Box(modifier = Modifier.padding(innerpadding)) {
+            key(currentRoute) {
+                NavHost(
                     navController = navController,
-                )
-            },
-            floatingActionButton = {
-                if (currentRoute == Destinations.Medicine.name) {
-                    FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
-                        Icon(Icons.Filled.Add, contentDescription = null)
-                    }
-                } else if (currentRoute == Destinations.Logs.name) {
-                    FloatingActionButton(onClick = { openAddBPLog.value = true }) {
-                        Icon(Icons.Filled.Edit, contentDescription = null)
-                    }
-                }
-            },
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-        ) { innerpadding ->
-            Box(modifier = Modifier.padding(innerpadding)) {
-                key(currentRoute) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = Destinations.Logs.name
-                    ) {
-                        composable(route = Destinations.Logs.name) {
-                            LogsScreen(
-                                hyprTrackerViewModel = hyprTrackerViewModel,
-                                snackBarHostState = snackBarHostState,
-                                openAddBloodPressureLog = openAddBPLog
-                            )
-                        }
-                        composable(route = Destinations.Medicine.name) {
-                            MedicineScreen(
-                                openAddMedicationScreen = openAddMedicationScreen,
-                                snackBarHostState = snackBarHostState,
-                                medicineViewModel = medicineViewModel
-                            )
-                        }
-                        composable(route = Destinations.Insights.name) {
-                            GraphScreen(insightsViewModel = insightsViewModel)
-                        }
-                    }
-                }
-
-                when {
-                    openSettingsDialog.value -> {
-                        Settings(
-                            onDismissRequest = { openSettingsDialog.value = false },
+                    startDestination = Destinations.Logs.name
+                ) {
+                    composable(route = Destinations.Logs.name) {
+                        LogsScreen(
                             hyprTrackerViewModel = hyprTrackerViewModel,
-                            medicineViewModel = medicineViewModel,
-                            themeViewModel = themeViewModel
+                            snackBarHostState = snackBarHostState,
+                            openAddBloodPressureLog = openAddBPLog
                         )
+                    }
+                    composable(route = Destinations.Medicine.name) {
+                        MedicineScreen(
+                            openAddMedicationScreen = openAddMedicationScreen,
+                            snackBarHostState = snackBarHostState,
+                            medicineViewModel = medicineViewModel
+                        )
+                    }
+                    composable(route = Destinations.Insights.name) {
+                        GraphScreen(insightsViewModel = insightsViewModel)
                     }
                 }
             }
