@@ -18,7 +18,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,8 +38,6 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.compon
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
 import io.github.mcx360.hyprtracker.ui.model.Medicine
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
-import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
-import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,8 +57,6 @@ fun AddMedicationScreen(
     var showScheduleInfoDialog by remember { mutableStateOf(false) }
     var showTimesPerDayInfoDialog by remember { mutableStateOf(false) }
     var showDosePerIntakeInfoDialog by remember { mutableStateOf(false) }
-    var showSelectSpecifiedNumberOfDaysDialog by remember { mutableStateOf(false) }
-    var showDurationDatePicker by remember { mutableStateOf(false) }
     var showSelectedDaysPicker by remember { mutableStateOf(false) }
     val uiState = medicineViewModel.uiState.collectAsState()
     var isMedicationNameFieldInError by remember { mutableStateOf(false) }
@@ -188,21 +183,9 @@ fun AddMedicationScreen(
 
                 //Duration Card
                 DurationCard(
-                    formatToRegularDate = { formatToRegularDate(it) },
                     startDate = uiState.value.date,
                     endDate = uiState.value.medicationEndDate,
-                    showSelectSpecifiedNumberOfDaysDialog = showSelectSpecifiedNumberOfDaysDialog,
-                    showDurationDatePicker = showDurationDatePicker,
-                    updateShowDurationDatePicker = { showDurationDatePicker = it },
-                    updateShowSelectSpecifiedNumberOfDaysDialog = {
-                        showSelectSpecifiedNumberOfDaysDialog = it
-                    },
-                    updateMedicationEndDateString = { medicineViewModel.updateMedicationEndDate(it) },
-                    updateMedicationEndDateLong = {
-                        medicineViewModel.updateMedicationEndDate(
-                            convertMillisToDate(it)
-                        )
-                    }
+                    updateMedicationEndDate = { medicineViewModel.updateMedicationEndDate(it) },
                 )
 
                 Row(

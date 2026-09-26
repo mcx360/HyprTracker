@@ -34,23 +34,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.text.isDigitsOnly
 import io.github.mcx360.hyprtracker.ui.utils.DurationDatePicker
+import io.github.mcx360.hyprtracker.ui.utils.convertMillisToDate
+import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import java.time.LocalDate
 
 @Composable
 fun DurationCard(
     modifier: Modifier = Modifier,
-    formatToRegularDate: (String) -> String,
     startDate: String,
     endDate: String,
-    showSelectSpecifiedNumberOfDaysDialog: Boolean,
-    updateShowSelectSpecifiedNumberOfDaysDialog: (Boolean) -> Unit,
-    showDurationDatePicker: Boolean,
-    updateShowDurationDatePicker: (Boolean) -> Unit,
-    updateMedicationEndDateLong: (Long?) -> Unit,
-    updateMedicationEndDateString: (String) -> Unit,
+    updateMedicationEndDate: (String) -> Unit,
 ){
     val radioButtons = listOf("Continuous", "Specified number of days", "Until a selected date")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioButtons[0]) }
+    val showSelectSpecifiedNumberOfDaysDialog = remember { mutableStateOf(false) }
+    val showDurationDatePicker = remember { mutableStateOf(false) }
 
     Card {
         Text(
@@ -73,8 +71,8 @@ fun DurationCard(
                             selected = (text == selectedOption),
                             onClick = { onOptionSelected(text)
                                 when(text){
-                                    "Specified number of days" -> updateShowSelectSpecifiedNumberOfDaysDialog(true)
-                                    "Until a selected date" -> updateShowDurationDatePicker(true)
+                                    "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value = true
+                                    "Until a selected date" -> showDurationDatePicker.value = true
                                 }
                             },
                             role = Role.RadioButton
@@ -85,8 +83,8 @@ fun DurationCard(
                     RadioButton(selected = (text==selectedOption), onClick = {
                         onOptionSelected(text)
                         when(text){
-                            "Specified number of days" -> updateShowSelectSpecifiedNumberOfDaysDialog(true)
-                            "Until a selected date" -> updateShowDurationDatePicker(true)
+                            "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value = true
+                            "Until a selected date" -> showDurationDatePicker.value = true
                         }
                     })
                     Text(
@@ -118,21 +116,23 @@ fun DurationCard(
             }
         }
 
-        if (showSelectSpecifiedNumberOfDaysDialog) {
+        when {
+            showSelectSpecifiedNumberOfDaysDialog.value ->
             SelectSpecifiedNumberOfDaysDialog(
-                onDismissRequest = { updateShowSelectSpecifiedNumberOfDaysDialog(false) },
+                onDismissRequest = { showSelectSpecifiedNumberOfDaysDialog.value = false },
                 onNumOfDaysSelected = {
-                    if (it != "") updateMedicationEndDateString(
+                    if (it != "") updateMedicationEndDate(
                         LocalDate.now().plusDays(it.toLong()).toString()
                     )
                 }
             )
         }
 
-        if (showDurationDatePicker) {
+        when  {
+            showDurationDatePicker.value ->
             DurationDatePicker(
-                onDateSelected = { updateMedicationEndDateLong(it) },
-                onDismiss = { updateShowDurationDatePicker(false) })
+                onDateSelected = { updateMedicationEndDate(convertMillisToDate(it)) },
+                onDismiss = { showDurationDatePicker.value = false })
         }
     }
 }
@@ -144,12 +144,7 @@ fun SelectSpecifiedNumberOfDaysDialog(
 ){
     var days by remember { mutableStateOf("") }
     Dialog(onDismissRequest = {onDismissRequest()}) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
+        Card(shape = RoundedCornerShape(16.dp),) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -179,9 +174,7 @@ fun SelectSpecifiedNumberOfDaysDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedButton(
-                        onClick = {
-                            onDismissRequest()
-                        },
+                        onClick = { onDismissRequest() },
                         modifier = Modifier.padding(8.dp)
                     ) {
                         Text("Cancel")
