@@ -255,7 +255,7 @@ fun SmallMenu(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HyprTrackerScreen(
+fun HyprTrackerApp(
     hyprTrackerViewModel: HyprTrackerViewModel = viewModel(factory = HyprTrackerViewModel.Factory),
     medicineViewModel: MedicineViewModel = viewModel(factory = MedicineViewModel.Factory),
     themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory),

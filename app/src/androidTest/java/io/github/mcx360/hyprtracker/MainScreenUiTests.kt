@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerScreen
+import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerApp
 import io.github.mcx360.hyprtracker.ui.mainScreen.NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.ABOUT_IN_NAVIGATIONDRAWER_TAG
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BACKUP_IN_NAVIGATIONDRAWER_TAG
@@ -29,7 +29,7 @@ class MainScreenUiTests {
     fun setupLoggingScreen(){
         composeTestRule.setContent {
             AppTheme {
-                HyprTrackerScreen()
+                HyprTrackerApp()
             }
         }
     }
