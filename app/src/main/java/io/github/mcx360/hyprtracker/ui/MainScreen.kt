@@ -51,6 +51,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.settingsScreen.Settings
 import io.github.mcx360.hyprtracker.ui.settingsScreen.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
+import androidx.compose.runtime.collectAsState
 
 enum class Destinations {
     //Main screen routes
@@ -287,6 +288,7 @@ fun HyprTrackerApp(
     themeViewModel: ThemeViewModel = viewModel(factory = ThemeViewModel.Factory),
     insightsViewModel: InsightsViewModel = viewModel(factory = InsightsViewModel.Factory)
 ) {
+    val uiState by hyprTrackerViewModel.uiState.collectAsState()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route

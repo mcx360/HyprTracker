@@ -25,32 +25,16 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     private val _uiState = MutableStateFlow(HyprTrackerUIState())
     val uiState: StateFlow<HyprTrackerUIState> = _uiState.asStateFlow()
-    var getCurrentDateAndTime = true
 
-    init {
-        viewModelScope.launch {
-            while(isActive){
-                //if getCurrentDateAndTime is set to true then the ui keeps updating date and time to the most current
-                if (getCurrentDateAndTime){
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            time = LocalTime.now().withNano(0).toString(),
-                            date = LocalDate.now().toString(),
-                        )
-                    }
-                }
-                delay(1000)
-            }
-        }
-        viewModelScope.launch {
-            fetchBPReadings()
-        }
-    }
+    init { fetchBPReadings() }
 
     //fetches blood pressure readings from database and loads them into uiState
-    suspend fun fetchBPReadings(){
-        return bloodPressureRepository.getAllRecordingsStream().collect { readings ->
-            _uiState.value.readings = readings.map { reading -> reading.toHyprReading() }
+    fun fetchBPReadings(){
+        viewModelScope.launch {
+            bloodPressureRepository.getAllRecordingsStream().collect { readings ->
+                val list = readings.map { it.toHyprReading() }
+                updateReadingsList(list)
+            }
         }
     }
 
@@ -75,7 +59,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
                 time = LocalTime.now().withNano(0).toString()
                 )
         }
-        getCurrentDateAndTime = true
     }
 
     //Updates systolic value in log tab
@@ -114,9 +97,15 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
         }
     }
 
+    fun updateReadingsList(readingsList: List<HyprReading>){
+        _uiState.update { currentState ->
+            currentState.copy(readings = readingsList)
+
+        }
+    }
+
     //Adds custom date value in log tab and stops updating the date
     fun updateDateValue(inputtedValue: String){
-        getCurrentDateAndTime = false
         _uiState.update { currentState ->
             currentState.copy(date = inputtedValue)
         }
@@ -124,7 +113,6 @@ class HyprTrackerViewModel(private val bloodPressureRepository: BloodPressureRep
 
     //Adds custom time value in log tab and stops updating the time
     fun updateTimeValue(inputtedValue: String){
-        getCurrentDateAndTime = false
         _uiState.update { currentState ->
             currentState.copy(time = inputtedValue)
         }
