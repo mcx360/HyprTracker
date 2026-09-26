@@ -43,18 +43,6 @@ import java.time.DayOfWeek
 @Composable
 fun MedicationScheduleAndDosageCard(
     modifier: Modifier = Modifier,
-    showScheduleDropDownMenu: Boolean,
-    showSelectedDaysPicker: Boolean,
-    showTimesPerDayDropDownMenu: Boolean,
-    showDosePerIntakeInfoDialog: Boolean,
-    showTimesPerDayInfoDialog: Boolean,
-    showScheduleInfoDialog: Boolean,
-    changeScheduleDropDownMenuStatus: (Boolean) -> Unit,
-    changeShowTimesPerDayDropDownMenuStatus: (Boolean) -> Unit,
-    changeShowSelectedDaysPickerStatus: (Boolean) -> Unit,
-    changeShowScheduleInfoDialogStatus: (Boolean) -> Unit,
-    changeShowTimesPerDayInfoDialogStatus: (Boolean) -> Unit,
-    changeShowDosePerIntakeDialogStatus: (Boolean) -> Unit,
     isMedicationScheduleFieldInError: Boolean,
     isMedicationTimesPerDayFieldInError: Boolean,
     isMedicationDosePerIntakeInError: Boolean,
@@ -77,6 +65,12 @@ fun MedicationScheduleAndDosageCard(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
+            val showScheduleDropDownMenu = remember { mutableStateOf(false) }
+            val showTimesPerDayDropDownMenu = remember { mutableStateOf(false) }
+            val showSelectedDaysPicker = remember { mutableStateOf(false) }
+            val showScheduleInfoDialog = remember { mutableStateOf(false) }
+            val showTimesPerDayInfoDialog = remember { mutableStateOf(false) }
+            val showDosePerIntakeInfoDialog = remember { mutableStateOf(false) }
             //title
             Text(
                 text = "Medication Schedule & Dosage",
@@ -90,8 +84,8 @@ fun MedicationScheduleAndDosageCard(
 
                 //Box for medication schedule
                 ExposedDropdownMenuBox(
-                    expanded = showScheduleDropDownMenu,
-                    onExpandedChange = { changeScheduleDropDownMenuStatus(true) }) {
+                    expanded = showScheduleDropDownMenu.value,
+                    onExpandedChange = { showScheduleDropDownMenu.value = true }) {
 
                     //Medication schedule field
                     OutlinedTextField(
@@ -102,7 +96,7 @@ fun MedicationScheduleAndDosageCard(
                         label = { Text("Schedule*") },
                         placeholder = { Text("e.g. Every day") },
                         trailingIcon = {
-                                if (showScheduleDropDownMenu){
+                                if (showScheduleDropDownMenu.value){
                                     Icon(Icons.Default.ArrowDropUp, null)
                                 } else{
                                     Icon(Icons.Default.ArrowDropDown, contentDescription = null)
@@ -115,8 +109,8 @@ fun MedicationScheduleAndDosageCard(
 
                     //Medication schedule menu
                     ExposedDropdownMenu(
-                        expanded = showScheduleDropDownMenu,
-                        onDismissRequest = { changeScheduleDropDownMenuStatus(false) }) {
+                        expanded = showScheduleDropDownMenu.value,
+                        onDismissRequest = { showScheduleDropDownMenu.value = false }) {
                         DropdownMenuItem(
                             onClick = {
                                 updateMedicationSchedule("Every single day")
@@ -124,41 +118,40 @@ fun MedicationScheduleAndDosageCard(
                                 for (day in DayOfWeek.entries){
                                     addSelectedDay(day.name)
                                 }
-                                changeScheduleDropDownMenuStatus(false)
+                                showScheduleDropDownMenu.value = false
                             },
                             text = { Text("Every single day") }
                         )
                         DropdownMenuItem(
                             onClick = {
                                 setIsMedicationScheduleFieldInErrorToFalse()
-                                changeShowSelectedDaysPickerStatus(true)
+                                showScheduleDropDownMenu.value = false
+                                showSelectedDaysPicker.value = true
                             },
                             text = { Text("On selected days only") }
                         )
                     }
                 }
-
-                if (showSelectedDaysPicker){
+                when { showSelectedDaysPicker.value ->
                     SelectDaysForMedication(
                         onDismiss = {
-                            changeShowSelectedDaysPickerStatus(false)
                             if (!it.isNullOrEmpty()) {
                                 updateMedicationSchedule(it)
                             }
+                            showSelectedDaysPicker.value = false
                         },
                         onDaySelected = { addSelectedDay(it) },
                         onDayRemoved = { removeSelectedDay(it) }
                     )
-                    changeScheduleDropDownMenuStatus(false)
                 }
 
                 //Schedule info Dialog popup
-                IconButton(onClick = {changeShowScheduleInfoDialogStatus(true)}) {
+                IconButton(onClick = {showScheduleInfoDialog.value = true }) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
-                if (showScheduleInfoDialog){
+                if (showScheduleInfoDialog.value){
                     InfoDialog(
-                        onDismissRequest = {changeShowScheduleInfoDialogStatus(false)},
+                        onDismissRequest = {showScheduleInfoDialog.value = false},
                         info = "Schedule defines how often you take this medication (e.g. every day or on specific days).",
                         title = "Schedule"
                     )
@@ -171,8 +164,8 @@ fun MedicationScheduleAndDosageCard(
 
                 //Box for times per day
                 ExposedDropdownMenuBox(
-                    expanded = showTimesPerDayDropDownMenu,
-                    onExpandedChange = {changeShowTimesPerDayDropDownMenuStatus(it)}
+                    expanded = showTimesPerDayDropDownMenu.value,
+                    onExpandedChange = {showTimesPerDayDropDownMenu.value = it}
                 ) {
                     //times per day field
                     OutlinedTextField(
@@ -192,7 +185,7 @@ fun MedicationScheduleAndDosageCard(
                         label = { Text("Times per day*") },
                         placeholder = {Text("e.g. Once daily")},
                         trailingIcon = {
-                            if (showTimesPerDayDropDownMenu){
+                            if (showTimesPerDayDropDownMenu.value){
                                 Icon(Icons.Default.ArrowDropUp, null)
                             }else{
                                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
@@ -206,8 +199,8 @@ fun MedicationScheduleAndDosageCard(
 
                     //times per day menu
                     ExposedDropdownMenu(
-                        expanded = showTimesPerDayDropDownMenu,
-                        onDismissRequest = {changeShowTimesPerDayDropDownMenuStatus(false)}
+                        expanded = showTimesPerDayDropDownMenu.value,
+                        onDismissRequest = {showTimesPerDayDropDownMenu.value =false}
                     ) {
                         //One times per day option
                         DropdownMenuItem(
@@ -215,7 +208,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(1)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value =false
                             }
                         )
 
@@ -225,7 +218,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(2)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value = false
                             }
                         )
 
@@ -235,7 +228,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(3)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value = false
                             }
                         )
 
@@ -245,7 +238,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(4)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value = false
                             }
                         )
 
@@ -255,7 +248,7 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(5)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value = false
                             }
                         )
 
@@ -265,20 +258,20 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 setIsMedicationTimesPerDayFieldInErrorToFalse()
                                 updateMedicationTimesPerDay(6)
-                                changeShowTimesPerDayDropDownMenuStatus(false)
+                                showTimesPerDayDropDownMenu.value = false
                             }
                         )
                     }
                 }
 
                 //times per day info dialog popup
-                IconButton(onClick = {changeShowTimesPerDayInfoDialogStatus(true)}) {
+                IconButton(onClick = {showTimesPerDayInfoDialog.value = true}) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
-                if(showTimesPerDayInfoDialog){
+                if(showTimesPerDayInfoDialog.value){
                     InfoDialog(
                         info = "Times per day indicates how many times you take the medication on a scheduled day.",
-                        onDismissRequest = {changeShowTimesPerDayInfoDialogStatus(false)},
+                        onDismissRequest = {showTimesPerDayInfoDialog.value = false},
                         title = "Times Per Day"
                     )
                 }
@@ -307,14 +300,14 @@ fun MedicationScheduleAndDosageCard(
                 )
 
                 //Dose per intake info popup
-                IconButton(onClick = {changeShowDosePerIntakeDialogStatus(true)}) {
+                IconButton(onClick = { showDosePerIntakeInfoDialog.value = true}) {
                     Icon(Icons.Default.Info, contentDescription = null)
                 }
 
-                if (showDosePerIntakeInfoDialog){
+                if (showDosePerIntakeInfoDialog.value){
                     InfoDialog(
                         info = "Dose per intake describes the amount of medication you take each time (e.g. 1 tablet or 10 mg).",
-                        onDismissRequest = {changeShowDosePerIntakeDialogStatus(false) },
+                        onDismissRequest = {showDosePerIntakeInfoDialog.value = false },
                         title = "Dose Per Intake"
                     )
                 }

@@ -51,12 +51,6 @@ fun AddMedicationScreen(
     medicineViewModel: MedicineViewModel
 ){
     val haptic = LocalHapticFeedback.current
-    var showScheduleDropDownMenu by remember { mutableStateOf(false) }
-    var showTimesPerDayDropDownMenu by remember { mutableStateOf(false) }
-    var showScheduleInfoDialog by remember { mutableStateOf(false) }
-    var showTimesPerDayInfoDialog by remember { mutableStateOf(false) }
-    var showDosePerIntakeInfoDialog by remember { mutableStateOf(false) }
-    var showSelectedDaysPicker by remember { mutableStateOf(false) }
     val uiState = medicineViewModel.uiState.collectAsState()
     var isMedicationNameFieldInError by remember { mutableStateOf(false) }
     var isMedicationDescriptionFieldInError by remember { mutableStateOf(false) }
@@ -110,27 +104,13 @@ fun AddMedicationScreen(
                         if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
                     },
                     setMedicationNameErrorStatusFalse = { isMedicationNameFieldInError = false },
-                    setMedicationDescriptionErrorStatusFalse = {
-                        isMedicationDescriptionFieldInError = false
-                    }
+                    setMedicationDescriptionErrorStatusFalse = { isMedicationDescriptionFieldInError = false }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
 
                 //Medication schedule and dosage Card
                 MedicationScheduleAndDosageCard(
-                    showScheduleDropDownMenu = showScheduleDropDownMenu,
-                    showSelectedDaysPicker = showSelectedDaysPicker,
-                    showTimesPerDayDropDownMenu = showTimesPerDayDropDownMenu,
-                    showDosePerIntakeInfoDialog = showDosePerIntakeInfoDialog,
-                    showTimesPerDayInfoDialog = showTimesPerDayInfoDialog,
-                    showScheduleInfoDialog = showScheduleInfoDialog,
-                    changeScheduleDropDownMenuStatus = { showScheduleDropDownMenu = it },
-                    changeShowTimesPerDayDropDownMenuStatus = { showTimesPerDayDropDownMenu = it },
-                    changeShowSelectedDaysPickerStatus = { showSelectedDaysPicker = it },
-                    changeShowScheduleInfoDialogStatus = { showScheduleInfoDialog = it },
-                    changeShowDosePerIntakeDialogStatus = { showDosePerIntakeInfoDialog = it },
-                    changeShowTimesPerDayInfoDialogStatus = { showTimesPerDayInfoDialog = it },
                     isMedicationScheduleFieldInError = isMedicationScheduleFieldInError,
                     isMedicationDosePerIntakeInError = isMedicationDosePerIntakeInError,
                     isMedicationTimesPerDayFieldInError = isMedicationTimesPerDayFieldInError,
@@ -142,15 +122,9 @@ fun AddMedicationScreen(
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
                     medicationDosage = uiState.value.medicationDosage,
-                    setIsMedicationScheduleFieldInErrorToFalse = {
-                        isMedicationScheduleFieldInError = false
-                    },
-                    setIsMedicationDosePerIntakeInErrorToFalse = {
-                        isMedicationDosePerIntakeInError = false
-                    },
-                    setIsMedicationTimesPerDayFieldInErrorToFalse = {
-                        isMedicationTimesPerDayFieldInError = false
-                    }
+                    setIsMedicationScheduleFieldInErrorToFalse = { isMedicationScheduleFieldInError = false },
+                    setIsMedicationDosePerIntakeInErrorToFalse = { isMedicationDosePerIntakeInError = false },
+                    setIsMedicationTimesPerDayFieldInErrorToFalse = { isMedicationTimesPerDayFieldInError = false }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
