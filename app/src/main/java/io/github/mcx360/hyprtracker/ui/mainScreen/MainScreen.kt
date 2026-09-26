@@ -21,17 +21,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
-import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.NavHostContainer
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
+import io.github.mcx360.hyprtracker.ui.insightsScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
+import io.github.mcx360.hyprtracker.ui.logsScreen.LogsScreen
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.BottomNavBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.components.TopAppBar
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
 import io.github.mcx360.hyprtracker.ui.mainScreen.settings.ThemeViewModel
+import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+
+enum class Destinations {
+    //Main screen routes
+    Logs,
+    Medicine,
+    Insights,
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -85,15 +95,20 @@ fun HyprTrackerScreen(
         ) { innerpadding ->
             Box(modifier = Modifier.padding(innerpadding)) {
                 key(currentRoute) {
-                    NavHostContainer(
+                    NavHost(
                         navController = navController,
-                        hyprTrackerViewModel,
-                        snackBarHostState,
-                        openAddMedicationScreen,
-                        medicineViewModel,
-                        insightsViewModel,
-                        openAddBPLog
-                    )
+                        startDestination = Destinations.Logs.name
+                    ){
+                        composable(route = Destinations.Logs.name){
+                            LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBloodPressureLog = openAddBPLog)
+                        }
+                        composable(route = Destinations.Medicine.name){
+                            MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)
+                        }
+                        composable(route = Destinations.Insights.name){
+                            GraphScreen(insightsViewModel = insightsViewModel)
+                        }
+                    }
                 }
 
                 when {

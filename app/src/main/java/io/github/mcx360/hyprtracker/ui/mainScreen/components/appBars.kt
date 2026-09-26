@@ -25,7 +25,7 @@ import androidx.navigation.NavHostController
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.navigation.Destinations
+import io.github.mcx360.hyprtracker.ui.mainScreen.Destinations
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 
 @OptIn(ExperimentalMaterial3Api::class)
