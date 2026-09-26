@@ -199,9 +199,6 @@ fun HyprTrackerApp(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val snackBarHostState = remember { SnackbarHostState() }
-    val openAddMedicationScreen = remember { mutableStateOf(false) }
-    val openAddBPLog = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -220,7 +217,7 @@ fun HyprTrackerApp(
             )
         },
     ) {
-        innerpadding -> innerpadding.toString()
+        innerpadding ->
         Box(modifier = Modifier.padding(innerpadding)) {
             key(currentRoute) {
                 NavHost(
