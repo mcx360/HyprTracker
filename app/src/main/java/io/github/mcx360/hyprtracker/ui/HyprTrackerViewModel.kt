@@ -5,19 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.BloodPressureRepository
-import kotlinx.coroutines.delay
+import io.github.mcx360.hyprtracker.data.source.bloodPressure.BloodPressureRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import io.github.mcx360.hyprtracker.HyprTrackerApplication
-import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.source.bloodPressure.impl.RecordedBloodPressure
 import io.github.mcx360.hyprtracker.ui.model.HyprReading
 import java.io.InputStream
 

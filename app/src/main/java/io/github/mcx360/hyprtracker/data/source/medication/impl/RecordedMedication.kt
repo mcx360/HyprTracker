@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.source.local.medication.impl
+package io.github.mcx360.hyprtracker.data.source.medication.impl
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

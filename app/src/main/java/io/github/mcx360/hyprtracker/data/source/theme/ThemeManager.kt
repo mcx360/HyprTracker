@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.source.local.theme
+package io.github.mcx360.hyprtracker.data.source.theme
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

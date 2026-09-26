@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl
+package io.github.mcx360.hyprtracker.data.source.bloodPressure.impl
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

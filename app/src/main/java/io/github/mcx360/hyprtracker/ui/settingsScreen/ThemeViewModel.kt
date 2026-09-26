@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.github.mcx360.hyprtracker.data.source.local.theme.ThemeManager
+import io.github.mcx360.hyprtracker.data.source.theme.ThemeManager
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

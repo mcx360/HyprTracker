@@ -1,13 +1,13 @@
-package io.github.mcx360.hyprtracker.data.source.local
+package io.github.mcx360.hyprtracker.data.source
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressure
-import io.github.mcx360.hyprtracker.data.source.local.bloodPressure.impl.RecordedBloodPressureDAO
-import io.github.mcx360.hyprtracker.data.source.local.medication.impl.RecordedMedication
-import io.github.mcx360.hyprtracker.data.source.local.medication.impl.RecordedMedicationDAO
+import io.github.mcx360.hyprtracker.data.source.bloodPressure.impl.RecordedBloodPressure
+import io.github.mcx360.hyprtracker.data.source.bloodPressure.impl.RecordedBloodPressureDAO
+import io.github.mcx360.hyprtracker.data.source.medication.impl.RecordedMedication
+import io.github.mcx360.hyprtracker.data.source.medication.impl.RecordedMedicationDAO
 
 @Database(entities = [RecordedBloodPressure::class, RecordedMedication::class], version = 6, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
