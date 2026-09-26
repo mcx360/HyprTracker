@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddMedicationScreen(
     modifier: Modifier,
-    openAddMedicationScreen: MutableState<Boolean>,
+    onDismissRequest: () -> Unit,
     snackBarHostState: SnackbarHostState,
     scope: CoroutineScope,
     medicineViewModel: MedicineViewModel
@@ -85,7 +85,7 @@ fun AddMedicationScreen(
             TitleBarWithBackButton(
                 title = "Add Medication",
                 onBackArrowClicked = {
-                    openAddMedicationScreen.value = !openAddMedicationScreen.value
+                    onDismissRequest()
                     scope.launch {
                         medicineViewModel.resetAddMedication()
                         medicineViewModel.fetchMedications()
@@ -222,7 +222,7 @@ fun AddMedicationScreen(
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
                             } else {
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                                openAddMedicationScreen.value = !openAddMedicationScreen.value
+                                onDismissRequest()
                                 scope.launch {
                                     medicineViewModel.fetchMedications()
                                     snackBarHostState.showSnackbar(

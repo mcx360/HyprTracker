@@ -64,17 +64,17 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
         }
     ) { contentPadding ->
 
-        if (uiState.value.medicineList.isNotEmpty()) {
+        when {
+            openAddMedicationScreen.value -> AddMedicationScreen(
+                modifier = Modifier,
+                onDismissRequest = {openAddMedicationScreen.value = false},
+                snackBarHostState = snackBarHostState,
+                scope = scope,
+                medicineViewModel = medicineViewModel
+            )
+        }
 
-            when {
-                openAddMedicationScreen.value -> AddMedicationScreen(
-                    modifier = Modifier,
-                    openAddMedicationScreen = openAddMedicationScreen,
-                    snackBarHostState = snackBarHostState,
-                    scope = scope,
-                    medicineViewModel = medicineViewModel
-                )
-            }
+        if (uiState.value.medicineList.isNotEmpty()) {
 
             //list of all medications recorded
             LazyColumn(
@@ -297,15 +297,6 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                 heading = stringResource(R.string.Empty_Medicine_Screen_Title),
                 subHeading = stringResource(R.string.Empty_Medicine_Screen_Text)
             )
-            when {
-                openAddMedicationScreen.value -> AddMedicationScreen(
-                    modifier = Modifier,
-                    openAddMedicationScreen = openAddMedicationScreen,
-                    snackBarHostState = snackBarHostState,
-                    scope = scope,
-                    medicineViewModel = medicineViewModel
-                )
-            }
         }
     }
 }
