@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen
+package io.github.mcx360.hyprtracker.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -43,14 +43,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.mcx360.hyprtracker.R
-import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
 import io.github.mcx360.hyprtracker.ui.insightsScreen.GraphScreen
 import io.github.mcx360.hyprtracker.ui.insightsScreen.InsightsViewModel
 import io.github.mcx360.hyprtracker.ui.logsScreen.LogsScreen
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.Settings
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineScreen
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
+import io.github.mcx360.hyprtracker.ui.settingsScreen.Settings
+import io.github.mcx360.hyprtracker.ui.settingsScreen.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.utils.formatToDayMonthYear
 
 enum class Destinations {
@@ -118,7 +117,7 @@ fun TopAppBar(
             TopAppBar(
                 title = {
                     Text(
-                        text =  stringResource(R.string.medicine_screen_label),
+                        text = stringResource(R.string.medicine_screen_label),
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
@@ -127,9 +126,12 @@ fun TopAppBar(
                         IconButton(onClick = { openMenu.value = !openMenu.value }) {
                             Icon(Icons.Filled.MoreVert, null)
                         }
-                        when{
+                        when {
                             openMenu.value -> {
-                                SmallMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false}, updateOpenSettings = {updateOpenSettings()})
+                                SmallMenu(
+                                    expanded = openMenu.value,
+                                    onDismissRequest = { openMenu.value = false },
+                                    updateOpenSettings = { updateOpenSettings() })
                             }
                         }
                     }
@@ -145,9 +147,13 @@ fun TopAppBar(
                             text = stringResource(R.string.graph_screen_label),
                             style = MaterialTheme.typography.titleLarge
                         )
-                        if (insightsState.value.hasRecords){
+                        if (insightsState.value.hasRecords) {
                             Text(
-                                text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
+                                text = "${formatToDayMonthYear(insightsState.value.startDate)}–${
+                                    formatToDayMonthYear(
+                                        insightsState.value.endDate
+                                    )
+                                }",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -206,7 +212,12 @@ fun BottomNavBar(
         NavigationBarItem(
             selected = currentRoute == Destinations.Logs.name,
             onClick = { navController.navigate(Destinations.Logs.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24), contentDescription = null)},
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24),
+                    contentDescription = null
+                )
+            },
             label = { Text(text = "Logs") },
             alwaysShowLabel = true,
             colors = colours
@@ -215,7 +226,12 @@ fun BottomNavBar(
         NavigationBarItem(
             selected = currentRoute == Destinations.Medicine.name,
             onClick = { navController.navigate(Destinations.Medicine.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine), contentDescription = stringResource(R.string.medicine_screen_label)) },
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
+                    contentDescription = stringResource(R.string.medicine_screen_label)
+                )
+            },
             label = { Text(text = stringResource(R.string.medicine_screen_label)) },
             alwaysShowLabel = true,
             colors = colours
@@ -224,7 +240,12 @@ fun BottomNavBar(
         NavigationBarItem(
             selected = currentRoute == Destinations.Insights.name,
             onClick = { navController.navigate(Destinations.Insights.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight), contentDescription = stringResource(R.string.graph_screen_label)) },
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight),
+                    contentDescription = stringResource(R.string.graph_screen_label)
+                )
+            },
             label = { Text(text = stringResource(R.string.graph_screen_label)) },
             alwaysShowLabel = true,
             colors = colours
@@ -240,11 +261,16 @@ fun SmallMenu(
 ){
     DropdownMenu(
         expanded = expanded,
-        onDismissRequest = {onDismissRequest()}
+        onDismissRequest = { onDismissRequest() }
     ) {
         DropdownMenuItem(
             text = { Text(text = "Settings") },
-            leadingIcon = {Icon(painterResource(R.drawable.outline_settings_24), contentDescription =null)},
+            leadingIcon = {
+                Icon(
+                    painterResource(R.drawable.outline_settings_24),
+                    contentDescription = null
+                )
+            },
             onClick = {
                 updateOpenSettings()
                 onDismissRequest()
@@ -275,11 +301,11 @@ fun HyprTrackerApp(
             .statusBarsPadding()
     ) {
         Scaffold(
-            modifier = Modifier,
+            modifier = Modifier.Companion,
             topBar = {
                 TopAppBar(
                     title = currentRoute,
-                    updateOpenSettings = {openSettingsDialog.value = true},
+                    updateOpenSettings = { openSettingsDialog.value = true },
                     insightsViewModel = insightsViewModel,
                     hyprTrackerViewModel = hyprTrackerViewModel
                 )
@@ -292,10 +318,10 @@ fun HyprTrackerApp(
             },
             floatingActionButton = {
                 if (currentRoute == Destinations.Medicine.name) {
-                    FloatingActionButton(onClick = { openAddMedicationScreen.value = true}) {
-                            Icon(Icons.Filled.Add, contentDescription = null)
+                    FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
                     }
-                }else if (currentRoute == Destinations.Logs.name){
+                } else if (currentRoute == Destinations.Logs.name) {
                     FloatingActionButton(onClick = { openAddBPLog.value = true }) {
                         Icon(Icons.Filled.Edit, contentDescription = null)
                     }
@@ -308,14 +334,22 @@ fun HyprTrackerApp(
                     NavHost(
                         navController = navController,
                         startDestination = Destinations.Logs.name
-                    ){
-                        composable(route = Destinations.Logs.name){
-                            LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel, snackBarHostState = snackBarHostState, openAddBloodPressureLog = openAddBPLog)
+                    ) {
+                        composable(route = Destinations.Logs.name) {
+                            LogsScreen(
+                                hyprTrackerViewModel = hyprTrackerViewModel,
+                                snackBarHostState = snackBarHostState,
+                                openAddBloodPressureLog = openAddBPLog
+                            )
                         }
-                        composable(route = Destinations.Medicine.name){
-                            MedicineScreen(openAddMedicationScreen = openAddMedicationScreen, snackBarHostState = snackBarHostState, medicineViewModel = medicineViewModel)
+                        composable(route = Destinations.Medicine.name) {
+                            MedicineScreen(
+                                openAddMedicationScreen = openAddMedicationScreen,
+                                snackBarHostState = snackBarHostState,
+                                medicineViewModel = medicineViewModel
+                            )
                         }
-                        composable(route = Destinations.Insights.name){
+                        composable(route = Destinations.Insights.name) {
                             GraphScreen(insightsViewModel = insightsViewModel)
                         }
                     }

@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
+package io.github.mcx360.hyprtracker.ui.settingsScreen.components
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.mcx360.hyprtracker.R
-import kotlinx.coroutines.launch
 
 @Composable
 fun AboutDialog(

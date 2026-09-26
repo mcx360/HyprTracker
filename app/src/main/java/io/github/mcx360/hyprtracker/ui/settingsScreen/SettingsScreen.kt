@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings
+package io.github.mcx360.hyprtracker.ui.settingsScreen
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,18 +25,17 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.github.mcx360.hyprtracker.R
 import io.github.mcx360.hyprtracker.ui.HyprTrackerViewModel
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.AboutDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.BugReportDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.ImportLogsDataDialog
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Option
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Picker
-import io.github.mcx360.hyprtracker.ui.mainScreen.settings.components.Title
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.AboutDialog
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.BugReportDialog
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.ImportLogsDataDialog
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.Option
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.Picker
+import io.github.mcx360.hyprtracker.ui.settingsScreen.components.Title
 import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
 import io.github.mcx360.hyprtracker.ui.utils.DeletionDialog
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun Settings(
@@ -72,21 +71,22 @@ fun Settings(
             Title(title = "General")
             Option(
                 title = "Theme",
-                subtitle = when(currentTheme){
+                subtitle = when (currentTheme) {
                     ThemeMode.LIGHT -> "Light"
                     ThemeMode.DARK -> "Dark"
-                    ThemeMode.SYSTEM -> "System Default" },
-                onClick = {showThemeDialog.value = true}
+                    ThemeMode.SYSTEM -> "System Default"
+                },
+                onClick = { showThemeDialog.value = true }
             )
             when{
                 showThemeDialog.value -> Picker(
                     title = "Select theme",
                     options = mapOf(
-                        "Dark" to {themeViewModel.setTheme(ThemeMode.DARK)},
-                        "Light" to {themeViewModel.setTheme(ThemeMode.LIGHT)},
-                        "System Default" to {themeViewModel.setTheme(ThemeMode.SYSTEM)}
+                        "Dark" to { themeViewModel.setTheme(ThemeMode.DARK) },
+                        "Light" to { themeViewModel.setTheme(ThemeMode.LIGHT) },
+                        "System Default" to { themeViewModel.setTheme(ThemeMode.SYSTEM) }
                     ),
-                    onDismissRequest = {showThemeDialog.value = false},
+                    onDismissRequest = { showThemeDialog.value = false },
                     default = when (currentTheme) {
                         ThemeMode.LIGHT -> "Light"
                         ThemeMode.DARK -> "Dark"
@@ -95,20 +95,25 @@ fun Settings(
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Option(title = "Language", subtitle = "English (UK)") { showLanguageDialog.value = true }
+            Option(title = "Language", subtitle = "English (UK)") {
+                showLanguageDialog.value = true
+            }
             when{
                 showLanguageDialog.value -> Picker(
                     title = "Select Language",
                     options = mapOf("English(UK)" to {}),
-                    onDismissRequest = {showLanguageDialog.value = false},
+                    onDismissRequest = { showLanguageDialog.value = false },
                     default = "English(UK)"
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Option(title = "Classification table", subtitle = "International society of hypertension"){showClassificationTableDialog.value = true}
+            Option(
+                title = "Classification table",
+                subtitle = "International society of hypertension"
+            ) { showClassificationTableDialog.value = true }
             when{
                 showClassificationTableDialog.value -> Picker(
-                    onDismissRequest = {showClassificationTableDialog.value = false},
+                    onDismissRequest = { showClassificationTableDialog.value = false },
                     title = "Select classification table",
                     options = mapOf("International society of hypertension" to {}),
                     default = "International society of hypertension"
@@ -118,7 +123,10 @@ fun Settings(
 
             //Data Settings
             Title(title = "Data")
-            Option(title = "Delete BP data", subtitle = "Permanently delete all bp data") { showDeleteBPDataDialog.value = true }
+            Option(
+                title = "Delete BP data",
+                subtitle = "Permanently delete all bp data"
+            ) { showDeleteBPDataDialog.value = true }
             when{
                 showDeleteBPDataDialog.value -> {
                     DeletionDialog(
@@ -131,7 +139,10 @@ fun Settings(
                 }
             }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Option(title = "Delete medications?", subtitle = "Permanently delete all medication data") { showDeleteMedicationDialog.value = true }
+            Option(
+                title = "Delete medications?",
+                subtitle = "Permanently delete all medication data"
+            ) { showDeleteMedicationDialog.value = true }
             when{
                 showDeleteMedicationDialog.value -> {
                     DeletionDialog(
@@ -147,11 +158,19 @@ fun Settings(
 
             //Backup & restore settings
             Title("Backup & restore")
-            Option(title = "Database export", subtitle = "Export all your logs in csv format") { exporter.launch("logs.csv") }
+            Option(
+                title = "Database export",
+                subtitle = "Export all your logs in csv format"
+            ) { exporter.launch("logs.csv") }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Option(title = "Database Import", subtitle = "Import a csv file containing your logs") { importer.launch("text/*") }
+            Option(
+                title = "Database Import",
+                subtitle = "Import a csv file containing your logs"
+            ) { importer.launch("text/*") }
             when{
-                showWarning.value -> ImportLogsDataDialog(onDismissRequest = { showWarning.value = false}){
+                showWarning.value -> ImportLogsDataDialog(onDismissRequest = {
+                    showWarning.value = false
+                }) {
                     scope.launch {
                         hyprTrackerViewModel.importLogs(context.contentResolver.openInputStream(uri.value))
                         showWarning.value = false
@@ -163,10 +182,19 @@ fun Settings(
             //About section
             Title("About")
             Option(title = "About", subtitle = "Version 0.5.0") { showAboutDialog.value = true }
-            when{showAboutDialog.value -> AboutDialog(onDismissRequest = {showAboutDialog.value = false}) }
+            when{showAboutDialog.value -> AboutDialog(onDismissRequest = {
+                showAboutDialog.value = false
+            })
+            }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Option(title = "Report Bug", subtitle = "Report bugs found while using HyprTracker") { showBugReportDialog.value = true }
-            when{showBugReportDialog.value -> BugReportDialog(onDismissRequest = {showBugReportDialog.value = false}) }
+            Option(
+                title = "Report Bug",
+                subtitle = "Report bugs found while using HyprTracker"
+            ) { showBugReportDialog.value = true }
+            when{showBugReportDialog.value -> BugReportDialog(onDismissRequest = {
+                showBugReportDialog.value = false
+            })
+            }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
             //Info section

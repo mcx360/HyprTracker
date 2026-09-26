@@ -13,7 +13,7 @@ import io.github.mcx360.hyprtracker.ui.loggingScreen.CONFIRM_BUTTON_TAG
 import io.github.mcx360.hyprtracker.ui.loggingScreen.DIASTOLIC_OUTLINEDTEXTFIELD_TAG
 import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_TAB_ITEM
 import io.github.mcx360.hyprtracker.ui.loggingScreen.HISTORY_SCREEN_TAG
-import io.github.mcx360.hyprtracker.ui.mainScreen.HyprTrackerApp
+import io.github.mcx360.hyprtracker.ui.HyprTrackerApp
 import io.github.mcx360.hyprtracker.ui.loggingScreen.PULSE_OUTLINEDTEXTFIELD_TAG
 import io.github.mcx360.hyprtracker.ui.loggingScreen.SYSTOLIC_OUTLINEDTEXTFIELD_TAG
 import io.github.mcx360.hyprtracker.ui.theme.AppTheme

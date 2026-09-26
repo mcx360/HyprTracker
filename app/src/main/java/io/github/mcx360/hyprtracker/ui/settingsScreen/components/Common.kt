@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings.components
+package io.github.mcx360.hyprtracker.ui.settingsScreen.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

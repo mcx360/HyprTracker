@@ -1,4 +1,4 @@
-package io.github.mcx360.hyprtracker.ui.mainScreen.settings
+package io.github.mcx360.hyprtracker.ui.settingsScreen
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
