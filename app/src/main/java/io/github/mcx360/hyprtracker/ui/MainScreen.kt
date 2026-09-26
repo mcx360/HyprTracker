@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -218,19 +219,8 @@ fun HyprTrackerApp(
                 navController = navController,
             )
         },
-        floatingActionButton = {
-            if (currentRoute == Destinations.Medicine.name) {
-                FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
-                    Icon(Icons.Filled.Add, contentDescription = null)
-                }
-            } else if (currentRoute == Destinations.Logs.name) {
-                FloatingActionButton(onClick = { openAddBPLog.value = true }) {
-                    Icon(Icons.Filled.Edit, contentDescription = null)
-                }
-            }
-        },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-    ) { innerpadding ->
+    ) {
+        innerpadding -> innerpadding.toString()
         Box(modifier = Modifier.padding(innerpadding)) {
             key(currentRoute) {
                 NavHost(
@@ -238,16 +228,10 @@ fun HyprTrackerApp(
                     startDestination = Destinations.Logs.name
                 ) {
                     composable(route = Destinations.Logs.name) {
-                        LogsScreen(
-                            hyprTrackerViewModel = hyprTrackerViewModel,
-                            snackBarHostState = snackBarHostState,
-                            openAddBloodPressureLog = openAddBPLog
-                        )
+                        LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel,)
                     }
                     composable(route = Destinations.Medicine.name) {
                         MedicineScreen(
-                            openAddMedicationScreen = openAddMedicationScreen,
-                            snackBarHostState = snackBarHostState,
                             medicineViewModel = medicineViewModel
                         )
                     }

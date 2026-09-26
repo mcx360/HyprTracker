@@ -12,15 +12,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,235 +48,264 @@ import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 
 @Composable
-fun MedicineScreen(
-    modifier: Modifier = Modifier,
-    openAddMedicationScreen: MutableState<Boolean>,
-    snackBarHostState: SnackbarHostState,
-    medicineViewModel: MedicineViewModel
-){
+fun MedicineScreen(medicineViewModel: MedicineViewModel){
     val  scope = rememberCoroutineScope()
     val uiState = medicineViewModel.uiState.collectAsState()
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
+    val openAddMedicationScreen = remember { mutableStateOf(false) }
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    if (uiState.value.medicineList.isNotEmpty()){
-
-        when{
-            openAddMedicationScreen.value -> AddMedicationScreen(
-                modifier = modifier,
-                openAddMedicationScreen = openAddMedicationScreen,
-                snackBarHostState = snackBarHostState,
-                scope = scope,
-                medicineViewModel = medicineViewModel
-            )
+    Scaffold(
+        snackbarHost = {SnackbarHost(hostState = snackBarHostState)},
+        floatingActionButton = {
+            FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
+                Icon(Icons.Filled.Add, contentDescription = null)
+            }
         }
+    ) { contentPadding ->
 
-        //list of all medications recorded
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxSize()
-                .padding()
-                .background(color = MaterialTheme.colorScheme.surface)
-        ){
-            items(uiState.value.medicineList.size){ index ->
-                val medication = uiState.value.medicineList[index]
-                //individual medication card
-                OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
+        if (uiState.value.medicineList.isNotEmpty()) {
 
-                    val showExtrasMenu = remember { mutableStateOf(false) }
+            when {
+                openAddMedicationScreen.value -> AddMedicationScreen(
+                    modifier = Modifier,
+                    openAddMedicationScreen = openAddMedicationScreen,
+                    snackBarHostState = snackBarHostState,
+                    scope = scope,
+                    medicineViewModel = medicineViewModel
+                )
+            }
 
-                    when{
-                        //Dialog to confirm deletion of Medicine
-                        showDeleteConfirmationDialog.value -> {
-                            DeletionDialog(
-                                onDismissRequest = {showDeleteConfirmationDialog.value = false},
-                                onDeleteRequest = {showDeleteConfirmationDialog.value = false
-                                    scope.launch {
-                                        medicineViewModel.removeMedication(medication)
-                                        snackBarHostState.showSnackbar("Medicine removed")
-                                    }},
-                                deletionText = "Are you sure you want to delete this medication?"
-                            )
-                        }
-                    }
+            //list of all medications recorded
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .padding()
+                    .background(color = MaterialTheme.colorScheme.surface)
+            ) {
+                items(uiState.value.medicineList.size) { index ->
+                    val medication = uiState.value.medicineList[index]
+                    //individual medication card
+                    OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
 
-                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            Column(horizontalAlignment = Alignment.Start, modifier = Modifier.weight(0.8f)) {
-                                //Medication name and icon
-                                Row {
-                                    Text(
-                                        medication.name,
-                                        fontWeight = FontWeight.Bold,
-                                        style = MaterialTheme.typography.titleLarge,
-                                    )
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_medicine),
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.secondary
-                                    )
-                                }
+                        val showExtrasMenu = remember { mutableStateOf(false) }
 
-                                //Medication description
-                                Text(
-                                    medication.description,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                        when {
+                            //Dialog to confirm deletion of Medicine
+                            showDeleteConfirmationDialog.value -> {
+                                DeletionDialog(
+                                    onDismissRequest = {
+                                        showDeleteConfirmationDialog.value = false
+                                    },
+                                    onDeleteRequest = {
+                                        showDeleteConfirmationDialog.value = false
+                                        scope.launch {
+                                            medicineViewModel.removeMedication(medication)
+                                            snackBarHostState.showSnackbar("Medicine removed")
+                                        }
+                                    },
+                                    deletionText = "Are you sure you want to delete this medication?"
                                 )
                             }
+                        }
 
-                            //extras menu
-                            Column(
-                                horizontalAlignment = Alignment.End,
-                                modifier = Modifier.fillMaxWidth().weight(0.2f)
+                        Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.Start
                             ) {
-                                Box {
-                                FilledTonalIconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
-                                    Icon(
-                                        Icons.Filled.MoreHoriz,
-                                        contentDescription = null
+                                Column(
+                                    horizontalAlignment = Alignment.Start,
+                                    modifier = Modifier.weight(0.8f)
+                                ) {
+                                    //Medication name and icon
+                                    Row {
+                                        Text(
+                                            medication.name,
+                                            fontWeight = FontWeight.Bold,
+                                            style = MaterialTheme.typography.titleLarge,
+                                        )
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_medicine),
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+
+                                    //Medication description
+                                    Text(
+                                        medication.description,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                    DropdownMenu(
-                                        expanded = showExtrasMenu.value,
-                                        onDismissRequest = {showExtrasMenu.value = false}
-                                    ) {
-                                        DropdownMenuItem(
-                                            text = { Text("Delete") },
-                                            onClick = {
-                                                showDeleteConfirmationDialog.value = true
-                                                showExtrasMenu.value = false
 
-                                                      },
-                                            leadingIcon = { Icon(Icons.Default.Delete, contentDescription = null) },
-                                        )
+                                //extras menu
+                                Column(
+                                    horizontalAlignment = Alignment.End,
+                                    modifier = Modifier.fillMaxWidth().weight(0.2f)
+                                ) {
+                                    Box {
+                                        FilledTonalIconButton(onClick = {
+                                            showExtrasMenu.value = !showExtrasMenu.value
+                                        }) {
+                                            Icon(
+                                                Icons.Filled.MoreHoriz,
+                                                contentDescription = null
+                                            )
+                                        }
+                                        DropdownMenu(
+                                            expanded = showExtrasMenu.value,
+                                            onDismissRequest = { showExtrasMenu.value = false }
+                                        ) {
+                                            DropdownMenuItem(
+                                                text = { Text("Delete") },
+                                                onClick = {
+                                                    showDeleteConfirmationDialog.value = true
+                                                    showExtrasMenu.value = false
+
+                                                },
+                                                leadingIcon = {
+                                                    Icon(
+                                                        Icons.Default.Delete,
+                                                        contentDescription = null
+                                                    )
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        Spacer(modifier = Modifier.padding(4.dp))
+                            Spacer(modifier = Modifier.padding(4.dp))
 
-                        //Medication duration
-                        Row(
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-                            if (medication.endDate.isEmpty()) {
-                                Text("Started: ", fontWeight = FontWeight.Bold)
-                                Text("${formatToRegularDate(medication.startDate)} • Continuous")
-                            } else {
-                                Text("Duration: ", fontWeight = FontWeight.Bold)
-                                Text("${formatToRegularDate(medication.startDate)} ➩ ${formatToRegularDate(medication.endDate)}")
-                            }
-                        }
-
-                        //medication dosage
-                        Row(horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-                            Text("Dose: ", fontWeight = FontWeight.Bold)
-                            Text(medication.dosePerIntake)
-                        }
-
-                        //notification times
-                        if (medication.notificationsEnabled) {
+                            //Medication duration
                             Row(
                                 horizontalArrangement = Arrangement.Start,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp)
                             ) {
-                                Text(
-                                    text = "Taken at: ",
-                                    fontWeight = FontWeight.Bold
-                                )
+                                if (medication.endDate.isEmpty()) {
+                                    Text("Started: ", fontWeight = FontWeight.Bold)
+                                    Text("${formatToRegularDate(medication.startDate)} • Continuous")
+                                } else {
+                                    Text("Duration: ", fontWeight = FontWeight.Bold)
+                                    Text(
+                                        "${formatToRegularDate(medication.startDate)} ➩ ${
+                                            formatToRegularDate(
+                                                medication.endDate
+                                            )
+                                        }"
+                                    )
+                                }
+                            }
 
-                                var text = ""
-                                medication.scheduledNotificationsTime.forEach {
-                                    if (it.length > 4) {
-                                        text += it.removePrefix(" ").replaceRange(2, 2, ":") + ", "
+                            //medication dosage
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                            ) {
+                                Text("Dose: ", fontWeight = FontWeight.Bold)
+                                Text(medication.dosePerIntake)
+                            }
+
+                            //notification times
+                            if (medication.notificationsEnabled) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = "Taken at: ",
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    var text = ""
+                                    medication.scheduledNotificationsTime.forEach {
+                                        if (it.length > 4) {
+                                            text += it.removePrefix(" ")
+                                                .replaceRange(2, 2, ":") + ", "
+                                        }
+                                    }
+                                    Text(text.removeSuffix(", "))
+                                }
+                            }
+
+                            //frequency of intake
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Dot(MaterialTheme.colorScheme.secondary)
+                                Spacer(modifier = Modifier.padding(4.dp))
+
+                                if (medication.schedule == "Every single day") {
+                                    Text("Taken daily • ")
+                                    when (medication.timesPerDay) {
+                                        1 -> Text("Once")
+                                        else -> Text("${medication.timesPerDay} times")
+                                    }
+                                } else {
+                                    Text("Taken on selected days • ")
+                                    if (medication.timesPerDay == 1) {
+                                        Text("Once")
+                                    } else {
+                                        Text("${medication.timesPerDay} times")
                                     }
                                 }
-                                Text(text.removeSuffix(", "))
                             }
-                        }
 
-                        //frequency of intake
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Dot(MaterialTheme.colorScheme.secondary)
-                            Spacer(modifier = modifier.padding(4.dp))
-
-                            if (medication.schedule == "Every single day"){
-                                Text("Taken daily • ")
-                                when(medication.timesPerDay){
-                                    1 -> Text("Once")
-                                    else -> Text("${medication.timesPerDay} times")
-                                }
-                            } else{
-                                Text("Taken on selected days • ")
-                                if (medication.timesPerDay == 1){
-                                    Text("Once")
-                                } else {
-                                    Text("${medication.timesPerDay} times")
-                                }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                HorizontalDivider(
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                                )
                             }
-                        }
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            HorizontalDivider(
-                                color = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.padding(start = 8.dp, end =8.dp))
-                        }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-    else {
-        EmptyScreen(
-            painter = painterResource(R.drawable.empty_medicine_screen_image),
-            heading = stringResource(R.string.Empty_Medicine_Screen_Title),
-            subHeading = stringResource(R.string.Empty_Medicine_Screen_Text)
-        )
-        when{
-            openAddMedicationScreen.value -> AddMedicationScreen(
-                modifier = modifier,
-                openAddMedicationScreen = openAddMedicationScreen,
-                snackBarHostState = snackBarHostState,
-                scope = scope,
-                medicineViewModel = medicineViewModel
+        } else {
+            EmptyScreen(
+                painter = painterResource(R.drawable.empty_medicine_screen_image),
+                heading = stringResource(R.string.Empty_Medicine_Screen_Title),
+                subHeading = stringResource(R.string.Empty_Medicine_Screen_Text)
             )
+            when {
+                openAddMedicationScreen.value -> AddMedicationScreen(
+                    modifier = Modifier,
+                    openAddMedicationScreen = openAddMedicationScreen,
+                    snackBarHostState = snackBarHostState,
+                    scope = scope,
+                    medicineViewModel = medicineViewModel
+                )
+            }
         }
     }
 }
