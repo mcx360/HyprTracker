@@ -51,7 +51,6 @@ fun AddMedicationScreen(
     medicineViewModel: MedicineViewModel
 ){
     val haptic = LocalHapticFeedback.current
-    var checked by remember {mutableStateOf(false)}
     var showScheduleDropDownMenu by remember { mutableStateOf(false) }
     var showTimesPerDayDropDownMenu by remember { mutableStateOf(false) }
     var showScheduleInfoDialog by remember { mutableStateOf(false) }
@@ -104,13 +103,11 @@ fun AddMedicationScreen(
                     isMedicationDescriptionFieldInError = isMedicationDescriptionFieldInError,
                     updateMedicationName = {
                         medicineViewModel.updateMedicationName(it)
-                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError =
-                            false
+                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
                     },
                     updateMedicationDescription = {
                         medicineViewModel.updateMedicationDescription(it)
-                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError =
-                            false
+                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
                     },
                     setMedicationNameErrorStatusFalse = { isMedicationNameFieldInError = false },
                     setMedicationDescriptionErrorStatusFalse = {
@@ -160,19 +157,8 @@ fun AddMedicationScreen(
 
                 //Notification reminders Card
                 NotificationsCard(
-                    checked = checked,
-                    updateCheckedStatus = { checked = it },
-                    updateMedicationNotificationStatus = {
-                        medicineViewModel.updateMedicationNotificationStatus(
-                            it
-                        )
-                    },
-                    updateMedicationReminderTime = { value, reminder ->
-                        medicineViewModel.updateMedicationReminderTime(
-                            value,
-                            reminder
-                        )
-                    },
+                    updateMedicationNotificationStatus = { medicineViewModel.updateMedicationNotificationStatus(it) },
+                    updateMedicationReminderTime = { value, reminder -> medicineViewModel.updateMedicationReminderTime(value, reminder) },
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationSelectedDays = uiState.value.medicationSelectedDays,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,

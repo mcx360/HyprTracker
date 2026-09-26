@@ -16,6 +16,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,15 +35,14 @@ import io.github.mcx360.hyprtracker.R
 @Composable
 fun NotificationsCard(
     modifier: Modifier = Modifier,
-    checked: Boolean,
-    updateCheckedStatus: (Boolean) -> Unit,
     updateMedicationNotificationStatus: (Boolean) -> Unit,
-    updateMedicationReminderTime: (value: String,reminder: Int) -> Unit,
+    updateMedicationReminderTime: (value: String, reminder: Int) -> Unit,
     medicationSchedule: String,
     medicationSelectedDays: Set<String>,
     medicationTimesPerDay: Int,
     medicationReminderTimes: List<String>,
 ){
+    val checked = remember { mutableStateOf(false) }
     Card {
         Column(
             modifier = modifier
@@ -60,14 +61,12 @@ fun NotificationsCard(
 
                 Switch(
                     modifier = modifier.align(Alignment.CenterVertically),
-                    checked = checked,
-                    onCheckedChange = {
-                        updateCheckedStatus(it)
-                    }
+                    checked = checked.value,
+                    onCheckedChange = { checked.value = true }
                 )
             }
 
-            if (checked) {
+            if (checked.value) {
                 updateMedicationNotificationStatus(true)
                 Row {
                     when (medicationSchedule) {
