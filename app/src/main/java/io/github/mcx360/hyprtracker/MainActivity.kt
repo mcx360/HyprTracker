@@ -10,9 +10,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import io.github.mcx360.hyprtracker.ui.HyprTrackerApp
-import io.github.mcx360.hyprtracker.ui.settingsScreen.ThemeViewModel
 import io.github.mcx360.hyprtracker.ui.theme.AppTheme
 import io.github.mcx360.hyprtracker.ui.theme.ThemeMode
+import io.github.mcx360.hyprtracker.ui.theme.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
     private val themeViewModel: ThemeViewModel by viewModels()
