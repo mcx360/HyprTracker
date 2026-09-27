@@ -5,7 +5,7 @@ import io.github.mcx360.hyprtracker.data.source.medication.impl.RecordedMedicati
 import kotlinx.coroutines.flow.Flow
 
 class MedicationRepository(private val medicationDAO: RecordedMedicationDAO) {
-    suspend fun getAllMedicationsStream(): Flow<List<RecordedMedication>> = medicationDAO.getAllMedications()
+    fun getAllMedicationsStream(): Flow<List<RecordedMedication>> = medicationDAO.getAllMedications()
 
     suspend fun addMedication(medication: RecordedMedication) = medicationDAO.insertMedication(medication)
 
