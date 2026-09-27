@@ -1,19 +1,22 @@
-package io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen
+package io.github.mcx360.hyprtracker.ui.medicineScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -28,14 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationInfoCard
 import io.github.mcx360.hyprtracker.ui.model.Medicine
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.CoroutineScope
@@ -52,13 +53,14 @@ fun AddMedicationScreen(
 ){
     val haptic = LocalHapticFeedback.current
     val uiState = medicineViewModel.uiState.collectAsState()
-    var isMedicationNameFieldInError by remember { mutableStateOf(false) }
+    val errors = remember { mutableListOf(false) }
     var isMedicationDescriptionFieldInError by remember { mutableStateOf(false) }
     var isMedicationScheduleFieldInError by remember { mutableStateOf(false) }
     var isMedicationTimesPerDayFieldInError by remember { mutableStateOf(false) }
     var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = {},
+    Dialog(
+        onDismissRequest = {},
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
@@ -66,7 +68,12 @@ fun AddMedicationScreen(
     ) {
         Card(
             modifier = modifier.fillMaxSize(),
-            colors = CardColors(contentColor = MaterialTheme.colorScheme.surfaceContainer, containerColor = MaterialTheme.colorScheme.surfaceContainer, disabledContentColor = MaterialTheme.colorScheme.surfaceContainer, disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer),
+            colors = CardColors(
+                contentColor = MaterialTheme.colorScheme.surfaceContainer,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                disabledContentColor = MaterialTheme.colorScheme.surfaceContainer,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
             shape = RectangleShape,
         ) {
             //Add Medication title
@@ -89,23 +96,75 @@ fun AddMedicationScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //Medication Info
-                MedicationInfoCard(
-                    medicationName = uiState.value.medicationName,
-                    medicationDescription = uiState.value.medicationDescription,
-                    isMedicationNameFieldInError = isMedicationNameFieldInError,
-                    isMedicationDescriptionFieldInError = isMedicationDescriptionFieldInError,
-                    updateMedicationName = {
-                        medicineViewModel.updateMedicationName(it)
-                        if (uiState.value.medicationName.isNotEmpty()) isMedicationNameFieldInError = false
-                    },
-                    updateMedicationDescription = {
-                        medicineViewModel.updateMedicationDescription(it)
-                        if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError = false
-                    },
-                    setMedicationNameErrorStatusFalse = { isMedicationNameFieldInError = false },
-                    setMedicationDescriptionErrorStatusFalse = { isMedicationDescriptionFieldInError = false }
-                )
+                Card {
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = "Medication Info",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = modifier.padding(4.dp),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+
+                        OutlinedTextField(
+                            isError = errors[0],
+                            onValueChange = {
+                                medicineViewModel.updateMedicationName(it)
+                                if (uiState.value.medicationName.isNotEmpty()) errors[0] = false
+                            },
+                            value = uiState.value.medicationName,
+                            label = { Text("Medication name*") },
+                            maxLines = 1,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Next
+                            ),
+                            placeholder = { Text("e.g. Lisinopril") },
+                            supportingText = {
+                                if (errors[0]) {
+                                    Text(
+                                        text = "Medication name needed!",
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                } else {
+                                    Text("*required")
+                                }
+                            }
+                        )
+
+                        OutlinedTextField(
+                            isError = isMedicationDescriptionFieldInError,
+                            onValueChange = {
+                                medicineViewModel.updateMedicationDescription(it)
+                                if (uiState.value.medicationDescription.isNotEmpty()) isMedicationDescriptionFieldInError =
+                                    false
+                            },
+                            value = uiState.value.medicationDescription,
+                            label = { Text("Medication description*") },
+                            maxLines = 1,
+                            placeholder = { Text("e.g. Lowers high blood pressure") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Done
+                            ),
+                            supportingText = {
+                                if (isMedicationDescriptionFieldInError) {
+                                    Text(
+                                        text = "Medication description needed!",
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                } else {
+                                    Text("*required")
+                                }
+                            }
+                        )
+                    }
+                }
 
                 Spacer(modifier = modifier.height(16.dp))
 
@@ -122,17 +181,32 @@ fun AddMedicationScreen(
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
                     medicationDosage = uiState.value.medicationDosage,
-                    setIsMedicationScheduleFieldInErrorToFalse = { isMedicationScheduleFieldInError = false },
-                    setIsMedicationDosePerIntakeInErrorToFalse = { isMedicationDosePerIntakeInError = false },
-                    setIsMedicationTimesPerDayFieldInErrorToFalse = { isMedicationTimesPerDayFieldInError = false }
+                    setIsMedicationScheduleFieldInErrorToFalse = {
+                        isMedicationScheduleFieldInError = false
+                    },
+                    setIsMedicationDosePerIntakeInErrorToFalse = {
+                        isMedicationDosePerIntakeInError = false
+                    },
+                    setIsMedicationTimesPerDayFieldInErrorToFalse = {
+                        isMedicationTimesPerDayFieldInError = false
+                    }
                 )
 
                 Spacer(modifier = modifier.height(16.dp))
 
                 //Notification reminders Card
                 NotificationsCard(
-                    updateMedicationNotificationStatus = { medicineViewModel.updateMedicationNotificationStatus(it) },
-                    updateMedicationReminderTime = { value, reminder -> medicineViewModel.updateMedicationReminderTime(value, reminder) },
+                    updateMedicationNotificationStatus = {
+                        medicineViewModel.updateMedicationNotificationStatus(
+                            it
+                        )
+                    },
+                    updateMedicationReminderTime = { value, reminder ->
+                        medicineViewModel.updateMedicationReminderTime(
+                            value,
+                            reminder
+                        )
+                    },
                     medicationSchedule = uiState.value.medicationSchedule,
                     medicationSelectedDays = uiState.value.medicationSelectedDays,
                     medicationTimesPerDay = uiState.value.medicationTimesPerDay,
@@ -155,13 +229,27 @@ fun AddMedicationScreen(
                 ) {
                     Button(
                         onClick = {
-                            when {uiState.value.medicationName.isEmpty() -> isMedicationNameFieldInError = true }
-                            when {uiState.value.medicationDescription.isEmpty() -> isMedicationDescriptionFieldInError = true }
-                            when {uiState.value.medicationSchedule.isEmpty() -> isMedicationScheduleFieldInError = true }
-                            when {uiState.value.medicationTimesPerDay == 0 -> isMedicationTimesPerDayFieldInError = true }
-                            when {uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError = true }
+                            when {
+                                uiState.value.medicationName.isEmpty() -> errors[0] = true
+                            }
+                            when {
+                                uiState.value.medicationDescription.isEmpty() -> isMedicationDescriptionFieldInError =
+                                    true
+                            }
+                            when {
+                                uiState.value.medicationSchedule.isEmpty() -> isMedicationScheduleFieldInError =
+                                    true
+                            }
+                            when {
+                                uiState.value.medicationTimesPerDay == 0 -> isMedicationTimesPerDayFieldInError =
+                                    true
+                            }
+                            when {
+                                uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError =
+                                    true
+                            }
 
-                            if (isMedicationNameFieldInError || isMedicationDescriptionFieldInError || isMedicationScheduleFieldInError || isMedicationTimesPerDayFieldInError || isMedicationDosePerIntakeInError) {
+                            if (errors[0] || isMedicationDescriptionFieldInError || isMedicationScheduleFieldInError || isMedicationTimesPerDayFieldInError || isMedicationDosePerIntakeInError) {
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
                             } else {
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
