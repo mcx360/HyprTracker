@@ -35,7 +35,7 @@ import io.github.mcx360.hyprtracker.ui.medicineScreen.MedicineViewModel
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.DurationCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationScheduleAndDosageCard
 import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.NotificationsCard
-import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.medicationInfoCard
+import io.github.mcx360.hyprtracker.ui.medicineScreen.addMedicationScreen.components.MedicationInfoCard
 import io.github.mcx360.hyprtracker.ui.model.Medicine
 import io.github.mcx360.hyprtracker.ui.utils.TitleBarWithBackButton
 import kotlinx.coroutines.CoroutineScope
@@ -90,7 +90,7 @@ fun AddMedicationScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 //Medication Info
-                medicationInfoCard(
+                MedicationInfoCard(
                     medicationName = uiState.value.medicationName,
                     medicationDescription = uiState.value.medicationDescription,
                     isMedicationNameFieldInError = isMedicationNameFieldInError,

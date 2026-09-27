@@ -94,25 +94,27 @@ fun DurationCard(
                     )
                 }
             }
-            if (selectedOption == "Specified number of days"){
-                if (endDate != ""){
+            when (selectedOption) {
+                "Specified number of days" if endDate != "" -> {
                     Text(
-                        text = "medicine recorded until "+formatToRegularDate(endDate),
+                        text = "medicine recorded until " + formatToRegularDate(endDate),
+                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
+                    )
+
+                }
+                "Until a selected date" if endDate != "" -> {
+                    Text(
+                        text = formatToRegularDate(endDate),
+                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
+                    )
+
+                }
+                else -> {
+                    Text(
+                        text = "Medicine will be recorded indefinitely unless cancelled by the user",
                         modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
                     )
                 }
-            } else if(selectedOption == "Until a selected date"){
-                if (endDate != ""){
-                    Text(
-                        text = ""+formatToRegularDate(endDate),
-                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-                }
-            }else{
-                Text(
-                    text = "Medicine will be recorded indefinitely unless cancelled by the user",
-                    modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
-                )
             }
         }
 
@@ -120,11 +122,7 @@ fun DurationCard(
             showSelectSpecifiedNumberOfDaysDialog.value ->
             SelectSpecifiedNumberOfDaysDialog(
                 onDismissRequest = { showSelectSpecifiedNumberOfDaysDialog.value = false },
-                onNumOfDaysSelected = {
-                    if (it != "") updateMedicationEndDate(
-                        LocalDate.now().plusDays(it.toLong()).toString()
-                    )
-                }
+                onNumOfDaysSelected = { if (it != "") updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString()) }
             )
         }
 
@@ -158,10 +156,7 @@ fun SelectSpecifiedNumberOfDaysDialog(
                     OutlinedTextField(
                         onValueChange = {if (it.isDigitsOnly()) days = it},
                         value = days,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                         label = {Text("Days")},
                         modifier = Modifier.width(96.dp),
                         shape = RoundedCornerShape(16.dp)
@@ -185,9 +180,8 @@ fun SelectSpecifiedNumberOfDaysDialog(
                             onDismissRequest()
                             onNumOfDaysSelected(days)
                         },
-                        modifier = Modifier.padding(8.dp)
                     ) {
-                        Text("Confirm")
+                        Text(text = "Confirm")
                     }
                 }
             }

@@ -202,65 +202,16 @@ fun MedicationScheduleAndDosageCard(
                         expanded = showTimesPerDayDropDownMenu.value,
                         onDismissRequest = {showTimesPerDayDropDownMenu.value =false}
                     ) {
-                        //One times per day option
-                        DropdownMenuItem(
-                            text = {Text("One time daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(1)
-                                showTimesPerDayDropDownMenu.value =false
-                            }
-                        )
-
-                        //Two times per day option
-                        DropdownMenuItem(
-                            text = {Text("Two times daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(2)
-                                showTimesPerDayDropDownMenu.value = false
-                            }
-                        )
-
-                        //Three times per day option
-                        DropdownMenuItem(
-                            text = {Text("Three times daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(3)
-                                showTimesPerDayDropDownMenu.value = false
-                            }
-                        )
-
-                        //Four times per day option
-                        DropdownMenuItem(
-                            text = {Text("Four times daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(4)
-                                showTimesPerDayDropDownMenu.value = false
-                            }
-                        )
-
-                        //Five times per day option
-                        DropdownMenuItem(
-                            text = {Text("Five times daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(5)
-                                showTimesPerDayDropDownMenu.value = false
-                            }
-                        )
-
-                        //Six times per day option
-                        DropdownMenuItem(
-                            text = {Text("Six times daily")},
-                            onClick = {
-                                setIsMedicationTimesPerDayFieldInErrorToFalse()
-                                updateMedicationTimesPerDay(6)
-                                showTimesPerDayDropDownMenu.value = false
-                            }
-                        )
+                        for (i in 1..6){
+                            DropdownMenuItem(
+                                text = {Text("$i time(s) daily")},
+                                onClick = {
+                                    setIsMedicationTimesPerDayFieldInErrorToFalse()
+                                    updateMedicationTimesPerDay(i)
+                                    showTimesPerDayDropDownMenu.value =false
+                                }
+                            )
+                    }
                     }
                 }
 
