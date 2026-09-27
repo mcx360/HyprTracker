@@ -8,7 +8,7 @@ import java.io.InputStream
 
 class BloodPressureRepository(private val bloodPressureDAO: RecordedBloodPressureDAO){
 
-    suspend fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
+    fun getAllRecordingsStream(): Flow<List<RecordedBloodPressure>> = bloodPressureDAO.getAllBloodPressureReadings()
 
     suspend fun addBloodPressureReading(reading: RecordedBloodPressure) = bloodPressureDAO.insertBloodPressureReading(reading)
 
