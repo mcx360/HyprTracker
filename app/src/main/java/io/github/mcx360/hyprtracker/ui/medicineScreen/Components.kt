@@ -65,7 +65,6 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationScheduleAndDosageCard(
-    modifier: Modifier = Modifier,
     isMedicationScheduleFieldInError: Boolean,
     isMedicationTimesPerDayFieldInError: Boolean,
     isMedicationDosePerIntakeInError: Boolean,
@@ -79,15 +78,10 @@ fun MedicationScheduleAndDosageCard(
     removeSelectedDay: (String) -> Unit,
     medicationSchedule: String,
     medicationTimesPerDay: Int,
-    medicationDosage: String,
-    ){
+    medicationDosage: String
+){
     Card {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.Start) {
             val showScheduleDropDownMenu = remember { mutableStateOf(false) }
             val showTimesPerDayDropDownMenu = remember { mutableStateOf(false) }
             val showSelectedDaysPicker = remember { mutableStateOf(false) }
@@ -98,13 +92,12 @@ fun MedicationScheduleAndDosageCard(
             Text(
                 text = "Medication Schedule & Dosage",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = modifier.padding(4.dp),
+                modifier = Modifier.padding(4.dp),
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.secondary
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-
                 //Box for medication schedule
                 ExposedDropdownMenuBox(
                     expanded = showScheduleDropDownMenu.value,
@@ -116,22 +109,12 @@ fun MedicationScheduleAndDosageCard(
                         readOnly = true,
                         onValueChange = {},
                         value = medicationSchedule,
-                        label = { Text("Schedule*") },
-                        placeholder = { Text("e.g. Every day") },
-                        trailingIcon = {
-                            if (showScheduleDropDownMenu.value) {
-                                Icon(Icons.Default.ArrowDropUp, null)
-                            } else {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            }
-                        },
+                        label = { Text(text = "Schedule*") },
+                        placeholder = { Text(text = "e.g. Every day") },
+                        trailingIcon = { Icon(if (showScheduleDropDownMenu.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown, contentDescription = null) },
                         maxLines = 1,
-                        modifier = modifier.menuAnchor(
-                            type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                            enabled = true
-                        ),
+                        modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true),
                     )
-
 
                     //Medication schedule menu
                     ExposedDropdownMenu(
@@ -141,12 +124,10 @@ fun MedicationScheduleAndDosageCard(
                             onClick = {
                                 updateMedicationSchedule("Every single day")
                                 setIsMedicationScheduleFieldInErrorToFalse()
-                                for (day in DayOfWeek.entries) {
-                                    addSelectedDay(day.name)
-                                }
+                                for (day in DayOfWeek.entries) { addSelectedDay(day.name) }
                                 showScheduleDropDownMenu.value = false
                             },
-                            text = { Text("Every single day") }
+                            text = { Text(text = "Every single day") }
                         )
                         DropdownMenuItem(
                             onClick = {
@@ -154,7 +135,7 @@ fun MedicationScheduleAndDosageCard(
                                 showScheduleDropDownMenu.value = false
                                 showSelectedDaysPicker.value = true
                             },
-                            text = { Text("On selected days only") }
+                            text = { Text(text = "On selected days only") }
                         )
                     }
                 }
@@ -162,9 +143,7 @@ fun MedicationScheduleAndDosageCard(
                     showSelectedDaysPicker.value ->
                         SelectDaysForMedication(
                             onDismiss = {
-                                if (!it.isNullOrEmpty()) {
-                                    updateMedicationSchedule(it)
-                                }
+                                if (!it.isNullOrEmpty())  updateMedicationSchedule(it)
                                 showSelectedDaysPicker.value = false
                             },
                             onDaySelected = { addSelectedDay(it) },
@@ -223,19 +202,10 @@ fun MedicationScheduleAndDosageCard(
                             6 -> "Six times daily"
                             else -> ""
                         },
-                        label = { Text("Times per day*") },
-                        placeholder = { Text("e.g. Once daily") },
-                        trailingIcon = {
-                            if (showTimesPerDayDropDownMenu.value) {
-                                Icon(Icons.Default.ArrowDropUp, null)
-                            } else {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            }
-                        },
-                        modifier = modifier.menuAnchor(
-                            type = MenuAnchorType.PrimaryNotEditable,
-                            enabled = true
-                        ),
+                        label = { Text(text = "Times per day*") },
+                        placeholder = { Text(text = "e.g. Once daily") },
+                        trailingIcon = { Icon(if (showTimesPerDayDropDownMenu.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown , null) },
+                        modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true),
                     )
 
                     //times per day menu
@@ -297,16 +267,9 @@ fun MedicationScheduleAndDosageCard(
                     },
                     value = medicationDosage,
                     label = { Text("Dose per Intake*") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
                     placeholder = { Text("e.g. 1 x 10mg tablet") },
-                    supportingText = {
-                        if (isMedicationDosePerIntakeInError) Text("Dose per intake is needed") else Text(
-                            "*required"
-                        )
-                    }
+                    supportingText = { Text(text = if (isMedicationDosePerIntakeInError) "Dose per intake is needed" else "*required") }
                 )
 
                 //Dose per intake info popup
@@ -342,93 +305,56 @@ fun SelectDaysForMedication(
     var sundayChecked by remember { mutableStateOf(false) }
     val showWarning = remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = {
-        onDismiss(null)
-        showWarning.value = false
-    }) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                Text("Select days")
+    Dialog(onDismissRequest = { onDismiss(null); showWarning.value = false }) {
+        Card(modifier = Modifier.fillMaxWidth().padding(16.dp), shape = RoundedCornerShape(16.dp),) {
+            Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start,) {
+                Text(text = "Select days")
 
                 //Monday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = mondayChecked,
-                        onCheckedChange = { mondayChecked = it }
-                    )
+                    Checkbox(checked = mondayChecked, onCheckedChange = { mondayChecked = it })
                     Text("Monday")
                 }
 
                 //Tuesday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = tuesdayChecked,
-                        onCheckedChange = { tuesdayChecked = it }
-                    )
+                    Checkbox(checked = tuesdayChecked, onCheckedChange = { tuesdayChecked = it })
                     Text("Tuesday")
                 }
 
                 //Wednesday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = wednesdayChecked,
-                        onCheckedChange = { wednesdayChecked = it }
-                    )
+                    Checkbox(checked = wednesdayChecked, onCheckedChange = { wednesdayChecked = it })
                     Text("Wednesday")
                 }
 
                 //Thursday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = thursdayChecked,
-                        onCheckedChange = { thursdayChecked = it }
-                    )
+                    Checkbox(checked = thursdayChecked, onCheckedChange = { thursdayChecked = it })
                     Text("Thursday")
                 }
 
                 //Friday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = fridayChecked,
-                        onCheckedChange = { fridayChecked = it }
-                    )
+                    Checkbox(checked = fridayChecked, onCheckedChange = { fridayChecked = it })
                     Text("Friday")
                 }
 
                 //Saturday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = saturdayChecked,
-                        onCheckedChange = { saturdayChecked = it }
-                    )
+                    Checkbox(checked = saturdayChecked, onCheckedChange = { saturdayChecked = it })
                     Text("Saturday")
                 }
 
                 //Sunday
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = sundayChecked,
-                        onCheckedChange = { sundayChecked = it }
-                    )
+                    Checkbox(checked = sundayChecked, onCheckedChange = { sundayChecked = it })
                     Text("Sunday")
                 }
 
                 Row(horizontalArrangement = Arrangement.Center) {
                     //Cancel button
-                    Button(
-                        onClick = { onDismiss(null) },
-                        modifier = Modifier.padding(4.dp)
-                    ) {
+                    Button(onClick = { onDismiss(null) }, modifier = Modifier.padding(4.dp)) {
                         Text("Cancel")
                     }
 
@@ -445,12 +371,8 @@ fun SelectDaysForMedication(
                                     saturdayChecked to DayOfWeek.SATURDAY,
                                     sundayChecked to DayOfWeek.SUNDAY
                                 ).forEach { (isChecked, day) ->
-                                    if (isChecked) {
-                                        onDaySelected(day.name)
-                                    }
-                                    if (!isChecked) {
-                                        onDayRemoved(day.name)
-                                    }
+                                    if (isChecked) { onDaySelected(day.name) }
+                                    if (!isChecked) { onDayRemoved(day.name) }
                                 }
                                 onDismiss("Selected days only")
                             } else {
@@ -459,12 +381,12 @@ fun SelectDaysForMedication(
                         },
                         modifier = Modifier.padding(4.dp)
                     ) {
-                        Text("Ok")
+                        Text(text = "Ok")
                     }
                 }
                 if (showWarning.value) {
                     Text(
-                        "You must select at least one day!",
+                        text = "You must select at least one day!",
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -475,7 +397,6 @@ fun SelectDaysForMedication(
 
 @Composable
 fun DurationCard(
-    modifier: Modifier = Modifier.Companion,
     startDate: String,
     endDate: String,
     updateMedicationEndDate: (String) -> Unit,
@@ -488,21 +409,21 @@ fun DurationCard(
     Card {
         Text(
             text = "Duration",
-            modifier = modifier.padding(start = 16.dp, top = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp),
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            "Start date: " + formatToRegularDate(startDate),
-            modifier = modifier.padding(start = 16.dp)
+            text = "Start date: " + formatToRegularDate(startDate),
+            modifier = Modifier.padding(start = 16.dp)
         )
 
-        Column(modifier.selectableGroup()) {
+        Column(Modifier.selectableGroup()) {
             radioButtons.forEach { text ->
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                         .selectable(
@@ -510,9 +431,7 @@ fun DurationCard(
                             onClick = {
                                 onOptionSelected(text)
                                 when (text) {
-                                    "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value =
-                                        true
-
+                                    "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value = true
                                     "Until a selected date" -> showDurationDatePicker.value = true
                                 }
                             },
@@ -524,42 +443,21 @@ fun DurationCard(
                     RadioButton(selected = (text == selectedOption), onClick = {
                         onOptionSelected(text)
                         when (text) {
-                            "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value =
-                                true
-
+                            "Specified number of days" -> showSelectSpecifiedNumberOfDaysDialog.value = true
                             "Until a selected date" -> showDurationDatePicker.value = true
                         }
                     })
                     Text(
                         text = text,
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = modifier.padding(start = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp)
                     )
                 }
             }
             when (selectedOption) {
-                "Specified number of days" if endDate != "" -> {
-                    Text(
-                        text = "medicine recorded until " + formatToRegularDate(endDate),
-                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-
-                }
-
-                "Until a selected date" if endDate != "" -> {
-                    Text(
-                        text = formatToRegularDate(endDate),
-                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-
-                }
-
-                else -> {
-                    Text(
-                        text = "Medicine will be recorded indefinitely unless cancelled by the user",
-                        modifier = modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-                }
+                "Specified number of days" if endDate != "" -> { Text(text = "medicine recorded until " + formatToRegularDate(endDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
+                "Until a selected date" if endDate != "" -> { Text(text = formatToRegularDate(endDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
+                else -> { Text(text = "Medicine will be recorded indefinitely unless cancelled by the user", modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
             }
         }
 
@@ -567,11 +465,7 @@ fun DurationCard(
             showSelectSpecifiedNumberOfDaysDialog.value ->
                 SelectSpecifiedNumberOfDaysDialog(
                     onDismissRequest = { showSelectSpecifiedNumberOfDaysDialog.value = false },
-                    onNumOfDaysSelected = {
-                        if (it != "") updateMedicationEndDate(
-                            LocalDate.now().plusDays(it.toLong()).toString()
-                        )
-                    }
+                    onNumOfDaysSelected = { if (it != "") updateMedicationEndDate(LocalDate.now().plusDays(it.toLong()).toString()) }
                 )
         }
 
@@ -579,7 +473,8 @@ fun DurationCard(
             showDurationDatePicker.value ->
                 DurationDatePicker(
                     onDateSelected = { updateMedicationEndDate(convertMillisToDate(it)) },
-                    onDismiss = { showDurationDatePicker.value = false })
+                    onDismiss = { showDurationDatePicker.value = false }
+                )
         }
     }
 }
@@ -591,7 +486,7 @@ fun SelectSpecifiedNumberOfDaysDialog(
 ){
     var days by remember { mutableStateOf("") }
     Dialog(onDismissRequest = { onDismissRequest() }) {
-        Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),) {
+        Card(shape = RoundedCornerShape(16.dp),) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -605,11 +500,8 @@ fun SelectSpecifiedNumberOfDaysDialog(
                     OutlinedTextField(
                         onValueChange = { if (it.isDigitsOnly()) days = it },
                         value = days,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        ),
-                        label = { Text("Days") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                        label = { Text(text = "Days") },
                         modifier = Modifier.width(96.dp),
                         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
                     )
@@ -620,19 +512,10 @@ fun SelectSpecifiedNumberOfDaysDialog(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedButton(
-                        onClick = { onDismissRequest() },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text("Cancel")
+                    OutlinedButton(onClick = { onDismissRequest() }, modifier = Modifier.padding(8.dp)) {
+                        Text(text = "Cancel")
                     }
-
-                    Button(
-                        onClick = {
-                            onDismissRequest()
-                            onNumOfDaysSelected(days)
-                        },
-                    ) {
+                    Button(onClick = { onDismissRequest(); onNumOfDaysSelected(days) }) {
                         Text(text = "Confirm")
                     }
                 }
@@ -643,7 +526,6 @@ fun SelectSpecifiedNumberOfDaysDialog(
 
 @Composable
 fun NotificationsCard(
-    modifier: Modifier = Modifier.Companion,
     updateMedicationNotificationStatus: (Boolean) -> Unit,
     updateMedicationReminderTime: (value: String, reminder: Int) -> Unit,
     medicationSchedule: String,
@@ -654,7 +536,7 @@ fun NotificationsCard(
     val checked = remember { mutableStateOf(false) }
     Card {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -663,13 +545,13 @@ fun NotificationsCard(
                 Text(
                     text = "Notification Reminders",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = modifier.padding(4.dp).weight(0.8f),
+                    modifier = Modifier.padding(4.dp).weight(0.8f),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary
                 )
 
                 Switch(
-                    modifier = modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     checked = checked.value,
                     onCheckedChange = { checked.value = true }
                 )
@@ -683,21 +565,21 @@ fun NotificationsCard(
                             Text(
                                 text = "Enter your medication schedule into the fields above to set reminders",
                                 color = MaterialTheme.colorScheme.error,
-                                modifier = modifier.padding(8.dp)
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
 
                         "Every single day" -> {
                             Text(
                                 text = "You are scheduled to receive reminders every single day",
-                                modifier = modifier.padding(8.dp)
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
 
                         else -> {
                             Text(
                                 text = "You are scheduled to receive reminders on the following days: $medicationSelectedDays",
-                                modifier = modifier.padding(8.dp)
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
                     }
@@ -708,12 +590,12 @@ fun NotificationsCard(
                         Text(
                             text = "Enter how many times per scheduled day you take the medicine in the fields above before setting reminders",
                             color = MaterialTheme.colorScheme.error,
-                            modifier = modifier.padding(8.dp)
+                            modifier = Modifier.padding(8.dp)
                         )
                     } else {
                         Text(
                             text = "On each scheduled day you will receive this much reminder(s): $medicationTimesPerDay",
-                            modifier = modifier.padding(8.dp)
+                            modifier = Modifier.padding(8.dp)
                         )
                     }
                     IconButton(onClick = {}) {
@@ -726,34 +608,20 @@ fun NotificationsCard(
                         Text(
                             text = "Enter reminder time(s) below",
                             style = MaterialTheme.typography.titleSmall,
-                            modifier = modifier.padding(8.dp),
+                            modifier = Modifier.padding(8.dp),
                         )
                     }
                 }
 
                 Column {
                     for (i in 1..medicationTimesPerDay) {
-
                         TextField(
                             value = medicationReminderTimes[i],
                             label = { Text("Reminder$i") },
                             placeholder = { Text("HH:MM") },
-                            onValueChange = {
-                                if (it.length < 5 && it.isDigitsOnly()) updateMedicationReminderTime(
-                                    it,
-                                    i
-                                )
-                            },
-                            trailingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_date),
-                                    contentDescription = null
-                                )
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = if (i != medicationTimesPerDay) ImeAction.Next else ImeAction.Done
-                            ),
+                            onValueChange = { if (it.length < 5 && it.isDigitsOnly()) updateMedicationReminderTime(it, i) },
+                            trailingIcon = { Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = if (i != medicationTimesPerDay) ImeAction.Next else ImeAction.Done),
                             visualTransformation = VisualTransformation { text ->
                                 var out = ""
                                 for (i in text.indices) {

@@ -173,13 +173,10 @@ fun AddMedicationScreen(
                                 haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                                 onDismissRequest()
                                 scope.launch {
+                                    medicineViewModel.addMedication()
                                     medicineViewModel.fetchMedications()
-                                    snackBarHostState.showSnackbar(
-                                        message = "Medication added",
-                                        duration = SnackbarDuration.Short
-                                    )
+                                    snackBarHostState.showSnackbar(message = "Medication added", duration = SnackbarDuration.Short)
                                 }
-                                scope.launch { medicineViewModel.addMedication() }
                             }
                         }
                     ) {
