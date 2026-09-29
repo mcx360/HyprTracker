@@ -55,13 +55,8 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
 
     Scaffold(
         snackbarHost = {SnackbarHost(hostState = snackBarHostState)},
-        floatingActionButton = {
-            FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
-                Icon(Icons.Filled.Add, contentDescription = null)
-            }
-        }
+        floatingActionButton = { FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) { Icon(imageVector = Icons.Filled.Add, contentDescription = null) } }
     ) { contentPadding ->
-
         when {
             openAddMedicationScreen.value -> AddMedicationScreen(
                 onDismissRequest = {openAddMedicationScreen.value = false},
@@ -72,7 +67,6 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
         }
 
         if (uiState.value.medicineList.isNotEmpty()) {
-
             //list of all medications recorded
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,16 +82,13 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                     val medication = uiState.value.medicineList[index]
                     //individual medication card
                     OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
-
                         val showExtrasMenu = remember { mutableStateOf(false) }
 
                         when {
                             //Dialog to confirm deletion of Medicine
                             showDeleteConfirmationDialog.value -> {
                                 DeletionDialog(
-                                    onDismissRequest = {
-                                        showDeleteConfirmationDialog.value = false
-                                    },
+                                    onDismissRequest = { showDeleteConfirmationDialog.value = false },
                                     onDeleteRequest = {
                                         showDeleteConfirmationDialog.value = false
                                         scope.launch {
@@ -111,20 +102,12 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                         }
 
                         Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Column(
-                                    horizontalAlignment = Alignment.Start,
-                                    modifier = Modifier.weight(0.8f)
-                                ) {
+                            Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Start) {
+                                Column(horizontalAlignment = Alignment.Start, modifier = Modifier.weight(0.8f)) {
                                     //Medication name and icon
                                     Row {
                                         Text(
-                                            medication.name,
+                                            text = medication.name,
                                             fontWeight = FontWeight.Bold,
                                             style = MaterialTheme.typography.titleLarge,
                                         )
@@ -142,20 +125,11 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-
                                 //extras menu
-                                Column(
-                                    horizontalAlignment = Alignment.End,
-                                    modifier = Modifier.fillMaxWidth().weight(0.2f)
-                                ) {
+                                Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().weight(0.2f)) {
                                     Box {
-                                        FilledTonalIconButton(onClick = {
-                                            showExtrasMenu.value = !showExtrasMenu.value
-                                        }) {
-                                            Icon(
-                                                Icons.Filled.MoreHoriz,
-                                                contentDescription = null
-                                            )
+                                        FilledTonalIconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
+                                            Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = null)
                                         }
                                         DropdownMenu(
                                             expanded = showExtrasMenu.value,
@@ -166,14 +140,8 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                                 onClick = {
                                                     showDeleteConfirmationDialog.value = true
                                                     showExtrasMenu.value = false
-
                                                 },
-                                                leadingIcon = {
-                                                    Icon(
-                                                        Icons.Default.Delete,
-                                                        contentDescription = null
-                                                    )
-                                                },
+                                                leadingIcon = { Icon(imageVector = Icons.Default.Delete, contentDescription = null) }
                                             )
                                         }
                                     }
@@ -183,59 +151,33 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                             Spacer(modifier = Modifier.padding(4.dp))
 
                             //Medication duration
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp)
-                            ) {
+                            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                                 if (medication.endDate.isEmpty()) {
-                                    Text("Started: ", fontWeight = FontWeight.Bold)
-                                    Text("${formatToRegularDate(medication.startDate)} • Continuous")
+                                    Text(text = "Started: ", fontWeight = FontWeight.Bold)
+                                    Text(text = "${formatToRegularDate(medication.startDate)} • Continuous")
                                 } else {
-                                    Text("Duration: ", fontWeight = FontWeight.Bold)
-                                    Text(
-                                        "${formatToRegularDate(medication.startDate)} ➩ ${
-                                            formatToRegularDate(
-                                                medication.endDate
-                                            )
-                                        }"
-                                    )
+                                    Text(text = "Duration: ", fontWeight = FontWeight.Bold)
+                                    Text(text = "${formatToRegularDate(medication.startDate)} ➩ ${formatToRegularDate(medication.endDate)}")
                                 }
                             }
 
                             //medication dosage
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp)
-                            ) {
-                                Text("Dose: ", fontWeight = FontWeight.Bold)
-                                Text(medication.dosePerIntake)
+                            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                                Text(text = "Dose: ", fontWeight = FontWeight.Bold)
+                                Text(text = medication.dosePerIntake)
                             }
 
                             //notification times
                             if (medication.notificationsEnabled) {
-                                Row(
-                                    horizontalArrangement = Arrangement.Start,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                ) {
+                                Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                                     Text(
                                         text = "Taken at: ",
                                         fontWeight = FontWeight.Bold
                                     )
 
                                     var text = ""
-                                    medication.scheduledNotificationsTime.forEach {
-                                        if (it.length > 4) {
-                                            text += it.removePrefix(" ")
-                                                .replaceRange(2, 2, ":") + ", "
-                                        }
-                                    }
-                                    Text(text.removeSuffix(", "))
+                                    medication.scheduledNotificationsTime.forEach { if (it.length > 4) { text += it.removePrefix(" ").replaceRange(2, 2, ":") + ", " } }
+                                    Text(text = text.removeSuffix(", "))
                                 }
                             }
 
@@ -251,13 +193,13 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                 Spacer(modifier = Modifier.padding(4.dp))
 
                                 if (medication.schedule == "Every single day") {
-                                    Text("Taken daily • ")
+                                    Text(text = "Taken daily • ")
                                     when (medication.timesPerDay) {
-                                        1 -> Text("Once")
-                                        else -> Text("${medication.timesPerDay} times")
+                                        1 -> Text(text = "Once")
+                                        else -> Text(text = "${medication.timesPerDay} times")
                                     }
                                 } else {
-                                    Text("Taken on selected days • ")
+                                    Text(text = "Taken on selected days • ")
                                     if (medication.timesPerDay == 1) {
                                         Text("Once")
                                     } else {
@@ -266,23 +208,11 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                 }
                             }
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
                                 HorizontalDivider(
                                     color = MaterialTheme.colorScheme.secondary,
                                     modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                                 )
-                            }
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-
                             }
                         }
                     }
