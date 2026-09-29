@@ -54,16 +54,10 @@ fun AddMedicationScreen(
     val errors = remember { mutableListOf(false, false, false, false) }
     var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
 
-    Dialog(
-        onDismissRequest = {onDismissRequest()},
-        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
-    ) {
+    Dialog(onDismissRequest = {onDismissRequest()}, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         Card{
             //Add Medication title
-            TitleBarWithBackButton(
-                title = "Add Medication",
-                onBackArrowClicked = { onDismissRequest(); scope.launch { medicineViewModel.resetAddMedication(); medicineViewModel.fetchMedications() } }
-            )
+            TitleBarWithBackButton(title = "Add Medication", onBackArrowClicked = { onDismissRequest(); scope.launch { medicineViewModel.resetAddMedication(); medicineViewModel.fetchMedications() } })
 
             Column(
                 modifier = Modifier
