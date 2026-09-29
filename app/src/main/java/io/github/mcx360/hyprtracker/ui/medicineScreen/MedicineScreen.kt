@@ -64,7 +64,6 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
 
         when {
             openAddMedicationScreen.value -> AddMedicationScreen(
-                modifier = Modifier,
                 onDismissRequest = {openAddMedicationScreen.value = false},
                 snackBarHostState = snackBarHostState,
                 scope = scope,
