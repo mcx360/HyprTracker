@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddMedicationScreen(
     onDismissRequest: () -> Unit,
-    snackBarHostState: SnackbarHostState,
+    snackBarHostState:  SnackbarHostState,
     scope: CoroutineScope,
     medicineViewModel: MedicineViewModel
 ){
@@ -179,28 +179,11 @@ fun AddMedicationScreen(
                                         duration = SnackbarDuration.Short
                                     )
                                 }
-
-                                scope.launch {
-                                    medicineViewModel.addMedication(
-                                        Medicine(
-                                            name = uiState.value.medicationName,
-                                            description = uiState.value.medicationDescription,
-                                            schedule = uiState.value.medicationSchedule,
-                                            scheduledDays = uiState.value.medicationSelectedDays,
-                                            timesPerDay = uiState.value.medicationTimesPerDay,
-                                            dosePerIntake = uiState.value.medicationDosage,
-                                            notificationsEnabled = uiState.value.medicationNotifications,
-                                            scheduledNotificationsTime = uiState.value.medicationReminderTimes,
-                                            startDate = uiState.value.date,
-                                            endDate = uiState.value.medicationEndDate
-                                        )
-                                    )
-                                    medicineViewModel.resetAddMedication()
-                                }
+                                scope.launch { medicineViewModel.addMedication() }
                             }
                         }
                     ) {
-                        Text("Add medication")
+                        Text(text = "Add medication")
                     }
                 }
             }

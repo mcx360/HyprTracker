@@ -52,9 +52,23 @@ class MedicineViewModel(private val medicationRepository: MedicationRepository) 
         }
     }
 
-    fun addMedication(medicine: Medicine){
+    //fetches current medicine uiState and makes it into a medication object to be stored
+    fun addMedication(/*medicine: Medicine*/){
         viewModelScope.launch(Dispatchers.IO) {
-            medicationRepository.addMedication(medicine.toRecordedMedication())
+            //medicationRepository.addMedication(medicine.toRecordedMedication())
+            medicationRepository.addMedication(Medicine(
+                name = _uiState.value.medicationName,
+                description = _uiState.value.medicationDescription,
+                schedule = _uiState.value.medicationSchedule,
+                scheduledDays = _uiState.value.medicationSelectedDays,
+                timesPerDay = _uiState.value.medicationTimesPerDay,
+                dosePerIntake = _uiState.value.medicationDosage,
+                notificationsEnabled = _uiState.value.medicationNotifications,
+                scheduledNotificationsTime = _uiState.value.medicationReminderTimes,
+                startDate = _uiState.value.date,
+                endDate = _uiState.value.medicationEndDate
+            ).toRecordedMedication())
+            resetAddMedication()
         }
     }
 
