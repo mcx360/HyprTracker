@@ -102,7 +102,6 @@ fun MedicationScheduleAndDosageCard(
                 ExposedDropdownMenuBox(
                     expanded = showScheduleDropDownMenu.value,
                     onExpandedChange = { showScheduleDropDownMenu.value = true }) {
-
                     //Medication schedule field
                     OutlinedTextField(
                         isError = isMedicationScheduleFieldInError,
@@ -115,7 +114,6 @@ fun MedicationScheduleAndDosageCard(
                         maxLines = 1,
                         modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true),
                     )
-
                     //Medication schedule menu
                     ExposedDropdownMenu(
                         expanded = showScheduleDropDownMenu.value,
@@ -142,10 +140,7 @@ fun MedicationScheduleAndDosageCard(
                 when {
                     showSelectedDaysPicker.value ->
                         SelectDaysForMedication(
-                            onDismiss = {
-                                if (!it.isNullOrEmpty())  updateMedicationSchedule(it)
-                                showSelectedDaysPicker.value = false
-                            },
+                            onDismiss = { if (!it.isNullOrEmpty())  updateMedicationSchedule(it); showSelectedDaysPicker.value = false },
                             onDaySelected = { addSelectedDay(it) },
                             onDayRemoved = { removeSelectedDay(it) }
                         )
@@ -261,14 +256,11 @@ fun MedicationScheduleAndDosageCard(
                 OutlinedTextField(
                     singleLine = true,
                     isError = isMedicationDosePerIntakeInError,
-                    onValueChange = {
-                        updateMedicationDose(it)
-                        if (medicationDosage.isNotEmpty()) setIsMedicationDosePerIntakeInErrorToFalse()
-                    },
+                    onValueChange = { updateMedicationDose(it); if (medicationDosage.isNotEmpty()) setIsMedicationDosePerIntakeInErrorToFalse() },
                     value = medicationDosage,
-                    label = { Text("Dose per Intake*") },
+                    label = { Text(text = "Dose per Intake*") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
-                    placeholder = { Text("e.g. 1 x 10mg tablet") },
+                    placeholder = { Text(text = "e.g. 1 x 10mg tablet") },
                     supportingText = { Text(text = if (isMedicationDosePerIntakeInError) "Dose per intake is needed" else "*required") }
                 )
 
