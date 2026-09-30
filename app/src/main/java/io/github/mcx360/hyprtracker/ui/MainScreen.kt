@@ -15,7 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -124,16 +124,6 @@ fun BottomNavBar(
     navController: NavHostController,
     currentRoute: String?,
 ){
-    val colours = NavigationBarItemColors(
-        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        selectedTextColor = MaterialTheme.colorScheme.onSurface,
-        selectedIndicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
-        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-        disabledIconColor = MaterialTheme.colorScheme.error,
-        disabledTextColor = MaterialTheme.colorScheme.error
-    )
-
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -141,43 +131,28 @@ fun BottomNavBar(
         NavigationBarItem(
             selected = currentRoute == Destinations.Logs.name,
             onClick = { navController.navigate(Destinations.Logs.name) },
-            icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24),
-                    contentDescription = null
-                )
-            },
+            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24), contentDescription = null) },
             label = { Text(text = "Logs") },
             alwaysShowLabel = true,
-            colors = colours
+            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
         )
 
         NavigationBarItem(
             selected = currentRoute == Destinations.Medicine.name,
             onClick = { navController.navigate(Destinations.Medicine.name) },
-            icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine),
-                    contentDescription = stringResource(R.string.medicine_screen_label)
-                )
-            },
+            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine), contentDescription = stringResource(R.string.medicine_screen_label)) },
             label = { Text(text = stringResource(R.string.medicine_screen_label)) },
             alwaysShowLabel = true,
-            colors = colours
+            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
         )
 
         NavigationBarItem(
             selected = currentRoute == Destinations.Insights.name,
             onClick = { navController.navigate(Destinations.Insights.name) },
-            icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight),
-                    contentDescription = stringResource(R.string.graph_screen_label)
-                )
-            },
+            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight), contentDescription = stringResource(R.string.graph_screen_label)) },
             label = { Text(text = stringResource(R.string.graph_screen_label)) },
             alwaysShowLabel = true,
-            colors = colours
+            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
         )
     }
 }
@@ -209,9 +184,8 @@ fun HyprTrackerApp(
                 currentRoute = currentRoute,
                 navController = navController,
             )
-        },
-    ) {
-        innerpadding ->
+        }
+    ) { innerpadding ->
         Box(modifier = Modifier.padding(innerpadding)) {
             key(currentRoute) {
                 NavHost(
@@ -222,9 +196,7 @@ fun HyprTrackerApp(
                         LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel,)
                     }
                     composable(route = Destinations.Medicine.name) {
-                        MedicineScreen(
-                            medicineViewModel = medicineViewModel
-                        )
+                        MedicineScreen(medicineViewModel = medicineViewModel)
                     }
                     composable(route = Destinations.Insights.name) {
                         GraphScreen(insightsViewModel = insightsViewModel)
