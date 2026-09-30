@@ -29,6 +29,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,8 +48,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MedicineScreen(medicineViewModel: MedicineViewModel){
-    val  scope = rememberCoroutineScope()
-    val uiState = medicineViewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val uiState by medicineViewModel.uiState.collectAsState()
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val openAddMedicationScreen = remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
@@ -66,7 +67,7 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
             )
         }
 
-        if (uiState.value.medicineList.isNotEmpty()) {
+        if (uiState.medicineList.isNotEmpty()) {
             //list of all medications recorded
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,8 +79,8 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                     .padding()
                     .background(color = MaterialTheme.colorScheme.surface)
             ) {
-                items(uiState.value.medicineList.size) { index ->
-                    val medication = uiState.value.medicineList[index]
+                items(uiState.medicineList.size) { index ->
+                    val medication = uiState.medicineList[index]
                     //individual medication card
                     OutlinedCard(modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)) {
                         val showExtrasMenu = remember { mutableStateOf(false) }

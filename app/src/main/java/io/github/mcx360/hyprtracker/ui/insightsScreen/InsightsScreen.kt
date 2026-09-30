@@ -70,7 +70,7 @@ import java.time.LocalDate
 @Composable
 fun GraphScreen(insightsViewModel: InsightsViewModel) {
     val uiState by insightsViewModel.uiState.collectAsState()
-    var selectedIndex by remember { mutableIntStateOf(2) }
+    val selectedIndex = remember { mutableIntStateOf(2) }
 
     insightsViewModel.checkRecordsAreAvailable()
 
@@ -109,14 +109,14 @@ fun GraphScreen(insightsViewModel: InsightsViewModel) {
                     options.forEachIndexed { index, label ->
                         SegmentedButton(
                             shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                            onClick = { if (index == 3) showCustomDateRangePicker.value = true else selectedIndex = index  },
-                            selected = index == selectedIndex,
+                            onClick = { if (index == 3) showCustomDateRangePicker.value = true else selectedIndex.intValue = index  },
+                            selected = index == selectedIndex.intValue,
                             label = { Text(text = label) }
                         )
                     }
                 }
 
-                when(selectedIndex){
+                when(selectedIndex.intValue){
                     0 -> insightsViewModel.setTimePeriod(LocalDate.now().minusWeeks(1).toString(), LocalDate.now().toString())
                     1 -> insightsViewModel.setTimePeriod(LocalDate.now().minusMonths(1).toString(), LocalDate.now().toString())
                     2 -> insightsViewModel.setTimePeriod(null, null)
@@ -127,7 +127,7 @@ fun GraphScreen(insightsViewModel: InsightsViewModel) {
                         RangePickerDialog(
                             onDismissRequest = {showCustomDateRangePicker.value = false},
                             onDatesGiven = { start, end -> insightsViewModel.setTimePeriod(convertMillisToDate(start), convertMillisToDate(end))},
-                            onFinish = {selectedIndex = 3 }
+                            onFinish = {selectedIndex.intValue = 3 }
                         )
                 }
             }
@@ -237,7 +237,7 @@ fun GraphScreen(insightsViewModel: InsightsViewModel) {
                         Spacer(Modifier.padding(4.dp))
                         StageMarker(contentColour = colorResource(R.color.Hypertension_Grade1_Colour), backgroundColour = colorResource(R.color.Hypertension_Grade1_Background), stageName = stringResource(R.string.Grade1))
                         Spacer(Modifier.padding(4.dp))
-                        StageMarker(contentColour = colorResource(R.color.Hypertension_Grade2_Colour), backgroundColour = colorResource(R.color.Hypertension_Grade2_Background), stageName = stringResource(R.string.Grade2), )
+                        StageMarker(contentColour = colorResource(R.color.Hypertension_Grade2_Colour), backgroundColour = colorResource(R.color.Hypertension_Grade2_Background), stageName = stringResource(R.string.Grade2))
                     }
                     HorizontalDivider(modifier = Modifier.padding(8.dp), thickness = 2.dp )
 

@@ -85,7 +85,7 @@ fun AddMedicationScreen(
     medicineViewModel: MedicineViewModel
 ){
     val haptic = LocalHapticFeedback.current
-    val uiState = medicineViewModel.uiState.collectAsState()
+    val uiState by medicineViewModel.uiState.collectAsState()
     val errors = remember { mutableListOf(false, false, false, false) }
     var isMedicationDosePerIntakeInError by remember { mutableStateOf(false) }
 
@@ -117,8 +117,8 @@ fun AddMedicationScreen(
 
                         OutlinedTextField(
                             isError = errors[0],
-                            onValueChange = { medicineViewModel.updateMedicationName(it); if (uiState.value.medicationName.isNotEmpty()) errors[0] = false },
-                            value = uiState.value.medicationName,
+                            onValueChange = { medicineViewModel.updateMedicationName(it); if (uiState.medicationName.isNotEmpty()) errors[0] = false },
+                            value = uiState.medicationName,
                             label = { Text("Medication name*") },
                             maxLines = 1,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
@@ -128,8 +128,8 @@ fun AddMedicationScreen(
 
                         OutlinedTextField(
                             isError = errors[1],
-                            onValueChange = { medicineViewModel.updateMedicationDescription(it); if (uiState.value.medicationDescription.isNotEmpty()) errors[1] = false },
-                            value = uiState.value.medicationDescription,
+                            onValueChange = { medicineViewModel.updateMedicationDescription(it); if (uiState.medicationDescription.isNotEmpty()) errors[1] = false },
+                            value = uiState.medicationDescription,
                             label = { Text("Medication description*") },
                             maxLines = 1,
                             placeholder = { Text("e.g. Lowers high blood pressure") },
@@ -171,7 +171,7 @@ fun AddMedicationScreen(
                                     isError = errors[2],
                                     readOnly = true,
                                     onValueChange = {},
-                                    value = uiState.value.medicationSchedule,
+                                    value = uiState.medicationSchedule,
                                     label = { Text(text = "Schedule*") },
                                     placeholder = { Text(text = "e.g. Every day") },
                                     trailingIcon = {
@@ -265,7 +265,7 @@ fun AddMedicationScreen(
                                     isError = errors[3],
                                     readOnly = true,
                                     onValueChange = {},
-                                    value = when (uiState.value.medicationTimesPerDay) {
+                                    value = when (uiState.medicationTimesPerDay) {
                                         0 -> ""
                                         1 -> "One time daily"
                                         2 -> "Two times daily"
@@ -343,10 +343,10 @@ fun AddMedicationScreen(
                                 singleLine = true,
                                 isError = isMedicationDosePerIntakeInError,
                                 onValueChange = {
-                                    medicineViewModel.updateMedicationDose(it); if (uiState.value.medicationDosage.isNotEmpty()) isMedicationDosePerIntakeInError =
+                                    medicineViewModel.updateMedicationDose(it); if (uiState.medicationDosage.isNotEmpty()) isMedicationDosePerIntakeInError =
                                     false
                                 },
-                                value = uiState.value.medicationDosage,
+                                value = uiState.medicationDosage,
                                 label = { Text(text = "Dose per Intake*") },
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Text,
@@ -403,7 +403,7 @@ fun AddMedicationScreen(
                         if (checked.value) {
                             medicineViewModel.updateMedicationNotificationStatus(true)
                             Row {
-                                when (uiState.value.medicationSchedule) {
+                                when (uiState.medicationSchedule) {
                                     "" -> {
                                         Text(
                                             text = "Enter your medication schedule into the fields above to set reminders",
@@ -429,7 +429,7 @@ fun AddMedicationScreen(
                             }
 
                             Row {
-                                if (uiState.value.medicationTimesPerDay == 0) {
+                                if (uiState.medicationTimesPerDay == 0) {
                                     Text(
                                         text = "Enter how many times per scheduled day you take the medicine in the fields above before setting reminders",
                                         color = MaterialTheme.colorScheme.error,
@@ -447,7 +447,7 @@ fun AddMedicationScreen(
                             }
 
                             Row {
-                                if (uiState.value.medicationTimesPerDay > 0) {
+                                if (uiState.medicationTimesPerDay > 0) {
                                     Text(
                                         text = "Enter reminder time(s) below",
                                         style = MaterialTheme.typography.titleSmall,
@@ -457,14 +457,14 @@ fun AddMedicationScreen(
                             }
 
                             Column {
-                                for (i in 1..uiState.value.medicationTimesPerDay) {
+                                for (i in 1..uiState.medicationTimesPerDay) {
                                     TextField(
-                                        value = uiState.value.medicationReminderTimes[i],
+                                        value = uiState.medicationReminderTimes[i],
                                         label = { Text("Reminder$i") },
                                         placeholder = { Text("HH:MM") },
                                         onValueChange = { if (it.length < 5 && it.isDigitsOnly()) medicineViewModel.updateMedicationReminderTime(it, i) },
                                         trailingIcon = { Icon(painter = painterResource(R.drawable.ic_date), contentDescription = null) },
-                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = if (i != uiState.value.medicationTimesPerDay) ImeAction.Next else ImeAction.Done),
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = if (i != uiState.medicationTimesPerDay) ImeAction.Next else ImeAction.Done),
                                         visualTransformation = VisualTransformation { text ->
                                             var out = ""
                                             for (i in text.indices) {
@@ -513,7 +513,7 @@ fun AddMedicationScreen(
                     )
 
                     Text(
-                        text = "Start date: " + formatToRegularDate(uiState.value.date),
+                        text = "Start date: " + formatToRegularDate(uiState.date),
                         modifier = Modifier.padding(start = 16.dp)
                     )
 
@@ -552,8 +552,8 @@ fun AddMedicationScreen(
                             }
                         }
                         when (selectedOption) {
-                            "Specified number of days" if uiState.value.medicationEndDate != "" -> { Text(text = "medicine recorded until " + formatToRegularDate(uiState.value.medicationEndDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
-                            "Until a selected date" if uiState.value.medicationEndDate != "" -> { Text(text = formatToRegularDate(uiState.value.medicationEndDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
+                            "Specified number of days" if uiState.medicationEndDate != "" -> { Text(text = "medicine recorded until " + formatToRegularDate(uiState.medicationEndDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
+                            "Until a selected date" if uiState.medicationEndDate != "" -> { Text(text = formatToRegularDate(uiState.medicationEndDate), modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
                             else -> { Text(text = "Medicine will be recorded indefinitely unless cancelled by the user", modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) }
                         }
                     }
@@ -583,11 +583,11 @@ fun AddMedicationScreen(
                     Button(
                         modifier = Modifier.weight(1f).padding(16.dp),
                         onClick = {
-                            when {uiState.value.medicationName.isEmpty() -> errors[0] = true }
-                            when {uiState.value.medicationDescription.isEmpty() -> errors[1]= true }
-                            when {uiState.value.medicationSchedule.isEmpty() ->  errors[2] = true }
-                            when {uiState.value.medicationTimesPerDay == 0 ->  errors[3] = true }
-                            when {uiState.value.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError = true }
+                            when {uiState.medicationName.isEmpty() -> errors[0] = true }
+                            when {uiState.medicationDescription.isEmpty() -> errors[1]= true }
+                            when {uiState.medicationSchedule.isEmpty() ->  errors[2] = true }
+                            when {uiState.medicationTimesPerDay == 0 ->  errors[3] = true }
+                            when {uiState.medicationDosage.isEmpty() -> isMedicationDosePerIntakeInError = true }
 
                             if (errors[0] || errors[1] ||  errors[2] ||  errors[3] || isMedicationDosePerIntakeInError) {
                                 haptic.performHapticFeedback(HapticFeedbackType.Reject)
@@ -617,7 +617,7 @@ fun SelectSpecifiedNumberOfDaysDialog(
 ){
     var days by remember { mutableStateOf("") }
     Dialog(onDismissRequest = { onDismissRequest() }) {
-        Card(shape = RoundedCornerShape(16.dp),) {
+        Card(shape = RoundedCornerShape(16.dp)) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -672,8 +672,8 @@ fun SelectDaysForMedication(
     val showWarning = remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onDismiss(null); showWarning.value = false }) {
-        Card(modifier = Modifier.fillMaxWidth().padding(16.dp), shape = RoundedCornerShape(16.dp),) {
-            Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start,) {
+        Card(modifier = Modifier.fillMaxWidth().padding(16.dp), shape = RoundedCornerShape(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                 Text(text = "Select days")
 
                 //Monday
