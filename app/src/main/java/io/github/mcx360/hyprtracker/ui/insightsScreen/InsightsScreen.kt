@@ -72,6 +72,8 @@ fun GraphScreen(insightsViewModel: InsightsViewModel) {
     val uiState by insightsViewModel.uiState.collectAsState()
     var selectedIndex by remember { mutableIntStateOf(2) }
 
+    insightsViewModel.checkRecordsAreAvailable()
+
     if (uiState.hasRecords) {
         Column(
             modifier = Modifier
