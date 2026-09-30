@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -53,110 +52,6 @@ enum class Destinations(@StringRes val title: Int) {
     Insights(R.string.graph_screen_label),
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppTopAppBar(
-    title: String,
-    insightsViewModel: InsightsViewModel,
-    hyprTrackerViewModel: HyprTrackerViewModel,
-    medicineViewModel: MedicineViewModel,
-    themeViewModel: ThemeViewModel
-){
-    val insightsState = insightsViewModel.uiState.collectAsStateWithLifecycle()
-    val logsState = hyprTrackerViewModel.uiState.collectAsStateWithLifecycle()
-    val openMenu = remember { mutableStateOf(false) }
-    val openSettings = remember {mutableStateOf(false)}
-    TopAppBar(
-        title = {
-            Column {
-                Text(text = title, style = MaterialTheme.typography.titleLarge)
-                if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty() || title == Destinations.Insights.name && insightsState.value.hasRecords){
-                    Text(
-                        text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            } },
-        actions = {
-            if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty()) {
-                IconButton(onClick = {}) {
-                    Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
-                }
-            } else if (title == Destinations.Insights.name && insightsState.value.hasRecords){
-                IconButton(onClick = {}) {
-                    Icon(painter = painterResource(R.drawable.outline_filter_list_24), null)
-                }
-            }
-            IconButton(onClick = { openMenu.value = !openMenu.value }) {
-                Icon(Icons.Filled.MoreVert, null)
-            }
-            when {
-                openMenu.value -> {
-                    DropdownMenu(
-                        expanded = openMenu.value,
-                        onDismissRequest = {openMenu.value = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text(text = "Settings") },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.outline_settings_24),
-                                    contentDescription = null
-                                ) },
-                            onClick = {
-                                openSettings.value = true
-                                openMenu.value = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
-    )
-    when{
-        openSettings.value -> Settings(onDismissRequest = {openSettings.value = false}, hyprTrackerViewModel = hyprTrackerViewModel, medicineViewModel = medicineViewModel, themeViewModel = themeViewModel)
-    }
-}
-
-@Composable
-fun BottomNavBar(
-    navController: NavHostController,
-    currentRoute: String?,
-){
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.inverseOnSurface,
-        contentColor = MaterialTheme.colorScheme.onSurface,
-    ) {
-        NavigationBarItem(
-            selected = currentRoute == Destinations.Logs.name,
-            onClick = { navController.navigate(Destinations.Logs.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24), contentDescription = null) },
-            label = { Text(text = "Logs") },
-            alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
-        )
-
-        NavigationBarItem(
-            selected = currentRoute == Destinations.Medicine.name,
-            onClick = { navController.navigate(Destinations.Medicine.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine), contentDescription = stringResource(R.string.medicine_screen_label)) },
-            label = { Text(text = stringResource(R.string.medicine_screen_label)) },
-            alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
-        )
-
-        NavigationBarItem(
-            selected = currentRoute == Destinations.Insights.name,
-            onClick = { navController.navigate(Destinations.Insights.name) },
-            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight), contentDescription = stringResource(R.string.graph_screen_label)) },
-            label = { Text(text = stringResource(R.string.graph_screen_label)) },
-            alwaysShowLabel = true,
-            colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
-        )
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HyprTrackerApp(
@@ -168,39 +63,98 @@ fun HyprTrackerApp(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val openMenu = remember { mutableStateOf(false) }
+    val openSettings = remember {mutableStateOf(false)}
 
     Scaffold(
         topBar = {
-            AppTopAppBar(
-                title = currentRoute ?: Destinations.Logs.name,
-                insightsViewModel = insightsViewModel,
-                hyprTrackerViewModel = hyprTrackerViewModel,
-                themeViewModel = themeViewModel,
-                medicineViewModel = medicineViewModel
+            val title = currentRoute ?: Destinations.Logs.name
+            val insightsState = insightsViewModel.uiState.collectAsStateWithLifecycle()
+            val logsState = hyprTrackerViewModel.uiState.collectAsStateWithLifecycle()
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(text = title, style = MaterialTheme.typography.titleLarge)
+                        if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty() || title == Destinations.Insights.name && insightsState.value.hasRecords){
+                            Text(
+                                text = "${formatToDayMonthYear(insightsState.value.startDate)}–${formatToDayMonthYear(insightsState.value.endDate)}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    } },
+                actions = {
+                    if (title == Destinations.Logs.name && logsState.value.readings.isNotEmpty()) {
+                        IconButton(onClick = {}) { Icon(painter = painterResource(R.drawable.outline_filter_list_24), null) }
+                    } else if (title == Destinations.Insights.name && insightsState.value.hasRecords){
+                        IconButton(onClick = {}) { Icon(painter = painterResource(R.drawable.outline_filter_list_24), null) }
+                    }
+                    IconButton(onClick = { openMenu.value = !openMenu.value }) { Icon(Icons.Filled.MoreVert, null) }
+                    when {
+                        openMenu.value -> {
+                            DropdownMenu(expanded = openMenu.value, onDismissRequest = {openMenu.value = false }) {
+                                DropdownMenuItem(
+                                    text = { Text(text = "Settings") },
+                                    leadingIcon = { Icon(painter = painterResource(R.drawable.outline_settings_24), contentDescription = null) },
+                                    onClick = {
+                                        openSettings.value = true
+                                        openMenu.value = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             )
+            when{
+                openSettings.value -> Settings(
+                    onDismissRequest = {openSettings.value = false},
+                    hyprTrackerViewModel = hyprTrackerViewModel,
+                    medicineViewModel = medicineViewModel,
+                    themeViewModel = themeViewModel
+                )
+            }
         },
         bottomBar = {
-            BottomNavBar(
-                currentRoute = currentRoute,
-                navController = navController,
-            )
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+            ) {
+                NavigationBarItem(
+                    selected = currentRoute == Destinations.Logs.name,
+                    onClick = { navController.navigate(Destinations.Logs.name) },
+                    icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.outline_view_timeline_24), contentDescription = null) },
+                    label = { Text(text = "Logs") },
+                    alwaysShowLabel = true,
+                    colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
+                )
+
+                NavigationBarItem(
+                    selected = currentRoute == Destinations.Medicine.name,
+                    onClick = { navController.navigate(Destinations.Medicine.name) },
+                    icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_medicine), contentDescription = stringResource(R.string.medicine_screen_label)) },
+                    label = { Text(text = stringResource(R.string.medicine_screen_label)) },
+                    alwaysShowLabel = true,
+                    colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
+                )
+
+                NavigationBarItem(
+                    selected = currentRoute == Destinations.Insights.name,
+                    onClick = { navController.navigate(Destinations.Insights.name) },
+                    icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_graph_insight), contentDescription = stringResource(R.string.graph_screen_label)) },
+                    label = { Text(text = stringResource(R.string.graph_screen_label)) },
+                    alwaysShowLabel = true,
+                    colors = NavigationBarItemDefaults.colors(selectedTextColor = MaterialTheme.colorScheme.onSurface)
+                )
+            }
         }
     ) { innerpadding ->
         Box(modifier = Modifier.padding(innerpadding)) {
             key(currentRoute) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Destinations.Logs.name
-                ) {
-                    composable(route = Destinations.Logs.name) {
-                        LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel,)
-                    }
-                    composable(route = Destinations.Medicine.name) {
-                        MedicineScreen(medicineViewModel = medicineViewModel)
-                    }
-                    composable(route = Destinations.Insights.name) {
-                        GraphScreen(insightsViewModel = insightsViewModel)
-                    }
+                NavHost(navController = navController, startDestination = Destinations.Logs.name) {
+                    composable(route = Destinations.Logs.name) { LogsScreen(hyprTrackerViewModel = hyprTrackerViewModel) }
+                    composable(route = Destinations.Medicine.name) { MedicineScreen(medicineViewModel = medicineViewModel) }
+                    composable(route = Destinations.Insights.name) { GraphScreen(insightsViewModel = insightsViewModel) }
                 }
             }
         }
