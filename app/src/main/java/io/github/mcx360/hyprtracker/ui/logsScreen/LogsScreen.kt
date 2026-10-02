@@ -56,41 +56,19 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun LogsScreen(hyprTrackerViewModel: HyprTrackerViewModel) {
+fun LogsScreen(hyprTrackerViewModel: HyprTrackerViewModel, snackbarHostState: SnackbarHostState) {
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
-    val openAddBPLog = remember { mutableStateOf(false) }
     val hyprTrackerUIState by hyprTrackerViewModel.uiState.collectAsState()
     val listIndexToBeDeleted = remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val resource = LocalResources.current
-    val snackBarHostState = remember { SnackbarHostState() }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { openAddBPLog.value = true }) {
-                Icon(Icons.Filled.Edit, contentDescription = null)
-            }
-        },
-    ) { contentPadding ->
-
-        when {
-            openAddBPLog.value -> {
-                LogBPResult(
-                    onDismissRequest = { openAddBPLog.value = false },
-                    hyprTrackerViewModel = hyprTrackerViewModel,
-                    snackBarHostState = snackBarHostState,
-                    scope = scope
-                )
-            }
-        }
-
-        if (hyprTrackerUIState.readings.isEmpty()) {
-            EmptyScreen(
-                painter = painterResource(R.drawable.undraw_add_notes_9xls),
-                heading = stringResource(R.string.Empty_BP_Log_History_Tab_Title),
-                subHeading = stringResource(R.string.Empty_BP_Log_History_Tab_Text)
-            )
+    if (hyprTrackerUIState.readings.isEmpty()) {
+        EmptyScreen(
+            painter = painterResource(R.drawable.undraw_add_notes_9xls),
+            heading = stringResource(R.string.Empty_BP_Log_History_Tab_Title),
+            subHeading = stringResource(R.string.Empty_BP_Log_History_Tab_Text)
+        )
         } else {
 
             when {
@@ -103,7 +81,7 @@ fun LogsScreen(hyprTrackerViewModel: HyprTrackerViewModel) {
                             showDeleteConfirmationDialog.value = false
                             scope.launch {
                                 hyprTrackerViewModel.removeReading(index = listIndexToBeDeleted.intValue)
-                                snackBarHostState.showSnackbar(resource.getString(R.string.Remove_Button_snackbar_message))
+                                snackbarHostState.showSnackbar(resource.getString(R.string.Remove_Button_snackbar_message))
                             }
                         }
                     )
@@ -299,7 +277,7 @@ fun LogsScreen(hyprTrackerViewModel: HyprTrackerViewModel) {
                 }
             }
         }
-    }
+
 }
 
 @Composable

@@ -47,25 +47,10 @@ import io.github.mcx360.hyprtracker.ui.utils.formatToRegularDate
 import kotlinx.coroutines.launch
 
 @Composable
-fun MedicineScreen(medicineViewModel: MedicineViewModel){
+fun MedicineScreen(medicineViewModel: MedicineViewModel, snackbarHostState: SnackbarHostState) {
     val scope = rememberCoroutineScope()
     val uiState by medicineViewModel.uiState.collectAsState()
     val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
-    val openAddMedicationScreen = remember { mutableStateOf(false) }
-    val snackBarHostState = remember { SnackbarHostState() }
-
-    Scaffold(
-        snackbarHost = {SnackbarHost(hostState = snackBarHostState)},
-        floatingActionButton = { FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) { Icon(imageVector = Icons.Filled.Add, contentDescription = null) } }
-    ) { contentPadding ->
-        when {
-            openAddMedicationScreen.value -> AddMedicationScreen(
-                onDismissRequest = {openAddMedicationScreen.value = false},
-                snackBarHostState = snackBarHostState,
-                scope = scope,
-                medicineViewModel = medicineViewModel
-            )
-        }
 
         if (uiState.medicineList.isNotEmpty()) {
             //list of all medications recorded
@@ -89,12 +74,14 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                             //Dialog to confirm deletion of Medicine
                             showDeleteConfirmationDialog.value -> {
                                 DeletionDialog(
-                                    onDismissRequest = { showDeleteConfirmationDialog.value = false },
+                                    onDismissRequest = {
+                                        showDeleteConfirmationDialog.value = false
+                                    },
                                     onDeleteRequest = {
                                         showDeleteConfirmationDialog.value = false
                                         scope.launch {
                                             medicineViewModel.removeMedication(medication)
-                                            snackBarHostState.showSnackbar("Medicine removed")
+                                            snackbarHostState.showSnackbar("Medicine removed")
                                         }
                                     },
                                     deletionText = "Are you sure you want to delete this medication?"
@@ -103,8 +90,14 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                         }
 
                         Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
-                            Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Start) {
-                                Column(horizontalAlignment = Alignment.Start, modifier = Modifier.weight(0.8f)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.Start,
+                                    modifier = Modifier.weight(0.8f)
+                                ) {
                                     //Medication name and icon
                                     Row {
                                         Text(
@@ -127,10 +120,18 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                     )
                                 }
                                 //extras menu
-                                Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().weight(0.2f)) {
+                                Column(
+                                    horizontalAlignment = Alignment.End,
+                                    modifier = Modifier.fillMaxWidth().weight(0.2f)
+                                ) {
                                     Box {
-                                        FilledTonalIconButton(onClick = { showExtrasMenu.value = !showExtrasMenu.value }) {
-                                            Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = null)
+                                        FilledTonalIconButton(onClick = {
+                                            showExtrasMenu.value = !showExtrasMenu.value
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.MoreHoriz,
+                                                contentDescription = null
+                                            )
                                         }
                                         DropdownMenu(
                                             expanded = showExtrasMenu.value,
@@ -142,7 +143,12 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                                     showDeleteConfirmationDialog.value = true
                                                     showExtrasMenu.value = false
                                                 },
-                                                leadingIcon = { Icon(imageVector = Icons.Default.Delete, contentDescription = null) }
+                                                leadingIcon = {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Delete,
+                                                        contentDescription = null
+                                                    )
+                                                }
                                             )
                                         }
                                     }
@@ -152,32 +158,52 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                             Spacer(modifier = Modifier.padding(4.dp))
 
                             //Medication duration
-                            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                            ) {
                                 if (medication.endDate.isEmpty()) {
                                     Text(text = "Started: ", fontWeight = FontWeight.Bold)
                                     Text(text = "${formatToRegularDate(medication.startDate)} • Continuous")
                                 } else {
                                     Text(text = "Duration: ", fontWeight = FontWeight.Bold)
-                                    Text(text = "${formatToRegularDate(medication.startDate)} ➩ ${formatToRegularDate(medication.endDate)}")
+                                    Text(
+                                        text = "${formatToRegularDate(medication.startDate)} ➩ ${
+                                            formatToRegularDate(
+                                                medication.endDate
+                                            )
+                                        }"
+                                    )
                                 }
                             }
 
                             //medication dosage
-                            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                            ) {
                                 Text(text = "Dose: ", fontWeight = FontWeight.Bold)
                                 Text(text = medication.dosePerIntake)
                             }
 
                             //notification times
                             if (medication.notificationsEnabled) {
-                                Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                                ) {
                                     Text(
                                         text = "Taken at: ",
                                         fontWeight = FontWeight.Bold
                                     )
 
                                     var text = ""
-                                    medication.scheduledNotificationsTime.forEach { if (it.length > 4) { text += it.removePrefix(" ").replaceRange(2, 2, ":") + ", " } }
+                                    medication.scheduledNotificationsTime.forEach {
+                                        if (it.length > 4) {
+                                            text += it.removePrefix(" ")
+                                                .replaceRange(2, 2, ":") + ", "
+                                        }
+                                    }
                                     Text(text = text.removeSuffix(", "))
                                 }
                             }
@@ -209,7 +235,10 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                                 }
                             }
 
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
                                 HorizontalDivider(
                                     color = MaterialTheme.colorScheme.secondary,
                                     modifier = Modifier.padding(start = 8.dp, end = 8.dp)
@@ -226,5 +255,4 @@ fun MedicineScreen(medicineViewModel: MedicineViewModel){
                 subHeading = stringResource(R.string.Empty_Medicine_Screen_Text)
             )
         }
-    }
 }
