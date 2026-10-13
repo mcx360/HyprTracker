@@ -1,34 +1,22 @@
 # HyprTracker
 
-HyprTracker is a free and open-source Android application for recording, managing, and analyzing blood pressure readings. Designed with a clean Material Design 3 interface and built entirely in Kotlin, the app provides a simple way to track cardiovascular health while keeping medication and historical data organized in one place with no distracting add and everything is kept offline.
+HyprTracker is a free and open source android app for tracking blood pressure. It is still in active development and I plan to release on F-Droid once it is complete. It allows users to log blood pressure metric in a private, offline, and non-intrusive way. It is built using kotlin and Materiald Design 3. 
 
-Whether you need to track blood pressure daily, interpret you data with the insights tab, record your medicines, hyrptracker offers 
- an intuitive and privacy-focused experience.
+## Key Features 
+These features are needed for a 1.0 version of the app before release
 
-## Key Features
-
-- Log systolic, diastolic, and optional pulse readings
-- Edit previous entries with custom notes, date, and time
-- Track medications with dosage and scheduling details
+- Log systolic, diastolic, and pulse values
+- Track blood pressure medication
 - View trends with weekly, monthly, and all-time insights
-- Analyze averages, minimums, and maximums
-- Visualize hypertension stages with chart-based summaries
-- Import and export data in CSV format *(in active development)*
+- Import and export data in CSV format
 - Submit bug reports and app feedback directly within the app
-- Customize preferences through a dedicated settings page
+- Customise preferences through a dedicated settings page
 
-HyprTracker is built to make blood pressure tracking more accessible, organized, and user-friendly.
+
 
 ## Screenshots
-
 <p align="center">
-  <img src="Screenshots/Logging.png" alt="Logging" width="250"/>
-  <img src="Screenshots/History.png" alt="History" width="250"/>
-  <img src="Screenshots/Medicine.png" alt="Medicine" width="250"/>
-</p>
-
-<p align="center">
-  <img src="Screenshots/Insights.png" alt="Insights" width="250"/>
-  <img src="Screenshots/NavigationDrawer.png" alt="Navigation Drawer" width="250"/>
-  <img src="Screenshots/Settings.png" alt="Settings" width="250"/>
+ <img width="250" height="600" alt="Screenshot_20261013-131329_HyprTracker" src="https://github.com/user-attachments/assets/c48ddc68-3d37-4f71-b8be-0f6e9e9a96da" />
+ <img width="250" height="600" alt="Screenshot_20261013-131336_HyprTracker" src="https://github.com/user-attachments/assets/3b33e06f-e080-41a8-b1da-1822685486d0" />
+ <img width="250" height="600" alt="Screenshot_20261013-131341_HyprTracker" src="https://github.com/user-attachments/assets/3b44f10e-3c88-4e9d-9f4e-90c24dc8590e" />
 </p>
