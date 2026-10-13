@@ -167,9 +167,8 @@ fun HyprTrackerApp(
         },
         floatingActionButton = {
             if (title == Destinations.Logs.name){
-                ExtendedFloatingActionButton(onClick = { openAddBPLog.value = true }) {
+                FloatingActionButton(onClick = { openAddBPLog.value = true }) {
                     Icon(Icons.Filled.Add, contentDescription = null)
-                    Text("Add Reading", modifier = Modifier.padding(start = 8.dp))
                 }
                 when {
                     openAddBPLog.value -> {
@@ -183,9 +182,8 @@ fun HyprTrackerApp(
                 }
             }
             if (title == Destinations.Medicine.name){
-                ExtendedFloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
+                FloatingActionButton(onClick = { openAddMedicationScreen.value = true }) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
-                    Text("Add Medicine", modifier = Modifier.padding(start = 8.dp))
                 }
                 when {
                     openAddMedicationScreen.value -> AddMedicationScreen(
